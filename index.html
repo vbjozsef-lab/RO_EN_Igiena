@@ -115,7 +115,7 @@
 
 <script>
 // Pure data — no Babel needed
-const LP5B_MODULES = [
+var LP5B_MODULES = [
   {id:"bacterio",  icon:"🔬", title:"Bacteriologia Cărnii",      sub:"NTG, coliformi, norme mezeluri",  color:"#a855f7", dim:"rgba(168,85,247,.12)", border:"rgba(168,85,247,.3)",  time:7, count:6},
   {id:"parazito",  icon:"🪱",  title:"Parazitologia Cărnii",      sub:"Trichine, tenii, botriocefal",   color:"#ef4444", dim:"rgba(239,68,68,.12)",  border:"rgba(239,68,68,.3)",   time:7, count:6},
   {id:"tia",       icon:"🤒",  title:"Toxiinfecții Alimentare",   sub:"TIA, HACCP, prevenire OMS",      color:"#f97316", dim:"rgba(249,115,22,.12)", border:"rgba(249,115,22,.3)",  time:6, count:5},
@@ -123,7 +123,7 @@ const LP5B_MODULES = [
   {id:"full5b",    icon:"🏆",  title:"Quiz Complet LP5B",         sub:"Tot materialul LP5B",            color:"#10b981", dim:"rgba(16,185,129,.12)", border:"rgba(16,185,129,.3)",  time:14},
 ];
 
-const LP5B_QUESTIONS = {
+var LP5B_QUESTIONS = {
   bacterio:[
     {q:"Conditiile de recoltare a probelor de carne pentru examen bacteriologic:",
      o:["La temperatura camerei, fara ambalaj special","In conditii de asepsie, 100-150g, ambalare aseptica, transport max 6h","Orice cantitate, la frigider, fara termen","Minim 500g, ambalaj obisnuit, transport 24h"],
@@ -246,14 +246,14 @@ const LP5B_QUESTIONS = {
 // ════════════════════════════════════════════════════════════
 // LP1A – MICROCLIMAT, PROPRIETĂȚI FIZICE AER
 // ════════════════════════════════════════════════════════════
-const LP1A_MODULES = [
+var LP1A_MODULES = [
   {id:"temp",    icon:"🌡️", title:"Temperatura Aerului",        sub:"Norme, instrumente, metodologie", color:"#64748b", dim:"rgba(100,116,139,.12)", border:"rgba(100,116,139,.3)", time:6, count:5},
   {id:"umid",    icon:"💧", title:"Umiditatea Aerului",          sub:"UR, UA, UM, higrometre",          color:"#0ea5e9", dim:"rgba(14,165,233,.12)",  border:"rgba(14,165,233,.3)",  time:5, count:5},
   {id:"misc_aer",icon:"💨", title:"Mișcarea & Radiația Aerului", sub:"Viteza, anemometru, IR",          color:"#6366f1", dim:"rgba(99,102,241,.12)",  border:"rgba(99,102,241,.3)",  time:5, count:4},
   {id:"full1a",  icon:"🏆", title:"Quiz Complet LP1A",           sub:"Tot materialul LP1A",             color:"#10b981", dim:"rgba(16,185,129,.12)",  border:"rgba(16,185,129,.3)",  time:13},
 ];
 
-const LP1A_QUESTIONS = {
+var LP1A_QUESTIONS = {
   temp:[
     {q:"Temperatura optimă în locuințe (valoare medie):",o:["14-16°C","18-22°C","24-28°C","10-12°C"],c:1,e:"Valoare medie optimă în locuințe: 18-22°C. Spitale: 20-22°C. Muncă grea industrială: 10-12°C."},
     {q:"Diferența maximă admisă de temperatură pe verticală în încăperi:",o:["0,5-1°C","1,5-2°C","3-4°C","5-6°C"],c:1,e:"Norme: diferențe max 2-3°C orizontal și 1,5-2°C vertical."},
@@ -288,13 +288,13 @@ const LP1A_QUESTIONS = {
 // ════════════════════════════════════════════════════════════
 // LP1B – PULBERI, GAZE, CALITATEA AERULUI
 // ════════════════════════════════════════════════════════════
-const LP1B_MODULES = [
+var LP1B_MODULES = [
   {id:"pulberi",  icon:"🏭", title:"Pulberi – Proprietăți",       sub:"PM2.5, PM10, sedimentare",   color:"#78716c", dim:"rgba(120,113,108,.12)", border:"rgba(120,113,108,.3)", time:6, count:5},
   {id:"gaze1b",   icon:"☁️", title:"Gaze Toxice & CMA",           sub:"CO, SO2, NOx, indici",       color:"#6b7280", dim:"rgba(107,114,128,.12)", border:"rgba(107,114,128,.3)", time:6, count:5},
   {id:"full1b",   icon:"🏆", title:"Quiz Complet LP1B",            sub:"Tot materialul LP1B",        color:"#10b981", dim:"rgba(16,185,129,.12)",  border:"rgba(16,185,129,.3)",  time:12},
 ];
 
-const LP1B_QUESTIONS = {
+var LP1B_QUESTIONS = {
   pulberi:[
     {q:"Particulele PM2.5 au diametrul:",o:["Sub 10 μm","Sub 2,5 μm","Sub 0,1 μm","Între 10-50 μm"],c:1,e:"PM10 < 10 μm. PM2.5 < 2,5 μm (fine). PM0.1 < 0,1 μm (ultrafine). Surse PM2.5: fum, arderi, gaze."},
     {q:"Particulele sub 5 μm se rețin în plămân în proporție de:",o:["10-20%","40-60%","80-90%","99%"],c:2,e:"< 5 μm pătrund până în alveole, se rețin în proporție mare (80-90%). < 0,1 μm sunt eliminate parțial cu aerul expirat."},
@@ -324,13 +324,13 @@ const LP1B_QUESTIONS = {
 // ════════════════════════════════════════════════════════════
 // LP2A – FUMAT & MICROBIOLOGIA AERULUI
 // ════════════════════════════════════════════════════════════
-const LP2A_MODULES = [
+var LP2A_MODULES = [
   {id:"fumat",    icon:"🚬", title:"Fumatul & Asistență",         sub:"Fagerstrom, TSN, interventii", color:"#dc2626", dim:"rgba(220,38,38,.12)",  border:"rgba(220,38,38,.3)",  time:6, count:5},
   {id:"co_aer",   icon:"🌫️", title:"CO Expirat & Microbiologie",  sub:"COHb, NTG aer, norme",        color:"#7c3aed", dim:"rgba(124,58,237,.12)", border:"rgba(124,58,237,.3)", time:7, count:5},
   {id:"full2a",   icon:"🏆", title:"Quiz Complet LP2A",           sub:"Tot materialul LP2A",          color:"#10b981", dim:"rgba(16,185,129,.12)", border:"rgba(16,185,129,.3)", time:13},
 ];
 
-const LP2A_QUESTIONS = {
+var LP2A_QUESTIONS = {
   fumat:[
     {q:"Rata de reușită a renunțării la fumat pe cont propriu:",o:["15-20%","3-5%","30-40%","50%"],c:1,e:"Fără asistență: doar 3-5% succes. De aceea fumătorii au nevoie de asistență specializată."},
     {q:"Sfatul antifumat minimal (Very Brief Advice) durează:",o:["5-10 minute","15-30 minute","30 secunde – 3 minute","O ședință de 1 oră"],c:2,e:"VBA = 30 sec – 3 min. Include: Ask (întreabă), Advise (sfătuiește), Act (acționează)."},
@@ -360,7 +360,7 @@ const LP2A_QUESTIONS = {
 // ════════════════════════════════════════════════════════════
 // LP1A QUESTIONS — ENGLISH
 // ════════════════════════════════════════════════════════════
-const LP1A_QUESTIONS_EN = {
+var LP1A_QUESTIONS_EN = {
   temp:[
     {q:"Optimal indoor temperature (average value):",o:["14-16°C","18-22°C","24-28°C","10-12°C"],c:1,e:"Optimal average for dwellings: 18-22°C. Hospitals: 20-22°C. Heavy industrial work: 10-12°C."},
     {q:"Maximum allowed vertical temperature difference in rooms:",o:["0.5-1°C","1.5-2°C","3-4°C","5-6°C"],c:1,e:"Standards: max 2-3°C horizontal and 1.5-2°C vertical difference."},
@@ -395,7 +395,7 @@ const LP1A_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP2A QUESTIONS — ENGLISH
 // ════════════════════════════════════════════════════════════
-const LP2A_QUESTIONS_EN = {
+var LP2A_QUESTIONS_EN = {
   fumat:[
     {q:"Success rate of quitting smoking without assistance:",o:["15-20%","3-5%","30-40%","50%"],c:1,e:"Without help: only 3-5% success. That is why smokers need specialized assistance."},
     {q:"Very Brief Advice (VBA) for smoking cessation lasts:",o:["5-10 minutes","15-30 minutes","30 seconds – 3 minutes","A 1-hour session"],c:2,e:"VBA = 30 sec – 3 min. Includes: Ask, Advise, Act."},
@@ -425,7 +425,7 @@ const LP2A_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP1B – DUST, GASES, AIR QUALITY (EN)
 // ════════════════════════════════════════════════════════════
-const LP1B_QUESTIONS_EN = {
+var LP1B_QUESTIONS_EN = {
   pulberi:[
     {q:"PM2.5 particles have a diameter of:",o:["Below 10 μm","Below 2.5 μm","Below 0.1 μm","Between 10-50 μm"],c:1,e:"PM10 < 10 μm. PM2.5 < 2.5 μm (fine). PM0.1 < 0.1 μm (ultrafine). PM2.5 sources: smoke, combustion, gases."},
     {q:"Particles below 5 μm are retained in the lung at a rate of:",o:["10-20%","40-60%","80-90%","99%"],c:2,e:"< 5 μm penetrate to the alveoli and are retained at a high rate (80-90%). < 0.1 μm are partly expelled with exhaled air."},
@@ -455,7 +455,7 @@ const LP1B_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP2B – LIGHTING & NOISE (EN)
 // ════════════════════════════════════════════════════════════
-const LP2B_QUESTIONS_EN = {
+var LP2B_QUESTIONS_EN = {
   iluminat:[
     {q:"Luminosity coefficient (LC) for classrooms and operating theatres:",o:["1/8 - 1/10","1/6 - 1/8","1/4 - 1/5","1/3"],c:2,e:"Classrooms, operating theatres, delivery rooms, treatment rooms: 1/4-1/5. Offices, wards: 1/5-1/6. Dwellings: 1/6-1/8. Laboratories: 1/3."},
     {q:"Minimum natural lighting standard for writing/reading surfaces:",o:["50 lx","100 lx","200 lx","500 lx"],c:1,e:"Natural lighting on work surfaces: min 100 lx. Artificial incandescent: min 150 lx. Artificial fluorescent: min 300 lx."},
@@ -485,7 +485,7 @@ const LP2B_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP3A – WATER PHYSICO-CHEMISTRY (EN)
 // ════════════════════════════════════════════════════════════
-const LP3A_QUESTIONS_EN = {
+var LP3A_QUESTIONS_EN = {
   fizchim3a:[
     {q:"Stages of water sanitary-hygienic control include:",o:["Only microbiological analysis","Sanitary survey + sampling + physico-chemical + microbiological + biological analyses + interpretation","Only nitrate chemical analysis","Only turbidity and pH"],c:1,e:"Stages: sanitary survey → sampling → physico-chemical → microbiological → biological analyses → disinfection control → interpretation."},
     {q:"Organoleptic properties of water according to OG 7/2023 must be:",o:["Odourless and tasteless","Acceptable to the consumer, without abnormal change","Strictly odourless and colourless","Neutral pH and no chlorine"],c:1,e:"OG 7/2023 organoleptic: acceptable to the consumer and no abnormal change (subjective method)."},
@@ -515,7 +515,7 @@ const LP3A_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP3B – WATER MICROBIOLOGY (EN)
 // ════════════════════════════════════════════════════════════
-const LP3B_QUESTIONS_EN = {
+var LP3B_QUESTIONS_EN = {
   micro:[
     {q:"High TGC at 37°C indicates:",o:["Water with increased mineralisation","High contamination with human/animal flora, possibly pathogenic","Excessive disinfection","Acidic water"],c:1,e:"The higher the TGC, the greater the probability of pathogenic bacteria."},
     {s:"Drinking water: Total coliforms = 2/100mL, E. coli = 0/100mL",q:"Conclusion according to OG 7/2023:",o:["Compliant – coliforms allowed up to 5/100mL","Non-compliant – coliforms must be 0/100mL","Compliant – E. coli within standard","Requires EMB confirmation"],c:1,e:"OG 7/2023: Total coliforms = 0/100mL. Any value > 0 = non-compliant."},
@@ -565,7 +565,7 @@ const LP3B_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP4A – NUTRITIONAL STATUS ASSESSMENT (EN)
 // ════════════════════════════════════════════════════════════
-const LP4A_QUESTIONS_EN = {
+var LP4A_QUESTIONS_EN = {
   imc:[
     {q:"BMI formula:",o:["Weight (kg) × Height (m)","Weight (kg) / Height² (m²)","Weight (kg) / Height (m)","Height (m) / Weight (kg)"],c:1,e:"BMI = Weight (kg) / Height² (m²). Weight to 1 decimal, height in metres to 2 decimals."},
     {s:"Patient: weight 78.5 kg, height 1.72 m. BMI = 26.5",q:"Interpretation:",o:["Underweight","Normal weight","Overweight","Obesity grade I"],c:2,e:"BMI 25-29.9 = Overweight. (18.5-24.9 = normal; 30-34.9 = obesity grade I)"},
@@ -614,7 +614,7 @@ const LP4A_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP4B – ANIMAL PRODUCTS (EN)
 // ════════════════════════════════════════════════════════════
-const LP4B_QUESTIONS_EN = {
+var LP4B_QUESTIONS_EN = {
   fresh:[
     {s:"🥩 pH=6.8, Nessler positive at first 3 drops, unpleasant odour.",q:"Conclusion of meat examination:",o:["Fresh – accepted","Relatively fresh","Putrefied – rejected","Insufficient data"],c:2,e:"pH>6.6 = putrefied. Nessler positive confirms ammonia. Meat rejected."},
     {s:"🥚 Egg floating vertically at surface. Air cell >9mm.",q:"Egg condition:",o:["Fresh (1-3 days)","Middle-aged","Old – not recommended","Boiled"],c:2,e:"Vertical floating = large air cell = old egg."},
@@ -664,7 +664,7 @@ const LP4B_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP5A – PLANT PRODUCTS (EN)
 // ════════════════════════════════════════════════════════════
-const LP5A_QUESTIONS_EN = {
+var LP5A_QUESTIONS_EN = {
   cereale:[
     {q:"Conditions favouring mycotoxin contamination of cereals:",o:["Low temperatures and low humidity","High humidity and high temperatures","Freezing and drying","UV irradiation"],c:1,e:"Mycotoxins (e.g. aflatoxins) develop under high humidity and temperature conditions. 25% of global crops are contaminated."},
     {q:"Method for determining total aflatoxin (B1+B2+G1+G2):",o:["NaOH titration","ELISA method","Microscopic examination","Phenolphthalein test"],c:1,e:"Total aflatoxin is determined by the ELISA method (enzyme-linked immunosorbent assay)."},
@@ -707,7 +707,7 @@ const LP5A_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP5B – FOOD BACTERIOLOGY & PARASITOLOGY (EN)
 // ════════════════════════════════════════════════════════════
-const LP5B_QUESTIONS_EN = {
+var LP5B_QUESTIONS_EN = {
   bacterio:[
     {q:"Conditions for collecting meat samples for bacteriological examination:",o:["At room temperature, no special packaging","Aseptic conditions, 100-150g, aseptic packaging, transport max 6h","Any quantity, in fridge, no time limit","Min 500g, ordinary packaging, 24h transport"],c:1,e:"Collection: asepsis + 100-150g + aseptic packaging + sealing + waterproof labelling + transport max 6h from collection."},
     {q:"Bacterioscopy of FRESH meat deep inside shows:",o:["Many Gram+ and Gram- bacteria","Bacteria absent","Moulds and tissue fragments","Isolated cocci and bacilli"],c:1,e:"Fresh meat deep inside: BACTERIA ABSENT. On surface: absent or isolated cocci/bacilli, without muscle fragments."},
@@ -757,7 +757,7 @@ const LP5B_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP6A – IONISING RADIATION (EN)
 // ════════════════════════════════════════════════════════════
-const LP6A_QUESTIONS_EN = {
+var LP6A_QUESTIONS_EN = {
   radiatii:[
     {q:"Absorbed dose is measured in:",o:["Becquerel (Bq)","Sievert (Sv)","Gray (Gy)","Curie (Ci)"],c:2,e:"Gray (Gy) = energy transferred by radiation to a body (1 joule/kg). Bq/Ci = radioactive activity. Sv = equivalent/effective dose."},
     {q:"Weighting factor for alpha (α) particles compared to X-rays:",o:["Same (factor 1)","5-20 times higher (factor 10-20)","10 times lower","Factor 2"],c:1,e:"X-rays, γ, β = factor 1. α particles = factor 10-20. Neutrons = 5-20. α particles are much more ionising."},
@@ -785,7 +785,7 @@ const LP6A_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP6B – SCHOOL HYGIENE (EN)
 // ════════════════════════════════════════════════════════════
-const LP6B_QUESTIONS_EN = {
+var LP6B_QUESTIONS_EN = {
   orar:[
     {q:"Interval of maximum student performance during the day:",o:["7-9 in the morning","9-11 in the morning","14-16 in the afternoon","17-19 in the evening"],c:1,e:"Daily variations: 8am = medium, 9-11 = MAXIMUM, 13-14 = depression, 15-17 = slight increase (without morning peak)."},
     {q:"Lowest working capacity during the week:",o:["Monday and Friday","Tuesday and Thursday","Wednesday","Thursday and Friday"],c:0,e:"Low: Monday (returning) and Friday (fatigue). Maximum: Tuesday-Wednesday. Thursday: possible decrease."},
@@ -812,13 +812,13 @@ const LP6B_QUESTIONS_EN = {
 // ════════════════════════════════════════════════════════════
 // LP2B – ILUMINAT & SONOMETRIE
 // ════════════════════════════════════════════════════════════
-const LP2B_MODULES = [
+var LP2B_MODULES = [
   {id:"iluminat", icon:"💡", title:"Evaluarea Iluminatului",       sub:"CL, CIN, CU, CR, norme lux",  color:"#eab308", dim:"rgba(234,179,8,.12)",  border:"rgba(234,179,8,.3)",  time:7, count:5},
   {id:"zgomot",   icon:"🔊", title:"Zgomotul & Sonometria",        sub:"dB, limite, surse, măsuri",   color:"#f97316", dim:"rgba(249,115,22,.12)", border:"rgba(249,115,22,.3)", time:6, count:5},
   {id:"full2b",   icon:"🏆", title:"Quiz Complet LP2B",            sub:"Tot materialul LP2B",         color:"#10b981", dim:"rgba(16,185,129,.12)", border:"rgba(16,185,129,.3)", time:13},
 ];
 
-const LP2B_QUESTIONS = {
+var LP2B_QUESTIONS = {
   iluminat:[
     {q:"Coeficientul de luminozitate (CL) pentru săli de clasă și operație:",o:["1/8 - 1/10","1/6 - 1/8","1/4 - 1/5","1/3"],c:2,e:"Săli clasă, operație, naștere, tratament: 1/4-1/5. Cabinete, saloane: 1/5-1/6. Locuințe: 1/6-1/8. Laboratoare: 1/3."},
     {q:"Norma de iluminat natural minim pentru suprafețe de scris/citit:",o:["50 lx","100 lx","200 lx","500 lx"],c:1,e:"Iluminat natural suprafețe lucru: min 100 lx. Artificial incandescent: min 150 lx. Artificial fluorescent: min 300 lx."},
@@ -848,13 +848,13 @@ const LP2B_QUESTIONS = {
 // ════════════════════════════════════════════════════════════
 // LP3A – APĂ FIZICO-CHIMIC & NITRAȚI (LP3B already has this content partially)
 // ════════════════════════════════════════════════════════════
-const LP3A_MODULES = [
+var LP3A_MODULES = [
   {id:"fizchim3a", icon:"💧", title:"Proprietăți Fizico-Chimice",  sub:"Turbiditate, pH, duritate",   color:"#0284c7", dim:"rgba(2,132,199,.12)",   border:"rgba(2,132,199,.3)",  time:7, count:5},
   {id:"nitrati3a", icon:"⚗️", title:"Nitrați, Nitriți & Amoniac", sub:"Ciclu N, methemoglobinemie",  color:"#7c3aed", dim:"rgba(124,58,237,.12)",  border:"rgba(124,58,237,.3)", time:6, count:5},
   {id:"full3a",    icon:"🏆", title:"Quiz Complet LP3A",           sub:"Tot materialul LP3A",         color:"#10b981", dim:"rgba(16,185,129,.12)",  border:"rgba(16,185,129,.3)", time:12},
 ];
 
-const LP3A_QUESTIONS = {
+var LP3A_QUESTIONS = {
   fizchim3a:[
     {q:"Etapele controlului igienico-sanitar al apei includ:",o:["Doar analiza microbiologică","Anchetă sanitară + recoltare + analize fizico-chimice + microbiologice + biologice + interpretare","Exclusiv analiza chimică a nitraților","Doar turbiditate și pH"],c:1,e:"Etape: anchetă sanitară → recoltare → analize fizico-chimice → microbiologice → biologice → controlul purificării/dezinfecției → interpretare."},
     {q:"Proprietățile organoleptice ale apei conform OG 7/2023 trebuie să fie:",o:["Fără miros și gust","Acceptabile pentru consumator, fără modificare anormală","Inodore și incolore strict","pH neutru și fără clor"],c:1,e:"OG 7/2023 organoleptic: acceptabil pentru consumator și nicio modificare anormală (metodă subiectivă)."},
@@ -884,13 +884,13 @@ const LP3A_QUESTIONS = {
 // ════════════════════════════════════════════════════════════
 // LP6A – RADIAȚII IONIZANTE & RADIOPROTECȚIE
 // ════════════════════════════════════════════════════════════
-const LP6A_MODULES = [
+var LP6A_MODULES = [
   {id:"radiatii",  icon:"☢️", title:"Radiații & Unități Măsură",   sub:"Gy, Sv, Bq, tipuri radiații",  color:"#f59e0b", dim:"rgba(245,158,11,.12)", border:"rgba(245,158,11,.3)",  time:6, count:5},
   {id:"protectie", icon:"🛡️", title:"Radioprotecție",              sub:"Limite doze, echipamente",     color:"#ef4444", dim:"rgba(239,68,68,.12)",  border:"rgba(239,68,68,.3)",   time:6, count:5},
   {id:"full6a",    icon:"🏆", title:"Quiz Complet LP6A",            sub:"Tot materialul LP6A",          color:"#10b981", dim:"rgba(16,185,129,.12)", border:"rgba(16,185,129,.3)",  time:13},
 ];
 
-const LP6A_QUESTIONS = {
+var LP6A_QUESTIONS = {
   radiatii:[
     {q:"Doza absorbită se măsoară în:",o:["Becquerel (Bq)","Sievert (Sv)","Gray (Gy)","Curie (Ci)"],c:2,e:"Gray (Gy) = energia transferată de radiație unui corp (1 joule/kg). Bq/Ci = activitate radioactivă. Sv = doză echivalentă/efectivă."},
     {q:"Factorul de ponderare pentru particulele alfa (α) față de razele X:",o:["Același (factor 1)","5-20 ori mai mare (factor 10-20)","10 ori mai mic","Factor 2"],c:1,e:"Raze X, γ, β = factor 1. Particule α = factor 10-20. Neutroni = 5-20. Particulele α sunt mult mai ionizante."},
@@ -918,13 +918,13 @@ const LP6A_QUESTIONS = {
 // ════════════════════════════════════════════════════════════
 // LP6B – IGIENĂ ȘCOLARĂ & COMPORTAMENTE DE RISC
 // ════════════════════════════════════════════════════════════
-const LP6B_MODULES = [
+var LP6B_MODULES = [
   {id:"orar",     icon:"📅", title:"Capacitate de Lucru & Orar",  sub:"Variații zilnice, săptămânale", color:"#7c3aed", dim:"rgba(124,58,237,.12)", border:"rgba(124,58,237,.3)", time:6, count:5},
   {id:"risc",     icon:"⚠️", title:"Comportamente de Risc",       sub:"Fumat, alcool, droguri, dentar", color:"#dc2626", dim:"rgba(220,38,38,.12)",  border:"rgba(220,38,38,.3)",  time:5, count:4},
   {id:"full6b",   icon:"🏆", title:"Quiz Complet LP6B",           sub:"Tot materialul LP6B",           color:"#10b981", dim:"rgba(16,185,129,.12)", border:"rgba(16,185,129,.3)", time:11},
 ];
 
-const LP6B_QUESTIONS = {
+var LP6B_QUESTIONS = {
   orar:[
     {q:"Intervalul de randament maxim al elevilor în cursul zilei:",o:["7-9 dimineața","9-11 dimineața","14-16 după-amiaza","17-19 seara"],c:1,e:"Variații zilnice: 8 dim = mediu, 9-11 = MAXIM, 13-14 = depresiune, 15-17 = creștere ușoară (fără maximul mat.)."},
     {q:"Capacitatea de lucru cea mai scăzută în cursul săptămânii:",o:["Luni și vineri","Marți și joi","Miercuri","Joi și vineri"],c:0,e:"Scăzut: luni (revenire) și vineri (oboseală). Maxim: marți-miercuri. Joi: posibilă diminuare."},
@@ -950,14 +950,14 @@ const LP6B_QUESTIONS = {
 // ════════════════════════════════════════════════════════════
 // LP5A QUIZ MODULES & QUESTIONS
 // ════════════════════════════════════════════════════════════
-const LP5A_MODULES = [
+var LP5A_MODULES = [
   {id:"cereale",  icon:"🌾", title:"Cereale și Panificație",    sub:"Gluten, aciditate, făină",       color:"#f59e0b", dim:"rgba(245,158,11,.12)", border:"rgba(245,158,11,.3)",  time:7, count:5},
   {id:"legfruct", icon:"🍎", title:"Legume și Fructe",          sub:"Vit. C, caroten, aciditate",     color:"#22c55e", dim:"rgba(34,197,94,.12)",  border:"rgba(34,197,94,.3)",   time:6, count:5},
   {id:"bauturi",  icon:"🥤", title:"Băuturi & Conserve",        sub:"Alcool metilic, etanșeitate",    color:"#3b82f6", dim:"rgba(59,130,246,.12)", border:"rgba(59,130,246,.3)",  time:6, count:5},
   {id:"full5a",   icon:"🏆", title:"Quiz Complet LP5A",         sub:"Tot materialul LP5A",            color:"#8b5cf6", dim:"rgba(139,92,246,.12)", border:"rgba(139,92,246,.3)",  time:14},
 ];
 
-const LP5A_QUESTIONS = {
+var LP5A_QUESTIONS = {
   cereale:[
     {q:"Conditiile care favorizeaza contaminarea cerealelor cu micotoxine:",
      o:["Temperaturi scazute si umiditate mica","Umiditate si temperaturi inalte","Congelare si uscare","Iradiere UV"],
@@ -1064,7 +1064,7 @@ const LP5A_QUESTIONS = {
 // ════════════════════════════════════════════════════════════
 // LP4A QUIZ MODULES & QUESTIONS
 // ════════════════════════════════════════════════════════════
-const LP4A_MODULES = [
+var LP4A_MODULES = [
   {id:"imc",      icon:"⚖️",  title:"IMC și Greutate Corporală", sub:"Calcul, interpretare",         color:"#f97316", dim:"rgba(249,115,22,.12)", border:"rgba(249,115,22,.3)",  time:6, count:5},
   {id:"grasime",  icon:"📊",  title:"% Grăsime Corporală",       sub:"Metode, procedură, valori",    color:"#ef4444", dim:"rgba(239,68,68,.12)",  border:"rgba(239,68,68,.3)",   time:5, count:4},
   {id:"consum",   icon:"🍽️", title:"Evaluarea Consumului Alim.", sub:"Metode, chestionar 24h",      color:"#10b981", dim:"rgba(16,185,129,.12)", border:"rgba(16,185,129,.3)",  time:6, count:5},
@@ -1072,7 +1072,7 @@ const LP4A_MODULES = [
   {id:"full4a",   icon:"🏆",  title:"Quiz Complet LP4A",          sub:"Tot materialul LP4A",         color:"#3b82f6", dim:"rgba(59,130,246,.12)", border:"rgba(59,130,246,.3)",  time:14},
 ];
 
-const LP4A_QUESTIONS = {
+var LP4A_QUESTIONS = {
   imc:[
     {q:"Formula IMC:",
      o:["Greutate (kg) x Inaltime (m)","Greutate (kg) / Inaltime² (m²)","Greutate (kg) / Inaltime (m)","Inaltime (m) / Greutate (kg)"],
@@ -1194,7 +1194,7 @@ const LP4A_QUESTIONS = {
 // ════════════════════════════════════════════════════════════
 // LP3B QUIZ MODULES & QUESTIONS
 // ════════════════════════════════════════════════════════════
-const LP3B_MODULES = [
+var LP3B_MODULES = [
   {id:"micro",    icon:"🦠", title:"Microbiologia Apei",        sub:"NTG, coliformi, norme",      color:"#06b6d4", dim:"rgba(6,182,212,.12)",  border:"rgba(6,182,212,.3)",  time:7, count:6},
   {id:"dezinfect",icon:"🧪", title:"Dezinfecția Apei",          sub:"Clor rezidual, metode",      color:"#0ea5e9", dim:"rgba(14,165,233,.12)", border:"rgba(14,165,233,.3)", time:6, count:5},
   {id:"fizchim",  icon:"💧", title:"Fizico-Chimic & pH",        sub:"pH, turbiditate, duritate",  color:"#3b82f6", dim:"rgba(59,130,246,.12)", border:"rgba(59,130,246,.3)", time:7, count:5},
@@ -1202,7 +1202,7 @@ const LP3B_MODULES = [
   {id:"full3b",   icon:"🏆", title:"Quiz Complet LP3B",         sub:"Tot materialul LP3A+LP3B",   color:"#10b981", dim:"rgba(16,185,129,.12)", border:"rgba(16,185,129,.3)", time:14},
 ];
 
-const LP3B_QUESTIONS = {
+var LP3B_QUESTIONS = {
   micro:[
     {q:"NTG la 37 grade C ridicat semnifica:",o:["Apa cu mineralizare crescuta","Contaminare mare cu flora umana/animala, posibil patogena","Dezinfectie prea puternica","Apa acida"],c:1,e:"Cu cat NTG mai ridicat, cu atat probabilitatea germenilor patogeni e mai mare."},
     {s:"Apa potabila: Bacterii coliforme = 2/100ml, E. coli = 0/100ml",q:"Concluzia conform OG 7/2023:",o:["Conforma - coliforme admise 5/100ml","Neconforma - coliforme trebuie 0/100ml","Conforma - E. coli in norma","Necesita confirmare EMB"],c:1,e:"OG 7/2023: Bacterii coliforme = 0/100ml. Orice valoare >0 = neconforma."},
@@ -1252,7 +1252,7 @@ const LP3B_QUESTIONS = {
 // ════════════════════════════════════════════════════════════
 // LP4B QUIZ MODULES & QUESTIONS
 // ════════════════════════════════════════════════════════════
-const LP4B_MODULES = [
+var LP4B_MODULES = [
   {id:"fresh",     icon:"🔬", title:"Proaspăt sau Alterat?", sub:"Carne, ouă, lapte",         color:"#ef4444", dim:"rgba(239,68,68,.12)",  border:"rgba(239,68,68,.3)",   time:8, count:5},
   {id:"detective", icon:"🕵️", title:"Detectiv Laborator",   sub:"Falsificarea laptelui",      color:"#3b82f6", dim:"rgba(59,130,246,.12)", border:"rgba(59,130,246,.3)",  time:7, count:4},
   {id:"egg",       icon:"🥚", title:"Detectiv Ouă",         sub:"Vechime și densitate",        color:"#f59e0b", dim:"rgba(245,158,11,.12)", border:"rgba(245,158,11,.3)",  time:6, count:4},
@@ -1260,7 +1260,7 @@ const LP4B_MODULES = [
   {id:"full",      icon:"🏆", title:"Quiz Complet",         sub:"Tot materialul LP4B",         color:"#8b5cf6", dim:"rgba(139,92,246,.12)", border:"rgba(139,92,246,.3)",  time:12},
 ];
 
-const LP4B_QUESTIONS = {
+var LP4B_QUESTIONS = {
   fresh:[
     {s:"🥩 pH=6.8, Nessler pozitiv la primele 3 picături, miros neplăcut.",q:"Concluzia examinării cărnii:",o:["Proaspătă – admisă","Relativ proaspătă","Alterată – respinsă","Date insuficiente"],c:2,e:"pH>6,6 = alterat. Nessler pozitiv confirma amoniac. Carne respinsă."},
     {s:"🥚 Ou plutește vertical la suprafață. Camera de aer >9mm.",q:"Starea oului:",o:["Proaspăt (1-3 zile)","Vârstă medie","Vechi – nerecomandat","Fiert"],c:2,e:"Plutire verticală = cameră aer mare = ou vechi."},
@@ -1309,7 +1309,7 @@ const LP4B_QUESTIONS = {
 
 
 
-const FISE_LABS = {
+var FISE_LABS = {
   lp1a: { title:"LP1A · Igiena Aerului",         available:true,  grupe:9, desc:"9 fise: microclimat, temperatura, umiditate, miscare aer, temperatura radianta, confort termic, pulberi, gaze, alergie latex" },
   lp1b: { title:"LP1B · Pulberi & Gaze",          available:true,  grupe:6, desc:"6 fise: pulberi PM10/PM2.5, COV, NTG birou, stafilococi bloc operator, azbest scoala, formaldehida gradinita" },
   lp2a: { title:"LP2A · Fumat & Microbi",         available:true,  grupe:6, desc:"6 fise: Fagerstrom + CO, fumat pasiv restaurant, NTG cabinet stomatologic, focar MRSA, sick building, dezinfectie gresita" },
@@ -1329,7 +1329,7 @@ const FISE_LABS = {
 // ════════════════════════════════════════════════════════════
 // FISE DATA + STYLES
 // ════════════════════════════════════════════════════════════
-const FISE_DATA = {
+var FISE_DATA = {
   lp1a: [
     { id:"g1", emoji:"🏥", title:"Microclimatul și influența asupra sănătății", color:"#1a5a9a",
       caz:[{l:"Temperatura aerului",v:"24,8°C"},{l:"Umiditate relativă",v:"72%"},{l:"Viteza aerului",v:"0,45 m/s"},{l:"Sursă încălzire",v:"lângă un pat"},{l:"Pacient",v:"în stare gravă, sedat"}],
@@ -2166,10 +2166,8 @@ const FISE_DATA = {
 
 };
 
-</script>
-<script type="text/babel">
 
-const FISE_DATA_EN = {
+var FISE_DATA_EN = {
   lp1a: [
     { id:"g1", emoji:"🏥", title:"Microclimate and its health effects", color:"#1a5a9a",
       caz:[{l:"Air temperature",v:"24.8°C"},{l:"Relative humidity",v:"72%"},{l:"Air velocity",v:"0.45 m/s"},{l:"Heat source",v:"near a patient bed"},{l:"Patient",v:"critically ill, sedated"}],
@@ -2872,8 +2870,7 @@ const FISE_DATA_EN = {
         {q:"What preventive measures do you recommend to the family of an allergic child?",h:"Carry 2 autoinjectors at all times. Read ALL labels every purchase (formulas change). Avoid products from shared production lines ('may contain'). Notify school + restaurant (allergy plan). Annual allergist review (may outgrow allergy). Emergency action plan written. Wear medical ID bracelet."},
       ], conc:["Peanut risk for the allergic child","Regulatory violations of the producer","Emergency treatment administered"] },
     { id:"g6", emoji:"🥫", title:"Vegetable canned goods — botulism", color:"#7c3aed",
-      caz:[{l:"Cases",v:"Couple: descending paralysis, diplopia, dysarthria, 18-36h after home-canned beans"},{l:"Diagnosis",v:"Clostridium botulinum toxin type B (mouse bioassay + ELISA positive    { id:"g5", emoji:"🥕", title:"Undeclared allergens in processed vegetable products", color:"#ea580c",
-      caz:[{l:"Product",v:"Cream of vegetable soup, packaged, restaurant"},{l:"Incident",v:"Customer with peanut allergy — severe anaphylactic shock after consuming"},{l:"Label",v:"does not mention peanuts"},{l:"Recipe investigation",v:"peanut oil used for sautéeing"},{l:"EpiPen",v:"patient did not have it"},{l:"Status",v:"ICU, stable after adrenaline administered by ambulance"}],
+      caz:[{l:"Cases",v:"Couple: descending paralysis, diplopia, dysarthria, 18-36h after home-canned beans"},{l:"Diagnosis",v:"Clostridium botulinum toxin type B confirmed"},{l:"Source",v:"home-canned green beans, boiled 30 min at 100°C"},{l:"pH",v:"5.8 — favourable for C. botulinum"},{l:"Distributed",v:"50 jars to family and neighbours"}],
       qs:[
         {q:"What legal obligations does the restaurant have regarding allergen declaration?",h:"EU Reg. 1169/2011: 14 major allergens must be declared (including peanuts). For food service: verbal or written information available for each dish. Penalty: fine 5,000-10,000 lei + civil liability for damages."},
         {q:"Describe the mechanism of anaphylactic shock and why peanuts are potent allergens.",h:"Peanut-specific IgE → mast cells + basophils → degranulation → histamine + tryptase + leukotrienes → massive vasodilation + bronchospasm + laryngeal oedema + hypotension → cardiovascular collapse within minutes. Peanut proteins (Ara h 1-9) = extremely heat-stable allergens."},
@@ -2956,6 +2953,50 @@ const FISE_DATA_EN = {
       ], conc:["Most preventable source of infection","Main foetal risk of congenital toxoplasmosis","#1 prevention tip for pregnant women"] },
   ],
 };
+
+
+// Expose to global scope for Babel script
+window.LP5B_MODULES = LP5B_MODULES;
+window.LP5B_QUESTIONS = LP5B_QUESTIONS;
+window.LP1A_MODULES = LP1A_MODULES;
+window.LP1A_QUESTIONS = LP1A_QUESTIONS;
+window.LP1B_MODULES = LP1B_MODULES;
+window.LP1B_QUESTIONS = LP1B_QUESTIONS;
+window.LP2A_MODULES = LP2A_MODULES;
+window.LP2A_QUESTIONS = LP2A_QUESTIONS;
+window.LP1A_QUESTIONS_EN = LP1A_QUESTIONS_EN;
+window.LP2A_QUESTIONS_EN = LP2A_QUESTIONS_EN;
+window.LP1B_QUESTIONS_EN = LP1B_QUESTIONS_EN;
+window.LP2B_QUESTIONS_EN = LP2B_QUESTIONS_EN;
+window.LP3A_QUESTIONS_EN = LP3A_QUESTIONS_EN;
+window.LP3B_QUESTIONS_EN = LP3B_QUESTIONS_EN;
+window.LP4A_QUESTIONS_EN = LP4A_QUESTIONS_EN;
+window.LP4B_QUESTIONS_EN = LP4B_QUESTIONS_EN;
+window.LP5A_QUESTIONS_EN = LP5A_QUESTIONS_EN;
+window.LP5B_QUESTIONS_EN = LP5B_QUESTIONS_EN;
+window.LP6A_QUESTIONS_EN = LP6A_QUESTIONS_EN;
+window.LP6B_QUESTIONS_EN = LP6B_QUESTIONS_EN;
+window.LP2B_MODULES = LP2B_MODULES;
+window.LP2B_QUESTIONS = LP2B_QUESTIONS;
+window.LP3A_MODULES = LP3A_MODULES;
+window.LP3A_QUESTIONS = LP3A_QUESTIONS;
+window.LP6A_MODULES = LP6A_MODULES;
+window.LP6A_QUESTIONS = LP6A_QUESTIONS;
+window.LP6B_MODULES = LP6B_MODULES;
+window.LP6B_QUESTIONS = LP6B_QUESTIONS;
+window.LP5A_MODULES = LP5A_MODULES;
+window.LP5A_QUESTIONS = LP5A_QUESTIONS;
+window.LP4A_MODULES = LP4A_MODULES;
+window.LP4A_QUESTIONS = LP4A_QUESTIONS;
+window.LP3B_MODULES = LP3B_MODULES;
+window.LP3B_QUESTIONS = LP3B_QUESTIONS;
+window.LP4B_MODULES = LP4B_MODULES;
+window.LP4B_QUESTIONS = LP4B_QUESTIONS;
+window.FISE_LABS = FISE_LABS;
+window.FISE_DATA = FISE_DATA;
+window.FISE_DATA_EN = FISE_DATA_EN;
+</script>
+<script type="text/babel">
 
 const {useState, useEffect, useRef, useCallback} = React;
 
