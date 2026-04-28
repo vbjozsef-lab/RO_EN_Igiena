@@ -3428,7 +3428,7 @@ const T_STRINGS = {
     st_name:"Numele și prenumele", st_name_ph:"ex. Ionescu Maria",
     st_group:"Fișă", st_group_ph:"— Selectați fișa —",
     st_spec:"Specializare", st_spec_ph:"— Selectați specializarea —",
-    st_enter:"Intră la test →",
+    st_enter:"Intră la test →", teacher_label:"Profesor", demo_sub:"Prezentări interactive.", demo_empty:"Niciun material pentru", demo_open:"Deschide →", teacher_label:"Profesor", demo_sub:"Prezentări interactive și laboratoare animate.", demo_empty:"Niciun material disponibil pentru", demo_open:"Deschide →",
     st_err_name:"Introduceți numele complet (min. 3 caractere).",
     st_err_group:"Selectați fișa!", st_err_spec:"Selectați specializarea!",
     st_teacher:"Profesor:",
@@ -3613,7 +3613,7 @@ const T_STRINGS = {
     st_name:"Full name", st_name_ph:"e.g. Maria Ionescu",
     st_group:"Fișă", st_group_ph:"— Select fișă —",
     st_spec:"Specialization", st_spec_ph:"— Select specialization —",
-    st_enter:"Enter test →",
+    st_enter:"Enter test →", teacher_label:"Teacher", demo_sub:"Interactive presentations.", demo_empty:"No materials for", demo_open:"Open →", teacher_label:"Teacher", demo_sub:"Interactive presentations and animated labs.", demo_empty:"No materials available for", demo_open:"Open →",
     st_err_name:"Please enter your full name (min. 3 characters).",
     st_err_group:"Please select a group!", st_err_spec:"Please select a specialization!",
     st_teacher:"Teacher:",
@@ -5877,24 +5877,24 @@ function StudentLogin({session, onLogin}) {
         <div style={{textAlign:"center",marginBottom:20}}>
           <div style={{fontSize:36}}>{lab.icon||"🧪"}</div>
           <h2 style={{color:"#0a2a18",fontSize:20,margin:"8px 0 4px"}}>{lab.code} — {lab.title}</h2>
-          <p style={{color:"#4a9a6a",fontSize:13,margin:0}}>Profesor: {session.teacher||"–"}</p>
+          <p style={{color:"#4a9a6a",fontSize:13,margin:0}}>{T("teacher_label")||"Profesor"}: {session.teacher||"–"}</p>
         </div>
-        <label style={S.label}>Numele și prenumele</label>
+        <label style={S.label}>{T("st_name")||"Numele și prenumele"}</label>
         <input style={{...S.input,marginBottom:12}} placeholder={T("st_name_ph")}
           value={name} onChange={e=>{setName(e.target.value);setErr("");}}
           onKeyDown={e=>e.key==="Enter"&&go()}/>
-        <label style={S.label}>Fișă</label>
+        <label style={S.label}>{T("st_group")||"Fișă"}</label>
         <select style={{...S.input,marginBottom:12}} value={group} onChange={e=>{setGroup(e.target.value);setErr("");}}>
-          <option value="">— Selectați grupa —</option>
+          <option value="">{T("st_group_ph")||"— Selectați fișa —"}</option>
           {Array.from({length:40},(_,i)=><option key={i+1} value={String(i+1)}>{i+1}</option>)}
         </select>
-        <label style={S.label}>Specializare</label>
+        <label style={S.label}>{T("st_spec")||"Specializare"}</label>
         <select style={{...S.input,marginBottom:16}} value={spec} onChange={e=>{setSpec(e.target.value);setErr("");}}>
-          <option value="">— Selectați specializarea —</option>
+          <option value="">{T("st_spec_ph")||"— Selectați specializarea —"}</option>
           {loadNomenclator().specializations.map(s=><option key={s} value={s}>{s}</option>)}
         </select>
         {err && <p style={{color:"#dc2626",fontSize:13,margin:"0 0 10px",fontWeight:600}}>{err}</p>}
-        <button style={S.btnG} onClick={go}>Intră la test →</button>
+        <button style={S.btnG} onClick={go}>{T("st_enter")||"Intră la test →"}</button>
       </div>
     </div>
   );
@@ -5908,12 +5908,12 @@ function DemoScreen({lab, onBack}) {
   return (
     <div style={{minHeight:"100vh",background:"#F8F9FA",padding:"24px 16px"}}>
       <div style={{maxWidth:800,margin:"0 auto"}}>
-        <button onClick={onBack} style={{...S.btnW,width:"auto",padding:"8px 16px",marginBottom:20,fontSize:13}}>← Înapoi</button>
+        <button onClick={onBack} style={{...S.btnW,width:"auto",padding:"8px 16px",marginBottom:20,fontSize:13}}>{T("back")||"← Înapoi"}</button>
         <h2 style={{color:"#0a2a18",fontSize:22,marginBottom:4}}>📽️ Materiale — {lab?.code}</h2>
-        <p style={{color:"#4a9a6a",fontSize:14,marginBottom:20}}>Prezentări interactive și laboratoare animate.</p>
+        <p style={{color:"#4a9a6a",fontSize:14,marginBottom:20}}>{T("demo_sub")||"Prezentări interactive și laboratoare animate."}</p>
         {demos.length===0
           ? <div style={{background:"#f0fdf4",borderRadius:12,padding:24,textAlign:"center",color:"#4a9a6a"}}>
-              <p style={{fontWeight:600}}>Niciun material disponibil pentru {lab?.code}.</p>
+              <p style={{fontWeight:600}}>{T("demo_empty")||"Niciun material disponibil pentru"} {lab?.code}.</p>
             </div>
           : <div style={{display:"flex",flexDirection:"column",gap:12}}>
               {demos.map((d,i)=>(
@@ -5921,7 +5921,7 @@ function DemoScreen({lab, onBack}) {
                   style={{display:"flex",alignItems:"center",gap:14,padding:"16px 20px",background:"#fff",border:"1.5px solid #b2ddc8",borderRadius:14,textDecoration:"none",color:"#166534",fontWeight:600,fontSize:15}}>
                   <span style={{fontSize:28}}>🔗</span>
                   <span style={{flex:1}}>{d.title}</span>
-                  <span style={{fontSize:12,opacity:.6,background:"#dcfce7",padding:"4px 10px",borderRadius:20}}>Deschide →</span>
+                  <span style={{fontSize:12,opacity:.6,background:"#dcfce7",padding:"4px 10px",borderRadius:20}}>{T("demo_open")||"Deschide →"}</span>
                 </a>
               ))}
             </div>
@@ -6175,14 +6175,15 @@ function LangToggle({lang, onToggle}) {
   return (
     <button onClick={onToggle}
       style={{position:"fixed",bottom:20,right:20,zIndex:9999,
-        background:"#fff",border:"2px solid #e0e7ff",borderRadius:"50%",
-        width:52,height:52,display:"flex",alignItems:"center",justifyContent:"center",
+        background:"#fff",border:"2px solid #e0e7ff",borderRadius:24,
+        padding:"8px 16px",display:"flex",alignItems:"center",justifyContent:"center",
         cursor:"pointer",boxShadow:"0 4px 20px rgba(99,102,241,0.25)",
-        fontSize:24,transition:"transform .2s",WebkitTapHighlightColor:"transparent"}}
-      onMouseEnter={e=>e.currentTarget.style.transform="scale(1.1)"}
+        fontSize:13,fontWeight:800,letterSpacing:".08em",color:"#6366f1",
+        transition:"transform .2s",WebkitTapHighlightColor:"transparent"}}
+      onMouseEnter={e=>e.currentTarget.style.transform="scale(1.05)"}
       onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}
       title={lang==="ro"?"Switch to English":"Comutați la Română"}>
-      {lang==="ro"?"🇬🇧":"🇷🇴"}
+      {lang==="ro"?"EN":"RO"}
     </button>
   );
 }
