@@ -3386,13 +3386,13 @@ const LANG_STORAGE_KEY = "igiena_lang";
 const T_STRINGS = {
   ro: {
     // Login
-    login_title:"Panou de control", login_sub:"Generează QR · Urmărește rezultatele",
-    login_auth:"Autentificare Profesor", login_btn:"Intră în panou →",
+    login_title:"Panou de control", login_auth:"Autentificare Profesor", back:"← Înapoi", platform_sub:"Platformă Practică", login_sub:"{T("login_sub")||"Generează QR · Urmărește rezultatele"}",
+    login_auth:"{T("login_auth")||"Autentificare Profesor"}", login_btn:"Intră în panou →",
     login_loading:"Se autentifică…", login_prof:"Profesor", login_pass:"Parolă",
-    login_select:"— Selectați numele —", login_err_prof:"Selectați profesorul!",
+    login_select:"{T("login_select")||"— Selectați numele —"}", login_err_prof:"Selectați profesorul!",
     login_err_pass:"Introduceți parola!", login_err_wrong:"Parolă incorectă!",
     login_student_title:"Studenți",
-    login_student_sub:"Scanați codul QR primit de la profesor. Nu este nevoie de cont.",
+    login_student_sub:"{T("login_student_sub")||"Scanați codul QR primit de la profesor. Nu este nevoie de cont."}",
     // Nav
     tab_qr:"Generează QR", tab_preview:"Previzualizare Quiz", tab_results:"Rezultate",
     tab_prezentari:"Prezentări", tab_fisiere:"Fișiere", tab_nomenclator:"Nomenclator",
@@ -3433,7 +3433,7 @@ const T_STRINGS = {
     st_err_group:"Selectați fișa!", st_err_spec:"Selectați specializarea!",
     st_teacher:"Profesor:",
     // Quiz
-    quiz_confirm:"Confirmă răspunsul", quiz_next:"Următoarea întrebare →",
+    quiz_confirm:"Confirmă răspunsul", quiz_next:"Următoarea întrebare →", welcome_student:"Bun venit", materials_available:"Materiale disponibile", select_module:"Selectează modulul:", questions_label:"întrebări",
     quiz_finish:"Finalizează testul →", quiz_answers:"răspunsuri",
     quiz_correct:"✓ Corect",
     // Result screen
@@ -3474,7 +3474,7 @@ const T_STRINGS = {
     mod_select:"Selectează modulul:",
     mod_materials:"📽️ Materiale disponibile",
     // Error / Loading
-    err_title:"Eroare", err_back:"← Înapoi acasă",
+    err_title:"Eroare", err_back:"{T("back")||"← Înapoi"} acasă",
     loading_qr:"Se verifică codul QR…",
     err_no_quiz:"nu are quiz activ inca.",
     // Common
@@ -3571,7 +3571,7 @@ const T_STRINGS = {
   },
   en: {
     // Login
-    login_title:"Dashboard", login_sub:"Generate QR · Track results",
+    login_title:"Dashboard", login_auth:"Teacher Login", back:"← Back", platform_sub:"Practical Platform", login_sub:"Generate QR · Track results",
     login_auth:"Teacher Login", login_btn:"Enter dashboard →",
     login_loading:"Signing in…", login_prof:"Teacher", login_pass:"Password",
     login_select:"— Select name —", login_err_prof:"Please select a teacher!",
@@ -3618,7 +3618,7 @@ const T_STRINGS = {
     st_err_group:"Please select a group!", st_err_spec:"Please select a specialization!",
     st_teacher:"Teacher:",
     // Quiz
-    quiz_confirm:"Confirm answer", quiz_next:"Next question →",
+    quiz_confirm:"Confirm answer", quiz_next:"Next question →", welcome_student:"Welcome", materials_available:"Available materials", select_module:"Select module:", questions_label:"questions",
     quiz_finish:"Finish test →", quiz_answers:"answers",
     quiz_correct:"✓ Correct",
     // Result screen
@@ -3814,7 +3814,7 @@ function HomePage({onAdminLogin, onJoinToken}) {
             <div style={{width:50,height:50,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",borderRadius:15,display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,boxShadow:"0 8px 24px rgba(99,102,241,0.3)"}}>🧬</div>
             <div>
               <div style={{fontSize:21,fontWeight:900,color:"#1e1b4b",letterSpacing:"-.02em",lineHeight:1.1}}>Igienă</div>
-              <div style={{fontSize:11,color:"#6366f1",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase"}}>UMFST · Platformă Practică</div>
+              <div style={{fontSize:11,color:"#6366f1",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase"}}>UMFST · {T("platform_sub")||"Platformă Practică"}</div>
             </div>
           </div>
           <div style={{width:40,height:3,background:"linear-gradient(90deg,#6366f1,#c4b5fd)",borderRadius:2}}/>
@@ -3881,11 +3881,11 @@ function HomePage({onAdminLogin, onJoinToken}) {
 
             <div style={{marginBottom:28}}>
               <div style={{fontSize:11,color:"#6366f1",fontWeight:800,textTransform:"uppercase",letterSpacing:".12em",marginBottom:8}}>Autentificare Profesor</div>
-              <h2 style={{fontSize:24,fontWeight:900,color:"#1e1b4b",margin:"0 0 4px",letterSpacing:"-.02em"}}>Panou de control</h2>
+              <h2 style={{fontSize:24,fontWeight:900,color:"#1e1b4b",margin:"0 0 4px",letterSpacing:"-.02em"}}>{T("login_title")||"Panou de control"}</h2>
               <p style={{fontSize:13,color:"#94a3b8",margin:0}}>Generează QR · Urmărește rezultatele</p>
             </div>
 
-            <label style={{display:"block",fontSize:11,color:"#6366f1",fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",marginBottom:6}}>Profesor</label>
+            <label style={{display:"block",fontSize:11,color:"#6366f1",fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",marginBottom:6}}>{T("login_prof")||"Profesor"}</label>
             <div style={{position:"relative",marginBottom:14}}>
               <select
                 style={{width:"100%",background:teacher?"#fff":"#F8FAFF",border:`1.5px solid ${err&&!teacher?"#fca5a5":"#e0e7ff"}`,borderRadius:10,padding:"12px 40px 12px 14px",color:teacher?"#1e293b":"#94a3b8",fontSize:14,boxSizing:"border-box",outline:"none",appearance:"none",cursor:"pointer",transition:"border-color .15s"}}
@@ -3896,7 +3896,7 @@ function HomePage({onAdminLogin, onJoinToken}) {
               <div style={{position:"absolute",right:14,top:"50%",transform:"translateY(-50%)",color:"#a5b4fc",pointerEvents:"none",fontSize:11,fontWeight:700}}>▾</div>
             </div>
 
-            <label style={{display:"block",fontSize:11,color:"#6366f1",fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",marginBottom:6}}>Parolă</label>
+            <label style={{display:"block",fontSize:11,color:"#6366f1",fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",marginBottom:6}}>{T("login_pass")||"Parolă"}</label>
             <input
               type="password" placeholder="••••••••"
               style={{width:"100%",background:"#F8FAFF",border:`1.5px solid ${err&&teacher?"#fca5a5":"#e0e7ff"}`,borderRadius:10,padding:"12px 14px",color:"#1e293b",fontSize:14,boxSizing:"border-box",outline:"none",marginBottom:err?10:20,transition:"border-color .15s"}}
@@ -3918,7 +3918,7 @@ function HomePage({onAdminLogin, onJoinToken}) {
           <div style={{marginTop:20,background:"rgba(255,255,255,0.6)",backdropFilter:"blur(10px)",border:"1px solid #e0e7ff",borderRadius:14,padding:"14px 18px",display:"flex",alignItems:"flex-start",gap:12}}>
             <span style={{fontSize:22,marginTop:1}}>📱</span>
             <div>
-              <div style={{fontSize:12,fontWeight:700,color:"#6366f1",marginBottom:3}}>Studenți</div>
+              <div style={{fontSize:12,fontWeight:700,color:"#6366f1",marginBottom:3}}>{T("login_student_title")||"Studenți"}</div>
               <div style={{fontSize:12,color:"#64748b",lineHeight:1.6}}>Scanați codul QR primit de la profesor. Nu este nevoie de cont.</div>
             </div>
           </div>
@@ -3935,7 +3935,7 @@ function AdminLogin({onSuccess, onBack}) {
   const [pw, setPw]           = useState("");
   const [err, setErr]         = useState("");
   const go = () => {
-    if (!teacher) { setErr("Selectați numele profesorului!"); return; }
+    if (!teacher) { setErr(T("login_err_prof")||"Selectați numele profesorului!"); return; }
     if (!pw) { setErr(T("login_err_pass")); return; }
     if (TEACHERS[teacher] !== pw) { setErr(T("login_err_wrong")); return; }
     onSuccess(teacher);
@@ -3944,18 +3944,18 @@ function AdminLogin({onSuccess, onBack}) {
     <div style={S.page}>
       <div style={{...S.card, maxWidth:380, textAlign:"center"}}>
         <div style={{fontSize:44, marginBottom:10}}>🔐</div>
-        <h2 style={{color:"#f1f5f9", margin:"0 0 4px", fontSize:22}}>Panou Profesor</h2>
-        <p style={{color:"#64748b",fontSize:13,margin:"0 0 20px"}}>Generează coduri QR și urmărești rezultatele</p>
-        <label style={{...S.label, textAlign:"left", display:"block"}}>Profesor</label>
+        <h2 style={{color:"#f1f5f9", margin:"0 0 4px", fontSize:22}}>{T("login_title")||"Panou Profesor"}</h2>
+        <p style={{color:"#64748b",fontSize:13,margin:"0 0 20px"}}>{T("login_sub")||"Generează coduri QR și urmărești rezultatele"}</p>
+        <label style={{...S.label, textAlign:"left", display:"block"}}>{T("login_prof")||"Profesor"}</label>
         <select style={{...S.input, marginBottom:12}} value={teacher} onChange={e=>{setTeacher(e.target.value);setPw("");setErr("")}}>
           <option value="">— Selectați numele —</option>
           {Object.keys(TEACHERS).map(t=><option key={t} value={t}>{t}</option>)}
         </select>
-        <label style={{...S.label, textAlign:"left", display:"block"}}>Parolă</label>
+        <label style={{...S.label, textAlign:"left", display:"block"}}>{T("login_pass")||"Parolă"}</label>
         <input style={S.input} type="password" placeholder="••••••••" value={pw}
           onChange={e=>{setPw(e.target.value);setErr("")}} onKeyDown={e=>e.key==="Enter"&&go()}/>
         {err && <p style={{color:"#f87171",fontSize:13,margin:"8px 0 0",fontWeight:600}}>{err}</p>}
-        <button style={{...S.btnG, marginTop:14}} onClick={go}>Intră în panou</button>
+        <button style={{...S.btnG, marginTop:14}} onClick={go}>{T("login_btn")||"Intră în panou"}</button>
         <button style={{...S.btnW, marginTop:8}} onClick={onBack}>← Înapoi</button>
       </div>
     </div>
@@ -5943,11 +5943,11 @@ function GenericModuleSelect({lab, modules, questions, studentName, onSelect, on
         <div style={{textAlign:"center",marginBottom:28}}>
           <div style={{fontSize:42,marginBottom:8}}>{lab?.icon}</div>
           <h2 style={{color:"#0a2a18",fontSize:22,margin:"0 0 6px"}}>{lab?.code} — {lab?.title}</h2>
-          {studentName && <p style={{color:"#4a9a6a",fontSize:14,margin:0}}>Bun venit, {studentName}!</p>}
+          {studentName && <p style={{color:"#4a9a6a",fontSize:14,margin:0}}>{T("welcome_student")||"Bun venit"}, {studentName}!</p>}
         </div>
         {demos.length>0 && (
           <div style={{background:"#fff",border:"1.5px solid #b2ddc8",borderRadius:14,padding:"16px 20px",marginBottom:20}}>
-            <p style={{fontWeight:700,fontSize:14,color:"#0a2a18",margin:"0 0 10px"}}>📽️ Materiale disponibile</p>
+            <p style={{fontWeight:700,fontSize:14,color:"#0a2a18",margin:"0 0 10px"}}>📽️ {T("materials_available")||"Materiale disponibile"}</p>
             <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
               {demos.map((d,i)=>(
                 <a key={i} href={d.url} target="_blank" rel="noreferrer"
@@ -5958,7 +5958,7 @@ function GenericModuleSelect({lab, modules, questions, studentName, onSelect, on
             </div>
           </div>
         )}
-        <p style={{fontWeight:700,color:"#0a2a18",fontSize:16,marginBottom:16}}>Selectează modulul:</p>
+        <p style={{fontWeight:700,color:"#0a2a18",fontSize:16,marginBottom:16}}>{T("select_module")||"Selectează modulul:"}</p>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:12}}>
           {modules.map(m=>{
             const count = (questions[m.id]||[]).length;
@@ -5968,7 +5968,7 @@ function GenericModuleSelect({lab, modules, questions, studentName, onSelect, on
                 <div style={{fontSize:28,marginBottom:6}}>{m.icon}</div>
                 <p style={{fontWeight:700,color:m.color,fontSize:15,margin:"0 0 4px"}}>{m.title}</p>
                 <p style={{color:"#4a7a60",fontSize:12,margin:"0 0 8px"}}>{m.sub}</p>
-                <p style={{color:m.color,fontSize:11,fontWeight:600}}>⏱ {m.time} min · {Math.min(m.count||count,count)} întrebări</p>
+                <p style={{color:m.color,fontSize:11,fontWeight:600}}>⏱ {m.time} min · {Math.min(m.count||count,count)} {T("questions_label")||"întrebări"}</p>
               </button>
             );
           })}
