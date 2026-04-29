@@ -3153,18 +3153,18 @@ const QR_DURATIONS = [
 // PRACTICALS REGISTRY
 // ════════════════════════════════════════════════════════════
 const LABS = [
-  {id:"lp1a", code:"LP1A", icon:"🌬️", title:"Proprietăți fizice ale aerului",         color:"#0ea5e9", dim:"rgba(14,165,233,.12)",  border:"rgba(14,165,233,.3)",  ready:true },
-  {id:"lp1b", code:"LP1B", icon:"🏭", title:"Pulberi, gaze, calitatea aerului",        color:"#64748b", dim:"rgba(100,116,139,.12)", border:"rgba(100,116,139,.3)", ready:true },
-  {id:"lp2a", code:"LP2A", icon:"🚬", title:"Fumat și microbiologia aerului",          color:"#78716c", dim:"rgba(120,113,108,.12)", border:"rgba(120,113,108,.3)", ready:true },
-  {id:"lp2b", code:"LP2B", icon:"💡", title:"Iluminat și sonometrie",                  color:"#eab308", dim:"rgba(234,179,8,.12)",   border:"rgba(234,179,8,.3)",   ready:true },
-  {id:"lp3a", code:"LP3A", icon:"💧", title:"Apă – fizico-chimic, nitrați",            color:"#3b82f6", dim:"rgba(59,130,246,.12)",  border:"rgba(59,130,246,.3)",  ready:true },
-  {id:"lp3b", code:"LP3B", icon:"🦠", title:"Apă – microbiologie, dezinfecție",        color:"#06b6d4", dim:"rgba(6,182,212,.12)",   border:"rgba(6,182,212,.3)",   ready:true },
-  {id:"lp4a", code:"LP4A", icon:"🍎", title:"Evaluarea stării de nutriție",            color:"#f97316", dim:"rgba(249,115,22,.12)",  border:"rgba(249,115,22,.3)",  ready:true },
-  {id:"lp4b", code:"LP4B", icon:"🥩", title:"Produse de origine animală",              color:"#ef4444", dim:"rgba(239,68,68,.12)",   border:"rgba(239,68,68,.3)",   ready:true },
-  {id:"lp5a", code:"LP5A", icon:"🥦", title:"Produse vegetale",                        color:"#22c55e", dim:"rgba(34,197,94,.12)",   border:"rgba(34,197,94,.3)",   ready:true },
-  {id:"lp5b", code:"LP5B", icon:"🧫", title:"Alimente – bacterii și paraziți",         color:"#a855f7", dim:"rgba(168,85,247,.12)",  border:"rgba(168,85,247,.3)",  ready:true },
-  {id:"lp6a", code:"LP6A", icon:"☢️", title:"Radiații",                                color:"#f59e0b", dim:"rgba(245,158,11,.12)",  border:"rgba(245,158,11,.3)",  ready:true },
-  {id:"lp6b", code:"LP6B", icon:"🏫", title:"Igienă școlară, comportamente de risc",   color:"#8b5cf6", dim:"rgba(139,92,246,.12)",  border:"rgba(139,92,246,.3)",  ready:true },
+  {id:"lp1a", code:"LP1A", icon:"🌬️", title:"Proprietăți fizice ale aerului",         titleEn:"Physical properties of air",              color:"#0ea5e9", dim:"rgba(14,165,233,.12)",  border:"rgba(14,165,233,.3)",  ready:true },
+  {id:"lp1b", code:"LP1B", icon:"🏭", title:"Pulberi, gaze, calitatea aerului",        titleEn:"Dust, gases and air quality",              color:"#64748b", dim:"rgba(100,116,139,.12)", border:"rgba(100,116,139,.3)", ready:true },
+  {id:"lp2a", code:"LP2A", icon:"🚬", title:"Fumat și microbiologia aerului",          titleEn:"Smoking and air microbiology",             color:"#78716c", dim:"rgba(120,113,108,.12)", border:"rgba(120,113,108,.3)", ready:true },
+  {id:"lp2b", code:"LP2B", icon:"💡", title:"Iluminat și sonometrie",                  titleEn:"Lighting and noise measurement",           color:"#eab308", dim:"rgba(234,179,8,.12)",   border:"rgba(234,179,8,.3)",   ready:true },
+  {id:"lp3a", code:"LP3A", icon:"💧", title:"Apă – fizico-chimic, nitrați",            titleEn:"Water – physico-chemical, nitrates",       color:"#3b82f6", dim:"rgba(59,130,246,.12)",  border:"rgba(59,130,246,.3)",  ready:true },
+  {id:"lp3b", code:"LP3B", icon:"🦠", title:"Apă – microbiologie, dezinfecție",        titleEn:"Water – microbiology, disinfection",       color:"#06b6d4", dim:"rgba(6,182,212,.12)",   border:"rgba(6,182,212,.3)",   ready:true },
+  {id:"lp4a", code:"LP4A", icon:"🍎", title:"Evaluarea stării de nutriție",            titleEn:"Nutritional status assessment",            color:"#f97316", dim:"rgba(249,115,22,.12)",  border:"rgba(249,115,22,.3)",  ready:true },
+  {id:"lp4b", code:"LP4B", icon:"🥩", title:"Produse de origine animală",              titleEn:"Animal-origin food products",              color:"#ef4444", dim:"rgba(239,68,68,.12)",   border:"rgba(239,68,68,.3)",   ready:true },
+  {id:"lp5a", code:"LP5A", icon:"🥦", title:"Produse vegetale",                        titleEn:"Plant-based food products",                color:"#22c55e", dim:"rgba(34,197,94,.12)",   border:"rgba(34,197,94,.3)",   ready:true },
+  {id:"lp5b", code:"LP5B", icon:"🧫", title:"Alimente – bacterii și paraziți",         titleEn:"Food – bacteria and parasites",            color:"#a855f7", dim:"rgba(168,85,247,.12)",  border:"rgba(168,85,247,.3)",  ready:true },
+  {id:"lp6a", code:"LP6A", icon:"☢️", title:"Radiații",                                titleEn:"Ionising radiation",                       color:"#f59e0b", dim:"rgba(245,158,11,.12)",  border:"rgba(245,158,11,.3)",  ready:true },
+  {id:"lp6b", code:"LP6B", icon:"🏫", title:"Igienă școlară, comportamente de risc",   titleEn:"School hygiene and risk behaviours",       color:"#8b5cf6", dim:"rgba(139,92,246,.12)",  border:"rgba(139,92,246,.3)",  ready:true },
 ];
 
 // ════════════════════════════════════════════════════════════
@@ -5857,6 +5857,7 @@ function TokenJoin({token, onValid, onInvalid}) {
 // ════════════════════════════════════════════════════════════
 function StudentLogin({session, onLogin}) {
   const T = useT();
+  const lang = React.useContext(LangContext);
   const [name, setName]   = useState("");
   const [group, setGroup] = useState("");
   const [spec, setSpec]   = useState("");
@@ -5876,7 +5877,7 @@ function StudentLogin({session, onLogin}) {
       <div className="student-card">
         <div style={{textAlign:"center",marginBottom:20}}>
           <div style={{fontSize:36}}>{lab.icon||"🧪"}</div>
-          <h2 style={{color:"#0a2a18",fontSize:20,margin:"8px 0 4px"}}>{lab.code} — {lab.title}</h2>
+          <h2 style={{color:"#0a2a18",fontSize:20,margin:"8px 0 4px"}}>{lab.code} — {lang==="en" && lab.titleEn ? lab.titleEn : lab.title}</h2>
           <p style={{color:"#4a9a6a",fontSize:13,margin:0}}>{T("teacher_label")||"Profesor"}: {session.teacher||"–"}</p>
         </div>
         <label style={S.label}>{T("st_name")||"Numele și prenumele"}</label>
@@ -5936,13 +5937,14 @@ function DemoScreen({lab, onBack}) {
 // ════════════════════════════════════════════════════════════
 function GenericModuleSelect({lab, modules, questions, studentName, onSelect, onDemo}) {
   const T = useT();
+  const lang = React.useContext(LangContext);
   const demos = LAB_DEMOS[lab?.id] || [];
   return (
     <div style={{minHeight:"100vh",background:"#F8F9FA",padding:"24px 16px"}}>
       <div style={{maxWidth:800,margin:"0 auto"}}>
         <div style={{textAlign:"center",marginBottom:28}}>
           <div style={{fontSize:42,marginBottom:8}}>{lab?.icon}</div>
-          <h2 style={{color:"#0a2a18",fontSize:22,margin:"0 0 6px"}}>{lab?.code} — {lab?.title}</h2>
+          <h2 style={{color:"#0a2a18",fontSize:22,margin:"0 0 6px"}}>{lab?.code} — {lang==="en" && lab?.titleEn ? lab?.titleEn : lab?.title}</h2>
           {studentName && <p style={{color:"#4a9a6a",fontSize:14,margin:0}}>{T("welcome_student")||"Bun venit"}, {studentName}!</p>}
         </div>
         {demos.length>0 && (
