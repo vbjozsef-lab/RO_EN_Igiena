@@ -2159,71 +2159,122 @@ var FISE_DATA = {
       ], conc:["Solicitarea nejustificată și motivul","Principiul de bază al radioprotecției pacientului","Cea mai importantă măsură tehnică de reducere a dozei"] },
   ],
   lp1b: [
-    { id:"g1", emoji:"🏭", title:"Pulberi în secția de prelucrare mecanică", color:"#64748b",
-      caz:[{l:"Locație",v:"Atelier strungărie, 12 muncitori"},{l:"PM10 măsurat",v:"0,38 mg/m³"},{l:"PM2.5 estimat",v:"0,19 mg/m³"},{l:"Durată expunere",v:"8h/zi, 5 zile/săptămână"},{l:"EIP",v:"absent — nu poartă mască"},{l:"Simptome",v:"3 muncitori: tuse cronică, dispnee la efort"}],
+    { id:"g1", emoji:"🌫️", title:"Silicosis — Miner with chronic SiO₂ exposure", color:"#64748b",
+      caz:[
+        {l:"Patient",v:"Male, 52 years, underground miner, vechime 28 years"},
+        {l:"Exposure",v:"Pulberi SiO₂ > 50%, without regular protective equipment"},
+        {l:"PM₂.₅ at workplace",v:"850 µg/m³ (CMA: 25 µg/m³ anual)"},
+        {l:"Symptoms",v:"Exertional dyspnoea, dry cough, weight loss"},
+        {l:"Chest X-ray",v:"Bilateral nodular opacities, dilated hila"},
+        {l:"HRCT",v:"Noduli fibroși, adenopatie hilară, emfizem"},
+        {l:"Spirometrie",v:"Sindrom restrictiv: CV↓, VEMS↓"},
+        {l:"Diagnostic",v:"Silicoză stadiu II (ILO 2/2)"},
+      ],
       qs:[
-        {q:"Sunteți inspector DSP. Identificați toate neconformitățile față de normele în vigoare.",h:"PM10 norma: 0,35 mg/m³ (depășit). Lipsa EIP = neconformitate gravă. 3 simptomatici = semnal de alarmă ocupațional."},
-        {q:"Calculați doza zilnică inhalată de un muncitor (volum respirator 10 m³/zi).",h:"Doză = 0,38 mg/m³ × 10 m³ = 3,8 mg/zi. Comparat cu limita profesională: 4 mg/zi (aproape de CMP)."},
-        {q:"Ce fracțiune din PM2.5 ajunge la nivel alveolar și ce risc implică?",h:"PM2.5 < 5µm → penetrare alveolară. Risc: pneumoconioze, fibroză, cancer pulmonar (IARC Gr.1)."},
-        {q:"Ce măsuri tehnice obligatorii propuneți pentru reducerea expunerii?",h:"Sistem aspirație localizată, ecrane de protecție, umectare așchii, capsulare utilaje zgomotoase."},
-        {q:"Ce EIP este obligatoriu și ce tip de filtru specificați în recomandare?",h:"Mască FFP2 (PM2.5) sau FFP3 (PM0.1). Obligatorie conform HG 1048/2006."},
-        {q:"Formulați decizia de inspector: ce sancțiuni și termene aplicați?",h:"Suspendare activitate dacă risc iminent. Avertisment + termen 30 zile pentru EIP + sistem aspirație. Reevaluare la 60 zile."},
-      ], conc:["Neconformitățile identificate","Măsura cu prioritate maximă","Termenul de remediere propus"] },
+        {q:"Calculate of câte ori is depășită CMA for PM₂.₅ at locul of muncă. Ce semnifică această depășire?",h:"850/25 = 34× depășire CMA. Semnifică risc extrem of ridicat of pneumoconioză, in special silicoză. CMA reprezintă doza legală maximă which nu produce efecte nocive at exposure repetată."},
+        {q:"Explain of ce silicoza is considerată boală profesională ireversibilă and which is baza patogenică.",h:"SiO₂ → fagocitat of macrofage alveolare → macrofagele mor → eliberare enzime fibrozante → fibroză progresivă. Nu există treatment curativ. Prevenția prin reducerea expunerii is singura intervenție eficientă. Latență tipică 10-20 years."},
+        {q:"Ce relație există între dimensiunea particulelor and penetrarea respiratorie? La ce nivel se rețin particulele < 2,5 µm?",h:"< 2,5 µm (PM₂.₅): ajung in alveole, retenție 80-90%. 2,5-10 µm (PM₁₀): bronhiole. > 10 µm: căi respiratorii superioare. Cu cât particula is mai mică, with atât penetrarea is mai profundă and mai periculoasă."},
+        {q:"Ce metode of determinare cantitativă a pulberilor cunoașteți? Descrieți principiul metodei aspirației with alonjă.",h:"Metode cantitative: sedimentare (mg/m²/zi) and aspirație with alonjă (mg/m³). Aspirație: cântărire filtru inițial → aspirare volum cunoscut of aer → cântărire filtru with praf → calcul: (M_final - M_filtru)/V_aer. Necesită balanță analitică (0,1 mg precizie)."},
+        {q:"Ce measures of protection colectivă and individuală propuneți for această secție minieră?",h:"Colective: ventilație mecyearscă, umezirea forajului (reducere pulberi), capsulare surse. Individuale: mască FFP3 (filtrare >99% PM2,5), rotație posturi. Orgyearszatorice: monitorizare periodică PM, audiogramă, spirometrie anuală. Juridic: CMA 25 µg/m³ PM2,5 (Legea 104/2011)."},
+        {q:"Ce clasificare EPA există for particulele of praf and ce potențial nociv are fiecare fracție?",h:"PM₁₀ (<10µm): inhalabile, ajung in bronhiole, risc moderat. PM₂.₅ (<2,5µm): fine, alveole, retenție 80-90%, risc ridicat. PM₀.₁ (<0,1µm): ultrafine, circulație sistemică, fără CMA stabilit, in studiu. Nocivitatea crește with diminuarea dimensiunii."},
+      ], conc:["Gradul of depășire a CMA calculat","Patogenia silicozei (ireversibilă)","Măsura prioritară of protection"] },
 
-    { id:"g2", emoji:"🌫️", title:"Ceață chimică lângă o fabrică de vopsele", color:"#6b7280",
-      caz:[{l:"Locație",v:"Cartier rezidențial, 200m de fabrică"},{l:"Substanță suspectă",v:"solvenți organici (toluen, xilen)"},{l:"Plângeri",v:"42 de cetățeni: cefalee, iritație oculară, greață"},{l:"Măsurare toluen",v:"85 ppm (olfactiv: 2 ppm)"},{l:"Limita CMA 8h",v:"50 ppm"},{l:"Direcție vânt",v:"dinspre fabrică spre cartier"}],
+    { id:"g2", emoji:"🧤", title:"Latex allergy — Nurse, 9 years exposure", color:"#7c3aed",
+      caz:[
+        {l:"Pacientă",v:"Female, 34 years, nurse, vechime 9 years"},
+        {l:"Exposure",v:"Mănuși latex pudrate zilnic, deschidere zilnică multiple pachete"},
+        {l:"Symptoms",v:"Urticarie, rinoree, wheezing at locul of muncă"},
+        {l:"Trigger",v:"Simptome in primele minute după deschiderea pachetului of mănuși"},
+        {l:"Prick test",v:"Pozitiv at extract latex — reacție 9 mm"},
+        {l:"IgE specific",v:"Latex Hev b 1, 3, 5 — pozitiv (> 3,5 kU/L)"},
+        {l:"Diagnostic",v:"Alergie latex tip I (IgE-mediată) + dermatită of contact"},
+      ],
       qs:[
-        {q:"Confirmați sau infirmați legătura cauzală dintre fabrică și simptome. Argumentați.",h:"85 ppm depășește CMA de 1,7×. Direcție vânt confirmă sursa. Simptomele concordă cu expunere la toluen. Legătură cauzală probabilă."},
-        {q:"Ce protocoale de urgență activați ca inspector DSP?",h:"Notificare Garda de Mediu + ANPM. Anchetă epidemiologică. Solicitare oprire producție până la remediere. Comunicat public."},
-        {q:"Ce investigații medicale recomandați pentru cei 42 de cetățeni?",h:"Examen neurologic, funcție hepatică (AST/ALT), hemoleucogramă. Biomarkeri: acid hipuric urinar (metabolit toluen)."},
-        {q:"Care este mecanismul de toxicitate al toluenului? Ce organe-țintă sunt afectate?",h:"Neurotoxic: dizolvă mielina. Hepatotoxic: metabolism hepatic cu radicali liberi. SNC (narcoze), ficat, rinichi."},
-        {q:"Ce modificări ale procesului de producție impuneți fabricii?",h:"Sisteme de retenție vapori (condensare), filtre cu carbon activ, monitorizare continuă emisii, program de difuzare nocturnă."},
-        {q:"Redactați concluzia raportului de inspecție în 3 puncte esențiale.",h:"1. Depășire CMA confirmată. 2. Risc pentru sănătate publică demonstrat. 3. Măsuri corective obligatorii cu termen de 15 zile."},
-      ], conc:["Concluzia anchetei cauzale","Măsura de urgență aplicată","Termenul de remediere"] },
+        {q:"Explain mecyearssmul prin which mănușile of latex pudrate produc simptome respiratorii, nu doar cutanate.",h:"Alergenele from latex (proteine Hev b) are aeropurtate on particulele of TALC with which are lubrefiate mănușile. La deschiderea pachetului → eliberare masivă aerosoli with proteine → inhalare → IgE → degranulare mastocite → simptome respiratorii. Mecyearssm IgE-mediat tip I."},
+        {q:"Care is diferența dintre alergia at latex tip I and dermatita of contact (tip IV)?",h:"Tip I (IgE-mediată): proteinele from latex, reacție rapidă (minute), anafilaxie posibilă. Tip IV (hipersensibilitate întârziată): aditivii chimici (acceleratori of vulcyearszare), reacție tardivă (24-48h), dermatită of contact. Pacienta are ambele forme."},
+        {q:"Ce measures of prevenire primară recomandați for a spital with mulți angajați sensibilizați at latex?",h:"Eliminarea mănușilor with pudră (TALC) — cea mai eficientă măsură. Trecerea at mănuși non-latex (nitril, neopren) for personalul sensibilizat. Declararea spitalului ca 'mediu fără pudră'. Informarea pacienților alergici at latex înainte of proceduri. Screening angajați."},
+        {q:"Ce alte profesii prezintă risc crescut of alergie at latex and of ce?",h:"Riscuri crescute: personal medical/stomatologic (exposure zilnică mănuși), muncitori industria cauciucului (exposure directă), pacienți with spina bifida (multiple intervenții chirurgicale = sensibilizare cumulativă), utilizatori frecvenți of prezervative. Prevalența in personal medical: 5-15%."},
+        {q:"Prevalența alergiei at latex at personalul medical is of 5-15%. Ce factori explică această valoare ridicată?",h:"Exposure zilnică repetată → sensibilizare progresivă. Frecvența deschiderii pachetelor → doze mari of aerosoli. Contactul with mucosase (proceduri invazive) → sensibilizare mai rapidă. Lipsa screeningului sistematic → diagnosis tardiv. Pudra of talc → vehicul eficient for alergeni."},
+        {q:"Care is singurul treatment eficient for alergia at latex confirmată prin IgE specific?",h:"Evitarea COMPLETĂ a produselor ce conțin latex = singura măsură eficientă. Nu există desensibilizare standardizată for latex. Mănuși non-latex obligatorii. Informarea echipei and pacienților. Brățară of alertă medicală. Purtarea EpiPen in caz of reacție anafilactică severă."},
+      ], conc:["Mecyearssmul aeropurtat al alergenelor (rolul talcului)","Diferența tip I vs tip IV","Măsura of prevenire prioritară"] },
 
-    { id:"g3", emoji:"💨", title:"Calitatea aerului interior — birou open-space", color:"#0ea5e9",
-      caz:[{l:"Locație",v:"Birou open-space, 35 angajați, 180 m²"},{l:"CO2 măsurat",v:"2.800 ppm"},{l:"Temperatura",v:"26°C"},{l:"Umiditate",v:"62%"},{l:"Ventilare",v:"mecanică defectă de 3 săptămâni"},{l:"Simptome",v:"sindrom sick building: cefalee, oboseală, dificultăți de concentrare la 60% din personal"}],
+    { id:"g3", emoji:"💨", title:"CO poisoning — Defective stove, dwelling", color:"#dc2626",
+      caz:[
+        {l:"Pacientă",v:"Female, 41 years, găsită inconștientă dimineața"},
+        {l:"Context",v:"Sobă defectă, iarnă, cameră slab ventilată"},
+        {l:"SpO₂ inițial",v:"78% (normal: >95%)"},
+        {l:"COHb",v:"42% (normal < 3%) — intoxicație severă"},
+        {l:"pH arterial",v:"7,21 — acidoză metabolică"},
+        {l:"Gazometru at fața locului",v:"CO detectat: 850 ppm (CMA 8h: 9 ppm)"},
+        {l:"EKG",v:"Modificări ischemice ST — monitorizare cardiacă"},
+        {l:"Tratament",v:"O₂ 100% NHF → cameră hiperbară → recuperare"},
+      ],
       qs:[
-        {q:"Interpretați 2.800 ppm CO2 față de normele acceptate. Ce indică această valoare?",h:"Normal: <1000 ppm. 1000-2000: acceptabil. >2000: ventilare insuficientă. 2800 ppm = ventilare grav deficitară, acumulare biogaze."},
-        {q:"Care este legătura dintre CO2 crescut și simptomele raportate? Explicați mecanismul.",h:"CO2 >1500 ppm reduce O2 disponibil și crește acidoza cerebrală → cefalee, oboseală cognitivă, somnolență. Nu toxicitate directă, ci marker de calitate aer."},
-        {q:"Calculați rata de ventilare necesară pentru 35 de persoane (normă: 7 l/s/persoană).",h:"Necesar: 35 × 7 = 245 l/s = 882 m³/h. Verificați debitul actual al HVAC și comparați."},
-        {q:"Ce alte poluanți de interior suspectați în acest context?",h:"COV din mobilier/covoare, formaldehidă, particule fine, umiditate crescută → mucegai, alergeni, endotoxine bacteriene."},
-        {q:"Ce măsuri imediate impuneți angajatorului ca inspector de sănătate în muncă?",h:"Reparare urgentă HVAC (max 48h). Ventilare naturală forțată (ferestre). Reducere densitate personal temporar. Monitorizare CO2 continuă."},
-        {q:"Ce document legal impune angajatorului asigurarea calității aerului interior?",h:"Legea 319/2006 securitate și sănătate în muncă. HG 1091/2006. Directive UE 89/654/CEE. Normativ I5 pentru instalații HVAC."},
-      ], conc:["Problema principală identificată","Măsura imediată","Termenul legal de remediere"] },
+        {q:"Calculate of câte ori is depășită CMA for CO (9 ppm/8h). Ce implică această depășire?",h:"850/9 = 94× depășire CMA. CMA CO momentan 8h = 9 ppm = 10 mg/m³. La 850 ppm → COHb ajunge rapid at nivele letale. Simptome: cefalee (10-20% COHb) → greață, pierdere conștiință (30-40%) → deces (> 60% COHb)."},
+        {q:"Explain of ce CO is mai periculos decât oxigenul in competiția for hemoglobină.",h:"Afinitatea CO for Hb is of 240× mai mare decât O₂. CO + Hb → COHb (carboxihemoglobină) → Hb nu mai transportă O₂ → hipoxie tisulară fără hipoxemie (SpO₂ pulsoximetric fals normal). Organele with consum maxim of O₂: inima and creierul are primele afectate."},
+        {q:"Ce metode of determinare a gazelor toxice există? Care dintre ele detectează CO in această situație?",h:"Metode rapide: reactivi colorimetrici (tuburi Dräger), detectoare electrochimice (gazometru portabil Dräger MiniWarn). Metode exacte: spectrometrie IR, cromatografie. Biomarkeri: COHb from sânge (corelat with exposurea). Gazometrul portabil Dräger MiniWarn detecta CO, H₂S, O₂, NO₂ simultan."},
+        {q:"De ce treatmentul with cameră hiperbară is superior față of O₂ normobaric at 100%?",h:"Camera hiperbară (2-3 atm O₂ 100%): crește PaO₂ of 10-20× → O₂ dizolvat in plasmă suficient fără Hb → grăbește disocierea COHb (t½: 90 min vs 5h at aer ambient). Indicații: COHb > 25%, pierdere conștiință, sarcină, modificări EKG."},
+        {q:"Ce measures of prevenire primară a intoxicației with CO recomandați at nivel individual and comunitar?",h:"Individual: detector CO montat in dormitor (alarma at >70 ppm/1h), verificare anuală sobă/centrală termică, ventilare camere. Comunitar: obligativitate detector CO in locuințe (Legea 307/2006 amendată), campyearsi informare DSP iarna, inspectia coșurilor of fum. CMA CO: 10 mg/m³ (8h)."},
+        {q:"Ce alte gaze toxice poate detecta simultan gazometrul portabil Dräger MiniWarn and in ce contexte are relevante?",h:"CO (arderi incomplete, garaje, incendii), H₂S (canalizări, industrie chimică — miros ou putred), O₂ (deficiență in spații confinate), NO₂ (trafic rutier, industrie), NH₃ (agricultură, frigorifice), CO₂ (spații închise aglomerate). Până at 4 senzori simultan + alarmă sonoră at depășire CMA."},
+      ], conc:["Depășirea CMA calculată (94×)","Mecyearssmul toxicității CO față of O₂","Indicația camerei hiperbare"] },
 
-    { id:"g4", emoji:"🔬", title:"NTG crescut în sala de operații", color:"#7c3aed",
-      caz:[{l:"Locație",v:"Bloc operator, spital județean"},{l:"NTG 37°C/m³",v:"580 germeni/m³"},{l:"Stafilococi",v:"detectați (norma: 0)"},{l:"Streptococi",v:"42/m³ (norma: max 16)"},{l:"Ventilare",v:"laminar flow defect 2 luni"},{l:"Curățenie",v:"protocol corect aplicat"},{l:"Incidente",v:"2 infecții post-operatorii în 3 săptămâni"}],
+    { id:"g4", emoji:"📊", title:"PM₂.₅ in Romyearsa — Epidemiological assessment Mureș county", color:"#0ea5e9",
+      caz:[
+        {l:"Context",v:"Studiu epidemiologic, 6 județe Centru: BV, SB, AB, MS, HR, CV"},
+        {l:"Populație studiată",v:"~2,6 milioane locuitori, 22 stații monitorizare"},
+        {l:"PM₂.₅ medie anuală România 2023",v:"15,7 µg/m³"},
+        {l:"Limita OMS",v:"5 µg/m³ anual (actualizat 2021)"},
+        {l:"Limita legală UE",v:"25 µg/m³ anual (Legea 104/2011)"},
+        {l:"Impact estimat Mureș",v:"Unul from cele 6 județe studiate (Vata et al., 2024)"},
+        {l:"Decese UE/an atribuite PM₂.₅",v:"182.000 (EEA 2023)"},
+      ],
       qs:[
-        {q:"Sistați activitatea chirurgicală? Argumentați decizia pe baza datelor.",h:"DA — stafilococi detectați = risc imediat de infecție de plagă. NTG 580 depășește norma 300. 2 infecții postoperatorii confirmă riscul real."},
-        {q:"Care sunt sursele probabile ale contaminării? Analizați fiecare.",h:"Laminar flow defect → pierdere presiune pozitivă → germeni din exterior. Personal purtători Staph. aureus (nazofaringe, tegument). Materiale contaminate."},
-        {q:"Ce investigații microbiologice suplimentare ordonați?",h:"Tampoane nazale personal chirurgical (Staph. aureus). Culturi din plăgile celor 2 pacienți infectați. Tampoane suprafețe + instrumentar. Tipizare moleculară pentru trasabilitate."},
-        {q:"Ce protocol de decontaminare impuneți înainte de redeschidere?",h:"Dezinfecție terminală UV-C + formaldehidă gazoasă (sau HPV). Reparare laminar flow. Reevaluare NTG după 48h. Test de acceptabilitate <300 germeni/m³."},
-        {q:"Ce modificări de protocol impuneți personalului?",h:"Control bacteriologic nazal. Dublare schimburi lenjerie. Halate sterile verificate. Mănuși duble pentru chirurgi. Raportare imediată orice infecție postoperatorie."},
-        {q:"Redactați raportul de inspecție: ce sancțiuni și ce termene?",h:"Suspendare imediată bloc operator. Anchetă epidemiologică obligatorie. Reevaluare la remediere completă. Notificare DSP județean și MS."},
-      ], conc:["Decizia de inspector (da/nu sistare)","Sursa probabilă de contaminare","Condiția de redeschidere"] },
+        {q:"De câte ori depășește media anuală PM₂.₅ from România (15,7 µg/m³) limita OMS (5 µg/m³)? Comentați semnificația.",h:"15,7/5 = 3,14× depășire față of OMS. România se clasifică in categoria '5× față of OMS' conform IQAir 2024 (Moldova, Romyearsa, Albyearsa). Depășirea OMS indică risc crescut of boli cardiovasculare, cancer pulmonar, mortalitate prematură. Limita legală UE (25 µg/m³) is respectată."},
+        {q:"Ce is PM₂.₅ and of ce is considerat cel mai periculos poluant atmosferic?",h:"PM₂.₅ = particule materie with diametru < 2,5 µm. Periculos deoarece: penetrează alveolele (retenție 80-90%), trece in circulația sistemică, efecte cardiovasculare (aritmii, HTA, infarct), pulmonare (BPOC, cancer), neurologice. Surse: trafic, arderi, industrie. Monitorizat with SidePak AM510."},
+        {q:"Studiul Vata et al. (2024) estimează 196 decese/an amânate prin reducerea PM₂.₅ at 10 µg/m³ in cele 6 județe. Ce metodă epidemiologică a fost folosită?",h:"Health Risk Assessment (HRA) with formula Relative Risk. Parametrii: concentrație curentă vs concentrație țintă → RR specific (mortalitate cardio-respiratorie) → decese atribuibile. Referință: ghid OMS 2021 (5 µg/m³). Metoda permite estimarea impactului intervențiilor of sănătate publică."},
+        {q:"Care are principalele surse of PM₂.₅ in mediul urban from România and cum pot fi reduse?",h:"Surse: trafic rutier (frâne, anvelope, eșapament), arderi rezidențiale (lemn, cărbune — iarna!), industrie, agricultură (NH₃ → PM secundar). Reducere: tranziție at vehicule electrice, interdicție arderi deșeuri vegetale, izolarea locuințelor (reducere necesar încălzire), zone with emisii reduse in orașe."},
+        {q:"Ce instrumente se folosesc for monitorizarea PM₂.₅ in timp real and in laborator?",h:"Personal/ambiental timp real: SidePak Personal Aerosol Monitor AM510 (µg/m³, memorie 8h). Stații fixe: analizoare gravimetrice with impactor (metodă of referință UE), fotometrie laser, TEOM. România: 142 stații continue on calitateaer.ro. Calibrare SidePak: factor specific (fumat, praf mineral)."},
+        {q:"Norma legală for PM₂.₅ in România diferă of recomandarea OMS. Explain această diferență and implicațiile ei.",h:"România (Legea 104/2011): 25 µg/m³ anual (Directiva UE 2008/50). OMS 2021: 5 µg/m³ anual (revizuit sever in jos). Diferența: OMS bazat on evidențe epidemiologice actualizate, UE = compromis politic/economic. Implicație: exposure at 15,7 µg/m³ = legală in UE dar dăunătoare conform OMS. România: top 3 YLL/100.000 in UE."},
+      ], conc:["Depășirea OMS calculată (3,1×)","De ce PM₂.₅ is cel mai periculos poluant","Diferența standard UE vs recomandare OMS"] },
 
-    { id:"g5", emoji:"🏗️", title:"Pulberi de azbest în clădire renovată", color:"#b45309",
-      caz:[{l:"Locație",v:"Școală construită 1975, renovare parțială"},{l:"Material suspect",v:"tencuială veche, izolație tavan"},{l:"Fibre azbest",v:"0,8 f/ml (norma: <0,1 f/ml)"},{l:"Expuși",v:"850 elevi + 60 cadre didactice, 6 săptămâni"},{l:"Stare material",v:"friabil, deteriorat — risc eliberare fibre"}],
+    { id:"g5", emoji:"🔬", title:"CO₂ determination by Pettenkofer method — lecture hall", color:"#16a34a",
+      caz:[
+        {l:"Context",v:"Sală of curs, 120 studenți, ventilație insuficientă, 2 ore curs"},
+        {l:"Determinare",v:"Metoda titrimetrică Pettenkofer (Ba(OH)₂ + acid oxalic)"},
+        {l:"V₁ (titrare inițială)",v:"24,5 cm³ acid oxalic"},
+        {l:"Aer aspirat",v:"100 cm³"},
+        {l:"V₂ (titrare finală)",v:"21,3 cm³ acid oxalic"},
+        {l:"ΔV = V₁ - V₂",v:"3,2 cm³"},
+        {l:"Normal CO₂ atmosferic",v:"0,03-0,04%"},
+        {l:"Aer viciat",v:"> 0,1% CO₂"},
+      ],
       qs:[
-        {q:"Evaluați urgența situației. Ce acțiune luați în primele 30 de minute?",h:"URGENȚĂ MAXIMĂ. Evacuare imediată clădire. Izolare zonă. Oprire ventilare (răspândire fibre). Notificare DSP + Inspecție Muncă + primărie."},
-        {q:"Care este riscul specific al azbestului friabil față de cel încapsulat?",h:"Friabil → fibre aeropurtate permanent. Fibre <3µm → penetrare alveolară → mezotelium → mezoteliom malign (latență 20-40 ani). Fără prag sigur."},
-        {q:"Ce investigații de sănătate propuneți pentru cei 850 de elevi expuși 6 săptămâni?",h:"Dosar medical de monitorizare. Radiografie pulmonară baseline. Urmărire pe 40 de ani (latența mezoteliomului). Informare părinți + consimțământ."},
-        {q:"Cine are dreptul legal de a efectua lucrări de decontaminare azbest?",h:"Numai firme acreditate ANPM pentru lucrări cu azbest. Personal specializat cu EIP nivel 3 (combinaison, SCBA). Deșeuri categorie periculoasă."},
-        {q:"Ce dovezi documentare solicitați de la administrația școlii?",h:"Raportul de expertiză azbest anterior renovării (obligatoriu prin lege). Autorizația de demolare. Contractul cu firma de decontaminare. Registrul de evidență azbest."},
-        {q:"Formulați recomandările pentru autoritățile locale privind clădirile din aceeași perioadă.",h:"Inventariere obligatorie toate clădirile publice >1980. Expertiză azbest înainte orice renovare. Registru național clădiri cu azbest. Informare proprietari privați."},
-      ], conc:["Acțiunea imediată (primele 30 min)","Riscul principal pe termen lung","Condiția de reocupare a clădirii"] },
+        {q:"Calculate concentrația of CO₂ from sala of curs folosind formula metodei Pettenkofer. Interpretați rezultatul.",h:"CO₂ (cm³) = ΔV × 2 = 3,2 × 2 = 6,4 cm³. CO₂ (%) = 6,4/100 × 100 = 6,4%. Normal: 0,03-0,04%. Viciat: > 0,1%. 6,4% >> 0,1% = aer PUTERNIC VICIAT. Semnifică ventilație complet insuficientă for 120 persoane. CO₂ nu is toxic at această valoare dar indică and acumulare of alți poluanți biologici."},
+        {q:"Explain principiul chimic al metodei Pettenkofer. De ce scade volumul V₂ față of V₁?",h:"Reacție: Ba(OH)₂ + CO₂ → BaCO₃↓ + H₂O. Aerul with CO₂ bulos prin Ba(OH)₂ → CO₂ se fixează → Ba(OH)₂ disponibil scade → at titrarea finală with acid oxalic se consumă mai puțin acid (V₂ < V₁). ΔV = cantitatea of Ba(OH)₂ consumată of CO₂. Fondator metoda: Max Pettenkofer (fondatorul igienei moderne)."},
+        {q:"CO₂ is el însuși toxicul principal într-o sală aglomerată or is a indicator indirect? Explain.",h:"CO₂ > 0,1% = indicator of aerisire deficitară → acumulare simultană de: vapori of apă (umiditate crescută), bacterii aeropurtate, COV (compuși orgyearsci volatili), odori. CO₂ devine toxic direct at > 1-2% (cefalee) and > 5% (narcotic). În sală: CO₂ = index of calitate a aerului, nu toxicul principal."},
+        {q:"Ce modificări orgyearszatorice and tehnice recomandați for îmbunătățirea calității aerului in sala with 120 studenți?",h:"Tehnice: ventilație mecyearscă (min. 10 L/s/persoană), senzori CO₂ with alarmă at >1000 ppm, filtre HEPA. Orgyearszatorice: pauze with aerisire forțată at 50 min, reducere ocupare (max 1 persoană/2 m²), măști in epidemii. Verificare: CO₂ < 1000 ppm (800 ppm ideal) = calitate bună a aerului interior."},
+        {q:"Ce alte gaze are determinate in cadrul LP1B and ce metode/instrumente se folosesc?",h:"CO: gazometru portabil Dräger MiniWarn (electrochimic), biomarker COHb sânge. Gaze multiple: Dräger MiniWarn (CO, H₂S, O₂, NO₂, NH₃, CO₂ — 4 senzori simultan). PM₂.₅: SidePak AM510 (fotometric). Metode rapide: tuburi colorimetrice Dräger. Metode exacte: spectrometrie IR, cromatografie gaz."},
+        {q:"Care is valoarea maximă admisă of CO₂ in spații publice and of unde vine norma?",h:"CMA CO₂ spații publice: 0,1% (1000 ppm) — standard internațional (ASHRAE 62.1, OMS). Sursa normei: diferența față of aerul exterior (400 ppm CO₂) = 600 ppm → dacă diferența > 600 ppm = aerisire insuficientă. Pettenkofer a stabilit pragul 0,1% in sec. XIX. Spații industriale (fermentație): pot ajunge at 5-10% CO₂."},
+      ], conc:["Concentrația of CO₂ calculată and interpretarea","CO₂ ca indicator vs toxic direct","Recomandarea tehnică prioritară"] },
 
-    { id:"g6", emoji:"🌿", title:"COV și formaldehidă în grădiniță nou renovată", color:"#059669",
-      caz:[{l:"Locație",v:"Grădiniță, renovare completă finalizată acum 2 săptămâni"},{l:"Formaldehidă",v:"0,12 mg/m³ (norma OMS: 0,1 mg/m³)"},{l:"Benzen",v:"18 µg/m³ (norma UE: 5 µg/m³)"},{l:"Sursă probabilă",v:"vopsele, lacuri, mobilier nou"},{l:"Ventilare",v:"ferestre sigilate termic"},{l:"Copii",v:"120 copii 3-6 ani (populație vulnerabilă)"}],
+    { id:"g6", emoji:"⚖️", title:"MAC and syearstary standards — industrial compliance assessment", color:"#f59e0b",
+      caz:[
+        {l:"Context",v:"Inspecție syearstară, fabrică of materiale of construcții (ciment)"},
+        {l:"PM₁₀ măsurat 24h",v:"87 µg/m³"},
+        {l:"PM₂.₅ măsurat anual",v:"28 µg/m³"},
+        {l:"SO₂ măsurat 24h",v:"145 µg/m³"},
+        {l:"NO₂ măsurat anual",v:"35 µg/m³"},
+        {l:"Norme (Legea 104/2011)",v:"PM₁₀: 50 µg/m³/24h · PM₂.₅: 25 µg/m³/an · SO₂: 125 µg/m³/24h · NO₂: 40 µg/m³/an"},
+        {l:"Reședința",v:"Cartier locuit at 300 m of fabrică"},
+      ],
       qs:[
-        {q:"De ce copiii de 3-6 ani sunt mai vulnerabili la COV decât adulții?",h:"Frecvență respiratorie 2-3× mai mare → doză inhalată/kg mai mare. Sistem enzimatic de detoxifiere imatur. Timp petrecut indoor mai lung. Talie joasă → strat aer mai concentrat în COV grei."},
-        {q:"Calculați depășirea pentru formaldehidă și benzen față de normele aplicabile.",h:"HCHO: 0,12/0,1 = 1,2× depășire OMS. Benzen: 18/5 = 3,6× depășire norma UE. Benzen este carcinogen grupa 1 IARC — fără prag sigur."},
-        {q:"Autorizați deschiderea grădiniței sau impuneți amânarea?",h:"Amânare obligatorie până sub praguri. Benzen carcinogen fără prag = toleranță zero pentru copii. Ventiți 2 săptămâni intens (degasare materiale noi)."},
-        {q:"Ce protocol de ventilare impuneți pentru reducerea concentrațiilor?",h:"Ventilare intensivă 14 zile: ferestre deschise 8h/zi, temperatură ridicată 25-28°C (accelerează degasare). Remăsurare înainte deschidere."},
-        {q:"Ce verificări impuneți la contractele de renovare viitoare?",h:"Specificații: produse cu etichetă CE, conținut COV scăzut (categoria A+ conform standardului francez). Certificat analitic lot. Test aer înainte recepție."},
-        {q:"Redactați avizul sanitar: condiții pentru obținerea autorizației de funcționare.",h:"1. Ventilare 14 zile. 2. Remăsurare: HCHO <0,1 mg/m³ și benzen <5 µg/m³. 3. Dacă conforme → autorizație. 4. Monitorizare anuală ulterioară."},
-      ], conc:["Decizia privind deschiderea","Substanța cu risc maxim","Condiția de autorizare"] },
+        {q:"Analizați fiecare poluant față of norma legală and stabiliți which parametri are depășiți.",h:"PM₁₀: 87 > 50 µg/m³/24h → DEPĂȘIT (74%). PM₂.₅: 28 > 25 µg/m³/an → DEPĂȘIT (12%). SO₂: 145 > 125 µg/m³/24h → DEPĂȘIT (16%). NO₂: 35 < 40 µg/m³/an → CONFORM. Concluzie: 3 from 4 poluanți depășesc normele legale → fabrică NON-CONFORMĂ."},
+        {q:"Ce is CMA and ce tipuri of CMA prevede Legea 104/2011? Cum se aplică in evaluarea acestei fabrici?",h:"CMA = concentrația maximă admisă which nu produce efecte nocive at exposure repetată, sub prag acut/cronic/iritativ. Tipuri: momentană (30 min), medie 24h, lunară, anuală. PM₁₀ and SO₂ = evaluate ca 24h. PM₂.₅ and NO₂ = evaluate anual. Legea 104/2011 implementează Directiva 2008/50/CE."},
+        {q:"Ce is pragul of alertă and când se aplică conform Legii 104/2011?",h:"Prag of alertă = nivel depășit → risc for ÎNTREAGA populație at exposure scurtă → MĂSURI IMEDIATE obligatorii. Praguri specifice: SO₂: 500 µg/m³/3h consecutive on ≥100km². NO₂: 400 µg/m³/3h. O₃: 240 µg/m³. Diferit of prag of informare (risc doar for populații sensibile)."},
+        {q:"Ce metode of determinare a pulberilor recomandați for monitorizarea continuă at această fabrică?",h:"Cantitative gravimetrice: aspirație with alonjă (mg/m³) — metodă of referință. Monitorizare continuă: SidePak AM510 for PM₂.₅ personal + stații fixe TEOM/gravimetrice. Calitative: coniometru Zeiss for formula of praf (% particule < 5µm). Frecvență: minimum zilnic for surse industriale majore."},
+        {q:"Ce efect asupra sănătății au pulberile of ciment (PM₁₀ and PM₂.₅) at exposure cronică at cartierul vecin?",h:"PM₁₀: iritație căi respiratorii superioare, rinită, faringită cronică, exacerbare astm. PM₂.₅: penetrare alveolară → inflamație sistemică → boli cardiovasculare (HTA, aritmii, infarct), BPOC, cancer pulmonar. Particule ciment conțin SiO₂ (risc silicoză) and metale grele. Copiii and vârstnicii = grupuri vulnerabile."},
+        {q:"Ce acțiuni administrative and tehnice luați ca inspector of sănătate publică față of această fabrică?",h:"Imediat: somație scrisă + termen 30 zile remediere. Tehnice: sisteme of filtrare avansată (filtre baghouse, precipitatoare electrostatice), bariere verzi. Orgyearszatorice: reducere producție in episoade of poluare. Sancțiuni: amendă (Legea 104/2011), suspendare activitate dacă prag alertă depășit. Monitorizare săptămânală post-corectivă."},
+      ], conc:["Parametrii depășiți and procentul of depășire","Definiția CMA and tipurile prevăzute of lege","Acțiunea administrativă prioritară"] },
   ],
 
   lp2a: [
@@ -2992,67 +3043,124 @@ var FISE_DATA_EN = {
       ], conc:["Unjustified request and reason","Basic principle of patient radiation protection","Most important technical dose-reduction measure"] },
   ],
   lp1b: [
-    { id:"g1", emoji:"🏭", title:"Dust in a mechanical processing workshop", color:"#64748b",
-      caz:[{l:"Location",v:"Lathe workshop, 12 workers"},{l:"PM10 measured",v:"0.38 mg/m³"},{l:"PM2.5 estimated",v:"0.19 mg/m³"},{l:"Exposure duration",v:"8h/day, 5 days/week"},{l:"PPE",v:"absent — no mask worn"},{l:"Symptoms",v:"3 workers: chronic cough, exertional dyspnoea"}],
+    { id:"g1", emoji:"🌫️", title:"Silicosis — Miner with chronic SiO₂ exposure", color:"#64748b",
+      caz:[
+        {l:"Patient",v:"Male, 52 years, underground miner, vechime 28 years"},
+        {l:"Exposure",v:"Pulberi SiO₂ > 50%, without regular protective equipment"},
+        {l:"PM₂.₅ at workplace",v:"850 µg/m³ (CMA: 25 µg/m³ anual)"},
+        {l:"Symptoms",v:"Exertional dyspnoea, dry cough, weight loss"},
+        {l:"Chest X-ray",v:"Bilateral nodular opacities, dilated hila"},
+        {l:"HRCT",v:"Noduli fibroși, adenopatie hilară, emfizem"},
+        {l:"Spirometrie",v:"Sindrom restrictiv: CV↓, VEMS↓"},
+        {l:"Diagnostic",v:"Silicoză stadiu II (ILO 2/2)"},
+      ],
       qs:[
-        {q:"You are a public health inspector. Identify all non-compliances with applicable standards.",h:"PM10 standard: 0.35 mg/m³ (exceeded). Absence of PPE = serious non-compliance. 3 symptomatic workers = occupational alarm signal."},
-        {q:"Calculate the daily inhaled dose for a worker (respiratory volume 10 m³/day).",h:"Dose = 0.38 mg/m³ × 10 m³ = 3.8 mg/day. Compared to occupational limit: 4 mg/day (close to OEL)."},
-        {q:"What fraction of PM2.5 reaches the alveolar level and what risk does it imply?",h:"PM2.5 < 5µm → alveolar penetration. Risk: pneumoconiosis, fibrosis, lung cancer (IARC Group 1)."},
-        {q:"What mandatory technical measures do you propose to reduce exposure?",h:"Local exhaust ventilation, protective screens, chip wetting, enclosure of noisy machines."},
-        {q:"What PPE is mandatory and what filter type do you specify in the recommendation?",h:"FFP2 mask (PM2.5) or FFP3 (PM0.1). Mandatory under GD 1048/2006."},
-        {q:"Formulate the inspector's decision: what sanctions and deadlines do you apply?",h:"Suspend activity if immediate risk. Warning + 30-day deadline for PPE + extraction system. Re-evaluation at 60 days."},
-      ], conc:["Non-compliances identified","Highest priority measure","Proposed remediation deadline"] },
-    { id:"g2", emoji:"🌫️", title:"Chemical fog near a paint factory", color:"#6b7280",
-      caz:[{l:"Location",v:"Residential area, 200m from factory"},{l:"Suspected substance",v:"organic solvents (toluene, xylene)"},{l:"Complaints",v:"42 residents: headache, eye irritation, nausea"},{l:"Toluene measurement",v:"85 ppm (olfactory threshold: 2 ppm)"},{l:"8h OEL",v:"50 ppm"},{l:"Wind direction",v:"from factory towards residential area"}],
+        {q:"Calculate of câte ori is depășită CMA for PM₂.₅ at locul of muncă. Ce semnifică această depășire?",h:"850/25 = 34× depășire CMA. Semnifică risc extrem of ridicat of pneumoconioză, in special silicoză. CMA reprezintă doza legală maximă which nu produce efecte nocive at exposure repetată."},
+        {q:"Explain of ce silicoza is considerată boală profesională ireversibilă and which is baza patogenică.",h:"SiO₂ → fagocitat of macrofage alveolare → macrofagele mor → eliberare enzime fibrozante → fibroză progresivă. Nu există treatment curativ. Prevenția prin reducerea expunerii is singura intervenție eficientă. Latență tipică 10-20 years."},
+        {q:"Ce relație există între dimensiunea particulelor and penetrarea respiratorie? La ce nivel se rețin particulele < 2,5 µm?",h:"< 2,5 µm (PM₂.₅): ajung in alveole, retenție 80-90%. 2,5-10 µm (PM₁₀): bronhiole. > 10 µm: căi respiratorii superioare. Cu cât particula is mai mică, with atât penetrarea is mai profundă and mai periculoasă."},
+        {q:"Ce metode of determinare cantitativă a pulberilor cunoașteți? Descrieți principiul metodei aspirației with alonjă.",h:"Metode cantitative: sedimentare (mg/m²/zi) and aspirație with alonjă (mg/m³). Aspirație: cântărire filtru inițial → aspirare volum cunoscut of aer → cântărire filtru with praf → calcul: (M_final - M_filtru)/V_aer. Necesită balanță analitică (0,1 mg precizie)."},
+        {q:"Ce measures of protection colectivă and individuală propuneți for această secție minieră?",h:"Colective: ventilație mecyearscă, umezirea forajului (reducere pulberi), capsulare surse. Individuale: mască FFP3 (filtrare >99% PM2,5), rotație posturi. Orgyearszatorice: monitorizare periodică PM, audiogramă, spirometrie anuală. Juridic: CMA 25 µg/m³ PM2,5 (Legea 104/2011)."},
+        {q:"Ce clasificare EPA există for particulele of praf and ce potențial nociv are fiecare fracție?",h:"PM₁₀ (<10µm): inhalabile, ajung in bronhiole, risc moderat. PM₂.₅ (<2,5µm): fine, alveole, retenție 80-90%, risc ridicat. PM₀.₁ (<0,1µm): ultrafine, circulație sistemică, fără CMA stabilit, in studiu. Nocivitatea crește with diminuarea dimensiunii."},
+      ], conc:["Gradul of depășire a CMA calculat","Patogenia silicozei (ireversibilă)","Măsura prioritară of protection"] },
+
+    { id:"g2", emoji:"🧤", title:"Latex allergy — Nurse, 9 years exposure", color:"#7c3aed",
+      caz:[
+        {l:"Pacientă",v:"Female, 34 years, nurse, vechime 9 years"},
+        {l:"Exposure",v:"Mănuși latex pudrate zilnic, deschidere zilnică multiple pachete"},
+        {l:"Symptoms",v:"Urticarie, rinoree, wheezing at locul of muncă"},
+        {l:"Trigger",v:"Simptome in primele minute după deschiderea pachetului of mănuși"},
+        {l:"Prick test",v:"Pozitiv at extract latex — reacție 9 mm"},
+        {l:"IgE specific",v:"Latex Hev b 1, 3, 5 — pozitiv (> 3,5 kU/L)"},
+        {l:"Diagnostic",v:"Alergie latex tip I (IgE-mediată) + dermatită of contact"},
+      ],
       qs:[
-        {q:"Confirm or refute the causal link between the factory and the symptoms. Argue.",h:"85 ppm exceeds OEL by 1.7×. Wind direction confirms source. Symptoms consistent with toluene exposure. Causal link probable."},
-        {q:"What emergency protocols do you activate as public health inspector?",h:"Notify Environmental Guard + ANPM. Epidemiological investigation. Request production halt until remediation. Public statement."},
-        {q:"What medical investigations do you recommend for the 42 residents?",h:"Neurological examination, liver function (AST/ALT), full blood count. Biomarkers: urinary hippuric acid (toluene metabolite)."},
-        {q:"What is the toxicity mechanism of toluene? What target organs are affected?",h:"Neurotoxic: dissolves myelin. Hepatotoxic: hepatic metabolism with free radicals. CNS (narcosis), liver, kidneys."},
-        {q:"What production process changes do you impose on the factory?",h:"Vapour recovery systems (condensation), activated carbon filters, continuous emission monitoring, night-time diffusion programme."},
-        {q:"Draft the inspection report conclusion in 3 essential points.",h:"1. OEL exceedance confirmed. 2. Public health risk demonstrated. 3. Mandatory corrective measures within 15 days."},
-      ], conc:["Causal investigation conclusion","Emergency measure applied","Remediation deadline"] },
-    { id:"g3", emoji:"💨", title:"Indoor air quality — open-plan office", color:"#0ea5e9",
-      caz:[{l:"Location",v:"Open-plan office, 35 employees, 180 m²"},{l:"CO2 measured",v:"2,800 ppm"},{l:"Temperature",v:"26°C"},{l:"Humidity",v:"62%"},{l:"Ventilation",v:"mechanical system broken for 3 weeks"},{l:"Symptoms",v:"sick building syndrome: headache, fatigue, concentration difficulties in 60% of staff"}],
+        {q:"Explain mecyearssmul prin which mănușile of latex pudrate produc simptome respiratorii, nu doar cutanate.",h:"Alergenele from latex (proteine Hev b) are aeropurtate on particulele of TALC with which are lubrefiate mănușile. La deschiderea pachetului → eliberare masivă aerosoli with proteine → inhalare → IgE → degranulare mastocite → simptome respiratorii. Mecyearssm IgE-mediat tip I."},
+        {q:"Care is diferența dintre alergia at latex tip I and dermatita of contact (tip IV)?",h:"Tip I (IgE-mediată): proteinele from latex, reacție rapidă (minute), anafilaxie posibilă. Tip IV (hipersensibilitate întârziată): aditivii chimici (acceleratori of vulcyearszare), reacție tardivă (24-48h), dermatită of contact. Pacienta are ambele forme."},
+        {q:"Ce measures of prevenire primară recomandați for a spital with mulți angajați sensibilizați at latex?",h:"Eliminarea mănușilor with pudră (TALC) — cea mai eficientă măsură. Trecerea at mănuși non-latex (nitril, neopren) for personalul sensibilizat. Declararea spitalului ca 'mediu fără pudră'. Informarea pacienților alergici at latex înainte of proceduri. Screening angajați."},
+        {q:"Ce alte profesii prezintă risc crescut of alergie at latex and of ce?",h:"Riscuri crescute: personal medical/stomatologic (exposure zilnică mănuși), muncitori industria cauciucului (exposure directă), pacienți with spina bifida (multiple intervenții chirurgicale = sensibilizare cumulativă), utilizatori frecvenți of prezervative. Prevalența in personal medical: 5-15%."},
+        {q:"Prevalența alergiei at latex at personalul medical is of 5-15%. Ce factori explică această valoare ridicată?",h:"Exposure zilnică repetată → sensibilizare progresivă. Frecvența deschiderii pachetelor → doze mari of aerosoli. Contactul with mucosase (proceduri invazive) → sensibilizare mai rapidă. Lipsa screeningului sistematic → diagnosis tardiv. Pudra of talc → vehicul eficient for alergeni."},
+        {q:"Care is singurul treatment eficient for alergia at latex confirmată prin IgE specific?",h:"Evitarea COMPLETĂ a produselor ce conțin latex = singura măsură eficientă. Nu există desensibilizare standardizată for latex. Mănuși non-latex obligatorii. Informarea echipei and pacienților. Brățară of alertă medicală. Purtarea EpiPen in caz of reacție anafilactică severă."},
+      ], conc:["Mecyearssmul aeropurtat al alergenelor (rolul talcului)","Diferența tip I vs tip IV","Măsura of prevenire prioritară"] },
+
+    { id:"g3", emoji:"💨", title:"CO poisoning — Defective stove, dwelling", color:"#dc2626",
+      caz:[
+        {l:"Pacientă",v:"Female, 41 years, găsită inconștientă dimineața"},
+        {l:"Context",v:"Sobă defectă, iarnă, cameră slab ventilată"},
+        {l:"SpO₂ inițial",v:"78% (normal: >95%)"},
+        {l:"COHb",v:"42% (normal < 3%) — intoxicație severă"},
+        {l:"pH arterial",v:"7,21 — acidoză metabolică"},
+        {l:"Gazometru at fața locului",v:"CO detectat: 850 ppm (CMA 8h: 9 ppm)"},
+        {l:"EKG",v:"Modificări ischemice ST — monitorizare cardiacă"},
+        {l:"Tratament",v:"O₂ 100% NHF → cameră hiperbară → recuperare"},
+      ],
       qs:[
-        {q:"Interpret 2,800 ppm CO2 against accepted standards. What does this value indicate?",h:"Normal: <1000 ppm. 1000-2000: acceptable. >2000: insufficient ventilation. 2800 ppm = severely deficient ventilation, biogas accumulation."},
-        {q:"What is the link between elevated CO2 and the reported symptoms? Explain the mechanism.",h:"CO2 >1500 ppm reduces available O2 and increases cerebral acidosis → headache, cognitive fatigue, drowsiness. Not direct toxicity, but an air quality marker."},
-        {q:"Calculate the ventilation rate required for 35 people (standard: 7 l/s/person).",h:"Required: 35 × 7 = 245 l/s = 882 m³/h. Check current HVAC flow rate and compare."},
-        {q:"What other indoor pollutants do you suspect in this context?",h:"VOCs from furniture/carpets, formaldehyde, fine particles, elevated humidity → mould, allergens, bacterial endotoxins."},
-        {q:"What immediate measures do you impose on the employer as occupational health inspector?",h:"Urgent HVAC repair (max 48h). Forced natural ventilation (open windows). Temporary reduction of staff density. Continuous CO2 monitoring."},
-        {q:"What legal document requires the employer to ensure indoor air quality?",h:"Law 319/2006 occupational health and safety. GD 1091/2006. EU Directive 89/654/EEC. Normative I5 for HVAC installations."},
-      ], conc:["Main problem identified","Immediate measure","Legal remediation deadline"] },
-    { id:"g4", emoji:"🔬", title:"Elevated TBC in operating theatre", color:"#7c3aed",
-      caz:[{l:"Location",v:"Operating block, county hospital"},{l:"TBC 37°C/m³",v:"580 germs/m³"},{l:"Staphylococci",v:"detected (standard: 0)"},{l:"Streptococci",v:"42/m³ (standard: max 16)"},{l:"Ventilation",v:"laminar flow defective for 2 months"},{l:"Cleaning",v:"correct protocol applied"},{l:"Incidents",v:"2 post-operative infections in 3 weeks"}],
+        {q:"Calculate of câte ori is depășită CMA for CO (9 ppm/8h). Ce implică această depășire?",h:"850/9 = 94× depășire CMA. CMA CO momentan 8h = 9 ppm = 10 mg/m³. La 850 ppm → COHb ajunge rapid at nivele letale. Simptome: cefalee (10-20% COHb) → greață, pierdere conștiință (30-40%) → deces (> 60% COHb)."},
+        {q:"Explain of ce CO is mai periculos decât oxigenul in competiția for hemoglobină.",h:"Afinitatea CO for Hb is of 240× mai mare decât O₂. CO + Hb → COHb (carboxihemoglobină) → Hb nu mai transportă O₂ → hipoxie tisulară fără hipoxemie (SpO₂ pulsoximetric fals normal). Organele with consum maxim of O₂: inima and creierul are primele afectate."},
+        {q:"Ce metode of determinare a gazelor toxice există? Care dintre ele detectează CO in această situație?",h:"Metode rapide: reactivi colorimetrici (tuburi Dräger), detectoare electrochimice (gazometru portabil Dräger MiniWarn). Metode exacte: spectrometrie IR, cromatografie. Biomarkeri: COHb from sânge (corelat with exposurea). Gazometrul portabil Dräger MiniWarn detecta CO, H₂S, O₂, NO₂ simultan."},
+        {q:"De ce treatmentul with cameră hiperbară is superior față of O₂ normobaric at 100%?",h:"Camera hiperbară (2-3 atm O₂ 100%): crește PaO₂ of 10-20× → O₂ dizolvat in plasmă suficient fără Hb → grăbește disocierea COHb (t½: 90 min vs 5h at aer ambient). Indicații: COHb > 25%, pierdere conștiință, sarcină, modificări EKG."},
+        {q:"Ce measures of prevenire primară a intoxicației with CO recomandați at nivel individual and comunitar?",h:"Individual: detector CO montat in dormitor (alarma at >70 ppm/1h), verificare anuală sobă/centrală termică, ventilare camere. Comunitar: obligativitate detector CO in locuințe (Legea 307/2006 amendată), campyearsi informare DSP iarna, inspectia coșurilor of fum. CMA CO: 10 mg/m³ (8h)."},
+        {q:"Ce alte gaze toxice poate detecta simultan gazometrul portabil Dräger MiniWarn and in ce contexte are relevante?",h:"CO (arderi incomplete, garaje, incendii), H₂S (canalizări, industrie chimică — miros ou putred), O₂ (deficiență in spații confinate), NO₂ (trafic rutier, industrie), NH₃ (agricultură, frigorifice), CO₂ (spații închise aglomerate). Până at 4 senzori simultan + alarmă sonoră at depășire CMA."},
+      ], conc:["Depășirea CMA calculată (94×)","Mecyearssmul toxicității CO față of O₂","Indicația camerei hiperbare"] },
+
+    { id:"g4", emoji:"📊", title:"PM₂.₅ in Romyearsa — Epidemiological assessment Mureș county", color:"#0ea5e9",
+      caz:[
+        {l:"Context",v:"Studiu epidemiologic, 6 județe Centru: BV, SB, AB, MS, HR, CV"},
+        {l:"Populație studiată",v:"~2,6 milioane locuitori, 22 stații monitorizare"},
+        {l:"PM₂.₅ medie anuală România 2023",v:"15,7 µg/m³"},
+        {l:"Limita OMS",v:"5 µg/m³ anual (actualizat 2021)"},
+        {l:"Limita legală UE",v:"25 µg/m³ anual (Legea 104/2011)"},
+        {l:"Impact estimat Mureș",v:"Unul from cele 6 județe studiate (Vata et al., 2024)"},
+        {l:"Decese UE/an atribuite PM₂.₅",v:"182.000 (EEA 2023)"},
+      ],
       qs:[
-        {q:"Do you suspend surgical activity? Argue the decision based on the data.",h:"YES — staphylococci detected = immediate wound infection risk. TBC 580 exceeds standard 300. 2 post-op infections confirm real risk."},
-        {q:"What are the probable sources of contamination? Analyse each.",h:"Defective laminar flow → loss of positive pressure → external germs. Staff carriers of Staph. aureus (nasopharynx, skin). Contaminated materials."},
-        {q:"What additional microbiological investigations do you order?",h:"Nasal swabs of surgical staff (Staph. aureus). Cultures from the 2 infected patients' wounds. Surface + instrument swabs. Molecular typing for traceability."},
-        {q:"What decontamination protocol do you impose before reopening?",h:"Terminal disinfection UV-C + gaseous formaldehyde (or HPV). Repair laminar flow. Re-evaluation TBC after 48h. Acceptability test <300 germs/m³."},
-        {q:"What protocol changes do you impose on staff?",h:"Bacteriological nasal control. Double linen change frequency. Verified sterile gowns. Double gloves for surgeons. Immediate reporting of any post-op infection."},
-        {q:"Draft the inspection report: what sanctions and deadlines?",h:"Immediate suspension of operating block. Mandatory epidemiological investigation. Re-evaluation upon complete remediation. Notification to county public health authority and Ministry of Health."},
-      ], conc:["Inspector's decision (yes/no suspension)","Probable source of contamination","Condition for reopening"] },
-    { id:"g5", emoji:"🏗️", title:"Asbestos dust in a renovated building", color:"#b45309",
-      caz:[{l:"Location",v:"School built in 1975, partial renovation"},{l:"Suspected material",v:"old plaster, ceiling insulation"},{l:"Asbestos fibres",v:"0.8 f/ml (standard: <0.1 f/ml)"},{l:"Exposed",v:"850 students + 60 teachers, 6 weeks"},{l:"Material condition",v:"friable, deteriorated — fibre release risk"}],
+        {q:"De câte ori depășește media anuală PM₂.₅ from România (15,7 µg/m³) limita OMS (5 µg/m³)? Comentați semnificația.",h:"15,7/5 = 3,14× depășire față of OMS. România se clasifică in categoria '5× față of OMS' conform IQAir 2024 (Moldova, Romyearsa, Albyearsa). Depășirea OMS indică risc crescut of boli cardiovasculare, cancer pulmonar, mortalitate prematură. Limita legală UE (25 µg/m³) is respectată."},
+        {q:"Ce is PM₂.₅ and of ce is considerat cel mai periculos poluant atmosferic?",h:"PM₂.₅ = particule materie with diametru < 2,5 µm. Periculos deoarece: penetrează alveolele (retenție 80-90%), trece in circulația sistemică, efecte cardiovasculare (aritmii, HTA, infarct), pulmonare (BPOC, cancer), neurologice. Surse: trafic, arderi, industrie. Monitorizat with SidePak AM510."},
+        {q:"Studiul Vata et al. (2024) estimează 196 decese/an amânate prin reducerea PM₂.₅ at 10 µg/m³ in cele 6 județe. Ce metodă epidemiologică a fost folosită?",h:"Health Risk Assessment (HRA) with formula Relative Risk. Parametrii: concentrație curentă vs concentrație țintă → RR specific (mortalitate cardio-respiratorie) → decese atribuibile. Referință: ghid OMS 2021 (5 µg/m³). Metoda permite estimarea impactului intervențiilor of sănătate publică."},
+        {q:"Care are principalele surse of PM₂.₅ in mediul urban from România and cum pot fi reduse?",h:"Surse: trafic rutier (frâne, anvelope, eșapament), arderi rezidențiale (lemn, cărbune — iarna!), industrie, agricultură (NH₃ → PM secundar). Reducere: tranziție at vehicule electrice, interdicție arderi deșeuri vegetale, izolarea locuințelor (reducere necesar încălzire), zone with emisii reduse in orașe."},
+        {q:"Ce instrumente se folosesc for monitorizarea PM₂.₅ in timp real and in laborator?",h:"Personal/ambiental timp real: SidePak Personal Aerosol Monitor AM510 (µg/m³, memorie 8h). Stații fixe: analizoare gravimetrice with impactor (metodă of referință UE), fotometrie laser, TEOM. România: 142 stații continue on calitateaer.ro. Calibrare SidePak: factor specific (fumat, praf mineral)."},
+        {q:"Norma legală for PM₂.₅ in România diferă of recomandarea OMS. Explain această diferență and implicațiile ei.",h:"România (Legea 104/2011): 25 µg/m³ anual (Directiva UE 2008/50). OMS 2021: 5 µg/m³ anual (revizuit sever in jos). Diferența: OMS bazat on evidențe epidemiologice actualizate, UE = compromis politic/economic. Implicație: exposure at 15,7 µg/m³ = legală in UE dar dăunătoare conform OMS. România: top 3 YLL/100.000 in UE."},
+      ], conc:["Depășirea OMS calculată (3,1×)","De ce PM₂.₅ is cel mai periculos poluant","Diferența standard UE vs recomandare OMS"] },
+
+    { id:"g5", emoji:"🔬", title:"CO₂ determination by Pettenkofer method — lecture hall", color:"#16a34a",
+      caz:[
+        {l:"Context",v:"Sală of curs, 120 studenți, ventilație insuficientă, 2 ore curs"},
+        {l:"Determinare",v:"Metoda titrimetrică Pettenkofer (Ba(OH)₂ + acid oxalic)"},
+        {l:"V₁ (titrare inițială)",v:"24,5 cm³ acid oxalic"},
+        {l:"Aer aspirat",v:"100 cm³"},
+        {l:"V₂ (titrare finală)",v:"21,3 cm³ acid oxalic"},
+        {l:"ΔV = V₁ - V₂",v:"3,2 cm³"},
+        {l:"Normal CO₂ atmosferic",v:"0,03-0,04%"},
+        {l:"Aer viciat",v:"> 0,1% CO₂"},
+      ],
       qs:[
-        {q:"Evaluate the urgency. What action do you take in the first 30 minutes?",h:"MAXIMUM URGENCY. Immediate building evacuation. Area isolation. Stop ventilation (fibre spread). Notify public health authority + Labour Inspectorate + local authority."},
-        {q:"What is the specific risk of friable asbestos compared to encapsulated asbestos?",h:"Friable → permanently airborne fibres. Fibres <3µm → alveolar penetration → mesothelium → malignant mesothelioma (latency 20-40 years). No safe threshold."},
-        {q:"What health investigations do you propose for the 850 students exposed for 6 weeks?",h:"Medical monitoring file. Baseline chest X-ray. 40-year follow-up (mesothelioma latency). Inform parents + consent."},
-        {q:"Who has the legal right to carry out asbestos decontamination work?",h:"Only ANPM-accredited firms for asbestos work. Specialised staff with Level 3 PPE (coverall, SCBA). Hazardous category waste."},
-        {q:"What documentary evidence do you request from the school administration?",h:"Pre-renovation asbestos survey report (legally required). Demolition permit. Contract with decontamination firm. Asbestos register."},
-        {q:"Formulate recommendations for local authorities regarding buildings from the same period.",h:"Mandatory inventory of all public buildings >1980. Asbestos survey before any renovation. National register of asbestos-containing buildings. Inform private owners."},
-      ], conc:["Immediate action (first 30 min)","Main long-term risk","Condition for reoccupying the building"] },
-    { id:"g6", emoji:"🌿", title:"VOCs and formaldehyde in a newly renovated kindergarten", color:"#059669",
-      caz:[{l:"Location",v:"Kindergarten, full renovation completed 2 weeks ago"},{l:"Formaldehyde",v:"0.12 mg/m³ (WHO standard: 0.1 mg/m³)"},{l:"Benzene",v:"18 µg/m³ (EU standard: 5 µg/m³)"},{l:"Probable source",v:"paints, varnishes, new furniture"},{l:"Ventilation",v:"thermally sealed windows"},{l:"Children",v:"120 children aged 3-6 (vulnerable population)"}],
+        {q:"Calculate concentrația of CO₂ from sala of curs folosind formula metodei Pettenkofer. Interpretați rezultatul.",h:"CO₂ (cm³) = ΔV × 2 = 3,2 × 2 = 6,4 cm³. CO₂ (%) = 6,4/100 × 100 = 6,4%. Normal: 0,03-0,04%. Viciat: > 0,1%. 6,4% >> 0,1% = aer PUTERNIC VICIAT. Semnifică ventilație complet insuficientă for 120 persoane. CO₂ nu is toxic at această valoare dar indică and acumulare of alți poluanți biologici."},
+        {q:"Explain principiul chimic al metodei Pettenkofer. De ce scade volumul V₂ față of V₁?",h:"Reacție: Ba(OH)₂ + CO₂ → BaCO₃↓ + H₂O. Aerul with CO₂ bulos prin Ba(OH)₂ → CO₂ se fixează → Ba(OH)₂ disponibil scade → at titrarea finală with acid oxalic se consumă mai puțin acid (V₂ < V₁). ΔV = cantitatea of Ba(OH)₂ consumată of CO₂. Fondator metoda: Max Pettenkofer (fondatorul igienei moderne)."},
+        {q:"CO₂ is el însuși toxicul principal într-o sală aglomerată or is a indicator indirect? Explain.",h:"CO₂ > 0,1% = indicator of aerisire deficitară → acumulare simultană de: vapori of apă (umiditate crescută), bacterii aeropurtate, COV (compuși orgyearsci volatili), odori. CO₂ devine toxic direct at > 1-2% (cefalee) and > 5% (narcotic). În sală: CO₂ = index of calitate a aerului, nu toxicul principal."},
+        {q:"Ce modificări orgyearszatorice and tehnice recomandați for îmbunătățirea calității aerului in sala with 120 studenți?",h:"Tehnice: ventilație mecyearscă (min. 10 L/s/persoană), senzori CO₂ with alarmă at >1000 ppm, filtre HEPA. Orgyearszatorice: pauze with aerisire forțată at 50 min, reducere ocupare (max 1 persoană/2 m²), măști in epidemii. Verificare: CO₂ < 1000 ppm (800 ppm ideal) = calitate bună a aerului interior."},
+        {q:"Ce alte gaze are determinate in cadrul LP1B and ce metode/instrumente se folosesc?",h:"CO: gazometru portabil Dräger MiniWarn (electrochimic), biomarker COHb sânge. Gaze multiple: Dräger MiniWarn (CO, H₂S, O₂, NO₂, NH₃, CO₂ — 4 senzori simultan). PM₂.₅: SidePak AM510 (fotometric). Metode rapide: tuburi colorimetrice Dräger. Metode exacte: spectrometrie IR, cromatografie gaz."},
+        {q:"Care is valoarea maximă admisă of CO₂ in spații publice and of unde vine norma?",h:"CMA CO₂ spații publice: 0,1% (1000 ppm) — standard internațional (ASHRAE 62.1, OMS). Sursa normei: diferența față of aerul exterior (400 ppm CO₂) = 600 ppm → dacă diferența > 600 ppm = aerisire insuficientă. Pettenkofer a stabilit pragul 0,1% in sec. XIX. Spații industriale (fermentație): pot ajunge at 5-10% CO₂."},
+      ], conc:["Concentrația of CO₂ calculată and interpretarea","CO₂ ca indicator vs toxic direct","Recomandarea tehnică prioritară"] },
+
+    { id:"g6", emoji:"⚖️", title:"MAC and syearstary standards — industrial compliance assessment", color:"#f59e0b",
+      caz:[
+        {l:"Context",v:"Inspecție syearstară, fabrică of materiale of construcții (ciment)"},
+        {l:"PM₁₀ măsurat 24h",v:"87 µg/m³"},
+        {l:"PM₂.₅ măsurat anual",v:"28 µg/m³"},
+        {l:"SO₂ măsurat 24h",v:"145 µg/m³"},
+        {l:"NO₂ măsurat anual",v:"35 µg/m³"},
+        {l:"Norme (Legea 104/2011)",v:"PM₁₀: 50 µg/m³/24h · PM₂.₅: 25 µg/m³/an · SO₂: 125 µg/m³/24h · NO₂: 40 µg/m³/an"},
+        {l:"Reședința",v:"Cartier locuit at 300 m of fabrică"},
+      ],
       qs:[
-        {q:"Why are children aged 3-6 more vulnerable to VOCs than adults?",h:"Respiratory rate 2-3× higher → inhaled dose/kg greater. Immature detoxification enzyme system. Longer time spent indoors. Low height → more concentrated VOC layer near floor."},
-        {q:"Calculate the exceedance for formaldehyde and benzene against applicable standards.",h:"HCHO: 0.12/0.1 = 1.2× WHO exceedance. Benzene: 18/5 = 3.6× EU standard exceeded. Benzene is IARC Group 1 carcinogen — no safe threshold."},
-        {q:"Do you authorise the kindergarten to open or impose postponement?",h:"Mandatory postponement until below thresholds. Benzene carcinogen without threshold = zero tolerance for children. Ventilate intensively for 2 weeks (outgassing of new materials)."},
-        {q:"What ventilation protocol do you impose to reduce concentrations?",h:"Intensive ventilation 14 days: windows open 8h/day, elevated temperature 25-28°C (accelerates outgassing). Re-measure before opening."},
-        {q:"What checks do you impose on future renovation contracts?",h:"Specifications: CE-labelled products, low VOC content (category A+ per French standard). Analytical batch certificate. Air test before acceptance."},
-        {q:"Draft the sanitary opinion: conditions for obtaining the operating authorisation.",h:"1. Ventilation for 14 days. 2. Re-measure: HCHO <0.1 mg/m³ and benzene <5 µg/m³. 3. If compliant → authorisation. 4. Annual monitoring thereafter."},
-      ], conc:["Decision on opening","Substance with maximum risk","Authorisation condition"] },
+        {q:"Analizați fiecare poluant față of norma legală and stabiliți which parametri are depășiți.",h:"PM₁₀: 87 > 50 µg/m³/24h → DEPĂȘIT (74%). PM₂.₅: 28 > 25 µg/m³/an → DEPĂȘIT (12%). SO₂: 145 > 125 µg/m³/24h → DEPĂȘIT (16%). NO₂: 35 < 40 µg/m³/an → CONFORM. Concluzie: 3 from 4 poluanți depășesc normele legale → fabrică NON-CONFORMĂ."},
+        {q:"Ce is CMA and ce tipuri of CMA prevede Legea 104/2011? Cum se aplică in evaluarea acestei fabrici?",h:"CMA = concentrația maximă admisă which nu produce efecte nocive at exposure repetată, sub prag acut/cronic/iritativ. Tipuri: momentană (30 min), medie 24h, lunară, anuală. PM₁₀ and SO₂ = evaluate ca 24h. PM₂.₅ and NO₂ = evaluate anual. Legea 104/2011 implementează Directiva 2008/50/CE."},
+        {q:"Ce is pragul of alertă and când se aplică conform Legii 104/2011?",h:"Prag of alertă = nivel depășit → risc for ÎNTREAGA populație at exposure scurtă → MĂSURI IMEDIATE obligatorii. Praguri specifice: SO₂: 500 µg/m³/3h consecutive on ≥100km². NO₂: 400 µg/m³/3h. O₃: 240 µg/m³. Diferit of prag of informare (risc doar for populații sensibile)."},
+        {q:"Ce metode of determinare a pulberilor recomandați for monitorizarea continuă at această fabrică?",h:"Cantitative gravimetrice: aspirație with alonjă (mg/m³) — metodă of referință. Monitorizare continuă: SidePak AM510 for PM₂.₅ personal + stații fixe TEOM/gravimetrice. Calitative: coniometru Zeiss for formula of praf (% particule < 5µm). Frecvență: minimum zilnic for surse industriale majore."},
+        {q:"Ce efect asupra sănătății au pulberile of ciment (PM₁₀ and PM₂.₅) at exposure cronică at cartierul vecin?",h:"PM₁₀: iritație căi respiratorii superioare, rinită, faringită cronică, exacerbare astm. PM₂.₅: penetrare alveolară → inflamație sistemică → boli cardiovasculare (HTA, aritmii, infarct), BPOC, cancer pulmonar. Particule ciment conțin SiO₂ (risc silicoză) and metale grele. Copiii and vârstnicii = grupuri vulnerabile."},
+        {q:"Ce acțiuni administrative and tehnice luați ca inspector of sănătate publică față of această fabrică?",h:"Imediat: somație scrisă + termen 30 zile remediere. Tehnice: sisteme of filtrare avansată (filtre baghouse, precipitatoare electrostatice), bariere verzi. Orgyearszatorice: reducere producție in episoade of poluare. Sancțiuni: amendă (Legea 104/2011), suspendare activitate dacă prag alertă depășit. Monitorizare săptămânală post-corectivă."},
+      ], conc:["Parametrii depășiți and procentul of depășire","Definiția CMA and tipurile prevăzute of lege","Acțiunea administrativă prioritară"] },
   ],
+
   lp2a: [
     { id:"g1", emoji:"🚬", title:"Family physician — smoking cessation intervention", color:"#7c3aed",
       caz:[{l:"Patient",v:"Male, 47 years, active smoker for 25 years"},{l:"Consumption",v:"25 cigarettes/day"},{l:"Fagerström",v:"Test applied — responses: Q1=within 5 min (3p), Q2=yes (1p), Q3=first (1p), Q4=25 cig (2p), Q5=yes (1p), Q6=yes (1p)"},{l:"Exhaled CO",v:"28 ppm"},{l:"COHb%",v:"5.3%"},{l:"Comorbidities",v:"Grade II hypertension, COPD Stage I (FEV1 72%)"}],
@@ -3695,6 +3803,7 @@ const DEFAULT_NOMENCLATOR = {
     "BFK / Kinetoterapie",
     "Asistenți Medicali",
     "Nutriție și Dietetică",
+    "English",
   ],
   years: ["2025", "2026", "2027"],
   modules: ["Modul 1", "Modul 2", "Modul 3", "Modul 4"],
@@ -4023,14 +4132,14 @@ const T_STRINGS = {
     res_search:"🔍 Caută după nume...",
     res_all_sem:"📅 Toate semestrele", res_all_spec:"🎓 Toate specializările",
     res_all_grp:"Toate grupele", res_all_lab:"Toate lab-urile",
-    res_no_sem:"Fără semestru", res_no_spec:"Fără specializare",
+    res_no_sem:"Fără semestru", res_no_spec:"{T("res_no_spec")||"Fără specializare"}",
     res_export:"📥 CSV", res_empty:"Nu există rezultate înregistrate.",
     res_view_ans:"📄 Vezi răspunsuri",
     res_col_sem:"Semestru", res_col_spec:"Specializare", res_col_prof:"Profesor",
     res_col_name:"Nume", res_col_grp:"Grupă", res_col_lab:"Lab",
     res_col_mod:"Modul", res_col_score:"Scor", res_col_pct:"%",
     res_col_time:"Timp", res_col_date:"Data",
-    res_fisa_title:"Fișă completată",
+    res_fisa_title:"Group assessment completed",
     // Student login
     st_name:"Numele și prenumele", st_name_ph:"ex. Ionescu Maria",
     st_group:"Fișă", st_group_ph:"— Selectați fișa —",
@@ -4053,7 +4162,7 @@ const T_STRINGS = {
     fisa_general_note:"📌 Instrucțiune generală:",
     fisa_general_text:"Fiecare grupă primește un caz clinic/situațional. Citiți cu atenție cazul prezentat, analizați-l împreună, apoi răspundeți la întrebările aferente. La final, prezentați concluziile în maximum 2 minute.",
     fisa_select:"Selectați fișa grupei voastre:",
-    fisa_group_btn:"Fișă",
+    fisa_group_btn:"Group",
     fisa_case_label:"Caz prezentat — Fișă",
     fisa_situation:"📁 Situația",
     fisa_task_title:"📌 Sarcina grupei",
@@ -4218,7 +4327,7 @@ const T_STRINGS = {
     res_fisa_title:"Completed worksheet",
     // Student login
     st_name:"Full name", st_name_ph:"e.g. Maria Ionescu",
-    st_group:"Fișă", st_group_ph:"— Select fișă —",
+    st_group:"Group", st_group_ph:"— Select group —",
     st_spec:"Specialization", st_spec_ph:"— Select specialization —",
     st_enter:"Enter test →", teacher_label:"Teacher", demo_sub:"Interactive presentations and animated labs.", demo_empty:"No materials available for", demo_open:"Open →",
     st_err_name:"Please enter your full name (min. 3 characters).",
@@ -5033,9 +5142,9 @@ function AdminPanel({onBack, teacherName}) {
             <div style={{background:"#fff",borderRadius:16,padding:"24px 22px",maxWidth:680,width:"100%",boxShadow:"0 20px 60px rgba(99,102,241,.15)",marginTop:20,marginBottom:20}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:18}}>
                 <div>
-                  <div style={{fontSize:11,fontWeight:700,color:"#16a34a",textTransform:"uppercase",letterSpacing:".06em",marginBottom:4}}>Fișă completată</div>
+                  <div style={{fontSize:11,fontWeight:700,color:"#16a34a",textTransform:"uppercase",letterSpacing:".06em",marginBottom:4}}>{T("res_fisa_title")||"Fișă completată"}</div>
                   <div style={{fontSize:17,fontWeight:700,color:"#0a2a18",marginBottom:4}}>{selectedResult.name}</div>
-                  <div style={{fontSize:13,color:"#4a9a6a"}}>Fișă {selectedResult.group} · {selectedResult.labCode} · {title}</div>
+                  <div style={{fontSize:13,color:"#4a9a6a"}}>{lang==="en"?"Group":"Fișă"} {selectedResult.group} · {selectedResult.labCode} · {title}</div>
                 </div>
                 <button onClick={()=>setSelectedResult(null)}
                   style={{padding:"6px 14px",background:"#f1f5f9",border:"1px solid #e2e8f0",borderRadius:8,fontSize:14,cursor:"pointer",fontWeight:700,color:"#64748b",flexShrink:0,marginLeft:12}}>
@@ -5174,7 +5283,7 @@ function FisaGrupScreen({session, student, onBack}) {
         <span style={{fontSize:24}}>📋</span>
         <div>
           <div style={{fontWeight:700,fontSize:16}}>Fișe de Lucru — {session?.labCode?.replace("-FISA","")}</div>
-          <div style={{fontSize:12,color:"#90b4d8"}}>{student?.name} · Fișă {student?.group}</div>
+          <div style={{fontSize:12,color:"#90b4d8"}}>{student?.name} · {lang==="en"?"Group":"Fișă"} {student?.group}</div>
         </div>
       </div>
       <div style={{maxWidth:600,margin:"24px auto",padding:"0 16px"}}>
@@ -5188,7 +5297,7 @@ function FisaGrupScreen({session, student, onBack}) {
               style={{padding:"14px 8px",borderRadius:12,border:"2px solid "+f.color+"44",background:f.color+"18",
                 cursor:"pointer",textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",gap:6}}>
               <span style={{fontSize:26}}>{f.emoji}</span>
-              <span style={{fontSize:12,fontWeight:700,color:f.color}}>Fișă {i+1}</span>
+              <span style={{fontSize:12,fontWeight:700,color:f.color}}>{lang==="en"?"Group":"Fișă"} {i+1}</span>
               <span style={{fontSize:10,color:"#64748b",lineHeight:1.3}}>{f.title.split(" — ")[0]}</span>
             </button>
           ))}
@@ -5205,7 +5314,7 @@ function FisaGrupScreen({session, student, onBack}) {
       <div style={FS.hdr}>
         <span style={{fontSize:22}}>{f.emoji}</span>
         <div style={{flex:1}}>
-          <div style={{fontWeight:700,fontSize:15}}>Fișă {allFise.indexOf(f)+1} — {f.title}</div>
+          <div style={{fontWeight:700,fontSize:15}}>{lang==="en"?"Group":"Fișă"} {allFise.indexOf(f)+1} — {f.title}</div>
           <div style={{fontSize:11,color:"#90b4d8"}}>{student?.name} · Citiți cazul cu atenție</div>
         </div>
         <button onClick={()=>setPhase("select")} style={{padding:"6px 12px",background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.3)",borderRadius:8,color:"white",fontSize:12,cursor:"pointer"}}>← Înapoi</button>
@@ -5217,7 +5326,7 @@ function FisaGrupScreen({session, student, onBack}) {
           <div style={{background:f.color,padding:"14px 20px",display:"flex",alignItems:"center",gap:12}}>
             <span style={{fontSize:28}}>{f.emoji}</span>
             <div>
-              <div style={{fontSize:11,color:"rgba(255,255,255,.8)",textTransform:"uppercase",letterSpacing:".08em",fontWeight:700}}>Caz prezentat — Fișă {allFise.indexOf(f)+1}</div>
+              <div style={{fontSize:11,color:"rgba(255,255,255,.8)",textTransform:"uppercase",letterSpacing:".08em",fontWeight:700}}>{lang==="en"?"Presented case — Group":"Caz prezentat — Fișă"} {allFise.indexOf(f)+1}</div>
               <div style={{fontSize:17,fontWeight:800,color:"white"}}>{f.title}</div>
             </div>
           </div>
@@ -5395,7 +5504,7 @@ function FisaGrupScreen({session, student, onBack}) {
               <span style={{fontSize:12,color:sc,opacity:.7}}>/{maxScore}</span>
             </div>
             <h3 style={{color:"#0d2040",margin:"0 0 4px"}}>{pct>=80?"Excelent! 🎉":pct>=60?"Bun! 👍":"Necesită îmbunătățiri"}</h3>
-            <p style={{color:"#64748b",fontSize:13}}>{student?.name} · Fișă {student?.group} · {f.title}</p>
+            <p style={{color:"#64748b",fontSize:13}}>{student?.name} · {lang==="en"?"Group":"Fișă"} {student?.group} · {f.title}</p>
           </div>
 
           {/* Case recap in results */}
@@ -6109,7 +6218,7 @@ function FisaPreviewPanel({labId, mode="preview"}) {
                   background:active?"#EEF2FF":"transparent",cursor:"pointer",display:"flex",alignItems:"center",gap:8}}>
                 <span style={{fontSize:17}}>{f.emoji}</span>
                 <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:12,fontWeight:active?700:500,color:active?"#6366f1":"#1e293b",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>Fișă {i+1}</div>
+                  <div style={{fontSize:12,fontWeight:active?700:500,color:active?"#6366f1":"#1e293b",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{lang==="en"?"Group":"Fișă"} {i+1}</div>
                   <div style={{fontSize:10,color:active?"#818cf8":"#94a3b8",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",marginTop:1,display:"flex",gap:4,alignItems:"center"}}>
                     {f.qs.length}Q
                     {edited && <span style={{color:"#f59e0b",background:"#fffbeb",borderRadius:5,padding:"0 4px",fontSize:9}}>✎</span>}
@@ -6135,7 +6244,7 @@ function FisaPreviewPanel({labId, mode="preview"}) {
                 <span style={{fontSize:24}}>{selFisa.emoji}</span>
                 <div style={{flex:1}}>
                   <div style={{fontSize:10,color:"rgba(255,255,255,.75)",fontWeight:700,textTransform:"uppercase",letterSpacing:".08em"}}>
-                    Fișă Grupă {activeFise.indexOf(selFisa)+1}
+                    {lang==="en"?"Group":"Fișă Grupă"} {activeFise.indexOf(selFisa)+1}
                     {hasEdits && <span style={{marginLeft:8,background:"rgba(255,255,255,.25)",borderRadius:8,padding:"1px 6px",fontSize:9}}>EDITAT</span>}
                   </div>
                   <div style={{fontSize:15,fontWeight:800,color:"#fff"}}>{selFisa.title}</div>
@@ -6848,18 +6957,18 @@ function App() {
     <FisaGrupScreen session={session} student={student} onBack={()=>setScreen("home")}/>
   );
   const qb = (ro, en) => lang==="en" ? en : ro;
-  if (screen==="lp1a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp1a")} modules={LP1A_MODULES} questions={qb(LP1A_QUESTIONS,LP1A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
-  if (screen==="lp1b_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp1b")} modules={LP1B_MODULES} questions={qb(LP1B_QUESTIONS,LP1B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
-  if (screen==="lp2a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp2a")} modules={LP2A_MODULES} questions={qb(LP2A_QUESTIONS,LP2A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
-  if (screen==="lp2b_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp2b")} modules={LP2B_MODULES} questions={qb(LP2B_QUESTIONS,LP2B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
-  if (screen==="lp3a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp3a")} modules={LP3A_MODULES} questions={qb(LP3A_QUESTIONS,LP3A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
-  if (screen==="lp3b_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp3b")} modules={LP3B_MODULES} questions={qb(LP3B_QUESTIONS,LP3B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
-  if (screen==="lp6a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp6a")} modules={LP6A_MODULES} questions={qb(LP6A_QUESTIONS,LP6A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
-  if (screen==="lp6b_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp6b")} modules={LP6B_MODULES} questions={qb(LP6B_QUESTIONS,LP6B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
-  if (screen==="lp5b_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp5b")} modules={LP5B_MODULES} questions={qb(LP5B_QUESTIONS,LP5B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
-  if (screen==="lp5a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp5a")} modules={LP5A_MODULES} questions={qb(LP5A_QUESTIONS,LP5A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
-  if (screen==="lp4a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp4a")} modules={LP4A_MODULES} questions={qb(LP4A_QUESTIONS,LP4A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
-  if (screen==="lp4b_modules") return <LP4BModuleSelect studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
+  if (screen==="lp1a_modules") { const _fm = LP1A_MODULES.find(m=>m.id==="full1a")||LP1A_MODULES[LP1A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp1a")} modules={LP1A_MODULES} questions={qb(LP1A_QUESTIONS,LP1A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp1b_modules") { const _fm = LP1B_MODULES.find(m=>m.id==="full1b")||LP1B_MODULES[LP1B_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp1b")} modules={LP1B_MODULES} questions={qb(LP1B_QUESTIONS,LP1B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp2a_modules") { const _fm = LP2A_MODULES.find(m=>m.id==="full2a")||LP2A_MODULES[LP2A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp2a")} modules={LP2A_MODULES} questions={qb(LP2A_QUESTIONS,LP2A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp2b_modules") { const _fm = LP2B_MODULES.find(m=>m.id==="full2b")||LP2B_MODULES[LP2B_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp2b")} modules={LP2B_MODULES} questions={qb(LP2B_QUESTIONS,LP2B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp3a_modules") { const _fm = LP3A_MODULES.find(m=>m.id==="full3a")||LP3A_MODULES[LP3A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp3a")} modules={LP3A_MODULES} questions={qb(LP3A_QUESTIONS,LP3A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp3b_modules") { const _fm = LP3B_MODULES.find(m=>m.id==="full3b")||LP3B_MODULES[LP3B_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp3b")} modules={LP3B_MODULES} questions={qb(LP3B_QUESTIONS,LP3B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp6a_modules") { const _fm = LP6A_MODULES.find(m=>m.id==="full6a")||LP6A_MODULES[LP6A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp6a")} modules={LP6A_MODULES} questions={qb(LP6A_QUESTIONS,LP6A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp6b_modules") { const _fm = LP6B_MODULES.find(m=>m.id==="full6b")||LP6B_MODULES[LP6B_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp6b")} modules={LP6B_MODULES} questions={qb(LP6B_QUESTIONS,LP6B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp5b_modules") { const _fm = LP5B_MODULES.find(m=>m.id==="full5b")||LP5B_MODULES[LP5B_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp5b")} modules={LP5B_MODULES} questions={qb(LP5B_QUESTIONS,LP5B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp5a_modules") { const _fm = LP5A_MODULES.find(m=>m.id==="full5a")||LP5A_MODULES[LP5A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp5a")} modules={LP5A_MODULES} questions={qb(LP5A_QUESTIONS,LP5A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp4a_modules") { const _fm = LP4A_MODULES.find(m=>m.id==="full4a")||LP4A_MODULES[LP4A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp4a")} modules={LP4A_MODULES} questions={qb(LP4A_QUESTIONS,LP4A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp4b_modules") { const _fm = (qb(LP4B_QUESTIONS,LP4B_QUESTIONS_EN)["full"]||[]); const _m = LP4B_MODULES.find(m=>m.id==="full")||LP4B_MODULES[LP4B_MODULES.length-1]; if(_m){setModule(_m);setScreen("quiz");return null;} return <LP4BModuleSelect studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
   if (showDemo) return <DemoScreen lab={LABS.find(l=>l.id===session?.labId)} onBack={()=>setShowDemo(false)}/>;
   if (screen==="quiz" && module) return (
     <QuizScreen studentName={student?.name} studentGroup={student?.group} studentSpec={student?.spec||""}
