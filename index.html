@@ -4132,7 +4132,7 @@ const T_STRINGS = {
     res_search:"🔍 Caută după nume...",
     res_all_sem:"📅 Toate semestrele", res_all_spec:"🎓 Toate specializările",
     res_all_grp:"Toate grupele", res_all_lab:"Toate lab-urile",
-    res_no_sem:"Fără semestru", res_no_spec:"{T("res_no_spec")||"Fără specializare"}",
+    res_no_sem:"Fără semestru", res_no_spec:"Fără specializare",
     res_export:"📥 CSV", res_empty:"Nu există rezultate înregistrate.",
     res_view_ans:"📄 Vezi răspunsuri",
     res_col_sem:"Semestru", res_col_spec:"Specializare", res_col_prof:"Profesor",
@@ -6923,6 +6923,28 @@ function App() {
 
   const handleJoinToken = token => { setPendingToken(token); setScreen("tokenJoin"); };
 
+  const FULL_MODULES_MAP = {
+    lp1a:"full1a", lp1b:"full1b", lp2a:"full2a", lp2b:"full2b",
+    lp3a:"full3a", lp3b:"full3b", lp4a:"full4a", lp4b:"full",
+    lp5a:"full5a", lp5b:"full5b", lp6a:"full6a", lp6b:"full6b",
+  };
+  const ALL_MOD_VARS = {
+    lp1a:window.LP1A_MODULES, lp1b:window.LP1B_MODULES, lp2a:window.LP2A_MODULES,
+    lp2b:window.LP2B_MODULES, lp3a:window.LP3A_MODULES, lp3b:window.LP3B_MODULES,
+    lp4a:window.LP4A_MODULES, lp4b:window.LP4B_MODULES, lp5a:window.LP5A_MODULES,
+    lp5b:window.LP5B_MODULES, lp6a:window.LP6A_MODULES, lp6b:window.LP6B_MODULES,
+  };
+  useEffect(() => {
+    const m = screen.match(/^(lp\d+[ab])_modules$/);
+    if (m) {
+      const labId = m[1];
+      const mods = ALL_MOD_VARS[labId] || [];
+      const fullId = FULL_MODULES_MAP[labId];
+      const fullMod = mods.find(x=>x.id===fullId) || mods[mods.length-1];
+      if (fullMod) { setModule(fullMod); setScreen("quiz"); }
+    }
+  }, [screen]);
+
   const renderScreen = () => {
     if (screen==="home")        return <HomePage onAdminLogin={(t)=>{setTeacherName(t);setScreen("admin");}} onJoinToken={handleJoinToken}/>;
   if (screen==="adminLogin")  return <AdminLogin onSuccess={(t)=>{setTeacherName(t);setScreen("admin");}} onBack={()=>setScreen("home")}/>;
@@ -6957,18 +6979,18 @@ function App() {
     <FisaGrupScreen session={session} student={student} onBack={()=>setScreen("home")}/>
   );
   const qb = (ro, en) => lang==="en" ? en : ro;
-  if (screen==="lp1a_modules") { const _fm = LP1A_MODULES.find(m=>m.id==="full1a")||LP1A_MODULES[LP1A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp1a")} modules={LP1A_MODULES} questions={qb(LP1A_QUESTIONS,LP1A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
-  if (screen==="lp1b_modules") { const _fm = LP1B_MODULES.find(m=>m.id==="full1b")||LP1B_MODULES[LP1B_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp1b")} modules={LP1B_MODULES} questions={qb(LP1B_QUESTIONS,LP1B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
-  if (screen==="lp2a_modules") { const _fm = LP2A_MODULES.find(m=>m.id==="full2a")||LP2A_MODULES[LP2A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp2a")} modules={LP2A_MODULES} questions={qb(LP2A_QUESTIONS,LP2A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
-  if (screen==="lp2b_modules") { const _fm = LP2B_MODULES.find(m=>m.id==="full2b")||LP2B_MODULES[LP2B_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp2b")} modules={LP2B_MODULES} questions={qb(LP2B_QUESTIONS,LP2B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
-  if (screen==="lp3a_modules") { const _fm = LP3A_MODULES.find(m=>m.id==="full3a")||LP3A_MODULES[LP3A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp3a")} modules={LP3A_MODULES} questions={qb(LP3A_QUESTIONS,LP3A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
-  if (screen==="lp3b_modules") { const _fm = LP3B_MODULES.find(m=>m.id==="full3b")||LP3B_MODULES[LP3B_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp3b")} modules={LP3B_MODULES} questions={qb(LP3B_QUESTIONS,LP3B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
-  if (screen==="lp6a_modules") { const _fm = LP6A_MODULES.find(m=>m.id==="full6a")||LP6A_MODULES[LP6A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp6a")} modules={LP6A_MODULES} questions={qb(LP6A_QUESTIONS,LP6A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
-  if (screen==="lp6b_modules") { const _fm = LP6B_MODULES.find(m=>m.id==="full6b")||LP6B_MODULES[LP6B_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp6b")} modules={LP6B_MODULES} questions={qb(LP6B_QUESTIONS,LP6B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
-  if (screen==="lp5b_modules") { const _fm = LP5B_MODULES.find(m=>m.id==="full5b")||LP5B_MODULES[LP5B_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp5b")} modules={LP5B_MODULES} questions={qb(LP5B_QUESTIONS,LP5B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
-  if (screen==="lp5a_modules") { const _fm = LP5A_MODULES.find(m=>m.id==="full5a")||LP5A_MODULES[LP5A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp5a")} modules={LP5A_MODULES} questions={qb(LP5A_QUESTIONS,LP5A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
-  if (screen==="lp4a_modules") { const _fm = LP4A_MODULES.find(m=>m.id==="full4a")||LP4A_MODULES[LP4A_MODULES.length-1]; if(_fm){setModule(_fm);setScreen("quiz");return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp4a")} modules={LP4A_MODULES} questions={qb(LP4A_QUESTIONS,LP4A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
-  if (screen==="lp4b_modules") { const _fm = (qb(LP4B_QUESTIONS,LP4B_QUESTIONS_EN)["full"]||[]); const _m = LP4B_MODULES.find(m=>m.id==="full")||LP4B_MODULES[LP4B_MODULES.length-1]; if(_m){setModule(_m);setScreen("quiz");return null;} return <LP4BModuleSelect studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp1a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp1a")} modules={LP1A_MODULES} questions={qb(LP1A_QUESTIONS,LP1A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;,[]);return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp1a")} modules={LP1A_MODULES} questions={qb(LP1A_QUESTIONS,LP1A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp1b_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp1b")} modules={LP1B_MODULES} questions={qb(LP1B_QUESTIONS,LP1B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;,[]);return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp1b")} modules={LP1B_MODULES} questions={qb(LP1B_QUESTIONS,LP1B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp2a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp2a")} modules={LP2A_MODULES} questions={qb(LP2A_QUESTIONS,LP2A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;,[]);return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp2a")} modules={LP2A_MODULES} questions={qb(LP2A_QUESTIONS,LP2A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp2b_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp2b")} modules={LP2B_MODULES} questions={qb(LP2B_QUESTIONS,LP2B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;,[]);return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp2b")} modules={LP2B_MODULES} questions={qb(LP2B_QUESTIONS,LP2B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp3a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp3a")} modules={LP3A_MODULES} questions={qb(LP3A_QUESTIONS,LP3A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;,[]);return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp3a")} modules={LP3A_MODULES} questions={qb(LP3A_QUESTIONS,LP3A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp3b_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp3b")} modules={LP3B_MODULES} questions={qb(LP3B_QUESTIONS,LP3B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;,[]);return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp3b")} modules={LP3B_MODULES} questions={qb(LP3B_QUESTIONS,LP3B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp6a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp6a")} modules={LP6A_MODULES} questions={qb(LP6A_QUESTIONS,LP6A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;,[]);return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp6a")} modules={LP6A_MODULES} questions={qb(LP6A_QUESTIONS,LP6A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp6b_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp6b")} modules={LP6B_MODULES} questions={qb(LP6B_QUESTIONS,LP6B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;,[]);return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp6b")} modules={LP6B_MODULES} questions={qb(LP6B_QUESTIONS,LP6B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp5b_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp5b")} modules={LP5B_MODULES} questions={qb(LP5B_QUESTIONS,LP5B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;,[]);return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp5b")} modules={LP5B_MODULES} questions={qb(LP5B_QUESTIONS,LP5B_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp5a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp5a")} modules={LP5A_MODULES} questions={qb(LP5A_QUESTIONS,LP5A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;,[]);return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp5a")} modules={LP5A_MODULES} questions={qb(LP5A_QUESTIONS,LP5A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp4a_modules") return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp4a")} modules={LP4A_MODULES} questions={qb(LP4A_QUESTIONS,LP4A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;,[]);return null;} return <GenericModuleSelect lab={LABS.find(l=>l.id==="lp4a")} modules={LP4A_MODULES} questions={qb(LP4A_QUESTIONS,LP4A_QUESTIONS_EN)} studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
+  if (screen==="lp4b_modules") return <LP4BModuleSelect studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>; if(module?.id===_fm?.id){setScreen("quiz");return null;} return <LP4BModuleSelect studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;  }
   if (showDemo) return <DemoScreen lab={LABS.find(l=>l.id===session?.labId)} onBack={()=>setShowDemo(false)}/>;
   if (screen==="quiz" && module) return (
     <QuizScreen studentName={student?.name} studentGroup={student?.group} studentSpec={student?.spec||""}
