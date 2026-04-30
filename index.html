@@ -5375,7 +5375,7 @@ function FisaGrupScreen({session, student, onBack}) {
         {/* CTA */}
         <button onClick={()=>setPhase("questions")}
           style={{width:"100%",padding:"16px",background:"linear-gradient(135deg,"+f.color+","+f.color+"cc)",color:"white",border:"none",borderRadius:14,fontSize:16,fontWeight:800,cursor:"pointer",boxShadow:"0 4px 16px "+f.color+"44",letterSpacing:".02em"}}>
-          Am înțeles cazul — Încep să răspund →
+          {T("fisa_start")||"Am înțeles cazul — Încep să răspund →"}
         </button>
       </div>
     </div>
@@ -5560,11 +5560,14 @@ async function submitFisaGrup(f,answers,concluzii,student,session,setPhase,setEv
       method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})
     });
-    const data=await res.json();
-    const parsed=JSON.parse((data.content?.[0]?.text||"{}").replace(/```json|```/g,"").trim());
-    evaluations=parsed.evaluations||[];
-  } catch(e){
-    evaluations=f.qs.map(()=>({score:1,feedback:"Raspuns inregistrat — evaluare manuala."}));
+    if (res.ok) {
+      const data=await res.json();
+      const parsed=JSON.parse((data.content?.[0]?.text||"{}").replace(/```json|```/g,"").trim());
+      evaluations=parsed.evaluations||[];
+    }
+  } catch(e){}
+  if (!evaluations.length) {
+    evaluations=f.qs.map(()=>({score:1,feedback:lang==="en"?"Answer recorded — manual evaluation.":"Raspuns inregistrat — evaluare manuala."}));
   }
   const totalScore=evaluations.reduce((s,e)=>s+(e.score||0),0);
   const maxScore=f.qs.length*2;
@@ -6843,7 +6846,7 @@ function ResultScreen({studentName, studentGroup, labId, module, entry, answers,
           </div>
           <h2 style={{color:"#0a2a18",fontSize:22,margin:"0 0 4px"}}>{entry.pct}% — {entry.pct>=80?T("result_excellent"):entry.pct>=60?T("result_good"):T("result_retry")}</h2>
           <p style={{color:"#4a9a6a",fontSize:14,margin:"0 0 4px"}}>{studentName} · {module.title}</p>
-          <p style={{color:"#94a3b8",fontSize:12,margin:0}}>{T("result_time")||"Timp:"} {entry.timeUsed}s · {new Date().toLocaleString(lang==="en"?"en-GB":"ro-RO")}</p>
+          <p style={{color:"#94a3b8",fontSize:12,margin:0}}>{T("result_time")||"Timp:"} {entry.timeUsed}s · {new Date().toLocaleString(lang==="en"?"en-GB":"ro-RO",{timeZone:"Europe/Bucharest"})}</p>
         </div>
         <div style={{display:"flex",gap:10,marginBottom:20}}>
           <button style={{...S.btnG,flex:1}} onClick={onRestart}>{T("result_restart")||"🔄 Reîncepe"}</button>
