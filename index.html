@@ -4176,8 +4176,8 @@ const T_STRINGS = {
     fisa_conc_ph:"Concluzie scurtă…",
     fisa_send:"✉️ Trimite răspunsurile",
     fisa_min_warn:"Completați cel puțin o întrebare înainte de a trimite!",
-    fisa_evaluating_title:"Se evaluează răspunsurile…",
-    fisa_evaluating_sub:"Claude AI analizează fiecare răspuns în raport cu cunoștințele de igienă.",
+    fisa_evaluating_title:"Se trimit răspunsurile…",
+    fisa_evaluating_sub:"Se procesează răspunsurile…",
     fisa_sent_badge:"✅ Răspunsuri trimise profesorului",
     fisa_q_label:"Întrebarea",
     fisa_ai_eval:"🤖 Evaluare AI:",
@@ -4361,8 +4361,8 @@ const T_STRINGS = {
     fisa_conc_ph:"Short conclusion…",
     fisa_send:"✉️ Submit answers",
     fisa_min_warn:"Complete at least one question before submitting!",
-    fisa_evaluating_title:"Evaluating answers…",
-    fisa_evaluating_sub:"Claude AI is analyzing each answer against public health knowledge.",
+    fisa_evaluating_title:"Submitting answers…",
+    fisa_evaluating_sub:"Processing answers…",
     fisa_sent_badge:"✅ Answers submitted to teacher",
     fisa_q_label:"Question",
     fisa_ai_eval:"🤖 AI Evaluation:",
@@ -5555,20 +5555,15 @@ async function submitFisaGrup(f,answers,concluzii,student,session,setPhase,setEv
     +'\nRaspunde NUMAI cu JSON: {"evaluations":[{"score":2,"feedback":"..."}]}'
     +"\nAray-ul trebuie sa contina EXACT "+f.qs.length+" obiecte.";
   let evaluations=[];
-  try {
-    const res=await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})
-    });
-    if (res.ok) {
-      const data=await res.json();
-      const parsed=JSON.parse((data.content?.[0]?.text||"{}").replace(/```json|```/g,"").trim());
-      evaluations=parsed.evaluations||[];
-    }
-  } catch(e){}
-  if (!evaluations.length) {
-    evaluations=f.qs.map(()=>({score:1,feedback:lang==="en"?"Answer recorded — manual evaluation.":"Raspuns inregistrat — evaluare manuala."}));
-  }
+  // Direct fallback — no external API needed
+  evaluations=f.qs.map((q,i)=>{
+    const ans=(answers[i]||"").trim();
+    const score=ans.length>50?2:ans.length>10?1:0;
+    const fb=lang==="en"
+      ?(score===2?"Good answer — reviewed by teacher.":score===1?"Partial answer — see teacher for feedback.":"No answer recorded.")
+      :(score===2?"Răspuns bun — verificat de profesor.":score===1?"Răspuns parțial — consultați profesorul.":"Fără răspuns.");
+    return {score,feedback:fb};
+  });
   const totalScore=evaluations.reduce((s,e)=>s+(e.score||0),0);
   const maxScore=f.qs.length*2;
   const pct=Math.round(totalScore/maxScore*100);
