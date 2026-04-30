@@ -5462,7 +5462,7 @@ function FisaGrupScreen({session, student, onBack}) {
         </div>
         <button onClick={()=>{
             if(answered<1){alert("Completați cel puțin o întrebare înainte de a trimite!");return;}
-            submitFisaGrup(f,answers,concluzii,student,session,setPhase,setEvalResults);
+            submitFisaGrup(f,answers,concluzii,student,session,setPhase,setEvalResults,lang);
           }}
           style={{padding:"12px 24px",background:answered>=1?"linear-gradient(135deg,#10b981,#059669)":"#e2e8f0",
             color:answered>=1?"white":"#94a3b8",border:"none",borderRadius:11,fontSize:15,fontWeight:700,cursor:"pointer",transition:"all .2s"}}>
@@ -5544,10 +5544,10 @@ function FisaGrupScreen({session, student, onBack}) {
 }
 
 
-async function submitFisaGrup(f,answers,concluzii,student,session,setPhase,setEvalResults) {
+async function submitFisaGrup(f,answers,concluzii,student,session,setPhase,setEvalResults,lang) {
   setPhase("evaluating");
   const cazStr = f.caz.map(i=>i.l+": "+i.v).join(", ");
-  const qStr = f.qs.map((q,i)=>"Intrebarea "+(i+1)+": "+q.q+"\nRaspuns: "+(answers[i]||T("fisa_no_answer"))).join("\n\n");
+  const qStr = f.qs.map((q,i)=>"Intrebarea "+(i+1)+": "+q.q+"\nRaspuns: "+(answers[i]||"—")).join("\n\n");
   const prompt = "Esti profesor de igiena. Evalueaza raspunsurile unui student la fisa \""+f.title+"\"."
     +"\nContext: "+cazStr+"\n\n"+qStr
     +"\n\nAcorda scor (0,1,2) si feedback scurt pentru fiecare din cele "+f.qs.length+" intrebari."
@@ -5567,11 +5567,14 @@ async function submitFisaGrup(f,answers,concluzii,student,session,setPhase,setEv
   const totalScore=evaluations.reduce((s,e)=>s+(e.score||0),0);
   const maxScore=f.qs.length*2;
   const pct=Math.round(totalScore/maxScore*100);
-  const answersText=f.qs.map((q,i)=>"Q"+(i+1)+": "+q.q+"\nA: "+(answers[i]||T("fisa_no_answer"))).join("\n\n");
+  const answersText=f.qs.map((q,i)=>"Q"+(i+1)+": "+q.q+"\nA: "+(answers[i]||"—")).join("\n\n");
   const SB="https://hgknirjorjvlofhngvcp.supabase.co";
   const SK="sb_publishable_PnUOkG2Tpw3wKa9hTZc3Yw_T0bnhFAO";
   try {
+    const ctrl=new AbortController();
+    setTimeout(()=>ctrl.abort(),5000);
     await fetch(SB+"/rest/v1/results",{
+      signal:ctrl.signal,
       method:"POST",
       headers:{"Content-Type":"application/json","apikey":SK,"Authorization":"Bearer "+SK,"Prefer":"return=minimal"},
       body:JSON.stringify({
