@@ -3278,10 +3278,18 @@ async function markSessionUsed(token, studentName) {
   // Just log — recorded via result entry
 }
 async function loadResults() {
-  const res = await sb("results?select=*&order=created_at.desc&limit=500");
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.map(r => ({
+  // Paginated fetch — loads ALL results regardless of count
+  const PAGE = 1000;
+  let all = [], from = 0, done = false;
+  while (!done) {
+    const res = await sb(`results?select=*&order=created_at.desc&limit=${PAGE}&offset=${from}`);
+    if (!res.ok) break;
+    const page = await res.json();
+    all = all.concat(page);
+    if (page.length < PAGE) done = true;
+    else from += PAGE;
+  }
+  return all.map(r => ({
     name: r.name, group: r.grp, labId: r.lab_id, labCode: r.lab_code,
     module: r.module, moduleTitle: r.module_title,
     answersText: r.answers_text||"",
@@ -3289,7 +3297,8 @@ async function loadResults() {
     timestamp: new Date(r.created_at).getTime(), timeUsed: r.time_used,
     teacher: r.teacher || "",
     semester: r.semester || "",
-    specialization: r.specialization || ""
+    specialization: r.specialization || "",
+    studyYear: r.study_year || ""
   }));
 }
 
@@ -4060,8 +4069,6 @@ function AdminPanel({onBack, teacherName}) {
 
   // results state
   const [results, setResults]     = useState([]);
-  const [totalCount, setTotalCount] = useState(null);
-  const [totalUniqueCount, setTotalUniqueCount] = useState(null);
   const [labFilter,  setLabFilter]  = useState("all");
   const [grpFilter,  setGrpFilter]  = useState("all");
   const [semFilter,  setSemFilter]  = useState("all");
@@ -4070,17 +4077,6 @@ function AdminPanel({onBack, teacherName}) {
 
   useEffect(() => {
     loadResults().then(r => setResults(r.sort((a,b)=>b.timestamp-a.timestamp)));
-    // Load total count (all records)
-    fetch(`${SUPABASE_URL}/rest/v1/results?select=name`, {
-      headers: {"apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY,
-                "Prefer": "count=exact", "Range-Unit": "items", "Range": "0-9999"}
-    }).then(async res => {
-      if (res.ok) {
-        const all = await res.json();
-        setTotalCount(all.length);
-        setTotalUniqueCount(new Set(all.map(r=>r.name)).size);
-      }
-    }).catch(()=>{});
   }, [tab]);
 
   // countdown
@@ -4363,8 +4359,8 @@ function AdminPanel({onBack, teacherName}) {
             {/* summary cards */}
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:10,marginBottom:20}}>
               {[
-                {label:T("res_total"),value:totalCount||results.length,icon:"📋",color:"#10b981"},
-                {label:T("res_unique"),  value:totalCount?totalUniqueCount:[...new Set(results.map(r=>r.name))].length,icon:"👥",color:"#3b82f6"},
+                {label:T("res_total"),value:results.length,icon:"📋",color:"#10b981"},
+                {label:T("res_unique"),  value:[...new Set(results.map(r=>r.name))].length,icon:"👥",color:"#3b82f6"},
                 {label:T("res_avg"),  value:results.length?`${Math.round(results.reduce((s,r)=>s+r.pct,0)/results.length)}%`:"–",icon:"📈",color:"#f59e0b"},
                 {label:T("res_active"),  value:LABS.filter(l=>l.ready).length,icon:"🧪",color:"#8b5cf6"},
               ].map(c=>(
@@ -6620,25 +6616,13 @@ function ExamResultScreen({result, onRestart}) {
   );
 }
 
-function PresentaTab({results, labs}) {
+function PrezentaTab({results, labs}) {
   const [yearFilter, setYearFilter] = useState("all");
   const [grpFilter,  setGrpFilter]  = useState("all");
   const [specFilter, setSpecFilter] = useState("all");
-  const [allResults, setAllResults] = useState(null);
 
-  useEffect(() => {
-    // Load all results for full attendance view
-    fetch(`${SUPABASE_URL}/rest/v1/results?select=*&order=created_at.desc`, {
-      headers: {"apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY,
-                "Range": "0-9999"}
-    }).then(async res => {
-      if (res.ok) { const data = await res.json(); setAllResults(data); }
-    }).catch(()=>{ setAllResults(results); });
-  }, []);
-
-  const baseResults = allResults || results;
   // Quiz results only
-  const quizResults = baseResults.filter(r => !r.module || !r.module.startsWith("fisa_"));
+  const quizResults = results.filter(r => !r.module || !r.module.startsWith("fisa_"));
 
   // Unique values
   const groups = [...new Set(quizResults.map(r=>r.group||"").filter(Boolean))].sort((a,b)=>Number(a)-Number(b));
@@ -6673,7 +6657,7 @@ function PresentaTab({results, labs}) {
 
   const exportCSV = () => {
     const labCols = activeLabs.map(l=>l.code);
-    const header = ["Group","An","Specialization","Name",...labCols].join(",");
+    const header = ["Grupă","An","Specializare","Nume",...labCols].join(",");
     const csvRows = rows.map(r =>
       [r.group, r.studyYear||"", r.spec||"", r.name,
        ...activeLabs.map(l => r[l.id]!==undefined ? r[l.id]+"%" : "Absent")
@@ -6682,7 +6666,7 @@ function PresentaTab({results, labs}) {
     const blob = new Blob([header+"\n"+csvRows],{type:"text/csv;charset=utf-8"});
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href=url; a.download="attendance_"+grpFilter+".csv"; a.click();
+    a.href=url; a.download="prezenta_"+grpFilter+".csv"; a.click();
     URL.revokeObjectURL(url);
   };
 
@@ -6695,9 +6679,9 @@ function PresentaTab({results, labs}) {
       {/* Header */}
       <div style={{marginBottom:14,display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10}}>
         <div>
-          <h2 style={{fontSize:18,fontWeight:800,color:"#1e1b4b",margin:0}}>📋 Attendance Table</h2>
+          <h2 style={{fontSize:18,fontWeight:800,color:"#1e1b4b",margin:0}}>📋 Tabel Prezență</h2>
           <p style={{fontSize:12,color:"#64748b",margin:"3px 0 0"}}>
-            <b>{rows.length}</b> students · {filtered.length} records · {quizResults.length} quizzes in DB
+            <b>{rows.length}</b> studenți · {filtered.length} înregistrări · {quizResults.length} quiz-uri total în BD
           </p>
         </div>
         <button onClick={exportCSV} style={{padding:"8px 16px",background:"linear-gradient(135deg,#6366f1,#8b5cf6)",color:"#fff",border:"none",borderRadius:9,fontWeight:700,fontSize:13,cursor:"pointer"}}>
@@ -6708,15 +6692,15 @@ function PresentaTab({results, labs}) {
       {/* Filters */}
       <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14,background:"#fff",padding:"10px 12px",borderRadius:12,border:"1px solid #e0e7ff"}}>
         <select style={sS} value={yearFilter} onChange={e=>setYearFilter(e.target.value)}>
-          <option value="all">📅 All years</option>
+          <option value="all">📅 Toți anii</option>
           {["Anul I","Anul II","Anul III","Anul IV","Anul V","Anul VI"].map(y=><option key={y} value={y}>{y}</option>)}
         </select>
         <select style={sS} value={specFilter} onChange={e=>setSpecFilter(e.target.value)}>
-          <option value="all">🎓 All specializations</option>
+          <option value="all">🎓 Toate specializările</option>
           {specs.map(s=><option key={s} value={s}>{s}</option>)}
         </select>
         <select style={sS} value={grpFilter} onChange={e=>setGrpFilter(e.target.value)}>
-          <option value="all">👥 All groups</option>
+          <option value="all">👥 Toate grupele</option>
           {groups.map(g=><option key={g} value={g}>Grupa {g}</option>)}
         </select>
         {(yearFilter!=="all"||grpFilter!=="all"||specFilter!=="all") && (
@@ -6731,19 +6715,19 @@ function PresentaTab({results, labs}) {
       {quizResults.length===0 ? (
         <div style={{background:"#fff",borderRadius:12,border:"1px solid #e0e7ff",padding:"48px 24px",textAlign:"center",color:"#94a3b8"}}>
           <div style={{fontSize:36,marginBottom:8,opacity:.4}}>📋</div>
-          <p style={{margin:0,fontWeight:600}}>{results.length===0?"⏳ Se încarcă...":"Nu există rezultate of quiz in baza of date."}</p>
+          <p style={{margin:0,fontWeight:600}}>{results.length===0?"⏳ Se încarcă...":"Nu există rezultate de quiz în baza de date."}</p>
         </div>
       ) : rows.length===0 ? (
         <div style={{background:"#fff",borderRadius:12,border:"1px solid #e0e7ff",padding:"32px",textAlign:"center",color:"#94a3b8"}}>
-          <p style={{margin:0}}>Nicio înregistrare for filtrele selectate.</p>
+          <p style={{margin:0}}>Nicio înregistrare pentru filtrele selectate.</p>
         </div>
       ) : (
         <div style={{overflowX:"auto",borderRadius:12,border:"1px solid #e0e7ff",background:"#fff",boxShadow:"0 2px 8px rgba(99,102,241,0.06)"}}>
           <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
             <thead>
               <tr style={{background:"#F0F4FF"}}>
-                <th style={{textAlign:"left",padding:"10px 12px",borderBottom:"2px solid #e0e7ff",fontWeight:700,color:"#4338ca",fontSize:12,whiteSpace:"nowrap",position:"sticky",left:0,background:"#F0F4FF",zIndex:1}}>Group</th>
-                <th style={{textAlign:"left",padding:"10px 12px",borderBottom:"2px solid #e0e7ff",fontWeight:700,color:"#4338ca",fontSize:12,whiteSpace:"nowrap",position:"sticky",left:48,background:"#F0F4FF",zIndex:1}}>Name</th>
+                <th style={{textAlign:"left",padding:"10px 12px",borderBottom:"2px solid #e0e7ff",fontWeight:700,color:"#4338ca",fontSize:12,whiteSpace:"nowrap",position:"sticky",left:0,background:"#F0F4FF",zIndex:1}}>Grupă</th>
+                <th style={{textAlign:"left",padding:"10px 12px",borderBottom:"2px solid #e0e7ff",fontWeight:700,color:"#4338ca",fontSize:12,whiteSpace:"nowrap",position:"sticky",left:48,background:"#F0F4FF",zIndex:1}}>Nume</th>
                 {activeLabs.map(l=>(
                   <th key={l.id} style={{textAlign:"center",padding:"10px 10px",borderBottom:"2px solid #e0e7ff",fontWeight:700,color:"#4338ca",fontSize:12,whiteSpace:"nowrap"}}>
                     {l.icon} {l.code}
@@ -6782,7 +6766,6 @@ function PresentaTab({results, labs}) {
     </div>
   );
 }
-
 
 
 function App() {
