@@ -3278,11 +3278,18 @@ async function markSessionUsed(token, studentName) {
   // Just log — recorded via result entry
 }
 async function loadResults() {
-  // Load last 500 for display
-  const res = await sb("results?select=*&order=created_at.desc&limit=500");
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.map(r => ({
+  // Paginated fetch — loads ALL results
+  const PAGE = 1000;
+  let all = [], from = 0, done = false;
+  while (!done) {
+    const res = await sb(`results?select=*&order=created_at.desc&limit=${PAGE}&offset=${from}`);
+    if (!res.ok) break;
+    const page = await res.json();
+    all = all.concat(page);
+    if (page.length < PAGE) done = true;
+    else from += PAGE;
+  }
+  return all.map(r => ({
     name: r.name, group: r.grp, labId: r.lab_id, labCode: r.lab_code,
     module: r.module, moduleTitle: r.module_title,
     answersText: r.answers_text||"",
@@ -4142,6 +4149,10 @@ function AdminPanel({onBack, teacherName}) {
     .filter(r => specFilter==="all"||r.specialization===specFilter)
     .filter(r => !nameFilter||r.name.toLowerCase().includes(nameFilter.toLowerCase()));
 
+  const DISPLAY_LIMIT = 500;
+  const displayResults = filteredResults.slice(0, DISPLAY_LIMIT);
+  const hasMore = filteredResults.length > DISPLAY_LIMIT;
+
   return (
     <div style={{minHeight:"100vh",background:"#F0F4FF",fontFamily:"'Inter','Segoe UI',system-ui,sans-serif",position:"relative"}}>
 
@@ -4391,8 +4402,15 @@ function AdminPanel({onBack, teacherName}) {
               </button>
             </div>
 
+            {hasMore && (
+              <div style={{background:"#fffbeb",border:"1px solid #fde68a",borderRadius:10,padding:"10px 16px",marginBottom:12,fontSize:13,color:"#92400e"}}>
+                ⚠️ {lang==="en"
+                  ? `Showing first ${DISPLAY_LIMIT} of ${filteredResults.length} results. Export CSV for all data.`
+                  : `Se afișează primele ${DISPLAY_LIMIT} din ${filteredResults.length} rezultate. Exportați CSV pentru toate datele.`}
+              </div>
+            )}
             {filteredResults.length===0
-              ? <p style={{color:"#94a3b8",textAlign:"center",padding:40}}>Nu există rezultate înregistrate.</p>
+              ? <p style={{color:"#94a3b8",textAlign:"center",padding:40}}>{T("res_empty")||"Nu există rezultate înregistrate."}</p>
               : <div style={{overflowX:"auto",borderRadius:14,border:"1px solid rgba(255,255,255,0.08)",background:"#fff",boxShadow:"0 4px 16px rgba(99,102,241,0.06)"}}>
                 <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
                   <thead>
@@ -4403,7 +4421,7 @@ function AdminPanel({onBack, teacherName}) {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredResults.map((r,i)=>{
+                    {displayResults.map((r,i)=>{
                       const lab=LABS.find(l=>l.id===r.labId);
                       const d=new Date(r.timestamp);
                       return (
