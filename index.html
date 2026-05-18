@@ -216,7 +216,7 @@ var LP5B_QUESTIONS = {
      c:1, e:"Circuitul alimentelor: UN SINGUR SENS, fara incrucisari intre faze salubre/insalubre, eficient si operativ (Recoltare→Transport→Prelucrare→Preparare→Desfacere→Consum)."},
     {q:"Norma NTG pentru laptele pasteurizat:",
      o:["Sub 10.000 germeni/ml","Sub 100.000 germeni/ml","Sub 300.000 germeni/ml","Sub 1.000.000 germeni/ml"],
-     c:2, e:"Lapte pasteurizat: NTG < 300.000 germeni/ml."},
+     c:2, e:"Pasteurised milk: TGC < 300,000 germs/ml."},
     {q:"Norma pentru coliformi in lapte:",
      o:["Absenti","Sub 3 coliformi/ml","Sub 10 coliformi/ml","Sub 100 coliformi/ml"],
      c:1, e:"Coliformi lapte: < 3/ml. Semnificatie: informatii despre starea igienico-sanitara la fabricare."},
@@ -330,7 +330,7 @@ var LP1A_QUESTIONS_EN = {
         {q:"Saturation deficit (SD) is calculated as:",o:["SD = AM × MM","SD = MM - AM","SD = AM / MM","SD = AM + MM"],c:1,e:"SD = MM - AM (difference between maximum possible humidity and current humidity)."},
         {q:"Recommended speed of air currents in rooms:",o:["Below 0.1 m/s","0.1-0.3 m/s, not exceeding 0.5 m/s","0.5-1 m/s","1-2 m/s"],c:1,e:"Recommended speed: 0.1-0.3 m/s, max 0.5 m/s. Above 0.5 m/s = draft sensation, discomfort."},
         {q:"Microclimate represents:",o:["Only air temperature in a room","The totality of physical air factors influencing heat exchange between organism and environment","Exclusively humidity and air currents","Level of gas pollution"],c:1,e:"Microclimate = totality of physical air factors: temperature, thermal radiation, humidity, air currents."},
-        {q:"Primary source of radiant heat:",o:["Heating appliances","Solar radiation (direct and indirect)","Air humidity","Warm air currents"],c:1,e:"Primary source: solar radiation (direct and through atmospheric diffusion). IR rays produce the sensation of warmth."},
+        {q:"Primary source of radiant heat:",o:["Heating appliances","Solar radiation (direct and indirect)","Air humidity","Warm air currents"],c:1,e:"Primary source: solar radiation (direct and through atmospheric diffusion). IR rays produce the heat sensation.ation of warmth."},
         {q:"The instrument for measuring air current velocity is called:",o:["Hygrometer","Actinometer","Anemometer","Thermograph"],c:2,e:"Anemometer = measures air current velocity. Actinometer = thermal radiation. Hygrometer = humidity."},
         {q:"Principle of the hair hygrometer:",o:["Electric current proportional to humidity","Hair length varies proportionally with air humidity","Water evaporation depends on humidity","Colour reaction depending on RH"],c:1,e:"Hygrometric method: hair length varies proportionally with air humidity."},
         {q:"Saturation deficit (SD) is calculated as:",o:["SD = AH × MH","SD = MH - AH","SD = AH / MH","SD = AH + MH"],c:1,e:"SD = MH - AH (difference between maximum possible humidity and current humidity)."},
@@ -669,20 +669,20 @@ var LP5B_QUESTIONS_EN = {
      o:["Bidirectional, with possibility to repeat phases","Unidirectional, without cross-contamination between clean and unclean phases, efficient and operational","Circular, with phases that can be repeated","Flexible, with possibility to bypass phases"],
      c:1, e:"Food circuit: ONE DIRECTION, no crossing between clean/unclean phases, efficient and operational."},
         {q:"TGC standard for pasteurised milk:",
-     o:["Sub 10.000 germeni/ml","Sub 100.000 germeni/ml","Sub 300.000 germeni/ml","Sub 1.000.000 germeni/ml"],
-     c:2, e:"Lapte pasteurizat: NTG < 300.000 germeni/ml."},
+     o:["Below 10,000 germs/ml","Below 100,000 germs/ml","Below 300,000 germs/ml","Below 1,000,000 germs/ml"],
+     c:2, e:"Pasteurised milk: TGC < 300,000 germs/ml."},
         {q:"Coliform standard in milk:",
-     o:["Absenti","Sub 3 coliformi/ml","Sub 10 coliformi/ml","Sub 100 coliformi/ml"],
-     c:1, e:"Coliformi lapte: < 3/ml. significance: informatii despre starea igienico-sanitara at fabriwhich."},
+     o:["Absent","Below 3 coliforms/ml","Below 10 coliforms/ml","Below 100 coliforms/ml"],
+     c:1, e:"Milk coliforms: < 3/ml. Significance: information about hygienic-sanitary conditions at production."},
         {q:"Yeast and mould standard in milk:",
-     o:["Sub 10/ml","Sub 100/ml","Sub 1000/ml","0 (absente)"],
-     c:3, e:"Yeasts and moulds in milk: standard = 0 (ABSENT). Significance: information about storage conditions."},
+     o:["Below 10/ml","Below 100/ml","Below 1000/ml","0 (absent)"],
+     c:3, e:"Yeasts and moulds in milk: standard = 0 (ABSENT). Significance: indicates storage conditionsorage conditions."},
         {q:"The presence of coliforms in milk provides information about:",
-     o:["Storage conditions (temperature)","Starea igienico-sanitara at FABRICARE","Fat content","Degree of pasteurisation"],
-     c:1, e:"Coliformi lapte = informatii despre starea igienico-sanitara at FABRICARE. Drojdii/mucegaiuri = conditii of PASTRARE."},
+     o:["Storage conditions (temperature)","Hygienic-sanitary conditions at PRODUCTION","Fat content","Degree of pasteurisation"],
+     c:1, e:"Milk coliforms = information about hygienic-sanitary conditions at PRODUCTION. Yeasts/moulds = storageditii of PASTRARE."},
         {q:"Principle of coliform determination in milk:",
-     o:["Colony counting on nutritive geloza","Property of coliforms to produce gas in lactose medium","Staining on EMB medium","Fermentare at 44,5 grade C"],
-     c:1, e:"Coliformi lapte: bazat pe producerea of GAZ in mediu lactozat at 37 grade C (acelasi principiu ca at apa)."},
+     o:["Colony counting on nutritive geloza","Property of coliforms to produce gas in lactose medium","Staining on EMB medium","Fermentation at 44.5°C"],
+     c:1, e:"Milk coliforms: based on gas production in lactose medium at 37°C (same principle as for water).."},
   ],
 }
 var LP6A_QUESTIONS_EN = {
@@ -6624,9 +6624,21 @@ function PresentaTab({results, labs}) {
   const [yearFilter, setYearFilter] = useState("all");
   const [grpFilter,  setGrpFilter]  = useState("all");
   const [specFilter, setSpecFilter] = useState("all");
+  const [allResults, setAllResults] = useState(null);
 
+  useEffect(() => {
+    // Load all results for full attendance view
+    fetch(`${SUPABASE_URL}/rest/v1/results?select=*&order=created_at.desc`, {
+      headers: {"apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY,
+                "Range": "0-9999"}
+    }).then(async res => {
+      if (res.ok) { const data = await res.json(); setAllResults(data); }
+    }).catch(()=>{ setAllResults(results); });
+  }, []);
+
+  const baseResults = allResults || results;
   // Quiz results only
-  const quizResults = results.filter(r => !r.module || !r.module.startsWith("fisa_"));
+  const quizResults = baseResults.filter(r => !r.module || !r.module.startsWith("fisa_"));
 
   // Unique values
   const groups = [...new Set(quizResults.map(r=>r.group||"").filter(Boolean))].sort((a,b)=>Number(a)-Number(b));
