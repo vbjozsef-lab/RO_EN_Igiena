@@ -3278,18 +3278,11 @@ async function markSessionUsed(token, studentName) {
   // Just log — recorded via result entry
 }
 async function loadResults() {
-  // Paginated fetch — loads ALL results regardless of count
-  const PAGE = 1000;
-  let all = [], from = 0, done = false;
-  while (!done) {
-    const res = await sb(`results?select=*&order=created_at.desc&limit=${PAGE}&offset=${from}`);
-    if (!res.ok) break;
-    const page = await res.json();
-    all = all.concat(page);
-    if (page.length < PAGE) done = true;
-    else from += PAGE;
-  }
-  return all.map(r => ({
+  // Load last 500 for display
+  const res = await sb("results?select=*&order=created_at.desc&limit=500");
+  if (!res.ok) return [];
+  const data = await res.json();
+  return data.map(r => ({
     name: r.name, group: r.grp, labId: r.lab_id, labCode: r.lab_code,
     module: r.module, moduleTitle: r.module_title,
     answersText: r.answers_text||"",
@@ -5188,7 +5181,7 @@ function QuizPreviewTab({selLab, onSelectLab, teacherName}) {
         <FisaPreviewPanel labId={selLab?.id} mode={subTab==="fise_edit"?"edit":"preview"} teacherName={teacherName}/>
       )}
       {/* ── PREZENTA SUB-TAB ── */}
-      {subTab==="prezenta" && <PresentaTab results={results} labs={LABS}/>}
+      {subTab==="prezenta" && <PrezentaTab results={results} labs={LABS}/>}
 
       {/* ── PREVIEW + EDIT sub-tabs: two-column layout ── */}
       {(subTab==="preview"||subTab==="edit") && (
@@ -6620,9 +6613,36 @@ function PrezentaTab({results, labs}) {
   const [yearFilter, setYearFilter] = useState("all");
   const [grpFilter,  setGrpFilter]  = useState("all");
   const [specFilter, setSpecFilter] = useState("all");
+  const [allData, setAllData] = useState(null);
+
+  useEffect(() => {
+    // Load all results for attendance pivot (paginated)
+    (async () => {
+      const PAGE = 1000;
+      let all = [], from = 0, done = false;
+      while (!done) {
+        const res = await sb(`results?select=*&order=created_at.desc&limit=${PAGE}&offset=${from}`);
+        if (!res.ok) break;
+        const page = await res.json();
+        all = all.concat(page);
+        if (page.length < PAGE) done = true;
+        else from += PAGE;
+      }
+      setAllData(all.map(r => ({
+        name: r.name, group: r.grp, labId: r.lab_id, labCode: r.lab_code,
+        module: r.module, moduleTitle: r.module_title,
+        score: r.score, total: r.total, pct: r.pct,
+        timestamp: new Date(r.created_at).getTime(),
+        teacher: r.teacher||"", semester: r.semester||"",
+        specialization: r.specialization||"", studyYear: r.study_year||""
+      })));
+    })();
+  }, []);
+
+  if (!allData) return <div style={{padding:40,textAlign:"center",color:"#64748b",fontSize:16}}>⏳ Se încarcă datele de prezență...</div>;
 
   // Quiz results only
-  const quizResults = results.filter(r => !r.module || !r.module.startsWith("fisa_"));
+  const quizResults = allData.filter(r => !r.module || !r.module.startsWith("fisa_"));
 
   // Unique values
   const groups = [...new Set(quizResults.map(r=>r.group||"").filter(Boolean))].sort((a,b)=>Number(a)-Number(b));
