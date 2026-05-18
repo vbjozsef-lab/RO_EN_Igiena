@@ -3808,24 +3808,40 @@ const DEFAULT_NOMENCLATOR = {
   years: ["2025", "2026", "2027"],
   modules: ["Modul 1", "Modul 2", "Modul 3", "Modul 4"],
 };
-function loadQuizEdits() {
+let _quizEditsCache = null;
+let _fisaEditsCache = null;
+let _editsFetchPromise = null;
+
+function loadQuizEditsLocal() {
   try {
     const saved = localStorage.getItem("igiena_quiz_edits");
     return saved ? JSON.parse(saved) : {};
   } catch(e) { return {}; }
 }
+function loadQuizEdits() {
+  if (_quizEditsCache !== null) return _quizEditsCache;
+  return loadQuizEditsLocal();
+}
 function saveQuizEdits(edits) {
+  _quizEditsCache = edits;
   try { localStorage.setItem("igiena_quiz_edits", JSON.stringify(edits)); } catch(e) {}
 }
-// Apply stored edits on top of base questions for a specific lab+module
-function loadFisaEdits() {
+function loadFisaEditsLocal() {
   try {
     const saved = localStorage.getItem("igiena_fisa_edits");
     return saved ? JSON.parse(saved) : {};
   } catch(e) { return {}; }
 }
+function loadFisaEdits() {
+  if (_fisaEditsCache !== null) return _fisaEditsCache;
+  return loadFisaEditsLocal();
+}
 function saveFisaEdits(edits) {
+  _fisaEditsCache = edits;
   try { localStorage.setItem("igiena_fisa_edits", JSON.stringify(edits)); } catch(e) {}
+}
+function editsAreReady() {
+  return _quizEditsCache !== null && _fisaEditsCache !== null;
 }
 // Apply stored fisa edits on top of base data
 function applyFisaEdits(labId, fisaId, baseFisa) {
@@ -4044,6 +4060,117 @@ async function loadResults() {
     semester: r.semester || "",
     specialization: r.specialization || ""
   }));
+}
+
+async function migrateLocalEditsToServer(quizMap, fisaMap) {
+  const localQuiz = loadQuizEditsLocal();
+  const localFisa = loadFisaEditsLocal();
+  const quizKeys = Object.keys(localQuiz).filter(k => !quizMap[k]);
+  const fisaKeys = Object.keys(localFisa).filter(k => !fisaMap[k]);
+  if (!quizKeys.length && !fisaKeys.length) return;
+  await Promise.all([
+    ...quizKeys.map(k => {
+      const [labId, moduleId] = k.split(":");
+      return upsertQuizEdit(k, localQuiz[k], "", labId, moduleId);
+    }),
+    ...fisaKeys.map(k => {
+      const [labId, fisaId] = k.split(":");
+      return upsertFisaEdit(k, localFisa[k], "", labId, fisaId);
+    }),
+  ]);
+  quizKeys.forEach(k => { quizMap[k] = localQuiz[k]; });
+  fisaKeys.forEach(k => { fisaMap[k] = localFisa[k]; });
+}
+
+async function fetchQuizEditsRemote() {
+  const res = await sb("quiz_edits?select=id,questions");
+  if (!res.ok) {
+    console.warn("fetchQuizEditsRemote:", res.status, await res.text());
+    return loadQuizEditsLocal();
+  }
+  const rows = await res.json();
+  const map = {};
+  (rows || []).forEach(r => { map[r.id] = r.questions; });
+  return map;
+}
+
+async function fetchFisaEditsRemote() {
+  const res = await sb("fisa_edits?select=id,payload");
+  if (!res.ok) {
+    console.warn("fetchFisaEditsRemote:", res.status, await res.text());
+    return loadFisaEditsLocal();
+  }
+  const rows = await res.json();
+  const map = {};
+  (rows || []).forEach(r => { map[r.id] = r.payload; });
+  return map;
+}
+
+function fetchAllEditsRemote() {
+  if (!_editsFetchPromise) {
+    _editsFetchPromise = (async () => {
+      const [quizMap, fisaMap] = await Promise.all([fetchQuizEditsRemote(), fetchFisaEditsRemote()]);
+      await migrateLocalEditsToServer(quizMap, fisaMap);
+      _quizEditsCache = quizMap;
+      _fisaEditsCache = fisaMap;
+      saveQuizEdits(quizMap);
+      saveFisaEdits(fisaMap);
+      return [quizMap, fisaMap];
+    })().finally(() => { _editsFetchPromise = null; });
+  }
+  return _editsFetchPromise;
+}
+
+async function upsertQuizEdit(key, questions, teacher, labId, moduleId) {
+  const parts = key.split(":");
+  const lid = labId || parts[0];
+  const mid = moduleId || parts[1];
+  const res = await sb("quiz_edits", {
+    method: "POST",
+    prefer: "resolution=merge-duplicates,return=minimal",
+    body: JSON.stringify({
+      id: key,
+      lab_id: lid,
+      module_id: mid,
+      questions,
+      updated_at: new Date().toISOString(),
+      updated_by: teacher || ""
+    })
+  });
+  if (!res.ok) console.warn("upsertQuizEdit:", res.status, await res.text());
+  return res.ok;
+}
+
+async function deleteQuizEditRemote(key) {
+  const res = await sb(`quiz_edits?id=eq.${encodeURIComponent(key)}`, { method: "DELETE", prefer: "return=minimal" });
+  if (!res.ok) console.warn("deleteQuizEditRemote:", res.status, await res.text());
+  return res.ok;
+}
+
+async function upsertFisaEdit(key, payload, teacher, labId, fisaId) {
+  const parts = key.split(":");
+  const lid = labId || parts[0];
+  const fid = fisaId || parts[1];
+  const res = await sb("fisa_edits", {
+    method: "POST",
+    prefer: "resolution=merge-duplicates,return=minimal",
+    body: JSON.stringify({
+      id: key,
+      lab_id: lid,
+      fisa_id: fid,
+      payload,
+      updated_at: new Date().toISOString(),
+      updated_by: teacher || ""
+    })
+  });
+  if (!res.ok) console.warn("upsertFisaEdit:", res.status, await res.text());
+  return res.ok;
+}
+
+async function deleteFisaEditRemote(key) {
+  const res = await sb(`fisa_edits?id=eq.${encodeURIComponent(key)}`, { method: "DELETE", prefer: "return=minimal" });
+  if (!res.ok) console.warn("deleteFisaEditRemote:", res.status, await res.text());
+  return res.ok;
 }
 
 // ════════════════════════════════════════════════════════════
@@ -4982,7 +5109,7 @@ function AdminPanel({onBack, teacherName}) {
 
         {/* ── RESULTS TAB ── */}
         {tab==="preview" && (
-          <QuizPreviewTab selLab={selLab} onSelectLab={lab=>setSelLab(lab)}/>
+          <QuizPreviewTab selLab={selLab} onSelectLab={lab=>setSelLab(lab)} teacherName={teacherName}/>
         )}
 
         {tab==="results" && (
@@ -5262,19 +5389,37 @@ function FisaGrupScreen({session, student, onBack}) {
   const T = useT();
   const lang = React.useContext(LangContext);
   const labId = session?.labId || "lp1a";
-  const _fisaBank = lang==="en" ? FISE_DATA_EN : FISE_DATA;
-  const allFise = (_fisaBank[labId] || _fisaBank.lp1a).map(f => {
-    const key = labId + ":" + f.id;
-    const ov = loadFisaEdits()[key];
-    if (!ov) return f;
-    return {...f, ...ov, caz:ov.caz||f.caz, qs:ov.qs||f.qs, conc:ov.conc||f.conc};
-  });
+  const [allFise, setAllFise] = useState([]);
+  const [fisaLoaded, setFisaLoaded] = useState(editsAreReady());
   const [selectedFisa, setSelectedFisa] = useState(null);
   const [answers, setAnswers] = useState({});
   const [concluzii, setConcluzii] = useState({});
-  // phases: select | case | questions | evaluating | done
   const [phase, setPhase] = useState("select");
   const [evalResults, setEvalResults] = useState(null);
+
+  React.useEffect(() => {
+    const build = () => {
+      const _fisaBank = lang==="en" ? FISE_DATA_EN : FISE_DATA;
+      const edits = loadFisaEdits();
+      setAllFise((_fisaBank[labId] || _fisaBank.lp1a).map(f => {
+        const key = labId + ":" + f.id;
+        const ov = edits[key];
+        if (!ov) return f;
+        return {...f, ...ov, caz:ov.caz||f.caz, qs:ov.qs||f.qs, conc:ov.conc||f.conc};
+      }));
+      setFisaLoaded(true);
+    };
+    if (editsAreReady()) build();
+    else fetchAllEditsRemote().then(build).catch(build);
+  }, [labId, lang]);
+
+  if (!fisaLoaded) {
+    return (
+      <div style={{minHeight:"100vh",background:"#0d2040",display:"flex",alignItems:"center",justifyContent:"center",color:"#90b4d8",fontSize:14}}>
+        Se încarcă fișele…
+      </div>
+    );
+  }
 
   // ── GRUP SELECT ──────────────────────────────────────────
   if (phase === "select") return (
@@ -5591,7 +5736,7 @@ async function submitFisaGrup(f,answers,concluzii,student,session,setPhase,setEv
 // ════════════════════════════════════════════════════════════
 // QUIZ PREVIEW TAB — teacher sees all questions per lab/module
 // ════════════════════════════════════════════════════════════
-function QuizPreviewTab({selLab, onSelectLab}) {
+function QuizPreviewTab({selLab, onSelectLab, teacherName}) {
   const T = useT();
   const lang = React.useContext(LangContext);
   const _q = (ro, en) => lang==="en" ? en : ro;
@@ -5615,6 +5760,10 @@ function QuizPreviewTab({selLab, onSelectLab}) {
   const [expandedQ, setExpandedQ] = useState(null);
   const [saveMsg, setSaveMsg] = useState("");
 
+  React.useEffect(() => {
+    fetchAllEditsRemote().then(([q]) => setQuizEdits(q)).catch(() => setQuizEdits(loadQuizEdits()));
+  }, []);
+
   React.useEffect(()=>{ setSelModId(null); setExpandedQ(null); setSearch(""); setEditingQ(null); setNewQDraft(null); }, [selLab?.id]);
 
   const labData = LAB_Q_MAP[selLab?.id];
@@ -5627,11 +5776,14 @@ function QuizPreviewTab({selLab, onSelectLab}) {
   const activeQs = selModId ? (quizEdits[edKey] || baseQuestions[selModId] || []) : [];
   const filteredQs = search.trim() ? activeQs.filter(q=>(q.q+(q.o||[]).join("")+(q.e||"")).toLowerCase().includes(search.toLowerCase())) : activeQs;
 
-  const persist = (newEdits) => {
+  const persist = (newEdits, syncKey, syncQuestions) => {
     setQuizEdits(newEdits);
     saveQuizEdits(newEdits);
     setSaveMsg(T("saved"));
     setTimeout(()=>setSaveMsg(""), 2000);
+    if (syncKey && syncQuestions) {
+      upsertQuizEdit(syncKey, syncQuestions, teacherName).catch(e => console.warn("persist quiz:", e));
+    }
   };
 
   const resetModule = () => {
@@ -5639,25 +5791,26 @@ function QuizPreviewTab({selLab, onSelectLab}) {
     const ne = {...quizEdits};
     delete ne[edKey];
     persist(ne);
+    deleteQuizEditRemote(edKey).catch(e => console.warn("reset quiz:", e));
   };
 
   const saveEditQ = (idx, updated) => {
     const arr = [...activeQs];
     arr[idx] = updated;
-    persist({...quizEdits, [edKey]: arr});
+    persist({...quizEdits, [edKey]: arr}, edKey, arr);
     setEditingQ(null);
   };
 
   const deleteQ = (idx) => {
     if (!confirm("Ștergeți această întrebare?")) return;
     const arr = activeQs.filter((_,i)=>i!==idx);
-    persist({...quizEdits, [edKey]: arr});
+    persist({...quizEdits, [edKey]: arr}, edKey, arr);
     setExpandedQ(null);
   };
 
   const addNewQ = (q) => {
     const arr = [...activeQs, q];
-    persist({...quizEdits, [edKey]: arr});
+    persist({...quizEdits, [edKey]: arr}, edKey, arr);
     setNewQDraft(null);
   };
 
@@ -5666,7 +5819,7 @@ function QuizPreviewTab({selLab, onSelectLab}) {
     const target = idx + dir;
     if (target < 0 || target >= arr.length) return;
     [arr[idx], arr[target]] = [arr[target], arr[idx]];
-    persist({...quizEdits, [edKey]: arr});
+    persist({...quizEdits, [edKey]: arr}, edKey, arr);
   };
 
   const totalQ = Object.values(baseQuestions).reduce((s,arr)=>s+arr.length,0);
@@ -5790,7 +5943,7 @@ function QuizPreviewTab({selLab, onSelectLab}) {
 
       {/* ── FISE SUB-TABS ── */}
       {(subTab==="fise_preview"||subTab==="fise_edit") && (
-        <FisaPreviewPanel labId={selLab?.id} mode={subTab==="fise_edit"?"edit":"preview"}/>
+        <FisaPreviewPanel labId={selLab?.id} mode={subTab==="fise_edit"?"edit":"preview"} teacherName={teacherName}/>
       )}
 
       {/* ── PREVIEW + EDIT sub-tabs: two-column layout ── */}
@@ -6080,7 +6233,7 @@ function FisaMetaForm({title, emoji, onSave, onCancel}) {
   );
 }
 
-function FisaPreviewPanel({labId, mode="preview"}) {
+function FisaPreviewPanel({labId, mode="preview", teacherName}) {
   const T = useT();
   const ALL_LABS = ["lp1a","lp1b","lp2a","lp2b","lp3a","lp3b","lp4a","lp4b","lp5a","lp5b","lp6a","lp6b"];
   const hasFisa = ALL_LABS.includes(labId);
@@ -6093,6 +6246,10 @@ function FisaPreviewPanel({labId, mode="preview"}) {
   const [editingMeta, setEditingMeta] = useState(false);
   const [saveMsg, setSaveMsg] = useState("");
   const [subTab, setSubTab] = useState(mode||"preview");
+
+  React.useEffect(() => {
+    fetchAllEditsRemote().then(([, f]) => setFisaEdits(f)).catch(() => setFisaEdits(loadFisaEdits()));
+  }, []);
 
   React.useEffect(()=>{ setSelFisaId(null); setExpandedQ(null); setEditingQ(null); setNewQDraft(null); setEditingCase(false); setEditingMeta(false); }, [labId]);
   React.useEffect(()=>{ setSubTab(mode||"preview"); setEditingQ(null); setNewQDraft(null); setEditingCase(false); setEditingMeta(false); }, [mode]);
@@ -6125,6 +6282,7 @@ function FisaPreviewPanel({labId, mode="preview"}) {
     saveFisaEdits(ne);
     setSaveMsg(T("saved"));
     setTimeout(()=>setSaveMsg(""), 2000);
+    upsertFisaEdit(key, newData, teacherName).catch(e => console.warn("persist fisa:", e));
   };
 
   const resetFisa = () => {
@@ -6133,6 +6291,7 @@ function FisaPreviewPanel({labId, mode="preview"}) {
     delete ne[edKey];
     setFisaEdits(ne);
     saveFisaEdits(ne);
+    deleteFisaEditRemote(edKey).catch(e => console.warn("reset fisa:", e));
     setSaveMsg("✓ Resetat");
     setTimeout(()=>setSaveMsg(""), 2000);
     setEditingQ(null); setNewQDraft(null); setEditingCase(false); setEditingMeta(false);
@@ -6652,6 +6811,7 @@ function GenericModuleSelect({lab, modules, questions, studentName, onSelect, on
   const T = useT();
   const lang = React.useContext(LangContext);
   const demos = LAB_DEMOS[lab?.id] || [];
+  const qCount = (modId) => applyQuizEdits(lab?.id, modId, questions[modId] || []).length;
   return (
     <div style={{minHeight:"100vh",background:"#F8F9FA",padding:"24px 16px"}}>
       <div style={{maxWidth:800,margin:"0 auto"}}>
@@ -6676,7 +6836,7 @@ function GenericModuleSelect({lab, modules, questions, studentName, onSelect, on
         <p style={{fontWeight:700,color:"#0a2a18",fontSize:16,marginBottom:16}}>{T("select_module")||"Selectează modulul:"}</p>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:12}}>
           {modules.map(m=>{
-            const count = (questions[m.id]||[]).length;
+            const count = qCount(m.id);
             return (
               <button key={m.id} onClick={()=>onSelect(m)}
                 style={{padding:"18px 16px",background:m.dim,border:"1.5px solid "+m.border,borderRadius:14,cursor:"pointer",textAlign:"left",transition:"all .2s"}}>
@@ -6727,14 +6887,34 @@ function QuizScreen({studentName, studentGroup, studentSpec, labId, module, onFi
     lp6a: l==="en" ? LP6A_QUESTIONS_EN : LP6A_QUESTIONS,
     lp6b: l==="en" ? LP6B_QUESTIONS_EN : LP6B_QUESTIONS,
   });
-  const _allQs = applyQuizEdits(labId, module.id, (_getQBank(lang)[labId] || LP4B_QUESTIONS)[module.id] || []);
-  const [qs]          = useState(() => shufflePick(_allQs, module.count || _allQs.length));
+  const [qs, setQs] = useState(null);
+  const [quizLoaded, setQuizLoaded] = useState(editsAreReady());
   const [cur, setCur] = useState(0);
   const [sel, setSel] = useState(null);
   const [ans, setAns] = useState([]);
-  const [startT]      = useState(Date.now());
+  const [startT, setStartT] = useState(null);
   const [showExp, setShowExp] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+
+  React.useEffect(() => {
+    const init = () => {
+      const base = (_getQBank(lang)[labId] || LP4B_QUESTIONS)[module.id] || [];
+      const all = applyQuizEdits(labId, module.id, base);
+      setQs(shufflePick(all, module.count || all.length));
+      setStartT(Date.now());
+      setQuizLoaded(true);
+    };
+    if (editsAreReady()) init();
+    else fetchAllEditsRemote().then(init).catch(init);
+  }, [labId, module.id, lang]);
+
+  if (!quizLoaded || !qs) {
+    return (
+      <div style={{minHeight:"100vh",background:"#F8F9FA",display:"flex",alignItems:"center",justifyContent:"center",color:"#4a9a6a",fontSize:14}}>
+        Se încarcă quiz-ul…
+      </div>
+    );
+  }
 
   const q = qs[cur];
   if (!q) return null;
@@ -6918,6 +7098,10 @@ function App() {
   const [showDemo,    setShowDemo]    = useState(false);
   const [errMsg,      setErrMsg]      = useState("");
   const [pendingToken,setPendingToken]= useState(null);
+
+  useEffect(() => {
+    fetchAllEditsRemote().catch(e => console.warn("fetch edits:", e));
+  }, []);
 
   const handleJoinToken = token => { setPendingToken(token); setScreen("tokenJoin"); };
 
