@@ -7106,8 +7106,9 @@ function ExamCodeScreen({session, onStart}) {
   
   const go = () => {
     const trimmed = code.trim().toUpperCase();
-    if (trimmed.length < 3) { setErr('Please enter a valid code (min. 3 characters).'); return; }
-    const questions = pickExamQuestions();
+    if (trimmed.length < 3) { setErr('Introduceți un cod valid (minimum 3 caractere).'); return; }
+    const questions = pickExamQuestions(20);
+    if (!questions || questions.length === 0) { setErr('Banca de întrebări pentru examen nu este disponibilă.'); return; }
     onStart(trimmed, questions);
   };
   
@@ -7121,12 +7122,12 @@ function ExamCodeScreen({session, onStart}) {
             {session?.teacher && <span>👤 {session.teacher}</span>}
           </p>
           <div style={{background:'#F0F4FF',borderRadius:10,padding:'10px 16px',marginTop:12,fontSize:13,color:'#4338ca'}}>
-            20 întrebări · 4 variante fiecare · Timp nelimitat
+            20 întrebări · răspuns unic/multiplu · Timp nelimitat
           </div>
         </div>
         
         <label style={{display:'block',fontSize:13,fontWeight:700,color:'#374151',marginBottom:6}}>
-          Codul dvs. of identificare
+          Codul dvs. de identificare
         </label>
         <input
           value={code}
@@ -7558,6 +7559,89 @@ function saveExamEdits(edits) {
     body:JSON.stringify({key:EXAM_EDITS_KEY, data:edits})}).catch(()=>{});
 }
 
+
+// ─────────────────────────────────────────────────────────────
+// EXAM helpers — fixed
+// The exam start button calls pickExamQuestions(). In the previous
+// version this function, plus getExamBank() and calcGrade(), were missing,
+// so clicking "Începe examenul" threw a JavaScript ReferenceError.
+function getExamBank() {
+  const raw = window.EXAM_BANK_RAW || {};
+  const bank = {};
+  Object.keys(raw).forEach(lp => {
+    bank[lp] = (raw[lp] || []).map((item, idx) => {
+      const q = item && item[0] != null ? String(item[0]) : "";
+      const o = Array.isArray(item && item[1]) ? item[1].map(x => String(x)) : [];
+      const cRaw = item ? item[2] : [];
+      const c = (Array.isArray(cRaw) ? cRaw : [cRaw])
+        .map(n => Number(n))
+        .filter(n => Number.isInteger(n) && n >= 0 && n < o.length);
+      return {
+        q,
+        o,
+        c,
+        t: c.length > 1 ? "multi" : "single",
+        lp,
+        idx,
+        e: ""
+      };
+    }).filter(q => q.q && q.o.length >= 2 && q.c.length >= 1);
+  });
+  return bank;
+}
+
+function getEditedExamBank() {
+  const bank = getExamBank();
+  let edits = {};
+  try { edits = loadExamEdits ? loadExamEdits() : {}; } catch(e) { edits = {}; }
+
+  Object.keys(bank).forEach(lp => {
+    const lpEdits = edits[lp] || {};
+    bank[lp] = bank[lp]
+      .map((q, i) => {
+        if (lpEdits[`del_${i}`]) return null;
+        const edited = lpEdits[i];
+        if (!edited) return q;
+        const cRaw = edited.c != null ? edited.c : q.c;
+        const c = (Array.isArray(cRaw) ? cRaw : [cRaw])
+          .map(n => Number(n))
+          .filter(n => Number.isInteger(n) && n >= 0 && n < (edited.o || q.o || []).length);
+        return {
+          ...q,
+          ...edited,
+          c,
+          t: c.length > 1 ? "multi" : "single",
+          lp,
+          idx: i
+        };
+      })
+      .filter(Boolean);
+  });
+
+  return bank;
+}
+
+function pickExamQuestions(count = 20) {
+  const bank = getEditedExamBank();
+  const lpOrder = ["lp1a","lp1b","lp2a","lp2b","lp3a","lp3b","lp4a","lp4b","lp5a","lp5b","lp6a","lp6b"];
+  const all = lpOrder.flatMap(lp => (bank[lp] || []).map(q => ({...q, lp})));
+  if (!all.length) return [];
+
+  const shuffled = shufflePick(all, all.length);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
+}
+
+function calcGrade(pct) {
+  const p = Number(pct) || 0;
+  if (p >= 90) return 10;
+  if (p >= 80) return 9;
+  if (p >= 70) return 8;
+  if (p >= 60) return 7;
+  if (p >= 50) return 6;
+  return 5;
+}
+
+
 function ExamBankPanel({mode, selLab}) {
   const [edits, setEdits] = React.useState(()=>loadExamEdits());
   const [filterLP, setFilterLP] = React.useState("all");
@@ -7796,7 +7880,27 @@ function App() {
   );
   if (screen==="exam" && examQuestions) return (
     <ExamScreen code={examCode} questions={examQuestions} session={session}
-      onFinish={r=>{setExamResult(r);setScreen("exam_result");}}/>
+      onFinish={r=>{
+        const entry = {
+          token: session?.token || null,
+          name: student?.name || r.code || "",
+          group: student?.group || "",
+          labId: session?.labId || "exam",
+          labCode: session?.labCode || "EXAM",
+          module: "exam",
+          moduleTitle: "Examen Igienă",
+          score: r.score,
+          total: r.total,
+          pct: r.pct,
+          timeUsed: r.timeUsed,
+          teacher: session?.teacher || "",
+          semester: session?.semester || "",
+          specialization: student?.spec || ""
+        };
+        addResult(entry).catch(()=>{});
+        setExamResult({...r, student});
+        setScreen("exam_result");
+      }}/>
   );
   if (screen==="exam_result" && examResult) return (
     <ExamResultScreen result={examResult} onRestart={()=>setScreen("home")}/>
