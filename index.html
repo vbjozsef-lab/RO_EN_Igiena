@@ -106,6 +106,14 @@
     .fisa-grid-3{grid-template-columns:repeat(2,1fr) !important}
     .fisa-conc-grid{grid-template-columns:1fr !important}
   }
+
+  /* Exam anti-copy mode */
+  .exam-no-select,.exam-no-select *{
+    -webkit-user-select:none !important;
+    user-select:none !important;
+    -webkit-touch-callout:none !important;
+  }
+
 </style>
 </head>
 <body>
@@ -7109,6 +7117,7 @@ function ExamCodeScreen({session, onStart}) {
     if (trimmed.length < 3) { setErr('Introduceți un cod valid (minimum 3 caractere).'); return; }
     const questions = pickExamQuestions(20);
     if (!questions || questions.length === 0) { setErr('Banca de întrebări pentru examen nu este disponibilă.'); return; }
+    try { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); } catch(e) {}
     onStart(trimmed, questions);
   };
   
@@ -7122,7 +7131,7 @@ function ExamCodeScreen({session, onStart}) {
             {session?.teacher && <span>👤 {session.teacher}</span>}
           </p>
           <div style={{background:'#F0F4FF',borderRadius:10,padding:'10px 16px',marginTop:12,fontSize:13,color:'#4338ca'}}>
-            20 întrebări · răspuns unic/multiplu · Timp nelimitat
+            20 întrebări · mod securizat · fără schimbare aplicație
           </div>
         </div>
         
@@ -7144,7 +7153,7 @@ function ExamCodeScreen({session, onStart}) {
         </button>
         
         <p style={{fontSize:11,color:'#94a3b8',textAlign:'center',marginTop:16,lineHeight:1.5}}>
-          Codul dvs. va fi asociat rezultatelor.<br/>Nu este necesară introducerea numelui.
+          Codul dvs. va fi asociat rezultatelor.<br/>Dacă părăsiți pagina examenului, testul poate fi blocat.
         </p>
       </div>
     </div>
@@ -7157,14 +7166,99 @@ function ExamScreen({code, questions, session, onFinish}) {
   const [cur,      setCur]      = React.useState(0);
   const [selected, setSelected] = React.useState([]); // array of selected indices
   const [answers,  setAnswers]  = React.useState([]);
-  const [confirmed,setConfirmed]= React.useState(false);
   const [startT]               = React.useState(Date.now());
+  const [cheatEvents, setCheatEvents] = React.useState([]);
+  const [warningOpen, setWarningOpen] = React.useState(false);
+  const [lastWarning, setLastWarning] = React.useState('');
+  const finishedRef = React.useRef(false);
+  const violationRef = React.useRef(0);
+  const blurTimerRef = React.useRef(null);
   
+  const VIOLATION_LIMIT = 2; // 1 = warning, 2 = automatic lock
   const q = questions[cur];
   const isMulti = q.t === 'multi';
+  const ABCD = ['A','B','C','D'];
+  
+  const finishExam = React.useCallback((finalAnswers, status='completed', reason='', events=[]) => {
+    if (finishedRef.current) return;
+    finishedRef.current = true;
+    const score = status === 'blocked' ? 0 : finalAnswers.filter(a=>a.isCorrect).length;
+    const pct = status === 'blocked' ? 0 : Math.round(score / questions.length * 100);
+    const grade = status === 'blocked' ? 1 : calcGrade(pct);
+    const timeUsed = Math.round((Date.now() - startT) / 1000);
+    onFinish({
+      code,
+      score,
+      total: questions.length,
+      pct,
+      grade,
+      timeUsed,
+      answers: finalAnswers,
+      session,
+      status,
+      lockReason: reason,
+      cheatEvents: events
+    });
+  }, [code, questions.length, session, startT, onFinish]);
+  
+  const registerViolation = React.useCallback((reason) => {
+    if (finishedRef.current) return;
+    const event = { reason, at: new Date().toISOString(), question: cur + 1 };
+    violationRef.current += 1;
+    const count = violationRef.current;
+    const nextEvents = [...cheatEvents, event];
+    setCheatEvents(nextEvents);
+    if (count >= VIOLATION_LIMIT) {
+      finishExam(answers, 'blocked', reason, nextEvents);
+    } else {
+      setLastWarning(reason);
+      setWarningOpen(true);
+    }
+  }, [answers, cheatEvents, cur, finishExam]);
+  
+  React.useEffect(() => {
+    const blockCopy = (e) => {
+      e.preventDefault();
+      registerViolation('Încercare de copiere / selectare a textului');
+      return false;
+    };
+    const blockContext = (e) => {
+      e.preventDefault();
+      registerViolation('Meniu contextual / apăsare lungă pe ecran');
+      return false;
+    };
+    const onVisibility = () => {
+      if (document.hidden) registerViolation('A părăsit pagina sau a schimbat aplicația');
+    };
+    const onBlur = () => {
+      clearTimeout(blurTimerRef.current);
+      blurTimerRef.current = setTimeout(() => {
+        if (document.hidden || !document.hasFocus()) registerViolation('Fereastra examenului nu mai este activă');
+      }, 900);
+    };
+    const onPageHide = () => registerViolation('A încercat să părăsească pagina examenului');
+    
+    document.addEventListener('copy', blockCopy);
+    document.addEventListener('cut', blockCopy);
+    document.addEventListener('paste', blockCopy);
+    document.addEventListener('contextmenu', blockContext);
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('blur', onBlur);
+    window.addEventListener('pagehide', onPageHide);
+    
+    return () => {
+      clearTimeout(blurTimerRef.current);
+      document.removeEventListener('copy', blockCopy);
+      document.removeEventListener('cut', blockCopy);
+      document.removeEventListener('paste', blockCopy);
+      document.removeEventListener('contextmenu', blockContext);
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('blur', onBlur);
+      window.removeEventListener('pagehide', onPageHide);
+    };
+  }, [registerViolation]);
   
   const toggleOption = (idx) => {
-    if (confirmed) return;
     if (isMulti) {
       setSelected(prev => prev.includes(idx) ? prev.filter(i=>i!==idx) : [...prev, idx]);
     } else {
@@ -7172,79 +7266,81 @@ function ExamScreen({code, questions, session, onFinish}) {
     }
   };
   
-  const confirm = () => {
-    if (selected.length === 0) return;
-    setConfirmed(true);
-  };
-  
   const next = () => {
-    // Score this question
-    const correctSet = new Set(q.c);
+    if (selected.length === 0) return;
     const selectedSet = new Set(selected);
-    // Full points only if EXACTLY correct (all correct selected, none wrong)
-    const isCorrect = q.c.length === selected.length && 
-                      q.c.every(c => selectedSet.has(c));
-    
+    const isCorrect = q.c.length === selected.length && q.c.every(c => selectedSet.has(c));
     const newAnswers = [...answers, {
       q: q.q,
-      selected,
+      selected: [...selected],
       correct: q.c,
       options: q.o,
       lp: q.lp,
       type: q.t,
       isCorrect
     }];
-    
     if (cur + 1 >= questions.length) {
-      // Finished
-      const score = newAnswers.filter(a=>a.isCorrect).length;
-      const pct = Math.round(score / questions.length * 100);
-      const grade = calcGrade(pct);
-      const timeUsed = Math.round((Date.now() - startT) / 1000);
-      onFinish({code, score, total:questions.length, pct, grade, timeUsed, answers:newAnswers, session});
+      finishExam(newAnswers, 'completed', '', cheatEvents);
     } else {
       setAnswers(newAnswers);
       setCur(cur + 1);
       setSelected([]);
-      setConfirmed(false);
+      window.scrollTo({top:0,behavior:'smooth'});
     }
   };
   
-  // Option styling
   const getStyle = (idx) => {
     const isSelected = selected.includes(idx);
-    const isCorrect  = q.c.includes(idx);
-    
-    if (!confirmed) {
-      return {
-        background: isSelected ? '#EEF2FF' : '#F8FAFF',
-        border: '2px solid ' + (isSelected ? '#6366f1' : '#e0e7ff'),
-        color: '#1e293b'
-      };
-    }
-    // After confirm
-    if (isCorrect)  return {background:'#dcfce7', border:'2px solid #16a34a', color:'#15803d'};
-    if (isSelected && !isCorrect) return {background:'#fef2f2', border:'2px solid #ef4444', color:'#dc2626'};
-    return {background:'#F8FAFF', border:'2px solid #e0e7ff', color:'#94a3b8'};
+    return {
+      background: isSelected ? '#EEF2FF' : '#F8FAFF',
+      border: '2px solid ' + (isSelected ? '#6366f1' : '#e0e7ff'),
+      color: '#1e293b'
+    };
   };
   
   const progress = ((cur) / questions.length) * 100;
-  const ABCD = ['A','B','C','D'];
   
   return (
-    <div style={{minHeight:'100vh',background:'#F0F4FF',fontFamily:"'Inter','Segoe UI',system-ui,sans-serif",padding:'16px'}}>
+    <div className="exam-no-select" style={{minHeight:'100vh',background:'#F0F4FF',fontFamily:"'Inter','Segoe UI',system-ui,sans-serif",padding:'16px',WebkitUserSelect:'none',userSelect:'none',WebkitTouchCallout:'none'}}>
       <div style={{maxWidth:680,margin:'0 auto'}}>
         
+        {/* Warning modal */}
+        {warningOpen && (
+          <div style={{position:'fixed',inset:0,background:'rgba(15,23,42,.55)',zIndex:99999,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+            <div style={{background:'#fff',borderRadius:18,padding:24,maxWidth:420,width:'100%',boxShadow:'0 25px 60px rgba(0,0,0,.35)',textAlign:'center'}}>
+              <div style={{fontSize:42,marginBottom:8}}>⚠️</div>
+              <h2 style={{margin:'0 0 8px',color:'#991b1b',fontSize:22}}>Atenție!</h2>
+              <p style={{margin:'0 0 10px',color:'#334155',fontSize:14,lineHeight:1.55}}>
+                Sistemul a detectat că ați părăsit interfața examenului sau ați încercat să copiați textul.
+              </p>
+              <p style={{margin:'0 0 18px',color:'#b45309',fontSize:13,fontWeight:700}}>{lastWarning}</p>
+              <div style={{background:'#fef2f2',border:'1px solid #fecaca',borderRadius:10,padding:'10px 12px',fontSize:12,color:'#991b1b',marginBottom:16}}>
+                La următoarea abatere, testul se blochează automat și rezultatul va fi 0.
+              </div>
+              <button onClick={()=>setWarningOpen(false)} style={{width:'100%',padding:'12px',background:'#1e1b4b',color:'#fff',border:'none',borderRadius:12,fontWeight:800,cursor:'pointer'}}>
+                Am înțeles, continui examenul
+              </button>
+            </div>
+          </div>
+        )}
+        
         {/* Header */}
-        <div style={{background:'#1e1b4b',borderRadius:16,padding:'14px 20px',marginBottom:16,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <div style={{background:'#1e1b4b',borderRadius:16,padding:'14px 20px',marginBottom:16,display:'flex',alignItems:'center',justifyContent:'space-between',gap:12}}>
           <div>
-            <div style={{color:'#a5b4fc',fontSize:12,fontWeight:600}}>EXAMEN IGIENĂ</div>
+            <div style={{color:'#a5b4fc',fontSize:12,fontWeight:600}}>EXAMEN IGIENĂ · MOD SECURIZAT</div>
             <div style={{color:'#fff',fontSize:13,fontFamily:'monospace',marginTop:2}}>🔑 {code}</div>
           </div>
           <div style={{textAlign:'right'}}>
             <div style={{color:'#fff',fontWeight:800,fontSize:18}}>{cur+1}<span style={{color:'#a5b4fc',fontSize:13}}>/{questions.length}</span></div>
-            <div style={{color:'#a5b4fc',fontSize:11}}>{q.lp?.toUpperCase()}</div>
+            <div style={{color:violationRef.current>0?'#fca5a5':'#a5b4fc',fontSize:11,fontWeight:700}}>
+              Abateri: {violationRef.current}/{VIOLATION_LIMIT}
+            </div>
           </div>
+        </div>
+        
+        {/* Security notice */}
+        <div style={{background:'#fff7ed',border:'1.5px solid #fed7aa',borderRadius:12,padding:'10px 14px',marginBottom:14,fontSize:12,color:'#9a3412',lineHeight:1.5,fontWeight:600}}>
+          🔒 Nu părăsiți pagina examenului. Schimbarea aplicației, deschiderea altui tab, copierea textului sau apăsarea lungă pe întrebare este înregistrată. La a doua abatere testul se blochează automat.
         </div>
         
         {/* Progress */}
@@ -7267,43 +7363,24 @@ function ExamScreen({code, questions, session, onFinish}) {
           {q.o.map((opt,idx)=>(
             <button key={idx} onClick={()=>toggleOption(idx)}
               style={{...getStyle(idx), padding:'14px 16px',borderRadius:12,textAlign:'left',
-                      cursor:confirmed?'default':'pointer',transition:'all .15s',
+                      cursor:'pointer',transition:'all .15s',
                       display:'flex',alignItems:'flex-start',gap:12,width:'100%'}}>
               <span style={{
                 minWidth:28,height:28,borderRadius:8,border:'2px solid currentColor',
                 display:'flex',alignItems:'center',justifyContent:'center',
                 fontSize:12,fontWeight:800,flexShrink:0,
-                background: selected.includes(idx) ? (confirmed&&q.c.includes(idx)?'#16a34a':confirmed&&!q.c.includes(idx)?'#ef4444':'#6366f1') : 'transparent',
+                background: selected.includes(idx) ? '#6366f1' : 'transparent',
                 color: selected.includes(idx) ? '#fff' : 'inherit'
               }}>{ABCD[idx]}</span>
               <span style={{fontSize:14,lineHeight:1.5,paddingTop:2}}>{opt}</span>
-              {confirmed && q.c.includes(idx) && <span style={{marginLeft:'auto',color:'#16a34a',fontSize:18,flexShrink:0}}>✓</span>}
-              {confirmed && selected.includes(idx) && !q.c.includes(idx) && <span style={{marginLeft:'auto',color:'#ef4444',fontSize:18,flexShrink:0}}>✗</span>}
             </button>
           ))}
         </div>
         
-        {/* Explanation after confirm */}
-        {confirmed && (
-          <div style={{background:'#eff6ff',border:'1.5px solid #bfdbfe',borderRadius:12,padding:'12px 16px',marginBottom:16,fontSize:13,color:'#1e40af',lineHeight:1.6}}>
-            {q.c.every(c=>selected.includes(c)) && selected.every(s=>q.c.includes(s))
-              ? '✅ Corect!'
-              : `✗ Răspuns incorect. Correct: ${q.c.map(c=>ABCD[c]+'. '+q.o[c]).join(' | ')}`
-            }
-          </div>
-        )}
-        
-        {/* Buttons */}
-        {!confirmed
-          ? <button onClick={confirm} disabled={selected.length===0}
-              style={{width:'100%',padding:'14px',background:'linear-gradient(135deg,#6366f1,#8b5cf6)',color:'#fff',border:'none',borderRadius:12,fontWeight:700,fontSize:15,cursor:selected.length===0?'not-allowed':'pointer',opacity:selected.length===0?.5:1}}>
-              Confirm răspunsul
-            </button>
-          : <button onClick={next}
-              style={{width:'100%',padding:'14px',background:'linear-gradient(135deg,#059669,#10b981)',color:'#fff',border:'none',borderRadius:12,fontWeight:700,fontSize:15,cursor:'pointer'}}>
-              {cur+1>=questions.length?'Finish exam →':'Următoarea întrebare →'}
-            </button>
-        }
+        <button onClick={next} disabled={selected.length===0}
+          style={{width:'100%',padding:'14px',background:'linear-gradient(135deg,#6366f1,#8b5cf6)',color:'#fff',border:'none',borderRadius:12,fontWeight:700,fontSize:15,cursor:selected.length===0?'not-allowed':'pointer',opacity:selected.length===0?.5:1}}>
+          {cur+1>=questions.length?'Finalizează examenul →':'Următoarea întrebare →'}
+        </button>
       </div>
     </div>
   );
@@ -7312,26 +7389,43 @@ function ExamScreen({code, questions, session, onFinish}) {
 // ── ExamResultScreen ────────────────────────────────────────
 
 function ExamResultScreen({result, onRestart}) {
-  const {code,score,total,pct,grade,timeUsed,answers} = result;
+  const {code,score,total,pct,grade,timeUsed,status,lockReason,cheatEvents=[]} = result;
   const mins = Math.floor(timeUsed/60);
   const secs = timeUsed%60;
-  
-  const gradeColor = grade>=7?'#15803d':grade>=5?'#d97706':'#dc2626';
-  const gradeBg    = grade>=7?'#dcfce7':grade>=5?'#fef3c7':'#fef2f2';
+  const blocked = status === 'blocked';
+  const gradeColor = blocked ? '#dc2626' : (grade>=7?'#15803d':grade>=5?'#d97706':'#dc2626');
+  const gradeBg    = blocked ? '#fef2f2' : (grade>=7?'#dcfce7':grade>=5?'#fef3c7':'#fef2f2');
   
   return (
     <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#1e1b4b 0%,#312e81 100%)',fontFamily:"'Inter','Segoe UI',system-ui,sans-serif",padding:24}}>
       <div style={{maxWidth:640,margin:'0 auto'}}>
         
-        {/* Grade card */}
         <div style={{background:'#fff',borderRadius:24,padding:36,marginBottom:20,textAlign:'center',boxShadow:'0 20px 50px rgba(0,0,0,0.3)'}}>
-          <div style={{fontSize:14,color:'#64748b',fontWeight:600,marginBottom:4}}>REZULTAT EXAMEN IGIENĂ</div>
+          <div style={{fontSize:14,color:'#64748b',fontWeight:600,marginBottom:4}}>
+            {blocked ? 'TEST BLOCAT' : 'REZULTAT EXAMEN IGIENĂ'}
+          </div>
           <div style={{fontFamily:'monospace',color:'#6366f1',fontSize:18,marginBottom:20}}>🔑 {code}</div>
           
           <div style={{display:'inline-block',background:gradeBg,borderRadius:20,padding:'24px 48px',marginBottom:20}}>
-            <div style={{fontSize:72,fontWeight:900,color:gradeColor,lineHeight:1}}>{grade}</div>
-            <div style={{fontSize:14,color:gradeColor,fontWeight:700}}>/ 10</div>
+            {blocked ? (
+              <>
+                <div style={{fontSize:52,fontWeight:900,color:gradeColor,lineHeight:1}}>BLOCAT</div>
+                <div style={{fontSize:14,color:gradeColor,fontWeight:700,marginTop:6}}>rezultat automat: 0</div>
+              </>
+            ) : (
+              <>
+                <div style={{fontSize:72,fontWeight:900,color:gradeColor,lineHeight:1}}>{grade}</div>
+                <div style={{fontSize:14,color:gradeColor,fontWeight:700}}>/ 10</div>
+              </>
+            )}
           </div>
+          
+          {blocked && (
+            <div style={{background:'#fef2f2',border:'1.5px solid #fecaca',borderRadius:12,padding:'12px 16px',fontSize:13,color:'#991b1b',marginBottom:18,lineHeight:1.5,textAlign:'left'}}>
+              <b>Motiv:</b> {lockReason || 'interfața examenului a fost părăsită'}<br/>
+              <b>Evenimente detectate:</b> {cheatEvents.length}
+            </div>
+          )}
           
           <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap',marginBottom:20}}>
             <div style={{background:'#F0F4FF',borderRadius:12,padding:'12px 20px',textAlign:'center'}}>
@@ -7348,36 +7442,9 @@ function ExamResultScreen({result, onRestart}) {
             </div>
           </div>
           
-          {/* Grade scale */}
-          <div style={{background:'#F8FAFF',borderRadius:12,padding:'10px 16px',fontSize:12,color:'#475569',textAlign:'left'}}>
-            <div style={{fontWeight:700,marginBottom:4,color:'#1e1b4b'}}>Scala of notare:</div>
-            <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-              {[[10,'≥90%'],[9,'≥80%'],[8,'≥70%'],[7,'≥60%'],[6,'≥50%'],[5,'<50%']].map(([g,p])=>(
-                <span key={g} style={{background:grade===g?gradeColor:'#e0e7ff',color:grade===g?'#fff':'#4338ca',borderRadius:6,padding:'2px 8px',fontWeight:grade===g?800:500}}>{g} ({p})</span>
-              ))}
-            </div>
+          <div style={{background:'#F8FAFF',borderRadius:12,padding:'12px 16px',fontSize:12,color:'#475569',textAlign:'left',lineHeight:1.55}}>
+            <b style={{color:'#1e1b4b'}}>Notă:</b> în modul examen securizat, răspunsurile corecte nu sunt afișate pe telefonul studentului după finalizare, pentru a evita transmiterea lor către colegi.
           </div>
-        </div>
-        
-        {/* Answers review */}
-        <div style={{background:'rgba(255,255,255,0.1)',borderRadius:16,padding:16,marginBottom:20}}>
-          <div style={{color:'#fff',fontWeight:700,marginBottom:12,fontSize:14}}>📋 Răspunsurile dvs.</div>
-          {answers.map((a,i)=>(
-            <div key={i} style={{background:a.isCorrect?'rgba(22,163,74,0.15)':'rgba(239,68,68,0.15)',borderRadius:10,padding:'10px 14px',marginBottom:8,border:'1px solid '+(a.isCorrect?'rgba(22,163,74,0.3)':'rgba(239,68,68,0.3)')}}>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:8}}>
-                <div style={{color:'#e2e8f0',fontSize:13,lineHeight:1.4,flex:1}}>
-                  <span style={{color:'#a5b4fc',fontSize:11,fontWeight:600}}>{i+1}. {a.lp?.toUpperCase()} · </span>
-                  {a.q}
-                </div>
-                <span style={{fontSize:18,flexShrink:0}}>{a.isCorrect?'✅':'❌'}</span>
-              </div>
-              {!a.isCorrect && (
-                <div style={{marginTop:6,fontSize:12,color:'#fca5a5'}}>
-                  Correct: {a.correct.map(c=>'ABCD'[c]+'. '+a.options[c]).join(' | ')}
-                </div>
-              )}
-            </div>
-          ))}
         </div>
         
         <button onClick={onRestart} style={{width:'100%',padding:14,background:'rgba(255,255,255,0.15)',color:'#fff',border:'2px solid rgba(255,255,255,0.3)',borderRadius:12,fontWeight:700,fontSize:14,cursor:'pointer'}}>
@@ -7887,8 +7954,8 @@ function App() {
           group: student?.group || "",
           labId: session?.labId || "exam",
           labCode: session?.labCode || "EXAM",
-          module: "exam",
-          moduleTitle: "Examen Igienă",
+          module: r.status === "blocked" ? "exam_blocked" : "exam",
+          moduleTitle: r.status === "blocked" ? "Examen Igienă — TEST BLOCAT" : "Examen Igienă",
           score: r.score,
           total: r.total,
           pct: r.pct,
