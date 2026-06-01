@@ -4114,15 +4114,46 @@ async function addResult(result) {
     })
   });
 }
+function normalizeSessionExpiry(value) {
+  const n = Number(value);
+  if (Number.isFinite(n)) return n;
+  const d = Date.parse(value);
+  return Number.isFinite(d) ? d : 0;
+}
+
 async function getSession(token) {
-  const res = await sb(`sessions?id=eq.${token}&select=*`);
+  const safeToken = encodeURIComponent(token || "");
+  const res = await sb(`sessions?id=eq.${safeToken}&select=*`);
   console.log("getSession status:", res.status, "token:", token);
   if (!res.ok) { const err = await res.text(); console.error("getSession error:", err); return null; }
   const data = await res.json();
   console.log("getSession data:", data);
   if (!data.length) return null;
   const s = data[0];
-  return { token: s.id, labId: s.lab_id, labCode: s.lab_code, labTitle: s.lab_title, duration: s.duration, expiresAt: s.expires_at, createdAt: new Date(s.created_at).getTime(), teacher: s.teacher || "", semester: s.semester || "" };
+  const expiresAt = normalizeSessionExpiry(s.expires_at);
+  if (expiresAt && Date.now() > expiresAt) return null;
+  return { token: s.id, labId: s.lab_id, labCode: s.lab_code, labTitle: s.lab_title, duration: s.duration, expiresAt, createdAt: new Date(s.created_at).getTime(), teacher: s.teacher || "", semester: s.semester || "" };
+}
+
+async function cancelSessionRemote(token) {
+  const safeToken = encodeURIComponent(token || "");
+  if (!safeToken) return false;
+  let ok = false;
+  try {
+    const res = await sb(`sessions?id=eq.${safeToken}`, {
+      method: "PATCH",
+      prefer: "return=minimal",
+      body: JSON.stringify({ expires_at: Date.now() - 1000 })
+    });
+    if (res.ok) ok = true;
+    else console.warn("cancelSessionRemote expire:", res.status, await res.text());
+  } catch(e) { console.warn("cancelSessionRemote expire error:", e); }
+  try {
+    const res = await sb(`sessions?id=eq.${safeToken}`, { method: "DELETE", prefer: "return=minimal" });
+    if (res.ok) ok = true;
+    else console.warn("cancelSessionRemote delete:", res.status, await res.text());
+  } catch(e) { console.warn("cancelSessionRemote delete error:", e); }
+  return ok;
 }
 async function markSessionUsed(token, studentName) {
   // Just log — recorded via result entry
@@ -4967,11 +4998,18 @@ function AdminPanel({onBack, teacherName}) {
     setGenerating(false);
   };
 
-  const cancelSession = () => {
+  const cancelSession = async () => {
+    const token = activeSession?.token;
     clearInterval(timerRef.current);
     setActiveSession(null);
     setQrDataURL(null);
     setTimeLeft(0);
+    if (token) {
+      const ok = await cancelSessionRemote(token);
+      if (!ok) {
+        alert("Sesiunea a fost anulată pe acest ecran, dar nu a putut fi anulată în baza de date. Verificați permisiunile Supabase pentru tabela sessions.");
+      }
+    }
   };
 
   const exportCSV = () => {
