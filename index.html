@@ -6197,9 +6197,6 @@ function QuizPreviewTab({selLab, onSelectLab, teacherName}) {
       {(subTab==="exam_preview"||subTab==="exam_edit") && (
         <ExamBankPanel mode={subTab==="exam_edit"?"edit":"preview"} selLab={selLab}/>
       )}
-      {/* ── PREZENTA SUB-TAB ── */}
-      {tab==="prezenta" && <PrezentaTab results={results} labs={LABS}/>}
-
       {/* ── PREVIEW + EDIT sub-tabs: two-column layout ── */}
       {(subTab==="preview"||subTab==="edit") && (
         <div style={{display:"grid",gridTemplateColumns:"240px 1fr",gap:14,alignItems:"start"}}>
