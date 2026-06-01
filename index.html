@@ -4420,7 +4420,7 @@ const T_STRINGS = {
     saved:"✓ Salvat", reseted:"✓ Resetat",
     // Preview / Editor
     prev_quiz_title:"👁️ Quiz — Previzualizare & Editare",
-    prev_quiz_sub:"Vizualizați, editați sau adăugați întrebări · Modificările se salvează local în browser",
+    prev_quiz_sub:"Vizualizați, editați sau adăugați întrebări · Modificările se salvează în baza de date și local ca rezervă",
     prev_select_mod:"Selectați un modul din stânga",
     prev_select_fisa:"Selectați o fișă din stânga",
     prev_no_fisa:"Nu există fișe pentru",
@@ -4605,7 +4605,7 @@ const T_STRINGS = {
     saved:"✓ Saved", reseted:"✓ Reset",
     // Preview / Editor
     prev_quiz_title:"👁️ Quiz — Preview & Edit",
-    prev_quiz_sub:"View, edit or add questions · Changes are saved locally in browser",
+    prev_quiz_sub:"View, edit or add questions · Changes are saved to the database and locally as backup",
     prev_select_mod:"Select a module from the left",
     prev_select_fisa:"Select a worksheet from the left",
     prev_no_fisa:"No worksheets available for",
@@ -5359,6 +5359,10 @@ function AdminPanel({onBack, teacherName}) {
 
         {tab==="examResults" && (
           <ExamResultsPanel results={results} />
+        )}
+
+        {tab==="prezenta" && (
+          <PrezentaTab results={results} labs={LABS} />
         )}
 
         {tab==="fisiere" && (
@@ -6141,7 +6145,7 @@ function QuizPreviewTab({selLab, onSelectLab, teacherName}) {
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16,flexWrap:"wrap",gap:10}}>
         <div>
           <h3 style={{color:"#1e1b4b",fontSize:18,margin:"0 0 2px",fontWeight:800}}>👁️ Quiz — Previzualizare & Editare</h3>
-          <p style={{color:"#64748b",fontSize:13,margin:0}}>Vizualizați, editați sau adăugați întrebări · Modificările se salvează local în browser</p>
+          <p style={{color:"#64748b",fontSize:13,margin:0}}>Vizualizați, editați sau adăugați întrebări · Modificările se salvează în baza de date și local ca rezervă</p>
         </div>
         <div style={{display:"flex",gap:8,alignItems:"center"}}>
           {saveMsg && <span style={{fontSize:13,color:"#16a34a",fontWeight:700,background:"#f0fdf4",padding:"6px 12px",borderRadius:8,border:"1px solid #bbf7d0"}}>{saveMsg}</span>}
