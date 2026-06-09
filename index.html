@@ -5141,6 +5141,7 @@ function ExamResultsPanel({results, onRefresh}) {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [search, setSearch] = React.useState("");
   const [dateFilter, setDateFilter] = React.useState("");
+  const [selectedExamResult, setSelectedExamResult] = React.useState(null);
 
   const exams = (results || []).filter(isExamResult).map(enrichExamResult);
   const years = Array.from(new Set(exams.map(r => r.examYear).filter(Boolean))).sort();
@@ -5161,19 +5162,22 @@ function ExamResultsPanel({results, onRefresh}) {
 
   const getAnswerDetails = (r) => Array.isArray(r?.examMeta?.answers) ? r.examMeta.answers : [];
   const answerCell = (items) => (items || []).map(x => (x.letter ? x.letter + ". " : "") + (x.text || "")).join(" | ");
+  const optionCell = (items) => (items || []).map(x => (x.letter ? x.letter + ". " : "") + (x.text || "")).join(" | ");
+  const typeLabel = (t) => t === "multi" ? "răspuns multiplu" : "un singur răspuns";
+
   const exportExamDetailsCSV = (rows, suffix="toate") => {
-    const header = ["An", "Seria", "Grupa", "Nr. matricol", "Nume", "Status", "Nota", "Scor", "Data", "Nr intrebare", "LP", "Tip", "Intrebare", "Raspuns student", "Raspuns corect", "Corect"].map(csvCell).join(";");
+    const header = ["An", "Seria", "Grupa", "Nr. matricol", "Nume", "Status", "Nota", "Scor", "Data", "Nr intrebare", "LP", "Tip", "Intrebare", "Variante", "Raspuns student", "Raspuns corect", "Corect"].map(csvCell).join(";");
     const out = [];
-    rows.forEach(r => {
-      const grade = r.examStatus === "blocked" ? 0 : (r.examMeta?.grade || calcGrade(Number(r.pct)||0));
+    (rows || []).forEach(r => {
       const details = getAnswerDetails(r);
+      const grade = r.examStatus === "blocked" ? 0 : (r.examMeta?.grade || calcGrade(Number(r.pct)||0));
+      const base = [r.examYear||"", r.seria||"", r.grupaStudent||"", r.matricol||"", r.name||"", r.examStatus === "blocked" ? "TEST BLOCAT" : "Finalizat", grade, (r.score||0)+"/"+(r.total||0), new Date(r.timestamp).toLocaleString("ro-RO")];
       if (!details.length) {
-        out.push([r.examYear||"", r.seria||"", r.grupaStudent||"", r.matricol||"", r.name||"", r.examStatus === "blocked" ? "TEST BLOCAT" : "Finalizat", grade, (r.score||0)+"/"+(r.total||0), new Date(r.timestamp).toLocaleString("ro-RO"), "", "", "", "DETALII INDISPONIBILE - rezultat salvat inainte de activarea auditului pe intrebari", "", "", ""].map(csvCell).join(";"));
+        out.push([...base, "", "", "", "DETALII INDISPONIBILE - rezultat salvat inainte de activarea auditului pe intrebari", "", "", "", ""].map(csvCell).join(";"));
       } else {
         details.forEach(d => out.push([
-          r.examYear||"", r.seria||"", r.grupaStudent||"", r.matricol||"", r.name||"",
-          r.examStatus === "blocked" ? "TEST BLOCAT" : "Finalizat", grade, (r.score||0)+"/"+(r.total||0), new Date(r.timestamp).toLocaleString("ro-RO"),
-          d.nr || "", d.lp || "", d.type || "", d.question || "", answerCell(d.selected), answerCell(d.correct), d.isCorrect ? "DA" : "NU"
+          ...base,
+          d.nr || "", d.lp || "", typeLabel(d.type), d.question || "", optionCell(d.options), answerCell(d.selected), answerCell(d.correct), d.isCorrect ? "DA" : "NU"
         ].map(csvCell).join(";")));
       }
     });
@@ -5282,6 +5286,7 @@ function ExamResultsPanel({results, onRefresh}) {
               <tr><td colSpan="10" style={{padding:24,textAlign:"center",color:"#94a3b8"}}>Nu există rezultate de examen pentru filtrele selectate.</td></tr>
             ) : filtered.map((r,i)=>{
               const grade = r.examStatus === "blocked" ? 0 : (r.examMeta?.grade || calcGrade(Number(r.pct)||0));
+              const hasDetails = getAnswerDetails(r).length > 0;
               return (
                 <tr key={i} style={{borderBottom:"1px solid #f1f5f9"}}>
                   <td style={{padding:"9px 12px",fontWeight:700,color:"#1e293b"}}>{r.examYear || "—"}</td>
@@ -5298,9 +5303,9 @@ function ExamResultsPanel({results, onRefresh}) {
                   <td style={{padding:"9px 12px"}}>{r.score}/{r.total} · {r.pct}%</td>
                   <td style={{padding:"9px 12px",whiteSpace:"nowrap",color:"#64748b"}}>{new Date(r.timestamp).toLocaleString("ro-RO")}</td>
                   <td style={{padding:"9px 12px",whiteSpace:"nowrap"}}>
-                    <button onClick={()=>exportExamDetailsCSV([r], (r.matricol || r.name || "student").toString().replace(/[^a-zA-Z0-9_-]+/g,"_"))}
-                      style={{padding:"6px 10px",background:getAnswerDetails(r).length?"#EEF2FF":"#f1f5f9",color:getAnswerDetails(r).length?"#4338ca":"#94a3b8",border:"1px solid #c7d2fe",borderRadius:8,fontSize:11,fontWeight:800,cursor:"pointer"}}
-                      title={getAnswerDetails(r).length ? "Exportă răspunsurile pe întrebări" : "Rezultat vechi: nu are detalii pe întrebări"}>
+                    <button onClick={()=>setSelectedExamResult(r)}
+                      style={{padding:"6px 10px",background:hasDetails?"#EEF2FF":"#f1f5f9",color:hasDetails?"#4338ca":"#64748b",border:"1px solid #c7d2fe",borderRadius:8,fontSize:11,fontWeight:800,cursor:"pointer"}}
+                      title={hasDetails ? "Deschide testul complet cu răspunsurile studentului" : "Rezultat vechi: nu are detalii pe întrebări"}>
                       Detalii
                     </button>
                   </td>
@@ -5310,9 +5315,116 @@ function ExamResultsPanel({results, onRefresh}) {
           </tbody>
         </table>
       </div>
+
+      {selectedExamResult && (() => {
+        const r = selectedExamResult;
+        const details = getAnswerDetails(r);
+        const grade = r.examStatus === "blocked" ? 0 : (r.examMeta?.grade || calcGrade(Number(r.pct)||0));
+        return (
+          <div onClick={e=>{ if(e.target===e.currentTarget) setSelectedExamResult(null); }}
+            style={{position:"fixed",top:0,left:0,right:0,bottom:0,background:"rgba(15,23,42,.55)",zIndex:2000,display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"20px 12px",overflowY:"auto"}}>
+            <div style={{background:"#fff",borderRadius:18,padding:"22px",maxWidth:980,width:"100%",boxShadow:"0 25px 80px rgba(15,23,42,.35)",margin:"16px 0"}}>
+              <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"flex-start",marginBottom:16}}>
+                <div>
+                  <div style={{fontSize:11,fontWeight:900,color:"#4338ca",letterSpacing:".08em",textTransform:"uppercase",marginBottom:5}}>Detalii examen / contestații</div>
+                  <h3 style={{margin:"0 0 6px",fontSize:20,color:"#0f172a"}}>{r.name || "Student"}</h3>
+                  <div style={{fontSize:13,color:"#475569",lineHeight:1.6}}>
+                    Nr. matricol: <b>{r.matricol || "—"}</b> · {r.examYear || "—"} · Seria {r.seria || "—"} · Grupa {r.grupaStudent || "—"}<br/>
+                    Status: <b style={{color:r.examStatus==="blocked"?"#dc2626":"#15803d"}}>{r.examStatus==="blocked"?"TEST BLOCAT":"FINALIZAT"}</b> · Notă: <b>{grade}</b> · Scor: <b>{r.score}/{r.total}</b> · Procent: <b>{r.pct}%</b><br/>
+                    Data: {new Date(r.timestamp).toLocaleString("ro-RO")}
+                  </div>
+                </div>
+                <div style={{display:"flex",gap:8,flexWrap:"wrap",justifyContent:"flex-end"}}>
+                  <button onClick={()=>exportExamDetailsCSV([r], (r.matricol || r.name || "student").toString().replace(/[^a-zA-Z0-9_-]+/g,"_"))}
+                    style={{padding:"8px 12px",background:"#7c3aed",color:"#fff",border:"none",borderRadius:9,fontSize:12,fontWeight:900,cursor:"pointer"}}>
+                    ⬇ Export detalii
+                  </button>
+                  <button onClick={()=>setSelectedExamResult(null)}
+                    style={{padding:"8px 12px",background:"#f1f5f9",color:"#475569",border:"1px solid #e2e8f0",borderRadius:9,fontSize:13,fontWeight:900,cursor:"pointer"}}>
+                    ✕ Închide
+                  </button>
+                </div>
+              </div>
+
+              {r.lockReason && (
+                <div style={{background:"#fee2e2",border:"1px solid #fecaca",color:"#991b1b",borderRadius:12,padding:"10px 14px",fontSize:13,fontWeight:700,marginBottom:14}}>
+                  Motiv blocare: {r.lockReason}
+                </div>
+              )}
+
+              {!details.length ? (
+                <div style={{background:"#fff7ed",border:"1px solid #fed7aa",borderRadius:14,padding:18,color:"#9a3412",fontSize:14,lineHeight:1.6}}>
+                  Pentru acest rezultat nu există detalii pe întrebări. Probabil a fost salvat înainte de activarea auditului complet pe întrebări. Rezultatele noi vor salva testul cu întrebările, răspunsurile studentului și răspunsurile corecte.
+                </div>
+              ) : (
+                <div style={{display:"flex",flexDirection:"column",gap:12}}>
+                  {details.map((d,idx)=>{
+                    const isOk = !!d.isCorrect;
+                    const selectedText = answerCell(d.selected) || "— fără răspuns —";
+                    const correctText = answerCell(d.correct) || "—";
+                    const opts = Array.isArray(d.options) ? d.options : [];
+                    const selectedIdx = new Set((d.selected || []).map(x=>x.index));
+                    const correctIdx = new Set((d.correct || []).map(x=>x.index));
+                    return (
+                      <div key={idx} style={{border:"1.5px solid "+(isOk?"#bbf7d0":"#fecaca"),borderRadius:14,overflow:"hidden",background:"#fff"}}>
+                        <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"flex-start",background:isOk?"#f0fdf4":"#fef2f2",padding:"12px 14px",borderBottom:"1px solid "+(isOk?"#bbf7d0":"#fecaca")}}>
+                          <div style={{fontSize:14,fontWeight:900,color:"#0f172a",lineHeight:1.45}}>
+                            <span style={{color:"#4338ca",marginRight:6}}>Întrebarea {d.nr || idx+1}.</span>{d.question || "—"}
+                          </div>
+                          <span style={{whiteSpace:"nowrap",fontSize:11,fontWeight:900,borderRadius:99,padding:"4px 8px",background:isOk?"#dcfce7":"#fee2e2",color:isOk?"#166534":"#991b1b"}}>
+                            {isOk ? "CORECT" : "GREȘIT"}
+                          </span>
+                        </div>
+                        <div style={{padding:"12px 14px"}}>
+                          <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
+                            <span style={{fontSize:11,fontWeight:800,color:"#475569",background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:99,padding:"3px 8px"}}>{String(d.lp || "LP").toUpperCase()}</span>
+                            <span style={{fontSize:11,fontWeight:800,color:"#475569",background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:99,padding:"3px 8px"}}>{typeLabel(d.type)}</span>
+                          </div>
+
+                          {opts.length > 0 && (
+                            <div style={{marginBottom:12}}>
+                              <div style={{fontSize:11,fontWeight:900,color:"#64748b",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>Variante generate în test</div>
+                              <div style={{display:"grid",gap:6}}>
+                                {opts.map(opt=>{
+                                  const wasSelected = selectedIdx.has(opt.index);
+                                  const wasCorrect = correctIdx.has(opt.index);
+                                  return (
+                                    <div key={opt.index} style={{display:"flex",gap:8,alignItems:"flex-start",padding:"8px 10px",borderRadius:10,border:"1px solid "+(wasCorrect?"#86efac":wasSelected?"#fca5a5":"#e2e8f0"),background:wasCorrect?"#f0fdf4":wasSelected?"#fef2f2":"#f8fafc"}}>
+                                      <b style={{color:"#1e293b",minWidth:22}}>{opt.letter}.</b>
+                                      <span style={{flex:1,color:"#334155",fontSize:13,lineHeight:1.45}}>{opt.text}</span>
+                                      {wasSelected && <span style={{fontSize:10,fontWeight:900,color:"#991b1b",background:"#fee2e2",borderRadius:99,padding:"2px 7px"}}>ales</span>}
+                                      {wasCorrect && <span style={{fontSize:10,fontWeight:900,color:"#166534",background:"#dcfce7",borderRadius:99,padding:"2px 7px"}}>corect</span>}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+
+                          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:10}}>
+                            <div style={{border:"1px solid #e2e8f0",borderRadius:11,padding:"10px 12px",background:isOk?"#f8fafc":"#fff1f2"}}>
+                              <div style={{fontSize:11,fontWeight:900,color:"#64748b",textTransform:"uppercase",letterSpacing:".05em",marginBottom:5}}>Răspuns student</div>
+                              <div style={{fontSize:13,fontWeight:800,color:isOk?"#166534":"#991b1b",lineHeight:1.45}}>{selectedText}</div>
+                            </div>
+                            <div style={{border:"1px solid #bbf7d0",borderRadius:11,padding:"10px 12px",background:"#f0fdf4"}}>
+                              <div style={{fontSize:11,fontWeight:900,color:"#15803d",textTransform:"uppercase",letterSpacing:".05em",marginBottom:5}}>Răspuns corect</div>
+                              <div style={{fontSize:13,fontWeight:800,color:"#166534",lineHeight:1.45}}>{correctText}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
+
 
 // ════════════════════════════════════════════════════════════
 // NOMENCLATOR EDITOR
@@ -7971,6 +8083,7 @@ function App() {
           labCode: session?.labCode || "EXAM",
           answers: (r.answers || []).map((a, idx) => {
             const letters = ['A','B','C','D','E','F'];
+            const options = (a.options || []).map((text, optIdx) => ({index:optIdx, letter:letters[optIdx] || String(optIdx+1), text:text || ''}));
             const selected = (a.selected || []).map(x => ({index:x, letter:letters[x] || String(x+1), text:(a.options || [])[x] || ''}));
             const correct = (a.correct || []).map(x => ({index:x, letter:letters[x] || String(x+1), text:(a.options || [])[x] || ''}));
             return {
@@ -7978,6 +8091,7 @@ function App() {
               lp: a.lp || '',
               type: a.type || '',
               question: a.q || '',
+              options,
               selected,
               correct,
               isCorrect: !!a.isCorrect
