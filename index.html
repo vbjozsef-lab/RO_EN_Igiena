@@ -3963,7 +3963,8 @@ function enrichExamResult(r) {
     studentGroupLabel: meta.group || [meta.seria ? "Seria " + meta.seria : "", meta.grupa ? "Grupa " + meta.grupa : ""].filter(Boolean).join(" · "),
     examStatus: status,
     lockReason: meta.lockReason || "",
-    cheatEvents: meta.cheatEvents || []
+    cheatEvents: meta.cheatEvents || [],
+    answerReview: Array.isArray(meta.answers) ? meta.answers : []
   };
 }
 
@@ -5494,6 +5495,7 @@ function ExamResultsPanel({results}) {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [search, setSearch] = React.useState("");
   const [dateFilter, setDateFilter] = React.useState("");
+  const [reviewResult, setReviewResult] = React.useState(null);
 
   const exams = (results || []).filter(isExamResult).map(enrichExamResult);
   const years = Array.from(new Set(exams.map(r => r.examYear).filter(Boolean))).sort();
@@ -5511,6 +5513,11 @@ function ExamResultsPanel({results}) {
   );
   const completed = filtered.filter(r => r.examStatus !== "blocked");
   const avgGrade = completed.length ? (completed.reduce((s,r)=>s + (Number(r.examMeta?.grade || 0) || calcGrade(Number(r.pct)||0)),0) / completed.length).toFixed(2) : "—";
+
+  const answerLetters = (indices, options) => {
+    if (!Array.isArray(indices) || !indices.length) return "—";
+    return indices.map(i => String.fromCharCode(65 + Number(i)) + ". " + (options && options[i] ? options[i] : "")).join("; ");
+  };
 
   const exportExamCSV = () => {
     const header = ["An", "Seria", "Grupa", "Nr. matricol", "Nume", "Status", "Nota", "Scor", "Procent", "Timp", "Profesor", "Cod sesiune", "Data", "Motiv blocare"].map(csvCell).join(";");
@@ -5588,14 +5595,14 @@ function ExamResultsPanel({results}) {
         <table style={{width:"100%",borderCollapse:"collapse",fontSize:13,background:"#fff"}}>
           <thead>
             <tr style={{background:"#EEF2FF",color:"#4338ca",textAlign:"left"}}>
-              {["An", "Seria", "Grupa", "Nr. matricol", "Nume", "Status", "Nota", "Scor", "Data"].map(h=>(
+              {["An", "Seria", "Grupa", "Nr. matricol", "Nume", "Verificare", "Status", "Nota", "Scor", "Data"].map(h=>(
                 <th key={h} style={{padding:"10px 12px",fontWeight:800,borderBottom:"1px solid #c7d2fe"}}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {filtered.length===0 ? (
-              <tr><td colSpan="9" style={{padding:24,textAlign:"center",color:"#94a3b8"}}>Nu există rezultate de examen pentru filtrele selectate.</td></tr>
+              <tr><td colSpan="10" style={{padding:24,textAlign:"center",color:"#94a3b8"}}>Nu există rezultate de examen pentru filtrele selectate.</td></tr>
             ) : filtered.map((r,i)=>{
               const grade = r.examStatus === "blocked" ? 0 : (r.examMeta?.grade || calcGrade(Number(r.pct)||0));
               return (
@@ -5604,7 +5611,16 @@ function ExamResultsPanel({results}) {
                   <td style={{padding:"9px 12px"}}>{r.seria || "—"}</td>
                   <td style={{padding:"9px 12px"}}>{r.grupaStudent || "—"}</td>
                   <td style={{padding:"9px 12px",fontFamily:"JetBrains Mono,monospace",fontWeight:700}}>{r.matricol || "—"}</td>
-                  <td style={{padding:"9px 12px",fontWeight:700,color:"#0f172a"}}>{r.name}</td>
+                  <td style={{padding:"9px 12px",fontWeight:700,color:"#0f172a"}}>
+                    <div>{r.name}</div>
+                  </td>
+                  <td style={{padding:"9px 12px",whiteSpace:"nowrap"}}>
+                    <button type="button" onClick={()=>setReviewResult(r)}
+                      title="Deschide întrebările, răspunsurile studentului și răspunsurile corecte"
+                      style={{display:"inline-flex",alignItems:"center",gap:6,padding:"8px 12px",background:"#4338ca",color:"#fff",border:"none",borderRadius:10,fontSize:12,fontWeight:900,cursor:"pointer",boxShadow:"0 4px 12px rgba(67,56,202,.22)"}}>
+                      🔍 Verificare
+                    </button>
+                  </td>
                   <td style={{padding:"9px 12px"}}>
                     <span title={r.lockReason || ""} style={{padding:"4px 8px",borderRadius:99,fontSize:11,fontWeight:800,background:r.examStatus==="blocked"?"#fee2e2":"#dcfce7",color:r.examStatus==="blocked"?"#991b1b":"#166534"}}>
                       {r.examStatus==="blocked"?"BLOCAT":"FINALIZAT"}
@@ -5619,6 +5635,61 @@ function ExamResultsPanel({results}) {
           </tbody>
         </table>
       </div>
+
+      {reviewResult && (() => {
+        const reviewItems = Array.isArray(reviewResult.answerReview) ? reviewResult.answerReview : [];
+        return (
+          <div onClick={e=>{if(e.target===e.currentTarget)setReviewResult(null);}}
+            style={{position:"fixed",inset:0,background:"rgba(15,23,42,.55)",zIndex:10000,display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"22px 14px",overflowY:"auto"}}>
+            <div style={{background:"#fff",borderRadius:18,padding:"22px",maxWidth:900,width:"100%",boxShadow:"0 24px 70px rgba(15,23,42,.25)"}}>
+              <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"flex-start",marginBottom:16}}>
+                <div>
+                  <h3 style={{margin:"0 0 4px",fontSize:20,color:"#1e1b4b"}}>🔍 Verificare examen</h3>
+                  <div style={{fontSize:13,color:"#64748b",lineHeight:1.5}}>
+                    <b>{reviewResult.name}</b> · Matricol: <b>{reviewResult.matricol || "—"}</b> · {reviewResult.examYear || "—"}{reviewResult.seria ? " · Seria " + reviewResult.seria : ""}
+                    <br/>Cod examen: <b>{reviewResult.token || reviewResult.examMeta?.codQR || "—"}</b> · Nota: <b>{reviewResult.examStatus === "blocked" ? 0 : (reviewResult.examMeta?.grade || calcGrade(Number(reviewResult.pct)||0))}</b> · Scor: <b>{reviewResult.score}/{reviewResult.total}</b>
+                  </div>
+                </div>
+                <button onClick={()=>setReviewResult(null)}
+                  style={{border:"none",background:"#f1f5f9",color:"#334155",borderRadius:10,padding:"9px 12px",fontWeight:900,cursor:"pointer"}}>✕</button>
+              </div>
+
+              {!reviewItems.length ? (
+                <div style={{padding:18,background:"#fff7ed",border:"1px solid #fed7aa",borderRadius:12,color:"#9a3412",fontSize:14,lineHeight:1.5}}>
+                  Pentru această înregistrare nu există încă întrebările salvate. Verificarea completă va fi disponibilă pentru examenele susținute după actualizarea aplicației.
+                </div>
+              ) : (
+                <div style={{display:"grid",gap:12}}>
+                  {reviewItems.map((a,idx) => (
+                    <div key={idx} style={{border:"1px solid #e0e7ff",borderRadius:14,padding:14,background:a.isCorrect?"#f0fdf4":"#fff1f2"}}>
+                      <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"flex-start",marginBottom:8}}>
+                        <div style={{fontSize:12,fontWeight:900,color:"#6366f1",textTransform:"uppercase"}}>
+                          Întrebarea {idx+1} · {(a.lp||"").toUpperCase()} · {a.type === "multi" ? "răspuns multiplu" : "un singur răspuns"}
+                        </div>
+                        <span style={{padding:"4px 8px",borderRadius:99,fontSize:11,fontWeight:900,background:a.isCorrect?"#dcfce7":"#fee2e2",color:a.isCorrect?"#166534":"#991b1b"}}>
+                          {a.isCorrect ? "CORECT" : "GREȘIT"}
+                        </span>
+                      </div>
+                      <div style={{fontWeight:800,color:"#0f172a",lineHeight:1.45,marginBottom:10}}>{a.q}</div>
+                      <div style={{display:"grid",gap:6,fontSize:13,color:"#334155"}}>
+                        {(a.options||[]).map((opt,j)=>(
+                          <div key={j} style={{padding:"7px 9px",borderRadius:8,background:(a.correct||[]).includes(j)?"#dcfce7":(a.selected||[]).includes(j)?"#fee2e2":"#f8fafc",border:"1px solid "+((a.correct||[]).includes(j)?"#86efac":(a.selected||[]).includes(j)?"#fecaca":"#e2e8f0")}}>
+                            <b>{String.fromCharCode(65+j)}.</b> {opt}
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{marginTop:10,fontSize:13,lineHeight:1.5}}>
+                        <div><b>Răspuns student:</b> {answerLetters(a.selected, a.options)}</div>
+                        <div><b>Răspuns corect:</b> {answerLetters(a.correct, a.options)}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
@@ -8278,6 +8349,7 @@ function App() {
           grade: r.grade,
           lockReason: r.lockReason || "",
           cheatEvents: r.cheatEvents || [],
+          answers: Array.isArray(r.answers) ? r.answers : [],
           codQR: session?.token || "",
           labCode: session?.labCode || "EXAM"
         };
