@@ -5177,9 +5177,7 @@ function ExamResultsPanel({results, onRefresh}) {
         ].map(csvCell).join(";")));
       }
     });
-    const blob = new Blob(["﻿" + header + "
-" + out.join("
-")], {type:"text/csv;charset=utf-8"});
+    const blob = new Blob(["\ufeff" + header + "\n" + out.join("\n")], {type:"text/csv;charset=utf-8"});
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = `audit_examen_${suffix}.csv`;
