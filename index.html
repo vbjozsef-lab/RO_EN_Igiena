@@ -3819,7 +3819,12 @@ async function loadResults() {
       module: r.module, moduleTitle: r.module_title,
       answersText: r.answers_text||"",
       score: r.score, total: r.total, pct: r.pct,
-      timestamp: new Date(r.created_at).getTime(), timeUsed: r.time_used,
+      timestamp: new Date(
+  String(r.created_at || "").match(/Z$|[+-]\d\d:\d\d$/)
+    ? r.created_at
+    : r.created_at + "Z"
+).getTime(),
+timeUsed: r.time_used,
       teacher: r.teacher || "",
       semester: r.semester || "",
       specialization: r.specialization || "",
