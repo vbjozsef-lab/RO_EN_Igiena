@@ -7813,11 +7813,74 @@ function getEditedExamBank(langOverride) {
 function pickExamQuestions(count = 20, langOverride) {
   const bank = getEditedExamBank(langOverride);
   const lpOrder = ["lp1a","lp1b","lp2a","lp2b","lp3a","lp3b","lp4a","lp4b","lp5a","lp5b","lp6a","lp6b"];
-  const all = lpOrder.flatMap(lp => (bank[lp] || []).map(q => ({...q, lp})));
+  const activeLPs = lpOrder.filter(lp => (bank[lp] || []).length > 0);
+  const all = activeLPs.flatMap(lp => (bank[lp] || []).map(q => ({...q, lp})));
   if (!all.length) return [];
 
-  const shuffled = shufflePick(all, all.length);
-  return shuffled.slice(0, Math.min(count, shuffled.length));
+  // Exam rule: 20 questions total; every LP appears with at least 1 and at most 2 questions;
+  // exactly 15 single-answer questions and exactly 5 multi-answer questions whenever the bank allows it.
+  const totalWanted = Math.min(Number(count) || 20, all.length);
+  if (totalWanted !== 20 || activeLPs.length !== 12) {
+    return shufflePick(all, totalWanted);
+  }
+
+  const used = new Set();
+  const keyOf = q => `${q.lp}:${q.idx}:${q.q}`;
+  const selected = [];
+  const addQuestion = (q) => {
+    if (!q) return false;
+    const k = keyOf(q);
+    if (used.has(k)) return false;
+    used.add(k);
+    selected.push({...q});
+    return true;
+  };
+  const pickOne = (lp, type) => {
+    const candidates = shufflePick((bank[lp] || [])
+      .map(q => ({...q, lp}))
+      .filter(q => (!type || q.t === type) && !used.has(keyOf(q))), 1);
+    return candidates[0] || null;
+  };
+
+  const capacities = {};
+  activeLPs.forEach(lp => capacities[lp] = 1);
+  const extrasNeeded = totalWanted - activeLPs.length; // 8 extra slots for 20 questions / 12 LPs
+  shufflePick(activeLPs, activeLPs.length).slice(0, extrasNeeded).forEach(lp => capacities[lp] = 2);
+
+  const multiEligibleLPs = activeLPs.filter(lp => (bank[lp] || []).some(q => q.t === 'multi'));
+  const multiLPs = new Set(shufflePick(multiEligibleLPs, multiEligibleLPs.length).slice(0, 5));
+
+  activeLPs.forEach(lp => {
+    let pickedForLP = 0;
+    if (multiLPs.has(lp)) {
+      if (addQuestion(pickOne(lp, 'multi'))) pickedForLP++;
+    }
+    while (pickedForLP < capacities[lp]) {
+      if (addQuestion(pickOne(lp, 'single'))) pickedForLP++;
+      else if (addQuestion(pickOne(lp, null))) pickedForLP++;
+      else break;
+    }
+  });
+
+  // Safety fallback, should not be needed with the 2026 bank, but keeps the exam usable if a bank is edited later.
+  let singleCount = selected.filter(q => q.t !== 'multi').length;
+  let multiCount = selected.filter(q => q.t === 'multi').length;
+  if (selected.length !== totalWanted || singleCount !== 15 || multiCount !== 5) {
+    const byLp = Object.fromEntries(activeLPs.map(lp => [lp, selected.filter(q => q.lp === lp).length]));
+    for (const q of shufflePick(all, all.length)) {
+      if (selected.length >= totalWanted) break;
+      if (used.has(keyOf(q))) continue;
+      if ((byLp[q.lp] || 0) >= 2) continue;
+      if (q.t === 'multi' && multiCount >= 5) continue;
+      if (q.t !== 'multi' && singleCount >= 15) continue;
+      if (addQuestion(q)) {
+        byLp[q.lp] = (byLp[q.lp] || 0) + 1;
+        if (q.t === 'multi') multiCount++; else singleCount++;
+      }
+    }
+  }
+
+  return shufflePick(selected, selected.length).slice(0, totalWanted);
 }
 
 function calcGrade(pct) {
