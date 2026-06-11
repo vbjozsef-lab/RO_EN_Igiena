@@ -114,26 +114,6 @@
     -webkit-touch-callout:none !important;
   }
 
-
-  /* ── Exam screenshot deterrence: visible student watermark ── */
-  .exam-watermark-layer{
-    position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;
-    display:grid;grid-template-columns:repeat(3,1fr);gap:42px 18px;
-    padding:32px 10px;opacity:.16;mix-blend-mode:multiply;
-  }
-  .exam-watermark-item{
-    color:#1e1b4b;font-weight:900;font-size:13px;line-height:1.35;text-align:center;
-    transform:rotate(-24deg);white-space:normal;user-select:none;-webkit-user-select:none;
-  }
-  @media(max-width:640px){
-    .exam-watermark-layer{grid-template-columns:repeat(2,1fr);gap:36px 6px;padding:26px 4px;opacity:.18}
-    .exam-watermark-item{font-size:11px}
-  }
-  @media print{
-    .exam-no-select{display:none!important}
-    body:before{content:'Printarea examenului este dezactivată / Exam printing is disabled';display:flex;align-items:center;justify-content:center;min-height:100vh;font:700 24px Inter,Arial;color:#991b1b;text-align:center;padding:40px}
-  }
-
 </style>
 </head>
 <body>
@@ -3544,35 +3524,6 @@ function buildExamMeta(meta) {
   try { return "EXAM_META:" + JSON.stringify(meta || {}); } catch(e) { return "EXAM_META:{}"; }
 }
 
-function buildExamSummary(meta) {
-  const m = meta || {};
-  const summary = {
-    matricol: m.matricol || "",
-    name: m.name || "",
-    year: m.year || m.an || "",
-    yearLabel: m.yearLabel || "",
-    seria: m.seria || "",
-    grupa: m.grupa || "",
-    group: m.group || "",
-    status: m.status || "completed",
-    grade: m.grade,
-    lockReason: m.lockReason || "",
-    codQR: m.codQR || "",
-    labCode: m.labCode || "EXAM"
-  };
-  try { return "EXAM_SUMMARY:" + JSON.stringify(summary); } catch(e) { return "EXAM_SUMMARY:{}"; }
-}
-
-function parseExamSummary(text) {
-  const raw = String(text || "");
-  const idx = raw.indexOf("EXAM_SUMMARY:");
-  if (idx === -1) return {};
-  let jsonText = raw.slice(idx + "EXAM_SUMMARY:".length).trim();
-  const nextLine = jsonText.indexOf("\n");
-  if (nextLine >= 0) jsonText = jsonText.slice(0, nextLine).trim();
-  try { return JSON.parse(jsonText); } catch(e) { return {}; }
-}
-
 function parseExamMeta(text) {
   const raw = String(text || "");
   const idx = raw.indexOf("EXAM_META:");
@@ -3590,14 +3541,11 @@ function isExamResult(r) {
 }
 
 function enrichExamResult(r) {
-  const summary = parseExamSummary(r && r.moduleTitle);
-  const fullMeta = parseExamMeta(r && r.answersText);
-  const meta = {...summary, ...fullMeta};
+  const meta = parseExamMeta(r && r.answersText);
   const status = meta.status || (String(r?.module || "").includes("blocked") || String(r?.moduleTitle || "").includes("BLOCAT") ? "blocked" : "completed");
   return {
     ...(r || {}),
     examMeta: meta,
-    hasFullExamDetails: Array.isArray(meta.answers) && meta.answers.length > 0,
     matricol: meta.matricol || "",
     examYear: meta.yearLabel || formatStudentYear(meta.year || meta.an || r?.studyYear || r?.specialization || ""),
     seria: meta.seria || "",
@@ -3853,82 +3801,32 @@ async function cancelSessionRemote(token) {
 async function markSessionUsed(token, studentName) {
   // Just log — recorded via result entry
 }
-async function mapResultRow(r, includeDetails) {
-  const rawCreatedAt = String(r.created_at || "");
-  const safeCreatedAt = rawCreatedAt.match(/Z$|[+-]\d\d:\d\d$/) ? rawCreatedAt : rawCreatedAt + "Z";
-  const base = {
-    token: r.session_id || "",
-    name: r.name, group: r.grp, labId: r.lab_id, labCode: r.lab_code,
-    module: r.module, moduleTitle: r.module_title,
-    answersText: includeDetails ? (r.answers_text || "") : "",
-    score: r.score, total: r.total, pct: r.pct,
-    timestamp: new Date(safeCreatedAt).getTime(), timeUsed: r.time_used,
-    teacher: r.teacher || "",
-    semester: r.semester || "",
-    specialization: r.specialization || "",
-    studyYear: r.study_year || ""
-  };
-  return isExamResult(base) ? enrichExamResult(base) : base;
-}
-
-async function loadResultDetails(row) {
-  const token = row?.token || row?.examMeta?.codQR || "";
-  let query = "";
-  if (token) {
-    query = `results?session_id=eq.${encodeURIComponent(token)}&select=*&limit=1`;
-  } else if (row?.timestamp && row?.name) {
-    const iso = new Date(row.timestamp).toISOString();
-    query = `results?created_at=eq.${encodeURIComponent(iso)}&name=eq.${encodeURIComponent(row.name)}&select=*&limit=1`;
-  } else {
-    return row;
-  }
-  try {
-    const res = await sb(query);
-    if (!res.ok) {
-      console.error("loadResultDetails failed:", res.status, await res.text().catch(()=>""));
-      return row;
-    }
-    const data = await res.json();
-    if (!data || !data.length) return row;
-    return mapResultRow(data[0], true);
-  } catch(e) {
-    console.error("loadResultDetails error:", e);
-    return row;
-  }
-}
-
-async function loadResults(options = {}) {
-  // Fast summary fetch: by default it does NOT download answers_text / full exam tests.
-  // This keeps Results and Rezultate examen stable during live exams.
-  const full = options.full === true;
-  const PAGE = Number(options.pageSize || (full ? 100 : 250));
-  const maxPages = Number(options.maxPages || (full ? 20 : 1));
-  const sinceMs = Number(options.sinceMs || 0);
-  const selectCols = full
-    ? "*"
-    : "session_id,name,grp,lab_id,lab_code,module,module_title,score,total,pct,time_used,teacher,semester,specialization,created_at";
-  let all = [], from = 0, done = false, pages = 0;
-  const sinceFilter = sinceMs > 0 ? `&created_at=gte.${encodeURIComponent(new Date(sinceMs).toISOString())}` : "";
-  while (!done && pages < maxPages) {
-    let res;
-    try {
-      res = await sb(`results?select=${selectCols}${sinceFilter}&order=created_at.desc&limit=${PAGE}&offset=${from}`);
-    } catch(e) {
-      console.error("loadResults network error:", e);
-      return null;
-    }
-    if (!res.ok) {
-      const err = await res.text().catch(() => "");
-      console.error("loadResults failed:", res.status, err);
-      return null;
-    }
+async function loadResults() {
+  // Paginated fetch — loads ALL results
+  const PAGE = 1000;
+  let all = [], from = 0, done = false;
+  while (!done) {
+    const res = await sb(`results?select=*&order=created_at.desc&limit=${PAGE}&offset=${from}`);
+    if (!res.ok) break;
     const page = await res.json();
     all = all.concat(page);
-    pages += 1;
     if (page.length < PAGE) done = true;
     else from += PAGE;
   }
-  let mapped = await Promise.all(all.map(r => mapResultRow(r, full)));
+  let mapped = all.map(r => {
+    const base = {
+      name: r.name, group: r.grp, labId: r.lab_id, labCode: r.lab_code,
+      module: r.module, moduleTitle: r.module_title,
+      answersText: r.answers_text||"",
+      score: r.score, total: r.total, pct: r.pct,
+      timestamp: new Date(r.created_at).getTime(), timeUsed: r.time_used,
+      teacher: r.teacher || "",
+      semester: r.semester || "",
+      specialization: r.specialization || "",
+      studyYear: r.study_year || ""
+    };
+    return isExamResult(base) ? enrichExamResult(base) : base;
+  });
   try {
     const pending = JSON.parse(localStorage.getItem("igiena_pending_results") || "[]");
     const localRows = pending.map(r => isExamResult(r) ? enrichExamResult(r) : r);
@@ -3936,7 +3834,6 @@ async function loadResults(options = {}) {
   } catch(e) {}
   return mapped.filter(r => !(isExamResult(r) && Number(r.timestamp || 0) < EXAM_RESULTS_RESET_AT));
 }
-
 
 async function migrateLocalEditsToServer(quizMap, fisaMap) {
   const localQuiz = loadQuizEditsLocal();
@@ -4721,26 +4618,14 @@ function AdminPanel({onBack, teacherName}) {
   const [specFilter, setSpecFilter] = useState("all");
   const [nameFilter, setNameFilter] = useState("");
 
-  const refreshResults = useCallback((mode="recent") => {
-    const oneHourAgo = Date.now() - 60 * 60 * 1000;
-    const options = mode === "all"
-      ? { full:false, sinceMs:0, pageSize:250, maxPages:40 }
-      : { full:false, sinceMs:oneHourAgo, pageSize:250, maxPages:1 };
-    return loadResults(options).then(r => {
-      if (!Array.isArray(r)) {
-        console.warn("Rezultatele nu au putut fi reîncărcate. Păstrez lista existentă.");
-        return;
-      }
-      setResults(r.sort((a,b)=>b.timestamp-a.timestamp));
-    }).catch(e => {
-      console.error("refreshResults failed:", e);
-    });
+  const refreshResults = useCallback(() => {
+    return loadResults().then(r => setResults(r.sort((a,b)=>b.timestamp-a.timestamp)));
   }, []);
 
   useEffect(() => {
     refreshResults();
     if (tab !== "results" && tab !== "examResults" && tab !== "prezenta") return;
-    const id = setInterval(refreshResults, 30000);
+    const id = setInterval(refreshResults, 10000);
     return () => clearInterval(id);
   }, [tab, refreshResults]);
 
@@ -5257,7 +5142,6 @@ function ExamResultsPanel({results, onRefresh}) {
   const [search, setSearch] = React.useState("");
   const [dateFilter, setDateFilter] = React.useState("");
   const [selectedExamResult, setSelectedExamResult] = React.useState(null);
-  const [loadingDetailsKey, setLoadingDetailsKey] = React.useState("");
 
   const exams = (results || []).filter(isExamResult).map(enrichExamResult);
   const years = Array.from(new Set(exams.map(r => r.examYear).filter(Boolean))).sort();
@@ -5267,7 +5151,6 @@ function ExamResultsPanel({results, onRefresh}) {
     {id:"blocked", label:"Blocate"}
   ];
   const q = search.trim().toLowerCase();
-  const calcExamGradeLocal = (r) => r?.examStatus === "blocked" ? 0 : (Number(r?.examMeta?.grade) || Number(((Number(r?.score)||0) * 0.5).toFixed(1)) || calcGrade(Number(r?.pct)||0));
   const filtered = exams.filter(r =>
     (yearFilter === "all" || r.examYear === yearFilter) &&
     (statusFilter === "all" || r.examStatus === statusFilter) &&
@@ -5275,27 +5158,19 @@ function ExamResultsPanel({results, onRefresh}) {
     (!q || String(r.name||"").toLowerCase().includes(q) || String(r.matricol||"").toLowerCase().includes(q))
   );
   const completed = filtered.filter(r => r.examStatus !== "blocked");
-  const avgGrade = completed.length ? (completed.reduce((s,r)=>s + calcExamGradeLocal(r),0) / completed.length).toFixed(2) : "—";
+  const avgGrade = completed.length ? (completed.reduce((s,r)=>s + (Number(r.examMeta?.grade || 0) || calcGrade(Number(r.pct)||0)),0) / completed.length).toFixed(2) : "—";
 
   const getAnswerDetails = (r) => Array.isArray(r?.examMeta?.answers) ? r.examMeta.answers : [];
   const answerCell = (items) => (items || []).map(x => (x.letter ? x.letter + ". " : "") + (x.text || "")).join(" | ");
   const optionCell = (items) => (items || []).map(x => (x.letter ? x.letter + ". " : "") + (x.text || "")).join(" | ");
   const typeLabel = (t) => t === "multi" ? "răspuns multiplu" : "un singur răspuns";
-  const openExamDetails = async (r) => {
-    const key = r?.token || (r?.timestamp + "_" + r?.name);
-    setLoadingDetailsKey(key);
-    const full = await loadResultDetails(r);
-    setSelectedExamResult(enrichExamResult(full || r));
-    setLoadingDetailsKey("");
-  };
 
-  const exportExamDetailsCSV = async (rows, suffix="toate") => {
+  const exportExamDetailsCSV = (rows, suffix="toate") => {
     const header = ["An", "Seria", "Grupa", "Nr. matricol", "Nume", "Status", "Nota", "Scor", "Data", "Nr intrebare", "LP", "Tip", "Intrebare", "Variante", "Raspuns student", "Raspuns corect", "Corect"].map(csvCell).join(";");
     const out = [];
-    for (const original of (rows || [])) {
-      const r = getAnswerDetails(original).length ? original : await loadResultDetails(original);
+    (rows || []).forEach(r => {
       const details = getAnswerDetails(r);
-      const grade = calcExamGradeLocal(r);
+      const grade = r.examStatus === "blocked" ? 0 : (r.examMeta?.grade || calcGrade(Number(r.pct)||0));
       const base = [r.examYear||"", r.seria||"", r.grupaStudent||"", r.matricol||"", r.name||"", r.examStatus === "blocked" ? "TEST BLOCAT" : "Finalizat", grade, (r.score||0)+"/"+(r.total||0), new Date(r.timestamp).toLocaleString("ro-RO", { timeZone: "Europe/Bucharest" })];
       if (!details.length) {
         out.push([...base, "", "", "", "DETALII INDISPONIBILE - rezultat salvat inainte de activarea auditului pe intrebari", "", "", "", ""].map(csvCell).join(";"));
@@ -5305,7 +5180,7 @@ function ExamResultsPanel({results, onRefresh}) {
           d.nr || "", d.lp || "", typeLabel(d.type), d.question || "", optionCell(d.options), answerCell(d.selected), answerCell(d.correct), d.isCorrect ? "DA" : "NU"
         ].map(csvCell).join(";")));
       }
-    }
+    });
     const blob = new Blob(["\ufeff" + header + "\n" + out.join("\n")], {type:"text/csv;charset=utf-8"});
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -5324,7 +5199,7 @@ function ExamResultsPanel({results, onRefresh}) {
       r.matricol || "",
       r.name || "",
       r.examStatus === "blocked" ? "TEST BLOCAT" : "Finalizat",
-      calcExamGradeLocal(r),
+      r.examStatus === "blocked" ? "0" : (r.examMeta?.grade || calcGrade(Number(r.pct)||0)),
       (r.score || 0) + "/" + (r.total || 0),
       (r.pct || 0) + "%",
       (r.timeUsed || 0) + "s",
@@ -5348,16 +5223,12 @@ function ExamResultsPanel({results, onRefresh}) {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12,marginBottom:16,flexWrap:"wrap"}}>
         <div>
           <h3 style={{color:"#0a2a18",fontSize:18,margin:"0 0 4px"}}>📝 Rezultate examen</h3>
-          <p style={{color:"#4a9a6a",fontSize:13,margin:0}}>Se încarcă rapid doar lista sumară. Implicit: ultimele 60 de minute; testul complet se descarcă doar la Detalii.</p>
+          <p style={{color:"#4a9a6a",fontSize:13,margin:0}}>Listă separată pentru catalog, cu filtrare după Anul I / Anul II și export Excel/CSV.</p>
         </div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-          <button onClick={()=>onRefresh("recent")}
+          <button onClick={onRefresh}
             style={{padding:"10px 16px",background:"#EEF2FF",color:"#4338ca",border:"1px solid #c7d2fe",borderRadius:10,fontSize:13,fontWeight:800,cursor:"pointer"}}>
-            🔄 Ultima oră
-          </button>
-          <button onClick={()=>onRefresh("all")}
-            style={{padding:"10px 16px",background:"#fff",color:"#475569",border:"1px solid #cbd5e1",borderRadius:10,fontSize:13,fontWeight:800,cursor:"pointer"}}>
-            📋 Încarcă toate (sumar)
+            🔄 Reîmprospătează
           </button>
           <button onClick={exportExamCSV} disabled={filtered.length===0}
             style={{padding:"10px 16px",background:filtered.length?"#10b981":"#cbd5e1",color:"#fff",border:"none",borderRadius:10,fontSize:13,fontWeight:800,cursor:filtered.length?"pointer":"not-allowed"}}>
@@ -5414,7 +5285,8 @@ function ExamResultsPanel({results, onRefresh}) {
             {filtered.length===0 ? (
               <tr><td colSpan="10" style={{padding:24,textAlign:"center",color:"#94a3b8"}}>Nu există rezultate de examen pentru filtrele selectate.</td></tr>
             ) : filtered.map((r,i)=>{
-              const grade = calcExamGradeLocal(r);
+              const grade = r.examStatus === "blocked" ? 0 : (r.examMeta?.grade || calcGrade(Number(r.pct)||0));
+              const hasDetails = getAnswerDetails(r).length > 0;
               return (
                 <tr key={i} style={{borderBottom:"1px solid #f1f5f9"}}>
                   <td style={{padding:"9px 12px",fontWeight:700,color:"#1e293b"}}>{r.examYear || "—"}</td>
@@ -5431,10 +5303,10 @@ function ExamResultsPanel({results, onRefresh}) {
                   <td style={{padding:"9px 12px"}}>{r.score}/{r.total} · {r.pct}%</td>
                   <td style={{padding:"9px 12px",whiteSpace:"nowrap",color:"#64748b"}}>{new Date(r.timestamp).toLocaleString("ro-RO", { timeZone: "Europe/Bucharest" })}</td>
                   <td style={{padding:"9px 12px",whiteSpace:"nowrap"}}>
-                    <button onClick={()=>openExamDetails(r)}
-                      style={{padding:"6px 10px",background:"#EEF2FF",color:"#4338ca",border:"1px solid #c7d2fe",borderRadius:8,fontSize:11,fontWeight:800,cursor:"pointer"}}
-                      title="Descarcă și deschide testul complet doar pentru acest student">
-                      {loadingDetailsKey === (r.token || (r.timestamp + "_" + r.name)) ? "Se încarcă..." : "Detalii"}
+                    <button onClick={()=>setSelectedExamResult(r)}
+                      style={{padding:"6px 10px",background:hasDetails?"#EEF2FF":"#f1f5f9",color:hasDetails?"#4338ca":"#64748b",border:"1px solid #c7d2fe",borderRadius:8,fontSize:11,fontWeight:800,cursor:"pointer"}}
+                      title={hasDetails ? "Deschide testul complet cu răspunsurile studentului" : "Rezultat vechi: nu are detalii pe întrebări"}>
+                      Detalii
                     </button>
                   </td>
                 </tr>
@@ -5447,7 +5319,7 @@ function ExamResultsPanel({results, onRefresh}) {
       {selectedExamResult && (() => {
         const r = selectedExamResult;
         const details = getAnswerDetails(r);
-        const grade = calcExamGradeLocal(r);
+        const grade = r.examStatus === "blocked" ? 0 : (r.examMeta?.grade || calcGrade(Number(r.pct)||0));
         return (
           <div onClick={e=>{ if(e.target===e.currentTarget) setSelectedExamResult(null); }}
             style={{position:"fixed",top:0,left:0,right:0,bottom:0,background:"rgba(15,23,42,.55)",zIndex:2000,display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"20px 12px",overflowY:"auto"}}>
@@ -7477,21 +7349,12 @@ function ExamScreen({code, questions, session, student, onFinish}) {
       }, 900);
     };
     const onPageHide = () => registerViolation(lang==='en' ? 'Attempted to leave the exam page' : 'A încercat să părăsească pagina examenului');
-    const onKeyDown = (e) => {
-      const k = String(e.key || '').toLowerCase();
-      if (k === 'printscreen' || (e.ctrlKey && k === 'p') || (e.metaKey && e.shiftKey && (k === 's' || k === '3' || k === '4' || k === '5'))) {
-        try { e.preventDefault(); } catch(_) {}
-        registerViolation(lang==='en' ? 'Attempt to capture or print the exam screen' : 'Încercare de captură sau printare a ecranului de examen');
-        return false;
-      }
-    };
     
     document.addEventListener('copy', blockCopy);
     document.addEventListener('cut', blockCopy);
     document.addEventListener('paste', blockCopy);
     document.addEventListener('contextmenu', blockContext);
     document.addEventListener('visibilitychange', onVisibility);
-    document.addEventListener('keydown', onKeyDown, true);
     window.addEventListener('blur', onBlur);
     window.addEventListener('pagehide', onPageHide);
     
@@ -7502,7 +7365,6 @@ function ExamScreen({code, questions, session, student, onFinish}) {
       document.removeEventListener('paste', blockCopy);
       document.removeEventListener('contextmenu', blockContext);
       document.removeEventListener('visibilitychange', onVisibility);
-      document.removeEventListener('keydown', onKeyDown, true);
       window.removeEventListener('blur', onBlur);
       window.removeEventListener('pagehide', onPageHide);
     };
@@ -7549,16 +7411,10 @@ function ExamScreen({code, questions, session, student, onFinish}) {
   };
   
   const progress = ((cur) / questions.length) * 100;
-  const watermarkName = student?.name || (lang==='en' ? 'Exam student' : 'Student examen');
-  const watermarkId = student?.matricol || code || '';
-  const watermarkText = `${watermarkName} · ${watermarkId} · ${new Date().toLocaleString(lang==='en'?'en-GB':'ro-RO', { timeZone:'Europe/Bucharest' })}`;
   
   return (
-    <div className="exam-no-select" style={{minHeight:'100vh',background:'#F0F4FF',fontFamily:"'Inter','Segoe UI',system-ui,sans-serif",padding:'16px',WebkitUserSelect:'none',userSelect:'none',WebkitTouchCallout:'none',position:'relative'}}>
-      <div className="exam-watermark-layer" aria-hidden="true">
-        {Array.from({length:24}).map((_,i)=><div key={i} className="exam-watermark-item">{watermarkText}<br/>{lang==='en'?'SCREENSHOT PROTECTED':'CAPTURĂ IDENTIFICABILĂ'}</div>)}
-      </div>
-      <div style={{maxWidth:680,margin:'0 auto',position:'relative',zIndex:3}}>
+    <div className="exam-no-select" style={{minHeight:'100vh',background:'#F0F4FF',fontFamily:"'Inter','Segoe UI',system-ui,sans-serif",padding:'16px',WebkitUserSelect:'none',userSelect:'none',WebkitTouchCallout:'none'}}>
+      <div style={{maxWidth:680,margin:'0 auto'}}>
         
         {/* Warning modal */}
         {warningOpen && (
@@ -7597,7 +7453,7 @@ function ExamScreen({code, questions, session, student, onFinish}) {
         
         {/* Security notice */}
         <div style={{background:'#fff7ed',border:'1.5px solid #fed7aa',borderRadius:12,padding:'10px 14px',marginBottom:14,fontSize:12,color:'#9a3412',lineHeight:1.5,fontWeight:600}}>
-          🔒 {lang==='en'?'Do not leave the exam page. Switching applications, opening another tab, copying text, printing or long-pressing a question is recorded. Screenshots cannot be technically blocked in a mobile browser, therefore every screen is watermarked with your identity. At the second violation, the test is automatically blocked.':'Nu părăsiți pagina examenului. Schimbarea aplicației, deschiderea altui tab, copierea textului, printarea sau apăsarea lungă pe întrebare este înregistrată. Capturile de ecran nu pot fi blocate tehnic în browserul mobil, de aceea fiecare ecran este marcat cu identitatea studentului. La a doua abatere testul se blochează automat.'}
+          🔒 {lang==='en'?'Do not leave the exam page. Switching applications, opening another tab, copying text or long-pressing a question is recorded. At the second violation, the test is automatically blocked.':'Nu părăsiți pagina examenului. Schimbarea aplicației, deschiderea altui tab, copierea textului sau apăsarea lungă pe întrebare este înregistrată. La a doua abatere testul se blochează automat.'}
         </div>
         
         {/* Progress */}
@@ -8311,7 +8167,7 @@ function App() {
           labId: session?.labId || "exam",
           labCode: session?.labCode || "EXAM",
           module: r.status === "blocked" ? "exam_blocked" : "exam_completed",
-          moduleTitle: (r.status === "blocked" ? "Examen Igienă — TEST BLOCAT" : "Examen Igienă") + "\n" + buildExamSummary(examMeta),
+          moduleTitle: r.status === "blocked" ? "Examen Igienă — TEST BLOCAT" : "Examen Igienă",
           score: r.score,
           total: r.total,
           pct: r.pct,
