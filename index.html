@@ -4011,7 +4011,7 @@ const T_STRINGS = {
     login_student_sub:"Scanați codul QR primit de la profesor. Nu este nevoie de cont.",
     // Nav
     tab_qr:"Generează QR", tab_preview:"Previzualizare Quiz", tab_results:"Rezultate",
-    tab_prezentari:"Prezentări", tab_prezenta:"Prezență", tab_exam_preview:"🎓 Previzualizare Examen", tab_exam_edit:"✏️ Editor Examen", tab_fisiere:"Fișiere", tab_nomenclator:"Nomenclator",
+    tab_prezentari:"Prezentări", tab_prezenta:"Prezență", welcome_teacher:"Bun venit", admin_home_q:"Ce dorești să faci?", admin_home_sub:"Alege o secțiune pentru a începe.", card_qr:"Generează cod QR pentru quiz, fișă sau examen.", card_results:"Vezi și exportă răspunsurile studenților.", card_prezenta:"Tabel de prezență pe grupe și specializări.", card_exam:"Rezultate și configurare examene.", card_preview:"Verifică și editează întrebările.", card_files:"Materiale și laboratoare animate.", card_fisiere:"Încarcă și gestionează fișiere.", card_nomenclator:"Specializări, ani, grupe și module.", tab_exam_preview:"🎓 Previzualizare Examen", tab_exam_edit:"✏️ Editor Examen", tab_fisiere:"Fișiere", tab_nomenclator:"Nomenclator",
     tab_fise_preview:"Previzualizare Fișe de Grup", tab_fise_edit:"Editor Fișe",
     // QR
     qr_config:"⚙️ Configurare sesiune", qr_select_lab:"Selectează practica",
@@ -4196,7 +4196,7 @@ const T_STRINGS = {
     login_student_sub:"Scan the QR code received from your teacher. No account needed.",
     // Nav
     tab_qr:"Generate QR", tab_preview:"Quiz Preview", tab_results:"Results",
-    tab_prezentari:"Presentations", tab_prezenta:"Attendance", tab_exam_preview:"🎓 Exam Preview", tab_exam_edit:"✏️ Exam Editor", tab_fisiere:"Files", tab_nomenclator:"Nomenclature",
+    tab_prezentari:"Presentations", tab_prezenta:"Attendance", welcome_teacher:"Welcome", admin_home_q:"What would you like to do?", admin_home_sub:"Choose a section to get started.", card_qr:"Generate a QR code for quiz, worksheet or exam.", card_results:"View and export student responses.", card_prezenta:"Attendance table by group and specialization.", card_exam:"Exam results and configuration.", card_preview:"Review and edit questions.", card_files:"Materials and animated labs.", card_fisiere:"Upload and manage files.", card_nomenclator:"Specializations, years, groups and modules.", tab_exam_preview:"🎓 Exam Preview", tab_exam_edit:"✏️ Exam Editor", tab_fisiere:"Files", tab_nomenclator:"Nomenclature",
     tab_fise_preview:"Group Worksheet Preview", tab_fise_edit:"Worksheet Editor",
     // QR
     qr_config:"⚙️ Session setup", qr_select_lab:"Select practice",
@@ -4594,7 +4594,7 @@ function AdminLogin({onSuccess, onBack}) {
 function AdminPanel({onBack, teacherName}) {
   const T = useT();
   const lang = React.useContext(LangContext);
-  const [tab, setTab]             = useState("qr"); // qr | results
+  const [tab, setTab]             = useState("home"); // home | qr | results | ...
   const [selectedResult, setSelectedResult] = useState(null); // fisa detail modal
   const [selLab, setSelLab]       = useState(LABS.find(l=>l.ready) || LABS[0]);
   const [duration, setDuration]   = useState(5);
@@ -4717,58 +4717,102 @@ function AdminPanel({onBack, teacherName}) {
       <div style={{position:"fixed",width:600,height:600,borderRadius:"50%",background:"radial-gradient(circle,rgba(99,102,241,0.07),transparent 70%)",top:-200,left:-200,pointerEvents:"none",zIndex:0}}/>
       <div style={{position:"fixed",width:400,height:400,borderRadius:"50%",background:"radial-gradient(circle,rgba(139,92,246,0.05),transparent 70%)",bottom:-100,right:-100,pointerEvents:"none",zIndex:0}}/>
 
-      {/* ── TOP NAV ── */}
-      <div style={{position:"sticky",top:0,zIndex:100,background:"rgba(240,244,255,0.95)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(99,102,241,0.12)",padding:"0 12px"}}>
-        <div style={{maxWidth:1100,margin:"0 auto",display:"flex",alignItems:"center",height:52,gap:8}}>
+      {/* ── TOP HEADER ── */}
+      {(() => {
+        const SECTIONS = {
+          qr:          {icon:"📱", label:"QR & Sesiuni"},
+          preview:     {icon:"👁️", label:"Previzualizare quiz"},
+          results:     {icon:"📊", label:T("tab_results")||"Rezultate"},
+          examResults: {icon:"📝", label:"Rezultate examen"},
+          prezentari:  {icon:"📽️", label:T("tab_prezentari")||"Prezentări"},
+          prezenta:    {icon:"✅", label:T("tab_prezenta")||"Prezență"},
+          fisiere:     {icon:"📁", label:T("tab_fisiere")||"Fișiere"},
+          nomenclator: {icon:"🗂️", label:T("tab_nomenclator")||"Nomenclator"},
+        };
+        const cur = SECTIONS[tab];
+        return (
+        <div style={{position:"sticky",top:0,zIndex:100,background:"rgba(246,248,251,0.9)",backdropFilter:"blur(20px)",borderBottom:"1px solid #e8ecf4",padding:"0 16px"}}>
+          <div style={{maxWidth:1100,margin:"0 auto",display:"flex",alignItems:"center",height:60,gap:12}}>
 
-          {/* Logo */}
-          <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
-            <div style={{width:30,height:30,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>🧬</div>
-            <span style={{fontSize:13,fontWeight:800,color:"#1e1b4b",letterSpacing:"-.01em",whiteSpace:"nowrap"}} className="hide-mobile">Igienă · UMFST</span>
+            {/* Logo / back */}
+            {tab==="home" ? (
+              <div style={{display:"flex",alignItems:"center",gap:11,flexShrink:0}}>
+                <div style={{width:38,height:38,background:"linear-gradient(135deg,#0E8C86,#0A6B66)",borderRadius:11,display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 4px 12px rgba(14,140,134,0.28)",flexShrink:0}}>
+                  <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#fff" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12h3l2 5 4-12 2 7h5"/></svg>
+                </div>
+                <div>
+                  <div style={{fontSize:15,fontWeight:800,color:"#0B2B2E",letterSpacing:"-.01em",lineHeight:1.1}}>Igienă</div>
+                  <div style={{fontSize:9.5,fontWeight:700,letterSpacing:".13em",textTransform:"uppercase",color:"#0E8C86"}}>UMFST · Panou</div>
+                </div>
+              </div>
+            ) : (
+              <button onClick={()=>setTab("home")}
+                style={{display:"flex",alignItems:"center",gap:8,flexShrink:0,padding:"8px 14px",borderRadius:11,border:"1px solid #e3e8f0",background:"#fff",cursor:"pointer",fontSize:14,fontWeight:600,color:"#39415a",WebkitTapHighlightColor:"transparent"}}>
+                <span style={{fontSize:16}}>←</span>
+                <span className="hide-mobile">Panou</span>
+              </button>
+            )}
+
+            {/* Current section title (when inside) */}
+            {tab!=="home" && cur && (
+              <div style={{display:"flex",alignItems:"center",gap:9,flex:1,minWidth:0}}>
+                <span style={{fontSize:18}}>{cur.icon}</span>
+                <span style={{fontSize:16,fontWeight:800,color:"#0B2B2E",letterSpacing:"-.01em",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{cur.label}</span>
+              </div>
+            )}
+            {tab==="home" && <div style={{flex:1}}/>}
+
+            {/* User + logout */}
+            <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
+              {teacherName && (
+                <div style={{width:36,height:36,background:"linear-gradient(135deg,#0E8C86,#0A6B66)",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,color:"white",fontWeight:800,flexShrink:0}} title={teacherName}>
+                  {teacherName.split(" ").map(w=>w[0]).join("").slice(0,2)}
+                </div>
+              )}
+              <button onClick={onBack}
+                style={{padding:"8px 14px",background:"#fff",border:"1px solid #e3e8f0",borderRadius:11,color:"#5a6478",fontSize:13,cursor:"pointer",fontWeight:600,flexShrink:0,WebkitTapHighlightColor:"transparent",whiteSpace:"nowrap"}}>
+                {T("logout")||"Ieși"}
+              </button>
+            </div>
           </div>
+        </div>
+        );
+      })()}
 
-          {/* Nav tabs */}
-          <div className="admin-nav-tabs" style={{flex:1}}>
+      {/* ── HOME LAUNCHER ── */}
+      {tab==="home" && (
+        <div style={{maxWidth:900,margin:"0 auto",padding:"40px 20px 60px",zIndex:1,position:"relative"}}>
+          <div style={{textAlign:"center",marginBottom:32}}>
+            <div style={{fontSize:14,fontWeight:600,color:"#0E8C86",marginBottom:6}}>
+              {(T("welcome_teacher")||"Bun venit")}{teacherName?`, ${teacherName}`:""} 👋
+            </div>
+            <h2 style={{fontSize:27,fontWeight:800,letterSpacing:"-.025em",color:"#0B2B2E",margin:"0 0 6px"}}>{T("admin_home_q")||"Ce dorești să faci?"}</h2>
+            <p style={{color:"#67718a",fontSize:14.5,margin:0}}>{T("admin_home_sub")||"Alege o secțiune pentru a începe."}</p>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:16}}>
             {[
-              {id:"qr",          icon:"📱", label:"QR"},
-              {id:"preview",     icon:"👁️", label:"Quiz"},
-              {id:"results",     icon:"📊", label:T("tab_results")},
-              {id:"examResults", icon:"📝", label:"Rezultate examen"},
-              {id:"prezentari",  icon:"📽️", label:T("tab_prezentari")},
-              {id:"prezenta",    icon:"✅", label:T("tab_prezenta")||"Prezență"},
-              {id:"fisiere",     icon:"📁", label:T("tab_fisiere")},
-              {id:"nomenclator", icon:"🗂️", label:T("tab_nomenclator")},
-            ].map(t=>(
-              <button key={t.id} onClick={()=>setTab(t.id)}
-                style={{
-                  display:"flex",alignItems:"center",gap:5,flexShrink:0,
-                  padding:"5px 10px",borderRadius:8,border:"none",cursor:"pointer",
-                  fontSize:12,fontWeight:tab===t.id?700:400,
-                  background:tab===t.id?"#EEF2FF":"transparent",
-                  color:tab===t.id?"#6366f1":"#64748b",
-                  borderBottom:tab===t.id?"2px solid #6366f1":"2px solid transparent",
-                  WebkitTapHighlightColor:"transparent",whiteSpace:"nowrap",
-                }}>
-                <span style={{fontSize:15}}>{t.icon}</span>
-                <span style={{display:"none"}} className="show-desktop">{t.label}</span>
+              {id:"qr",          icon:"📱", ac:"#0E8C86", acw:"#E4F3F1", title:"QR & Sesiuni",        desc:T("card_qr")||"Generează cod QR pentru quiz, fișă sau examen."},
+              {id:"results",     icon:"📊", ac:"#3B82C4", acw:"#e5eff9", title:T("tab_results")||"Rezultate", desc:T("card_results")||"Vezi și exportă răspunsurile studenților."},
+              {id:"prezenta",    icon:"✅", ac:"#3FBF8F", acw:"#e7f7ef", title:T("tab_prezenta")||"Prezență", desc:T("card_prezenta")||"Tabel de prezență pe grupe și specializări."},
+              {id:"examResults", icon:"📝", ac:"#8B5CF6", acw:"#efeafe", title:"Examene",             desc:T("card_exam")||"Rezultate și configurare examene."},
+              {id:"preview",     icon:"👁️", ac:"#0891b2", acw:"#e0f2fe", title:"Previzualizare",      desc:T("card_preview")||"Verifică și editează întrebările."},
+              {id:"prezentari",  icon:"📽️", ac:"#E8A13A", acw:"#fef4e0", title:"Prezentări & Fișiere", desc:T("card_files")||"Materiale și laboratoare animate.", alt:"fisiere"},
+              {id:"fisiere",     icon:"📁", ac:"#e76a5b", acw:"#fdecea", title:T("tab_fisiere")||"Fișiere", desc:T("card_fisiere")||"Încarcă și gestionează fișiere."},
+              {id:"nomenclator", icon:"🗂️", ac:"#64748b", acw:"#eef1f6", title:T("tab_nomenclator")||"Nomenclator", desc:T("card_nomenclator")||"Specializări, ani, grupe și module."},
+            ].map(c=>(
+              <button key={c.id} onClick={()=>setTab(c.id)}
+                style={{background:"#fff",border:"1px solid #e8ecf4",borderRadius:18,padding:"24px 20px",cursor:"pointer",textAlign:"left",position:"relative",overflow:"hidden",transition:"all .18s",WebkitTapHighlightColor:"transparent",fontFamily:"inherit"}}
+                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 16px 36px rgba(20,30,60,0.11)";e.currentTarget.style.borderColor=c.ac;}}
+                onMouseLeave={e=>{e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="none";e.currentTarget.style.borderColor="#e8ecf4";}}>
+                <span style={{position:"absolute",top:24,right:22,color:"#cfd6e2",fontSize:18}}>→</span>
+                <div style={{width:48,height:48,borderRadius:14,display:"flex",alignItems:"center",justifyContent:"center",fontSize:23,background:c.acw,marginBottom:16}}>{c.icon}</div>
+                <div style={{fontSize:16,fontWeight:800,letterSpacing:"-.01em",color:"#0B2B2E",marginBottom:4}}>{c.title}</div>
+                <div style={{fontSize:13,color:"#67718a",lineHeight:1.45}}>{c.desc}</div>
               </button>
             ))}
           </div>
-
-          {/* User + logout */}
-          <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
-            {teacherName && (
-              <div style={{width:28,height:28,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:"white",fontWeight:700,flexShrink:0}} title={teacherName}>
-                {teacherName.split(" ").map(w=>w[0]).join("").slice(0,2)}
-              </div>
-            )}
-            <button onClick={onBack}
-              style={{padding:"6px 10px",background:"#fff",border:"1px solid #e0e7ff",borderRadius:8,color:"#64748b",fontSize:12,cursor:"pointer",fontWeight:500,flexShrink:0,WebkitTapHighlightColor:"transparent",whiteSpace:"nowrap"}}>
-              Ieși
-            </button>
-          </div>
         </div>
-      </div>
+      )}
 
       <div className="admin-content" style={{zIndex:1}}>
 
