@@ -3895,22 +3895,36 @@ function scoreTeamMission(f,state){
   return {breakdown,totalScore,maxScore,pct:Math.round(totalScore/maxScore*100)};
 }
 
-const ACTIVITY_SLOT_PLAN = [
-  {roleIndex:0,ro:"Coordonator · structurează problema",en:"Coordinator · structures the problem"},
-  {roleIndex:1,ro:"Medic A · efecte imediate",en:"Clinician A · immediate effects"},
-  {roleIndex:1,ro:"Medic B · grupuri vulnerabile",en:"Clinician B · vulnerable groups"},
-  {roleIndex:2,ro:"Analist A · valori și norme",en:"Analyst A · values and standards"},
-  {roleIndex:2,ro:"Analist B · metodă și unități",en:"Analyst B · method and units"},
-  {roleIndex:2,ro:"Analist C · surse de eroare",en:"Analyst C · sources of error"},
-  {roleIndex:3,ro:"Epidemiolog A · sursa riscului",en:"Epidemiologist A · risk source"},
-  {roleIndex:3,ro:"Epidemiolog B · cale și populație",en:"Epidemiologist B · route and population"},
-  {roleIndex:4,ro:"Prevenție A · măsuri imediate",en:"Prevention A · immediate measures"},
-  {roleIndex:4,ro:"Prevenție B · măsuri tehnice",en:"Prevention B · technical measures"},
-  {roleIndex:4,ro:"Prevenție C · monitorizare",en:"Prevention C · monitoring"},
-  {roleIndex:2,ro:"Auditor dovezi · date decisive",en:"Evidence auditor · decisive facts"},
-  {roleIndex:0,ro:"Auditor critic · verifică distractorii",en:"Critical auditor · checks distractors"},
-  {roleIndex:5,ro:"Raportor · sinteză în 60 de secunde",en:"Reporter · 60-second synthesis"},
-];
+const ACTIVITY_SLOT_LIBRARY = {
+  coordinator:{roleIndex:0,clueIndex:0,ro:"Coordonator · structurează problema",en:"Coordinator · structures the problem"},
+  medic_a:{roleIndex:1,clueIndex:1,ro:"Medic A · efecte imediate",en:"Clinician A · immediate effects"},
+  medic_b:{roleIndex:1,clueIndex:2,ro:"Medic B · grupuri vulnerabile",en:"Clinician B · vulnerable groups"},
+  analyst_a:{roleIndex:2,clueIndex:3,ro:"Analist A · valori și norme",en:"Analyst A · values and standards"},
+  analyst_b:{roleIndex:2,clueIndex:4,ro:"Analist B · metodă și unități",en:"Analyst B · method and units"},
+  analyst_c:{roleIndex:2,clueIndex:5,ro:"Analist C · surse de eroare",en:"Analyst C · sources of error"},
+  epidemiologist_a:{roleIndex:3,clueIndex:0,ro:"Epidemiolog A · sursa riscului",en:"Epidemiologist A · risk source"},
+  epidemiologist_b:{roleIndex:3,clueIndex:1,ro:"Epidemiolog B · cale și populație",en:"Epidemiologist B · route and population"},
+  prevention_a:{roleIndex:4,clueIndex:2,ro:"Prevenție A · măsuri imediate",en:"Prevention A · immediate measures"},
+  prevention_b:{roleIndex:4,clueIndex:3,ro:"Prevenție B · măsuri tehnice",en:"Prevention B · technical measures"},
+  prevention_c:{roleIndex:4,clueIndex:4,ro:"Prevenție C · monitorizare",en:"Prevention C · monitoring"},
+  evidence_auditor:{roleIndex:2,clueIndex:5,ro:"Auditor dovezi · date decisive",en:"Evidence auditor · decisive facts"},
+  critical_auditor:{roleIndex:0,clueIndex:4,ro:"Auditor critic · verifică distractorii",en:"Critical auditor · checks distractors"},
+  reporter:{roleIndex:5,clueIndex:0,ro:"Raportor · sinteză în 60 de secunde",en:"Reporter · 60-second synthesis"},
+};
+
+// Six students always cover all six professional role families. Additional
+// participants receive distinct sub-roles without making anyone double up.
+const ACTIVITY_REQUIRED_MIDDLE = ["medic_a","analyst_a","epidemiologist_a","prevention_a"];
+const ACTIVITY_ADDITIONAL_MIDDLE = ["evidence_auditor","medic_b","analyst_b","epidemiologist_b","prevention_b","analyst_c","prevention_c","critical_auditor"];
+const ACTIVITY_DISPLAY_ORDER = ["medic_a","medic_b","analyst_a","analyst_b","analyst_c","epidemiologist_a","epidemiologist_b","prevention_a","prevention_b","prevention_c","evidence_auditor","critical_auditor"];
+
+function activityPlanForSize(target){
+  const size=Math.min(14,Math.max(6,Number(target)||14));
+  const extraCount=size-6;
+  const middle=[...ACTIVITY_REQUIRED_MIDDLE,...ACTIVITY_ADDITIONAL_MIDDLE.slice(0,extraCount)]
+    .sort((a,b)=>ACTIVITY_DISPLAY_ORDER.indexOf(a)-ACTIVITY_DISPLAY_ORDER.indexOf(b));
+  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
+}
 
 function activityNameKey(value){
   return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
@@ -3922,13 +3936,14 @@ function activityPayload(row){
 
 function participantSlot(f,seat,target,lang){
   const safeSeat=Math.max(1,Number(seat)||1);
-  let plan=ACTIVITY_SLOT_PLAN[(safeSeat-1)%ACTIVITY_SLOT_PLAN.length];
-  if(safeSeat===1) plan=ACTIVITY_SLOT_PLAN[0];
-  if(safeSeat===Number(target)) plan=ACTIVITY_SLOT_PLAN[13];
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
   const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
   const qs=f.qs||[];
   const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
-  return {...role,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.length?(safeSeat-1)%qs.length:0};
+  return {...role,clue:privateClue,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.length?(safeSeat-1)%qs.length:0};
 }
 
 async function activityWriteEvent(kind,f,payload,session,student,moduleTitle){
@@ -4009,7 +4024,7 @@ function TeamMissionScreen({session,student,onBack}){
   const lang=React.useContext(LangContext);
   const L=(ro,en)=>lang==="en"?en:ro;
   const labId=session?.labId||"lp1a";
-  const teamSize=Math.min(20,Math.max(2,Number(session?.teamSize)||14));
+  const teamSize=Math.min(14,Math.max(6,Number(session?.teamSize)||14));
   const [f,setF]=React.useState(null);
   const [loaded,setLoaded]=React.useState(editsAreReady());
   const [room,setRoom]=React.useState({joins:[],members:[],seatByName:{},unlocked:false,synthesis:null,final:null});
@@ -4903,7 +4918,7 @@ const T_STRINGS = {
     qr_empty:"Configurează sesiunea și apasă „Generează cod QR\"",
     qr_used_by:"Utilizat de:", qr_students:"studenți",
     qr_not_ready:"⚠️ Practica nu are quiz activ",
-    qr_fisa_info:"📱 Fiecare student scanează codul pe propriul telefon și completează individual rolul primit. Contribuțiile rămân sigilate până când întreaga grupă termină sau profesorul deschide sinteza.",
+    qr_fisa_info:"📱 Fiecare student lucrează pe propriul telefon. Pentru 6–14 participanți, toate cele 6 roluri profesionale de bază sunt acoperite, iar studenții suplimentari primesc sarcini distincte.",
     qr_results_tab:"📊 Rezultate",
     // Results
     res_total:"Total răspunsuri", res_unique:"Studenți unici",
@@ -5088,7 +5103,7 @@ const T_STRINGS = {
     qr_empty:"Configure the session and press \"Generate QR code\"",
     qr_used_by:"Used by:", qr_students:"students",
     qr_not_ready:"⚠️ This practice has no active quiz",
-    qr_fisa_info:"📱 Every student scans the code on their own phone and completes the assigned role individually. Contributions stay sealed until the whole group finishes or the teacher opens synthesis.",
+    qr_fisa_info:"📱 Every student works on their own phone. With 6–14 participants, all six core professional roles are covered and additional students receive distinct tasks.",
     qr_results_tab:"📊 Results",
     // Results
     res_total:"Total responses", res_unique:"Unique students",
@@ -5711,16 +5726,16 @@ function AdminPanel({onBack, teacherName}) {
               </div>
               {activityType==="fisa" && <div style={{background:"#FFFBEB",border:"1px solid #fde68a",borderRadius:9,padding:"8px 14px",marginBottom:16,fontSize:12,color:"#92400e"}}>
                 📱 Fiecare student scanează același cod pe telefonul propriu, alege grupa 1–6 și primește automat un rol individual.<br/>
-                Răspunsurile rămân sigilate până când toți termină sau profesorul deschide sinteza.
+                Cele 6 roluri de bază sunt păstrate pentru orice grupă de 6–14 studenți; participanții suplimentari primesc sarcini distincte. Răspunsurile rămân sigilate până când toți termină.
               </div>}
 
               {activityType==="fisa" && <div style={{marginBottom:16}}>
                 <label style={S.label}>👥 Număr așteptat de studenți / grupă</label>
                 <div style={{display:"flex",gap:8,alignItems:"center"}}>
-                  {[10,12,14,16].map(n=><button key={n} onClick={()=>setTeamSize(n)} style={{flex:1,padding:"8px 4px",borderRadius:8,border:`1.5px solid ${teamSize===n?"#a5b4fc":"#e0e7ff"}`,background:teamSize===n?"#EEF2FF":"#F8FAFF",color:teamSize===n?"#6366f1":"#64748b",fontWeight:teamSize===n?700:500,cursor:"pointer"}}>{n}</button>)}
-                  <input type="number" min="2" max="20" value={teamSize} onChange={e=>setTeamSize(Math.min(20,Math.max(2,Number(e.target.value)||14)))} style={{...S.input,width:72,textAlign:"center",padding:"8px 4px"}} title="2–20"/>
+                  {[6,8,10,12,14].map(n=><button key={n} onClick={()=>setTeamSize(n)} style={{flex:1,padding:"8px 4px",borderRadius:8,border:`1.5px solid ${teamSize===n?"#a5b4fc":"#e0e7ff"}`,background:teamSize===n?"#EEF2FF":"#F8FAFF",color:teamSize===n?"#6366f1":"#64748b",fontWeight:teamSize===n?700:500,cursor:"pointer"}}>{n}</button>)}
+                  <input type="number" min="6" max="14" value={teamSize} onChange={e=>setTeamSize(Math.min(14,Math.max(6,Number(e.target.value)||14)))} style={{...S.input,width:72,textAlign:"center",padding:"8px 4px"}} title="6–14"/>
                 </div>
-                <p style={{fontSize:11,color:"#64748b",margin:"6px 0 0"}}>Sinteza se deschide automat după {teamSize} contribuții individuale.</p>
+                <p style={{fontSize:11,color:"#64748b",margin:"6px 0 0"}}>Selectați numărul prezent real (6–14). Sinteza se deschide automat după {teamSize} contribuții individuale.</p>
               </div>}
 
               <label style={S.label}>Durată valabilitate QR</label>
@@ -9030,7 +9045,7 @@ function App() {
   if (screen==="admin")       return <AdminPanel teacherName={teacherName} onBack={()=>setScreen("home")}/>;
   if (screen==="tokenJoin")   return (
     <TokenJoin token={pendingToken}
-      onValid={s=>{const sl=resolveSessionLang(s, lang); const rawSize=new URLSearchParams(window.location.search).get("teamSize"); const qrTeamSize=Math.min(20,Math.max(2,parseInt(rawSize||"14",10)||14)); setLang(sl); try{localStorage.setItem("igiena_lang",sl);}catch(e){} setSession({...s, lang:sl, teamSize:qrTeamSize}); setScreen(s?.labCode?.endsWith("-EXAM")?"exam_code":"studentLogin");}}
+      onValid={s=>{const sl=resolveSessionLang(s, lang); const rawSize=new URLSearchParams(window.location.search).get("teamSize"); const qrTeamSize=Math.min(14,Math.max(6,parseInt(rawSize||"14",10)||14)); setLang(sl); try{localStorage.setItem("igiena_lang",sl);}catch(e){} setSession({...s, lang:sl, teamSize:qrTeamSize}); setScreen(s?.labCode?.endsWith("-EXAM")?"exam_code":"studentLogin");}}
       onInvalid={msg=>{setErrMsg(msg);setScreen("error");}}/>
   );
   if (screen==="error")       return <ErrorScreen message={errMsg} onBack={()=>{setScreen("home");window.history.pushState({},"",window.location.pathname);}}/>;
