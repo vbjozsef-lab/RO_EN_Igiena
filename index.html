@@ -3948,7 +3948,17 @@ function TeamMissionScreen({session,student,onBack}){
   const groupMatch=String(student?.group||"").match(/\d+/);
   const recommended=groupMatch?Math.min(6,Math.max(1,parseInt(groupMatch[0],10)))-1:null;
   const budgetUsed=f?selectedActions.reduce((s,i)=>s+(f.actions[i]?.cost||0),0):0;
-  const progress=f?Math.round(((diagnosisChoice!==null?1:0)+(selectedEvidence.length>=2?1:0)+(selectedActions.length?1:0)+(Object.keys(answers).filter(i=>(answers[i]||"").trim().length>10).length>=2?1:0))/4*100):0;
+  // A completed answer means visible text was entered. The previous >10 character
+  // threshold was not shown to students and could block an otherwise completed board.
+  const answeredArgumentCount=Object.values(answers).filter(value=>String(value??"").trim().length>0).length;
+  const decisionRequirements=f?[
+    {key:"verdict",ok:diagnosisChoice!==null,label:L("verdictul","the verdict")},
+    {key:"evidence",ok:selectedEvidence.length>=2,label:L("minimum 2 dovezi","at least 2 evidence cards")},
+    {key:"actions",ok:selectedActions.length>=1,label:L("minimum o acțiune","at least one action")},
+    {key:"reasoning",ok:answeredArgumentCount>=2,label:L("minimum 2 răspunsuri motivate","at least 2 reasoned answers")},
+  ]:[];
+  const decisionReady=decisionRequirements.length>0&&decisionRequirements.every(item=>item.ok);
+  const progress=f?Math.round(decisionRequirements.filter(item=>item.ok).length/decisionRequirements.length*100):0;
   const toggleEvidence=(i)=>setSelectedEvidence(prev=>prev.includes(i)?prev.filter(x=>x!==i):(prev.length>=4?(alert(L("Alegeți maximum 4 dovezi.","Choose up to 4 evidence cards.")),prev):[...prev,i]));
   const toggleAction=(i)=>setSelectedActions(prev=>{
     if(prev.includes(i)) return prev.filter(x=>x!==i);
@@ -4040,30 +4050,30 @@ function TeamMissionScreen({session,student,onBack}){
       {header(f.title,L("Etapa 3/4 · tabla comună","Stage 3/4 · shared board"),()=>setPhase("case"))}
       <div style={{height:4,background:"#dbe7f1"}}><div style={{height:"100%",width:progress+"%",background:"linear-gradient(90deg,"+f.color+",#10b981)",transition:"width .25s"}}/></div>
       <div style={{maxWidth:880,margin:"0 auto",padding:"18px 14px"}}>
-        <section style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
+        <section data-mission-section="verdict" style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
           <div className="mission-kicker" style={{color:f.color,marginBottom:10}}>1 · {L("Verdict","Verdict")}</div><h3 style={{fontSize:16,color:"#0f2742",margin:"0 0 12px"}}>{f.diagnosis.prompt}</h3>
           <div className="mission-choice-grid" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8}}>{f.diagnosis.options.map((o,i)=><button key={i} onClick={()=>setDiagnosisChoice(i)} className="mission-tap" style={{padding:"13px 11px",borderRadius:12,border:"2px solid "+(diagnosisChoice===i?f.color:"#dbe7f1"),background:diagnosisChoice===i?f.color+"12":"#fff",fontSize:12,fontWeight:700,color:"#0f2742",cursor:"pointer",textAlign:"left"}}>{diagnosisChoice===i?"● ":"○ "}{o}</button>)}</div>
         </section>
 
-        <section style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
+        <section data-mission-section="evidence" style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
           <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}><div className="mission-kicker" style={{color:f.color}}>2 · {L("Dovezi","Evidence")}</div><span className="mission-chip" style={{background:"#f1f5f9",color:"#475569"}}>{selectedEvidence.length}/4</span></div>
           <p style={{fontSize:12,color:"#64748b",margin:"0 0 12px"}}>{L("Alegeți exact patru informații decisive. Două carduri sunt distractori.","Choose exactly four decisive facts. Two cards are distractors.")}</p>
           <div className="mission-choice-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>{f.evidence.map((e,i)=>{const on=selectedEvidence.includes(i);return <button key={i} onClick={()=>toggleEvidence(i)} className="mission-tap" style={{padding:"12px",borderRadius:12,border:"2px solid "+(on?f.color:"#dbe7f1"),background:on?f.color+"10":"#fff",fontSize:12,color:"#334155",lineHeight:1.5,textAlign:"left",cursor:"pointer"}}><strong style={{color:on?f.color:"#94a3b8"}}>{on?"✓":"+"}</strong> {e.text}</button>})}</div>
         </section>
 
-        <section style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
+        <section data-mission-section="actions" style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
           <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}><div className="mission-kicker" style={{color:f.color}}>3 · {L("Buget de intervenție","Intervention budget")}</div><span className="mission-chip" style={{background:budgetUsed>f.budget?"#fee2e2":"#ecfdf5",color:budgetUsed>f.budget?"#b91c1c":"#047857"}}>⚡ {budgetUsed}/{f.budget}</span></div>
           <p style={{fontSize:12,color:"#64748b",margin:"0 0 12px"}}>{L("Nu puteți face totul. Alegeți combinația cu impact maxim fără a depăși creditele.","You cannot do everything. Choose the highest-impact combination without exceeding credits.")}</p>
           <div className="mission-choice-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>{f.actions.map((a,i)=>{const on=selectedActions.includes(i);return <button key={i} onClick={()=>toggleAction(i)} className="mission-tap" style={{padding:12,borderRadius:12,border:"2px solid "+(on?"#059669":"#dbe7f1"),background:on?"#ecfdf5":"#fff",textAlign:"left",cursor:"pointer"}}><div style={{display:"flex",justifyContent:"space-between",gap:8}}><span style={{fontSize:12,fontWeight:750,color:"#0f2742",lineHeight:1.45}}>{a.text}</span><span className="mission-chip" style={{background:"#f1f5f9",color:"#475569",height:25,flexShrink:0}}>−{a.cost}</span></div></button>})}</div>
         </section>
 
-        <section style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
+        <section data-mission-section="reasoning" style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
           <div className="mission-kicker" style={{color:f.color,marginBottom:10}}>4 · {L("Raționamentul echipei","Team reasoning")}</div>
           {(f.qs||[]).map((q,i)=><div key={i} style={{marginBottom:12}}><div style={{fontSize:13,fontWeight:750,color:"#0f2742",lineHeight:1.45,marginBottom:6}}>{i+1}. {q.q}</div><textarea value={answers[i]||""} onChange={e=>setAnswers(x=>({...x,[i]:e.target.value}))} placeholder={L("Răspunsul echipei…","Team answer…")} style={{...FS.ta,minHeight:72}}/></div>)}
           <label style={{fontSize:12,fontWeight:750,color:"#475569"}}>{L("Încrederea echipei în verdict","Team confidence in the verdict")}: {confidence}%</label><input type="range" min="20" max="100" step="5" value={confidence} onChange={e=>setConfidence(Number(e.target.value))}/>
         </section>
       </div>
-      <div className="mission-no-print" style={{position:"fixed",bottom:0,left:0,right:0,padding:"10px 14px",background:"rgba(255,255,255,.96)",backdropFilter:"blur(10px)",borderTop:"1px solid #dbe7f1",display:"flex",alignItems:"center",gap:12,zIndex:20}}><div style={{flex:1}}><div style={{fontSize:12,fontWeight:800,color:progress===100?"#059669":"#475569"}}>{progress}% {L("tablou complet","board complete")}</div><div style={{fontSize:10,color:"#94a3b8"}}>{L("Verdict + dovezi + acțiuni + minimum 2 argumente","Verdict + evidence + actions + at least 2 arguments")}</div></div><button onClick={()=>{const written=Object.values(answers).filter(x=>(x||"").trim().length>10).length;if(diagnosisChoice===null||selectedEvidence.length<2||!selectedActions.length||written<2){alert(L("Completați verdictul, minimum 2 dovezi, o acțiune și 2 argumente.","Complete the verdict, at least 2 evidence cards, one action and 2 arguments."));return;}setPhase("pitch");}} style={{padding:"13px 18px",border:0,borderRadius:12,background:"#071a33",color:"white",fontWeight:800,cursor:"pointer"}}>{L("Pitch final →","Final pitch →")}</button></div>
+      <div className="mission-no-print" style={{position:"fixed",bottom:0,left:0,right:0,padding:"10px 14px",background:"rgba(255,255,255,.96)",backdropFilter:"blur(10px)",borderTop:"1px solid #dbe7f1",display:"flex",alignItems:"center",gap:12,zIndex:20}}><div style={{flex:1,minWidth:0}}><div aria-live="polite" style={{fontSize:12,fontWeight:800,color:decisionReady?"#059669":"#475569"}}>{progress}% {L("tablou complet","board complete")}</div><div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{L("Verdict","Verdict")} {diagnosisChoice!==null?"✓":"○"} · {L("Dovezi","Evidence")} {selectedEvidence.length}/2 {selectedEvidence.length>=2?"✓":""} · {L("Acțiuni","Actions")} {selectedActions.length}/1 {selectedActions.length>=1?"✓":""} · {L("Răspunsuri","Answers")} {answeredArgumentCount}/2 {answeredArgumentCount>=2?"✓":""}</div></div><button onClick={()=>{const missing=decisionRequirements.filter(item=>!item.ok);if(missing.length){alert(L("Mai trebuie completat: ","Still needed: ")+missing.map(item=>item.label).join(", ")+".");document.querySelector(`[data-mission-section="${missing[0].key}"]`)?.scrollIntoView({behavior:"smooth",block:"start"});return;}setPhase("pitch");}} style={{padding:"13px 18px",border:0,borderRadius:12,background:decisionReady?"#071a33":"#475569",color:"white",fontWeight:800,cursor:"pointer",flexShrink:0}}>{L("Pitch final →","Final pitch →")}</button></div>
     </div>
   );
 
