@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<title>Igiena – Platformă Interactivă · Misiuni de echipă</title>
+<title>Igiena – Platformă Interactivă · Activități de grup</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
@@ -1581,18 +1581,18 @@ var LP4B_QUESTIONS = {
 
 
 var FISE_LABS = {
-  lp1a: { title:"LP1A · Igiena Aerului",          available:true, grupe:6, desc:"6 misiuni: microclimat ATI, hartă termică, psihrometrie, mișcarea aerului, radiație calorică, confort" },
-  lp1b: { title:"LP1B · Pulberi & Gaze",          available:true, grupe:6, desc:"6 misiuni: fracții PM, gravimetrie, coniodispersiogramă, SidePak, latex, intoxicație CO" },
-  lp2a: { title:"LP2A · Fumat & Microbi",         available:true, grupe:6, desc:"6 misiuni: VBA, Fagerström, CO expirat, Koch, aspirare, control MRSA" },
-  lp2b: { title:"LP2B · Iluminat & Sonometrie",   available:true, grupe:6, desc:"6 misiuni: CL/CA, CIN, CU/CR, LED, sonometrie spital, plan anti-zgomot" },
-  lp3a: { title:"LP3A · Apa fizico-chimic",       available:true, grupe:6, desc:"6 misiuni: anchetă sanitară, pH/cloruri, fluor, ciclul azotului, teste NO₂/NO₃, methemoglobinemie" },
-  lp3b: { title:"LP3B · Apa microbiologie",       available:true, grupe:6, desc:"6 misiuni: indicatori fecali, calcul NTG, E. coli, clor rezidual, uzina de apă, focar hidric" },
-  lp4a: { title:"LP4A · Starea de nutriție",      available:true, grupe:6, desc:"6 misiuni: IMC/talie, copil, pliuri, BIA, chestionar 24 h, malnutriție spital" },
-  lp4b: { title:"LP4B · Produse Animale",         available:true, grupe:6, desc:"6 misiuni: prospețime carne, amoniac, conserve, ouă, frauda laptelui, pasteurizare" },
-  lp5a: { title:"LP5A · Produse Vegetale",        available:true, grupe:6, desc:"6 misiuni: aflatoxine, făină, pâine, nitrați, metanol, conserve vegetale" },
-  lp5b: { title:"LP5B · Bacterii și Paraziți",   available:true, grupe:6, desc:"6 misiuni: bacterioscopie, patogeni, Trichinella, teniaze, lapte, HACCP" },
-  lp6a: { title:"LP6A · Radiații Ionizante",      available:true, grupe:6, desc:"6 misiuni: unități, limite, dozimetrie, protecție, ALARA, audit de incident" },
-  lp6b: { title:"LP6B · Igiena Școlară",          available:true, grupe:6, desc:"6 misiuni: curbe zilnice, săptămânale, anuale, ore/clase, profil de risc, anti-bullying" },
+  lp1a: { title:"LP1A · Igiena Aerului",          available:true, grupe:6, desc:"6 activități: microclimat ATI, hartă termică, psihrometrie, mișcarea aerului, radiație calorică, confort" },
+  lp1b: { title:"LP1B · Pulberi & Gaze",          available:true, grupe:6, desc:"6 activități: fracții PM, gravimetrie, coniodispersiogramă, SidePak, latex, intoxicație CO" },
+  lp2a: { title:"LP2A · Fumat & Microbi",         available:true, grupe:6, desc:"6 activități: VBA, Fagerström, CO expirat, Koch, aspirare, control MRSA" },
+  lp2b: { title:"LP2B · Iluminat & Sonometrie",   available:true, grupe:6, desc:"6 activități: CL/CA, CIN, CU/CR, LED, sonometrie spital, plan anti-zgomot" },
+  lp3a: { title:"LP3A · Apa fizico-chimic",       available:true, grupe:6, desc:"6 activități: anchetă sanitară, pH/cloruri, fluor, ciclul azotului, teste NO₂/NO₃, methemoglobinemie" },
+  lp3b: { title:"LP3B · Apa microbiologie",       available:true, grupe:6, desc:"6 activități: indicatori fecali, calcul NTG, E. coli, clor rezidual, uzina de apă, focar hidric" },
+  lp4a: { title:"LP4A · Starea de nutriție",      available:true, grupe:6, desc:"6 activități: IMC/talie, copil, pliuri, BIA, chestionar 24 h, malnutriție spital" },
+  lp4b: { title:"LP4B · Produse Animale",         available:true, grupe:6, desc:"6 activități: prospețime carne, amoniac, conserve, ouă, frauda laptelui, pasteurizare" },
+  lp5a: { title:"LP5A · Produse Vegetale",        available:true, grupe:6, desc:"6 activități: aflatoxine, făină, pâine, nitrați, metanol, conserve vegetale" },
+  lp5b: { title:"LP5B · Bacterii și Paraziți",   available:true, grupe:6, desc:"6 activități: bacterioscopie, patogeni, Trichinella, teniaze, lapte, HACCP" },
+  lp6a: { title:"LP6A · Radiații Ionizante",      available:true, grupe:6, desc:"6 activități: unități, limite, dozimetrie, protecție, ALARA, audit de incident" },
+  lp6b: { title:"LP6B · Igiena Școlară",          available:true, grupe:6, desc:"6 activități: curbe zilnice, săptămânale, anuale, ore/clase, profil de risc, anti-bullying" },
 };
 
 
@@ -3840,8 +3840,8 @@ window.EXAM_BANK_RAW_EN = EXAM_BANK_RAW_EN;
 
 </script>
 <script type="text/babel">
-// Team Mission v1: one shared device, role-based evidence, budgeted decisions,
-// deterministic source-aligned scoring, 60-second pitch and printable report.
+// Activitate de grup v2: multi-device, individual sealed work, synchronized
+// reveal, coordinator synthesis, reporter pitch and one final team report.
 
 function normalizeTeamMission(f, lang){
   if (f?.mission) return f;
@@ -3856,7 +3856,7 @@ function normalizeTeamMission(f, lang){
     : [["🧭","Coordonator"],["🩺","Medic"],["🧪","Analist"],["🔎","Epidemiolog"],["🛡️","Prevenție"],["🎤","Raportor"]];
   const roles=roleNames.map((r,i)=>({id:"r"+i,icon:r[0],name:r[1],task:lang==="en"?"bring this clue to the team":"adu această informație echipei",clue:evidence[i].text}));
   return {...f,mission:true,
-    context:lang==="en"?"Work as a team. Separate decisive evidence from distractors, then spend the limited intervention budget.":"Lucrați în echipă. Separați dovezile decisive de distractori, apoi folosiți bugetul limitat de intervenție.",
+    context:lang==="en"?"Work individually first. Your answer remains sealed until the whole group is ready.":"Lucrați mai întâi individual. Răspunsul rămâne sigilat până când întregul grup este pregătit.",
     briefing:f.title,budget:6,evidence,roles,
     diagnosis:{prompt:lang==="en"?"Main team verdict":"Verdictul principal",options:[f.title,lang==="en"?"Insufficient data":"Date insuficiente",lang==="en"?"No hygiene risk":"Fără risc igienic"],correct:0},
     actions:[
@@ -3880,14 +3880,14 @@ function missionBestActionScore(actions,budget){
 
 function scoreTeamMission(f,state){
   const relevant=f.evidence.filter(e=>e.relevant).length;
-  const evidenceScore=Math.max(0,state.selectedEvidence.reduce((sum,i)=>sum+(f.evidence[i]?.relevant?1:-1),0));
-  const actionScore=state.selectedActions.reduce((sum,i)=>sum+(f.actions[i]?.score||0),0);
+  const evidenceScore=Math.max(0,(state.selectedEvidence||[]).reduce((sum,i)=>sum+(f.evidence[i]?.relevant?1:-1),0));
+  const actionScore=(state.selectedActions||[]).reduce((sum,i)=>sum+(f.actions[i]?.score||0),0);
   const actionMax=missionBestActionScore(f.actions,f.budget);
   const breakdown={
     diagnosis:{score:state.diagnosisChoice===f.diagnosis.correct?3:0,max:3},
     evidence:{score:evidenceScore,max:relevant},
     actions:{score:actionScore,max:actionMax},
-    roles:{score:Object.keys(state.roleSeen).length>=f.roles.length?1:0,max:1},
+    roles:{score:Object.keys(state.roleSeen||{}).length>=Math.min(6,f.roles.length)?1:0,max:1},
     pitch:{score:state.pitchStarted?1:0,max:1},
   };
   const totalScore=Object.values(breakdown).reduce((s,x)=>s+x.score,0);
@@ -3895,246 +3895,299 @@ function scoreTeamMission(f,state){
   return {breakdown,totalScore,maxScore,pct:Math.round(totalScore/maxScore*100)};
 }
 
+const ACTIVITY_SLOT_PLAN = [
+  {roleIndex:0,ro:"Coordonator · structurează problema",en:"Coordinator · structures the problem"},
+  {roleIndex:1,ro:"Medic A · efecte imediate",en:"Clinician A · immediate effects"},
+  {roleIndex:1,ro:"Medic B · grupuri vulnerabile",en:"Clinician B · vulnerable groups"},
+  {roleIndex:2,ro:"Analist A · valori și norme",en:"Analyst A · values and standards"},
+  {roleIndex:2,ro:"Analist B · metodă și unități",en:"Analyst B · method and units"},
+  {roleIndex:2,ro:"Analist C · surse de eroare",en:"Analyst C · sources of error"},
+  {roleIndex:3,ro:"Epidemiolog A · sursa riscului",en:"Epidemiologist A · risk source"},
+  {roleIndex:3,ro:"Epidemiolog B · cale și populație",en:"Epidemiologist B · route and population"},
+  {roleIndex:4,ro:"Prevenție A · măsuri imediate",en:"Prevention A · immediate measures"},
+  {roleIndex:4,ro:"Prevenție B · măsuri tehnice",en:"Prevention B · technical measures"},
+  {roleIndex:4,ro:"Prevenție C · monitorizare",en:"Prevention C · monitoring"},
+  {roleIndex:2,ro:"Auditor dovezi · date decisive",en:"Evidence auditor · decisive facts"},
+  {roleIndex:0,ro:"Auditor critic · verifică distractorii",en:"Critical auditor · checks distractors"},
+  {roleIndex:5,ro:"Raportor · sinteză în 60 de secunde",en:"Reporter · 60-second synthesis"},
+];
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  let plan=ACTIVITY_SLOT_PLAN[(safeSeat-1)%ACTIVITY_SLOT_PLAN.length];
+  if(safeSeat===1) plan=ACTIVITY_SLOT_PLAN[0];
+  if(safeSeat===Number(target)) plan=ACTIVITY_SLOT_PLAN[13];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
+  return {...role,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.length?(safeSeat-1)%qs.length:0};
+}
+
+async function activityWriteEvent(kind,f,payload,session,student,moduleTitle){
+  const body={
+    session_id:session?.token||null,
+    name:student?.name||"—",
+    grp:String(student?.group||""),
+    lab_id:session?.labId||"",
+    lab_code:session?.labCode||"",
+    module:"activity_"+kind+"_"+f.id,
+    module_title:moduleTitle||("Activitate sincronizată · "+f.title),
+    score:0,total:0,pct:0,time_used:0,
+    teacher:session?.teacher||"",semester:session?.semester||"",
+    specialization:student?.spec||"",
+    answers_text:JSON.stringify({version:2,kind,...payload}),
+  };
+  const res=await sb("results",{method:"POST",prefer:"return=minimal",body:JSON.stringify(body)});
+  if(!res.ok) throw new Error((await res.text().catch(()=>""))||("HTTP "+res.status));
+  return true;
+}
+
+async function loadActivityRoom(session,student,f,target=14){
+  const token=encodeURIComponent(session?.token||"");
+  const group=encodeURIComponent(String(student?.group||""));
+  // Before reveal, fetch metadata only. Teammates' answer text is not even
+  // transferred to the other phones while contributions are sealed.
+  const res=await sb(`results?session_id=eq.${token}&grp=eq.${group}&select=name,grp,module,module_title,created_at&order=created_at.asc`);
+  if(!res.ok) throw new Error("Room sync failed");
+  const metaRows=(await res.json()).filter(r=>String(r.module||"").startsWith("activity_")&&String(r.module||"").endsWith("_"+f.id));
+  const metaMembers=metaRows.filter(r=>r.module==="activity_member_"+f.id);
+  const metaMemberCount=new Set(metaMembers.map(r=>activityNameKey(r.name))).size;
+  const metaUnlocked=metaRows.some(r=>r.module==="activity_unlock_"+f.id);
+  let rows=metaRows;
+  if(metaUnlocked||metaMemberCount>=Number(target||14)){
+    const full=await sb(`results?session_id=eq.${token}&grp=eq.${group}&select=name,grp,module,module_title,answers_text,created_at&order=created_at.asc`);
+    if(!full.ok) throw new Error("Room reveal failed");
+    rows=(await full.json()).filter(r=>String(r.module||"").startsWith("activity_")&&String(r.module||"").endsWith("_"+f.id));
+  }
+  const joins=[],joinNames=new Set();
+  rows.filter(r=>r.module==="activity_join_"+f.id).forEach(r=>{const k=activityNameKey(r.name);if(k&&!joinNames.has(k)){joinNames.add(k);joins.push(r);}});
+  const latestBy=(kind)=>{
+    const map=new Map();
+    rows.filter(r=>r.module===`activity_${kind}_${f.id}`).forEach(r=>map.set(activityNameKey(r.name),r));
+    return [...map.values()];
+  };
+  const members=latestBy("member");
+  const synthesis=rows.filter(r=>r.module==="activity_synthesis_"+f.id).slice(-1)[0]||null;
+  const final=rows.filter(r=>r.module==="activity_final_"+f.id).slice(-1)[0]||null;
+  const unlocked=rows.some(r=>r.module==="activity_unlock_"+f.id);
+  const seatByName={};joins.forEach((r,i)=>{seatByName[activityNameKey(r.name)]=i+1;});
+  return {rows,joins,members,synthesis,final,unlocked,seatByName};
+}
+
+async function loadActivitySessionRooms(session){
+  const token=encodeURIComponent(session?.token||"");
+  if(!token) return {};
+  const res=await sb(`results?session_id=eq.${token}&select=name,grp,module,created_at`);
+  if(!res.ok) return {};
+  const rows=(await res.json()).filter(r=>String(r.module||"").startsWith("activity_"));
+  const out={};
+  rows.forEach(r=>{
+    const g=String(r.grp||"");if(!g)return;
+    if(!out[g]) out[g]={joins:new Set(),members:new Set(),unlocked:false,final:false};
+    if(String(r.module).startsWith("activity_join_")) out[g].joins.add(activityNameKey(r.name));
+    if(String(r.module).startsWith("activity_member_")) out[g].members.add(activityNameKey(r.name));
+    if(String(r.module).startsWith("activity_unlock_")) out[g].unlocked=true;
+    if(String(r.module).startsWith("activity_final_")) out[g].final=true;
+  });
+  Object.values(out).forEach(x=>{x.joinCount=x.joins.size;x.memberCount=x.members.size;delete x.joins;delete x.members;});
+  return out;
+}
+
+async function unlockTeamRoom(session,group,f,teacherName){
+  return activityWriteEvent("unlock",f,{manual:true,openedAt:Date.now()},session,{name:teacherName||"Profesor",group:String(group),spec:""},"Deblocare manuală · "+f.title);
+}
+
 function TeamMissionScreen({session,student,onBack}){
-  const T=useT();
   const lang=React.useContext(LangContext);
   const L=(ro,en)=>lang==="en"?en:ro;
   const labId=session?.labId||"lp1a";
-  const [allFise,setAllFise]=React.useState([]);
-  const [loaded,setLoaded]=React.useState(editsAreReady());
+  const teamSize=Math.min(20,Math.max(2,Number(session?.teamSize)||14));
   const [f,setF]=React.useState(null);
-  const [phase,setPhase]=React.useState("select");
-  const [roleSeen,setRoleSeen]=React.useState({});
+  const [loaded,setLoaded]=React.useState(editsAreReady());
+  const [room,setRoom]=React.useState({joins:[],members:[],seatByName:{},unlocked:false,synthesis:null,final:null});
+  const [seat,setSeat]=React.useState(null);
+  const [phase,setPhase]=React.useState("joining");
+  const [syncError,setSyncError]=React.useState("");
+  const [saving,setSaving]=React.useState(false);
+  const joinStarted=React.useRef(false);
+
+  const [privateVerdict,setPrivateVerdict]=React.useState(null);
+  const [clueClass,setClueClass]=React.useState("");
+  const [analysis,setAnalysis]=React.useState("");
+  const [impact,setImpact]=React.useState("");
+  const [proposal,setProposal]=React.useState("");
+
   const [diagnosisChoice,setDiagnosisChoice]=React.useState(null);
   const [selectedEvidence,setSelectedEvidence]=React.useState([]);
   const [selectedActions,setSelectedActions]=React.useState([]);
   const [answers,setAnswers]=React.useState({});
-  const [conclusions,setConclusions]=React.useState({});
   const [confidence,setConfidence]=React.useState(70);
   const [pitchSeconds,setPitchSeconds]=React.useState(60);
   const [pitchRunning,setPitchRunning]=React.useState(false);
   const [pitchStarted,setPitchStarted]=React.useState(false);
-  const [teamRating,setTeamRating]=React.useState({clarity:3,evidence:3,feasibility:3});
-  const [result,setResult]=React.useState(null);
 
   React.useEffect(()=>{
     const build=()=>{
       const rawBank=lang==="en"?FISE_DATA_EN:(window.TEAM_MISSIONS||FISE_DATA);
       const edits=loadFisaEdits();
       const base=(rawBank[labId]||rawBank.lp1a||[]).slice(0,6).map(x=>normalizeTeamMission(x,lang));
-      setAllFise(base.map(item=>{
-        const ov=edits[labId+":"+item.id];
-        return ov?{...item,...ov,caz:ov.caz||item.caz,qs:ov.qs||item.qs,conc:ov.conc||item.conc}:item;
-      }));
+      const groupNumber=Math.min(6,Math.max(1,parseInt(String(student?.group||"1").match(/\d+/)?.[0]||"1",10)));
+      const item=base[groupNumber-1]||base[0];
+      const ov=edits[labId+":"+item.id];
+      setF(ov?{...item,...ov,caz:ov.caz||item.caz,qs:ov.qs||item.qs,conc:ov.conc||item.conc}:item);
       setLoaded(true);
     };
     if(editsAreReady()) build(); else fetchAllEditsRemote().then(build).catch(build);
-  },[labId,lang]);
+  },[labId,lang,student?.group]);
+
+  const refreshRoom=React.useCallback(async()=>{
+    if(!f)return;
+    try{
+      const next=await loadActivityRoom(session,student,f,teamSize);
+      setRoom(next);setSyncError("");
+      const mySeat=next.seatByName[activityNameKey(student?.name)]||null;
+      if(mySeat)setSeat(mySeat);
+      const own=next.members.find(r=>activityNameKey(r.name)===activityNameKey(student?.name));
+      const revealed=next.unlocked||next.members.length>=teamSize;
+      if(next.final)setPhase("done");
+      else if(revealed)setPhase("synthesis");
+      else if(own)setPhase("waiting");
+      else if(mySeat)setPhase("private");
+    }catch(e){setSyncError(L("Conexiunea cu sala de grup a fost întreruptă. Reîncercăm automat…","Group room connection was interrupted. Retrying automatically…"));}
+  },[f,session?.token,student?.group,student?.name,teamSize,lang]);
 
   React.useEffect(()=>{
-    if(!pitchRunning) return;
-    const timer=setInterval(()=>setPitchSeconds(s=>{
-      if(s<=1){setPitchRunning(false);return 0;}
-      return s-1;
-    }),1000);
-    return ()=>clearInterval(timer);
+    if(!f||joinStarted.current)return;
+    joinStarted.current=true;
+    (async()=>{
+      try{
+        const current=await loadActivityRoom(session,student,f,teamSize);
+        if(!current.seatByName[activityNameKey(student?.name)]){
+          await activityWriteEvent("join",f,{joinedAt:Date.now()},session,student,"Participant conectat · "+f.title);
+        }
+        await refreshRoom();
+      }catch(e){joinStarted.current=false;setSyncError(L("Nu s-a putut intra în sala de grup. Verificați internetul și reîncercați.","Could not enter the group room. Check the internet connection and retry."));}
+    })();
+  },[f]);
+
+  React.useEffect(()=>{
+    if(!f)return;
+    const id=setInterval(refreshRoom,3000);
+    return()=>clearInterval(id);
+  },[f,refreshRoom]);
+
+  React.useEffect(()=>{
+    if(!pitchRunning)return;
+    const id=setInterval(()=>setPitchSeconds(s=>{if(s<=1){setPitchRunning(false);return 0;}return s-1;}),1000);
+    return()=>clearInterval(id);
   },[pitchRunning]);
 
-  const resetMission=(mission)=>{
-    setF(mission);setRoleSeen({});setDiagnosisChoice(null);setSelectedEvidence([]);setSelectedActions([]);
-    setAnswers({});setConclusions({});setConfidence(70);setPitchSeconds(60);setPitchRunning(false);setPitchStarted(false);
-    setTeamRating({clarity:3,evidence:3,feasibility:3});setResult(null);setPhase("roles");
-  };
-  const groupMatch=String(student?.group||"").match(/\d+/);
-  const recommended=groupMatch?Math.min(6,Math.max(1,parseInt(groupMatch[0],10)))-1:null;
-  const budgetUsed=f?selectedActions.reduce((s,i)=>s+(f.actions[i]?.cost||0),0):0;
-  // A completed answer means visible text was entered. The previous >10 character
-  // threshold was not shown to students and could block an otherwise completed board.
-  const answeredArgumentCount=Object.values(answers).filter(value=>String(value??"").trim().length>0).length;
-  const decisionRequirements=f?[
-    {key:"verdict",ok:diagnosisChoice!==null,label:L("verdictul","the verdict")},
-    {key:"evidence",ok:selectedEvidence.length>=2,label:L("minimum 2 dovezi","at least 2 evidence cards")},
-    {key:"actions",ok:selectedActions.length>=1,label:L("minimum o acțiune","at least one action")},
-    {key:"reasoning",ok:answeredArgumentCount>=2,label:L("minimum 2 răspunsuri motivate","at least 2 reasoned answers")},
-  ]:[];
-  const decisionReady=decisionRequirements.length>0&&decisionRequirements.every(item=>item.ok);
-  const progress=f?Math.round(decisionRequirements.filter(item=>item.ok).length/decisionRequirements.length*100):0;
-  const toggleEvidence=(i)=>setSelectedEvidence(prev=>prev.includes(i)?prev.filter(x=>x!==i):(prev.length>=4?(alert(L("Alegeți maximum 4 dovezi.","Choose up to 4 evidence cards.")),prev):[...prev,i]));
-  const toggleAction=(i)=>setSelectedActions(prev=>{
-    if(prev.includes(i)) return prev.filter(x=>x!==i);
-    const nextCost=budgetUsed+(f.actions[i]?.cost||0);
-    if(nextCost>f.budget){alert(L("Bugetul misiunii ar fi depășit.","Mission budget would be exceeded."));return prev;}
-    return [...prev,i];
-  });
+  if(!loaded||!f) return <div style={{minHeight:"100vh",background:"#071a33",display:"grid",placeItems:"center",color:"#a9c8e8",padding:20,textAlign:"center"}}>{L("Se pregătește activitatea sincronizată…","Preparing the synchronized activity…")}</div>;
 
-  const header=(title,sub,back)=> (
-    <div style={{...FS.hdr,background:"linear-gradient(135deg,#071a33,#123c62)"}} className="mission-no-print">
-      <span style={{fontSize:24}}>{f?.emoji||"🧭"}</span>
-      <div style={{flex:1,minWidth:0}}><div style={{fontWeight:800,fontSize:15,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{title}</div><div style={{fontSize:11,color:"#a9c8e8"}}>{sub}</div></div>
-      {back&&<button onClick={back} style={{padding:"7px 11px",background:"rgba(255,255,255,.12)",border:"1px solid rgba(255,255,255,.24)",borderRadius:9,color:"white",fontSize:12,cursor:"pointer"}}>← {L("Înapoi","Back")}</button>}
-    </div>
-  );
+  const slot=participantSlot(f,seat||1,teamSize,lang);
+  const memberCards=room.members.map(r=>({row:r,payload:activityPayload(r),seat:room.seatByName[activityNameKey(r.name)]||activityPayload(r).seat||0})).sort((a,b)=>a.seat-b.seat);
+  const synthesis=activityPayload(room.synthesis);
+  const finalData=activityPayload(room.final);
+  const currentMaxSeat=Math.max(1,...room.joins.map(r=>room.seatByName[activityNameKey(r.name)]||0));
+  const isCoordinator=seat===1;
+  const isReporter=seat===currentMaxSeat;
+  const budgetUsed=selectedActions.reduce((s,i)=>s+(f.actions[i]?.cost||0),0);
 
-  if(!loaded) return <div style={{minHeight:"100vh",background:"#071a33",display:"grid",placeItems:"center",color:"#a9c8e8"}}>{L("Se pregătesc misiunile…","Preparing missions…")}</div>;
+  const header=(sub)=><div style={{...FS.hdr,background:"linear-gradient(135deg,#071a33,#123c62)"}} className="mission-no-print"><span style={{fontSize:24}}>{f.emoji}</span><div style={{flex:1,minWidth:0}}><div style={{fontWeight:800,fontSize:15,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{f.title}</div><div style={{fontSize:11,color:"#a9c8e8"}}>{sub}</div></div><span className="mission-chip" style={{background:"rgba(255,255,255,.14)",color:"white"}}>{L("Grupa","Group")} {student?.group}</span></div>;
+  const syncBanner=syncError?<div style={{background:"#fff7ed",border:"1px solid #fdba74",color:"#9a3412",padding:"10px 12px",borderRadius:12,fontSize:12,marginBottom:12}}>⚠️ {syncError} <button onClick={refreshRoom} style={{marginLeft:8,border:0,background:"#ea580c",color:"white",borderRadius:7,padding:"4px 8px",cursor:"pointer"}}>{L("Reîncearcă","Retry")}</button></div>:null;
 
-  if(phase==="select") return (
-    <div style={{...FS.page,background:"radial-gradient(circle at 10% 0%,#e0f2fe 0,transparent 34%),#f8fafc"}}>
-      {header(L("Misiuni de echipă","Team missions"),(session?.labCode||"").replace("-FISA","")+" · "+(student?.name||""),null)}
-      <div style={{maxWidth:880,margin:"0 auto",padding:"28px 16px 60px"}}>
-        <div style={{background:"#071a33",color:"white",borderRadius:20,padding:"22px 22px",marginBottom:20,boxShadow:"0 16px 40px rgba(7,26,51,.16)"}}>
-          <div className="mission-kicker" style={{color:"#67e8f9",marginBottom:8}}>{L("NOU · laborator decizional","NEW · decision lab")}</div>
-          <h2 style={{fontSize:24,margin:"0 0 8px",lineHeight:1.2}}>{L("6 dosare. Roluri diferite. Un singur verdict.","6 cases. Different roles. One verdict.")}</h2>
-          <p style={{fontSize:13,color:"#c5d9ee",lineHeight:1.7,margin:0}}>{L("Alegeți misiunea grupei. Fiecare rol primește alt indiciu; apoi echipa selectează dovezile, cheltuie un buget limitat și susține o concluzie în 60 de secunde.","Choose your group mission. Each role receives a different clue; then the team selects evidence, spends a limited budget and delivers a 60-second conclusion.")}</p>
-        </div>
-        <div className="fisa-grid-3" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
-          {allFise.map((m,i)=>{
-            const rec=recommended===i;
-            return <button key={m.id} className="mission-tap" onClick={()=>resetMission(m)} style={{position:"relative",minHeight:160,padding:"18px 14px",borderRadius:18,border:"2px solid "+(rec?m.color:m.color+"33"),background:"linear-gradient(160deg,#fff,"+m.color+"12)",cursor:"pointer",textAlign:"left",display:"flex",flexDirection:"column",gap:8}}>
-              {rec&&<span className="mission-chip" style={{position:"absolute",top:10,right:10,background:m.color,color:"#fff"}}>{L("Grupa ta","Your group")}</span>}
-              <span style={{fontSize:34}}>{m.emoji}</span>
-              <span className="mission-kicker" style={{color:m.color}}>{L("Misiunea","Mission")} {i+1}</span>
-              <span style={{fontSize:14,fontWeight:800,color:"#0f2742",lineHeight:1.35}}>{m.title}</span>
-              <span style={{fontSize:11,color:"#64748b",marginTop:"auto"}}>6 {L("roluri","roles")} · {m.budget} {L("credite","credits")} · 60 s</span>
-            </button>;
-          })}
-        </div>
-      </div>
-    </div>
-  );
+  if(phase==="joining") return <div style={{...FS.page,background:"#f4f8fb"}}>{header(L("Conectare la sala privată","Connecting to the private room"))}<div style={{maxWidth:560,margin:"0 auto",padding:"40px 16px",textAlign:"center"}}>{syncBanner}<div className="spin" style={{fontSize:46}}>⏳</div><h2 style={{color:"#0f2742"}}>{L("Se atribuie rolul individual…","Assigning your individual role…")}</h2><p style={{color:"#64748b",fontSize:13}}>{L("Fiecare student lucrează pe telefonul propriu. Răspunsurile celorlalți rămân ascunse.","Each student works on their own phone. Other answers remain hidden.")}</p></div></div>;
 
-  if(phase==="roles"){
-    const seen=Object.keys(roleSeen).length;
-    return <div style={{...FS.page,background:"#f4f8fb"}}>
-      {header(f.title,L("Distribuiți rolurile și pasați telefonul","Assign roles and pass the phone"),()=>setPhase("select"))}
-      <div style={{maxWidth:860,margin:"0 auto",padding:"22px 16px 60px"}}>
-        <div style={{background:"#fff",borderRadius:18,padding:20,border:"1px solid #dbe7f1",marginBottom:16}}>
-          <span className="mission-chip" style={{background:"#e0f2fe",color:"#075985",marginBottom:10}}>🔒 {L("Indiciu privat pe rol","Private clue by role")}</span>
-          <p style={{margin:0,fontSize:14,color:"#334155",lineHeight:1.7}}>{f.context}</p>
-          <p style={{margin:"10px 0 0",fontSize:12,color:"#64748b"}}>{L("În echipe mici, o persoană poate prelua mai multe roluri. Fiecare card trebuie deschis înainte de dosarul comun.","In small teams, one person may take more than one role. Open every card before the shared case.")}</p>
-        </div>
-        <div className="mission-role-grid" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
-          {f.roles.map((r,i)=>{
-            const open=!!roleSeen[r.id];
-            return <button key={r.id} className="mission-tap" onClick={()=>setRoleSeen(x=>({...x,[r.id]:true}))} style={{minHeight:170,padding:16,borderRadius:16,border:"2px solid "+(open?f.color:"#dbe7f1"),background:open?f.color+"10":"#fff",cursor:"pointer",textAlign:"left"}}>
-              <div style={{display:"flex",alignItems:"center",gap:9,marginBottom:10}}><span style={{fontSize:26}}>{r.icon}</span><div><div style={{fontWeight:800,color:"#0f2742",fontSize:14}}>{r.name}</div><div style={{fontSize:10,color:"#64748b"}}>{r.task}</div></div></div>
-              {open?<div style={{fontSize:12,color:"#334155",lineHeight:1.55,background:"#fff",padding:10,borderRadius:10,border:"1px dashed "+f.color}}>🔎 {r.clue}</div>:<div style={{display:"grid",placeItems:"center",height:66,color:"#94a3b8",fontSize:12}}>Atinge pentru indiciu</div>}
-            </button>;
-          })}
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:12,marginTop:18}}><div style={{flex:1}}><div style={{fontSize:12,fontWeight:800,color:seen===f.roles.length?"#059669":"#64748b"}}>{seen}/{f.roles.length} {L("roluri activate","roles activated")}</div><div style={{height:7,background:"#e2e8f0",borderRadius:9,marginTop:6,overflow:"hidden"}}><div style={{width:(seen/f.roles.length*100)+"%",height:"100%",background:f.color,transition:"width .25s"}}/></div></div>
-          <button disabled={seen<f.roles.length} onClick={()=>setPhase("case")} style={{padding:"13px 18px",border:0,borderRadius:12,background:seen===f.roles.length?f.color:"#cbd5e1",color:"white",fontWeight:800,cursor:seen===f.roles.length?"pointer":"not-allowed"}}>{L("Dosarul comun →","Shared case →")}</button>
-        </div>
-      </div>
-    </div>;
+  if(phase==="private"){
+    const missing=[];
+    if(privateVerdict===null)missing.push(L("verdictul provizoriu","provisional verdict"));
+    if(!clueClass)missing.push(L("clasificarea indiciului","clue classification"));
+    if(!analysis.trim())missing.push(L("analiza profesională","professional analysis"));
+    if(!impact.trim())missing.push(L("impactul asupra sănătății","health impact"));
+    if(!proposal.trim())missing.push(L("propunerea de intervenție","intervention proposal"));
+    const submit=async()=>{
+      if(missing.length){alert(L("Mai trebuie completat: ","Still needed: ")+missing.join(", ")+".");return;}
+      setSaving(true);
+      try{
+        await activityWriteEvent("member",f,{seat,roleId:slot.id,roleName:slot.name,roleIcon:slot.icon,focus:slot.focus,clue:slot.clue,question:slot.question,verdictChoice:privateVerdict,clueClass,analysis:analysis.trim(),impact:impact.trim(),proposal:proposal.trim(),submittedAt:Date.now()},session,student,slot.focus);
+        await refreshRoom();setPhase("waiting");
+      }catch(e){setSyncError(L("Răspunsul nu a fost trimis. Verificați conexiunea.","The answer was not submitted. Check the connection."));}
+      setSaving(false);
+    };
+    return <div style={{...FS.page,background:"radial-gradient(circle at 10% 0%,"+f.color+"18,transparent 32%),#f4f8fb",paddingBottom:40}}>{header(L("Etapa privată · telefon personal","Private stage · personal phone"))}<div style={{maxWidth:760,margin:"0 auto",padding:"18px 14px"}}>{syncBanner}<div style={{background:"#071a33",color:"white",borderRadius:18,padding:18,marginBottom:14}}><div className="mission-kicker" style={{color:"#67e8f9"}}>{L("Locul","Seat")} {seat}/{teamSize} · {slot.focus}</div><h2 style={{margin:"8px 0",fontSize:21}}>{slot.icon} {slot.name}</h2><p style={{margin:0,color:"#c5d9ee",fontSize:13,lineHeight:1.6}}>{slot.task}</p></div>
+      <section style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}><div className="mission-kicker" style={{color:f.color,marginBottom:8}}>{L("Dosarul comun","Shared case")}</div>{(f.caz||[]).map((item,i)=><div key={i} style={{display:"grid",gridTemplateColumns:"minmax(110px,1fr) 1.4fr",gap:10,padding:"8px 10px",background:i%2?"#fff":"#f8fafc",borderRadius:8}}><span style={{fontSize:12,color:"#64748b"}}>{item.l}</span><strong style={{fontSize:12,color:"#0f2742"}}>{item.v}</strong></div>)}</section>
+      <section style={{background:"#ecfeff",borderRadius:18,padding:18,border:"1px solid #a5f3fc",marginBottom:14}}><div className="mission-kicker" style={{color:"#0e7490",marginBottom:8}}>🔒 {L("Indiciul tău privat","Your private clue")}</div><p style={{fontSize:15,fontWeight:800,color:"#155e75",lineHeight:1.55,margin:0}}>{slot.clue}</p><p style={{fontSize:11,color:"#0e7490",margin:"10px 0 0"}}>{L("Nu vedeți încă indiciile și răspunsurile colegilor.","You cannot see colleagues' clues or answers yet.")}</p></section>
+      <section style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1"}}><div className="mission-kicker" style={{color:f.color,marginBottom:12}}>{L("Contribuția ta individuală","Your individual contribution")}</div><label style={FS.label}>{f.diagnosis.prompt}</label><div style={{display:"grid",gap:7,margin:"7px 0 14px"}}>{f.diagnosis.options.map((o,i)=><button key={i} onClick={()=>setPrivateVerdict(i)} style={{padding:11,borderRadius:10,border:"2px solid "+(privateVerdict===i?f.color:"#dbe7f1"),background:privateVerdict===i?f.color+"12":"#fff",textAlign:"left",cursor:"pointer",fontSize:12,fontWeight:700}}>{privateVerdict===i?"● ":"○ "}{o}</button>)}</div>
+        <label style={FS.label}>{L("Cum clasificați indiciul primit?","How do you classify your clue?")}</label><div style={{display:"flex",gap:6,flexWrap:"wrap",margin:"7px 0 14px"}}>{[["decisive",L("Decisiv","Decisive")],["support",L("De sprijin","Supporting")],["distractor",L("Distractor","Distractor")]].map(([v,label])=><button key={v} onClick={()=>setClueClass(v)} style={{padding:"8px 11px",borderRadius:9,border:"1px solid "+(clueClass===v?f.color:"#cbd5e1"),background:clueClass===v?f.color:"#fff",color:clueClass===v?"white":"#475569",cursor:"pointer",fontWeight:700}}>{label}</button>)}</div>
+        <label style={FS.label}>{slot.question}</label><textarea value={analysis} onChange={e=>setAnalysis(e.target.value)} placeholder={L("Analiza dumneavoastră…","Your analysis…")} style={{...FS.ta,minHeight:84,margin:"6px 0 12px"}}/>
+        <label style={FS.label}>{L("Ce efect sau risc pentru sănătate identificați?","What health effect or risk do you identify?")}</label><textarea value={impact} onChange={e=>setImpact(e.target.value)} placeholder={L("Efectul asupra sănătății…","Health impact…")} style={{...FS.ta,minHeight:72,margin:"6px 0 12px"}}/>
+        <label style={FS.label}>{L("Ce măsură concretă propuneți?","What concrete measure do you propose?")}</label><textarea value={proposal} onChange={e=>setProposal(e.target.value)} placeholder={L("Propunerea dumneavoastră…","Your proposal…")} style={{...FS.ta,minHeight:72,margin:"6px 0 14px"}}/>
+        <div style={{background:"#f8fafc",padding:10,borderRadius:10,fontSize:11,color:"#64748b",marginBottom:12}}>🔐 {L("După trimitere, răspunsul nu este afișat colegilor până la deschiderea sintezei.","After submission, your answer is not shown to colleagues until synthesis opens.")}</div><button disabled={saving} onClick={submit} style={{width:"100%",padding:14,border:0,borderRadius:12,background:f.color,color:"white",fontWeight:850,cursor:saving?"wait":"pointer"}}>{saving?L("Se trimite…","Submitting…"):L("Sigilează contribuția mea","Seal my contribution")}</button></section></div></div>;
   }
 
-  if(phase==="case") return (
-    <div style={{...FS.page,background:"#f4f8fb"}}>
-      {header(f.title,L("Etapa 2/4 · dosarul comun","Stage 2/4 · shared case"),()=>setPhase("roles"))}
-      <div style={{maxWidth:760,margin:"0 auto",padding:"22px 16px 60px"}}>
-        <div style={{background:"#fff",borderRadius:20,overflow:"hidden",border:"2px solid "+f.color+"55",boxShadow:"0 12px 34px rgba(15,39,66,.1)"}}>
-          <div style={{background:"linear-gradient(135deg,"+f.color+","+f.color+"cc)",padding:"18px 20px",color:"white"}}><div className="mission-kicker" style={{opacity:.8}}>{L("Situația de investigat","Situation to investigate")}</div><h2 style={{margin:"6px 0 0",fontSize:21}}>{f.title}</h2></div>
-          <div style={{padding:20}}>
-            <p style={{fontSize:14,lineHeight:1.7,color:"#334155",margin:"0 0 16px"}}>{f.context}</p>
-            {f.caz.map((item,i)=><div key={i} style={{display:"grid",gridTemplateColumns:"minmax(120px,1fr) 1.4fr",gap:12,padding:"10px 12px",borderRadius:10,background:i%2?"#fff":"#f8fafc",borderBottom:"1px solid #eef2f6"}}><span style={{fontSize:12,color:"#64748b"}}>{item.l}</span><span style={{fontSize:13,fontWeight:800,color:"#0f2742",fontFamily:"'JetBrains Mono',monospace"}}>{item.v}</span></div>)}
-            <div style={{marginTop:16,padding:"12px 14px",borderRadius:12,background:"#ecfeff",color:"#155e75",fontSize:12,lineHeight:1.6}}>📚 <strong>{L("Materie de examen păstrată:","Exam material preserved:")}</strong> {L("verdictul se bazează numai pe datele și principiile din prezentarea originală. Sursele exacte apar după trimitere.","the verdict is based only on facts and principles from the original presentation. Exact slide sources appear after submission.")}</div>
-          </div>
-        </div>
-        <button onClick={()=>setPhase("decision")} style={{width:"100%",marginTop:18,padding:15,border:0,borderRadius:14,background:"#071a33",color:"white",fontSize:15,fontWeight:800,cursor:"pointer"}}>{L("Deschide tabla de decizie →","Open decision board →")}</button>
-      </div>
-    </div>
-  );
+  if(phase==="waiting") return <div style={{...FS.page,background:"#f4f8fb"}}>{header(L("Contribuție sigilată","Contribution sealed"))}<div style={{maxWidth:620,margin:"0 auto",padding:"28px 16px"}}>{syncBanner}<div style={{background:"#fff",borderRadius:20,padding:24,border:"1px solid #dbe7f1",textAlign:"center"}}><div style={{fontSize:46}}>🔒</div><h2 style={{color:"#0f2742",margin:"10px 0 6px"}}>{L("Răspunsul dumneavoastră a fost salvat","Your answer has been saved")}</h2><p style={{color:"#64748b",fontSize:13,lineHeight:1.6}}>{L("Contribuțiile colegilor rămân ascunse până când toți membrii grupului au trimis răspunsul sau profesorul deschide sinteza.","Colleagues' contributions remain hidden until every group member submits or the teacher opens synthesis.")}</p><div style={{fontSize:34,fontWeight:900,color:f.color,margin:"18px 0 4px"}}>{room.members.length}/{teamSize}</div><div style={{fontSize:12,color:"#64748b"}}>{L("contribuții finalizate","completed contributions")}</div><div style={{height:9,background:"#e2e8f0",borderRadius:9,overflow:"hidden",margin:"12px 0 18px"}}><div style={{width:Math.min(100,room.members.length/teamSize*100)+"%",height:"100%",background:f.color,transition:"width .3s"}}/></div><button onClick={refreshRoom} style={{padding:"10px 14px",border:"1px solid #cbd5e1",borderRadius:10,background:"white",color:"#475569",fontWeight:750,cursor:"pointer"}}>↻ {L("Actualizează","Refresh")}</button></div></div></div>;
 
-  if(phase==="decision") return (
-    <div style={{...FS.page,background:"#f4f8fb",paddingBottom:100}}>
-      {header(f.title,L("Etapa 3/4 · tabla comună","Stage 3/4 · shared board"),()=>setPhase("case"))}
-      <div style={{height:4,background:"#dbe7f1"}}><div style={{height:"100%",width:progress+"%",background:"linear-gradient(90deg,"+f.color+",#10b981)",transition:"width .25s"}}/></div>
-      <div style={{maxWidth:880,margin:"0 auto",padding:"18px 14px"}}>
-        <section data-mission-section="verdict" style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
-          <div className="mission-kicker" style={{color:f.color,marginBottom:10}}>1 · {L("Verdict","Verdict")}</div><h3 style={{fontSize:16,color:"#0f2742",margin:"0 0 12px"}}>{f.diagnosis.prompt}</h3>
-          <div className="mission-choice-grid" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8}}>{f.diagnosis.options.map((o,i)=><button key={i} onClick={()=>setDiagnosisChoice(i)} className="mission-tap" style={{padding:"13px 11px",borderRadius:12,border:"2px solid "+(diagnosisChoice===i?f.color:"#dbe7f1"),background:diagnosisChoice===i?f.color+"12":"#fff",fontSize:12,fontWeight:700,color:"#0f2742",cursor:"pointer",textAlign:"left"}}>{diagnosisChoice===i?"● ":"○ "}{o}</button>)}</div>
-        </section>
+  if(phase==="synthesis"){
+    const stateFromSynthesis=synthesis.state||{};
+    const hasSynthesis=!!room.synthesis;
+    const toggleEvidence=i=>setSelectedEvidence(prev=>prev.includes(i)?prev.filter(x=>x!==i):(prev.length>=4?prev:[...prev,i]));
+    const toggleAction=i=>setSelectedActions(prev=>{if(prev.includes(i))return prev.filter(x=>x!==i);const cost=budgetUsed+(f.actions[i]?.cost||0);if(cost>f.budget){alert(L("Bugetul activității ar fi depășit.","The activity budget would be exceeded."));return prev;}return [...prev,i];});
+    const submitSynthesis=async()=>{
+      const written=Object.values(answers).filter(x=>String(x||"").trim()).length;
+      if(diagnosisChoice===null||selectedEvidence.length<2||!selectedActions.length||written<2){alert(L("Completați verdictul, minimum 2 dovezi, o acțiune și 2 răspunsuri motivate.","Complete the verdict, at least 2 evidence cards, one action and 2 reasoned answers."));return;}
+      setSaving(true);
+      try{const state={diagnosisChoice,selectedEvidence,selectedActions,answers,confidence,roleSeen:Object.fromEntries(room.joins.map((r,i)=>[String(i+1),true]))};await activityWriteEvent("synthesis",f,{state,coordinator:student?.name,createdAt:Date.now()},session,student,"Sinteza grupului · "+f.title);await refreshRoom();}catch(e){setSyncError(L("Sinteza nu a fost salvată.","Synthesis was not saved."));}setSaving(false);
+    };
+    const finalize=async()=>{
+      const st={...stateFromSynthesis,pitchStarted:true,pitchSeconds,teamRating:{clarity:3,evidence:3,feasibility:3}};
+      const scored=scoreTeamMission(f,st);
+      setSaving(true);setPitchRunning(false);
+      try{await saveTeamMissionResult(f,st,scored,{...student,name:"Grupa "+student.group},session,memberCards);await activityWriteEvent("final",f,{scored,state:st,reporter:student?.name,finishedAt:Date.now()},session,student,"Raport final · "+f.title);await refreshRoom();setPhase("done");}catch(e){setSyncError(L("Raportul final nu a fost trimis.","Final report was not submitted."));}setSaving(false);
+    };
+    return <div style={{...FS.page,background:"#eef3f7",paddingBottom:50}}>{header(L("Sinteza deschisă · răspunsurile sunt vizibile","Synthesis open · answers are visible"))}<div style={{maxWidth:980,margin:"0 auto",padding:"18px 14px"}}>{syncBanner}<div style={{background:"#ecfdf5",border:"1px solid #86efac",color:"#166534",borderRadius:14,padding:14,marginBottom:14,fontSize:13}}>🔓 <strong>{L("Toți membrii pot vedea acum contribuțiile individuale.","All members can now see the individual contributions.")}</strong> {L("Discutați diferențele și construiți o singură decizie de grup.","Discuss differences and build one group decision.")}</div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:10,marginBottom:18}}>{memberCards.map((m,i)=><div key={i} style={{background:"#fff",border:"1px solid #dbe7f1",borderTop:"4px solid "+f.color,borderRadius:14,padding:14}}><div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"flex-start"}}><div><div className="mission-kicker" style={{color:f.color}}>{L("Locul","Seat")} {m.seat} · {m.payload.roleIcon} {m.payload.focus||m.payload.roleName}</div><div style={{fontWeight:850,color:"#0f2742",marginTop:5}}>{m.row.name}</div></div><span className="mission-chip" style={{background:"#f1f5f9",color:"#475569"}}>{m.payload.clueClass||"—"}</span></div><div style={{fontSize:12,color:"#334155",lineHeight:1.55,marginTop:10}}><strong>{L("Analiză:","Analysis:")}</strong> {m.payload.analysis||"—"}</div><div style={{fontSize:12,color:"#334155",lineHeight:1.55,marginTop:7}}><strong>{L("Impact:","Impact:")}</strong> {m.payload.impact||"—"}</div><div style={{fontSize:12,color:"#047857",lineHeight:1.55,marginTop:7}}><strong>{L("Propunere:","Proposal:")}</strong> {m.payload.proposal||"—"}</div></div>)}</div>
+      {!hasSynthesis&&isCoordinator&&<div style={{background:"#fff",borderRadius:18,padding:18,border:"2px solid "+f.color}}><div className="mission-kicker" style={{color:f.color,marginBottom:6}}>{L("Coordonator · decizia comună","Coordinator · team decision")}</div><p style={{fontSize:12,color:"#64748b",margin:"0 0 14px"}}>{L("Completați această secțiune după discuția cu toți membrii.","Complete this section after discussing with all members.")}</p><h3 style={{fontSize:14,color:"#0f2742"}}>{f.diagnosis.prompt}</h3><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:7,marginBottom:14}}>{f.diagnosis.options.map((o,i)=><button key={i} onClick={()=>setDiagnosisChoice(i)} style={{padding:11,borderRadius:10,border:"2px solid "+(diagnosisChoice===i?f.color:"#dbe7f1"),background:diagnosisChoice===i?f.color+"12":"white",textAlign:"left",cursor:"pointer",fontSize:12,fontWeight:700}}>{diagnosisChoice===i?"● ":"○ "}{o}</button>)}</div><div className="mission-kicker" style={{color:f.color,marginBottom:7}}>{L("Dovezi comune · maximum 4","Team evidence · maximum 4")}</div><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:7,marginBottom:14}}>{f.evidence.map((e,i)=>{const on=selectedEvidence.includes(i);return <button key={i} onClick={()=>toggleEvidence(i)} style={{padding:10,borderRadius:10,border:"2px solid "+(on?f.color:"#dbe7f1"),background:on?f.color+"10":"white",textAlign:"left",cursor:"pointer",fontSize:12}}>{on?"✓ ":"+ "}{e.text}</button>})}</div><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:7}}><div className="mission-kicker" style={{color:f.color}}>{L("Acțiuni comune","Team actions")}</div><span className="mission-chip" style={{background:"#ecfdf5",color:"#047857"}}>⚡ {budgetUsed}/{f.budget}</span></div><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:7,marginBottom:14}}>{f.actions.map((a,i)=>{const on=selectedActions.includes(i);return <button key={i} onClick={()=>toggleAction(i)} style={{padding:10,borderRadius:10,border:"2px solid "+(on?"#059669":"#dbe7f1"),background:on?"#ecfdf5":"white",textAlign:"left",cursor:"pointer",fontSize:12}}><strong>{a.text}</strong> · −{a.cost}</button>})}</div>{(f.qs||[]).map((q,i)=><div key={i} style={{marginBottom:10}}><label style={FS.label}>{i+1}. {q.q}</label><textarea value={answers[i]||""} onChange={e=>setAnswers(x=>({...x,[i]:e.target.value}))} style={{...FS.ta,minHeight:64,marginTop:4}}/></div>)}<label style={FS.label}>{L("Încrederea grupului","Group confidence")}: {confidence}%</label><input type="range" min="20" max="100" step="5" value={confidence} onChange={e=>setConfidence(Number(e.target.value))} style={{width:"100%",margin:"8px 0 14px"}}/><button disabled={saving} onClick={submitSynthesis} style={{width:"100%",padding:14,border:0,borderRadius:12,background:f.color,color:"white",fontWeight:850,cursor:"pointer"}}>{saving?L("Se salvează…","Saving…"):L("Închide sinteza coordonatorului","Lock coordinator synthesis")}</button></div>}
+      {!hasSynthesis&&!isCoordinator&&<div style={{background:"#fff",borderRadius:16,padding:20,border:"1px solid #dbe7f1",textAlign:"center"}}><div style={{fontSize:36}}>🧭</div><h3 style={{color:"#0f2742"}}>{L("Coordonatorul pregătește decizia comună","The coordinator is preparing the team decision")}</h3><p style={{color:"#64748b",fontSize:13}}>{L("Discutați cu grupul. Ecranul se actualizează automat.","Discuss with the group. This screen updates automatically.")}</p></div>}
+      {hasSynthesis&&<div style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1"}}><div className="mission-kicker" style={{color:f.color,marginBottom:10}}>{L("Decizia comună este pregătită","Team decision is ready")}</div><h3 style={{margin:"0 0 8px",color:"#0f2742"}}>{f.diagnosis.options[stateFromSynthesis.diagnosisChoice]}</h3><p style={{fontSize:12,color:"#475569"}}><strong>{L("Dovezi:","Evidence:")}</strong> {(stateFromSynthesis.selectedEvidence||[]).map(i=>f.evidence[i]?.text).join(" · ")}</p><p style={{fontSize:12,color:"#475569"}}><strong>{L("Acțiuni:","Actions:")}</strong> {(stateFromSynthesis.selectedActions||[]).map(i=>f.actions[i]?.text).join(" · ")}</p>{isReporter?<div style={{marginTop:18,borderTop:"1px solid #eef2f6",paddingTop:18,textAlign:"center"}}><div style={{width:140,height:140,borderRadius:"50%",background:"#071a33",border:"9px solid "+(pitchSeconds<=10?"#ef4444":f.color),display:"grid",placeItems:"center",margin:"0 auto 12px",color:"white",fontSize:38,fontWeight:900}}>{pitchSeconds}</div><div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:14}}><button onClick={()=>{setPitchStarted(true);setPitchRunning(x=>!x)}} style={{padding:"9px 15px",border:0,borderRadius:9,background:f.color,color:"white",fontWeight:800,cursor:"pointer"}}>{pitchRunning?L("Pauză","Pause"):pitchSeconds<60?L("Continuă","Resume"):L("Pornește pitch-ul","Start pitch")}</button><button onClick={()=>{setPitchSeconds(60);setPitchRunning(false)}} style={{padding:"9px 15px",border:"1px solid #cbd5e1",borderRadius:9,background:"white",cursor:"pointer"}}>↺ 60</button></div><button disabled={saving} onClick={finalize} style={{width:"100%",padding:14,border:0,borderRadius:12,background:"linear-gradient(135deg,#059669,#047857)",color:"white",fontWeight:850,cursor:"pointer"}}>{saving?L("Se trimite…","Submitting…"):L("Trimite raportul final al grupului","Submit the group's final report")}</button></div>:<div style={{background:"#eff6ff",color:"#1e40af",padding:12,borderRadius:10,fontSize:12,marginTop:14}}>🎤 {L("Raportorul grupului prezintă și trimite raportul final. Ecranul se actualizează automat.","The group reporter presents and submits the final report. This screen updates automatically.")}</div>}</div>}</div></div>;
+  }
 
-        <section data-mission-section="evidence" style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
-          <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}><div className="mission-kicker" style={{color:f.color}}>2 · {L("Dovezi","Evidence")}</div><span className="mission-chip" style={{background:"#f1f5f9",color:"#475569"}}>{selectedEvidence.length}/4</span></div>
-          <p style={{fontSize:12,color:"#64748b",margin:"0 0 12px"}}>{L("Alegeți exact patru informații decisive. Două carduri sunt distractori.","Choose exactly four decisive facts. Two cards are distractors.")}</p>
-          <div className="mission-choice-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>{f.evidence.map((e,i)=>{const on=selectedEvidence.includes(i);return <button key={i} onClick={()=>toggleEvidence(i)} className="mission-tap" style={{padding:"12px",borderRadius:12,border:"2px solid "+(on?f.color:"#dbe7f1"),background:on?f.color+"10":"#fff",fontSize:12,color:"#334155",lineHeight:1.5,textAlign:"left",cursor:"pointer"}}><strong style={{color:on?f.color:"#94a3b8"}}>{on?"✓":"+"}</strong> {e.text}</button>})}</div>
-        </section>
-
-        <section data-mission-section="actions" style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
-          <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}><div className="mission-kicker" style={{color:f.color}}>3 · {L("Buget de intervenție","Intervention budget")}</div><span className="mission-chip" style={{background:budgetUsed>f.budget?"#fee2e2":"#ecfdf5",color:budgetUsed>f.budget?"#b91c1c":"#047857"}}>⚡ {budgetUsed}/{f.budget}</span></div>
-          <p style={{fontSize:12,color:"#64748b",margin:"0 0 12px"}}>{L("Nu puteți face totul. Alegeți combinația cu impact maxim fără a depăși creditele.","You cannot do everything. Choose the highest-impact combination without exceeding credits.")}</p>
-          <div className="mission-choice-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>{f.actions.map((a,i)=>{const on=selectedActions.includes(i);return <button key={i} onClick={()=>toggleAction(i)} className="mission-tap" style={{padding:12,borderRadius:12,border:"2px solid "+(on?"#059669":"#dbe7f1"),background:on?"#ecfdf5":"#fff",textAlign:"left",cursor:"pointer"}}><div style={{display:"flex",justifyContent:"space-between",gap:8}}><span style={{fontSize:12,fontWeight:750,color:"#0f2742",lineHeight:1.45}}>{a.text}</span><span className="mission-chip" style={{background:"#f1f5f9",color:"#475569",height:25,flexShrink:0}}>−{a.cost}</span></div></button>})}</div>
-        </section>
-
-        <section data-mission-section="reasoning" style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}>
-          <div className="mission-kicker" style={{color:f.color,marginBottom:10}}>4 · {L("Raționamentul echipei","Team reasoning")}</div>
-          {(f.qs||[]).map((q,i)=><div key={i} style={{marginBottom:12}}><div style={{fontSize:13,fontWeight:750,color:"#0f2742",lineHeight:1.45,marginBottom:6}}>{i+1}. {q.q}</div><textarea value={answers[i]||""} onChange={e=>setAnswers(x=>({...x,[i]:e.target.value}))} placeholder={L("Răspunsul echipei…","Team answer…")} style={{...FS.ta,minHeight:72}}/></div>)}
-          <label style={{fontSize:12,fontWeight:750,color:"#475569"}}>{L("Încrederea echipei în verdict","Team confidence in the verdict")}: {confidence}%</label><input type="range" min="20" max="100" step="5" value={confidence} onChange={e=>setConfidence(Number(e.target.value))}/>
-        </section>
-      </div>
-      <div className="mission-no-print" style={{position:"fixed",bottom:0,left:0,right:0,padding:"10px 14px",background:"rgba(255,255,255,.96)",backdropFilter:"blur(10px)",borderTop:"1px solid #dbe7f1",display:"flex",alignItems:"center",gap:12,zIndex:20}}><div style={{flex:1,minWidth:0}}><div aria-live="polite" style={{fontSize:12,fontWeight:800,color:decisionReady?"#059669":"#475569"}}>{progress}% {L("tablou complet","board complete")}</div><div style={{fontSize:10,color:"#64748b",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{L("Verdict","Verdict")} {diagnosisChoice!==null?"✓":"○"} · {L("Dovezi","Evidence")} {selectedEvidence.length}/2 {selectedEvidence.length>=2?"✓":""} · {L("Acțiuni","Actions")} {selectedActions.length}/1 {selectedActions.length>=1?"✓":""} · {L("Răspunsuri","Answers")} {answeredArgumentCount}/2 {answeredArgumentCount>=2?"✓":""}</div></div><button onClick={()=>{const missing=decisionRequirements.filter(item=>!item.ok);if(missing.length){alert(L("Mai trebuie completat: ","Still needed: ")+missing.map(item=>item.label).join(", ")+".");document.querySelector(`[data-mission-section="${missing[0].key}"]`)?.scrollIntoView({behavior:"smooth",block:"start"});return;}setPhase("pitch");}} style={{padding:"13px 18px",border:0,borderRadius:12,background:decisionReady?"#071a33":"#475569",color:"white",fontWeight:800,cursor:"pointer",flexShrink:0}}>{L("Pitch final →","Final pitch →")}</button></div>
-    </div>
-  );
-
-  if(phase==="pitch") return (
-    <div style={{...FS.page,background:"radial-gradient(circle at 50% 0%,"+f.color+"22,transparent 35%),#f4f8fb"}}>
-      {header(f.title,L("Etapa 4/4 · raportul de 60 de secunde","Stage 4/4 · 60-second report"),()=>setPhase("decision"))}
-      <div style={{maxWidth:760,margin:"0 auto",padding:"22px 16px 70px"}}>
-        <div style={{display:"grid",placeItems:"center",marginBottom:18}}><div style={{width:156,height:156,borderRadius:"50%",background:"#071a33",border:"10px solid "+(pitchSeconds<=10?"#ef4444":f.color),display:"grid",placeItems:"center",boxShadow:"0 16px 40px rgba(7,26,51,.2)"}}><div style={{textAlign:"center",color:"white"}}><div style={{fontSize:42,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{pitchSeconds}</div><div className="mission-kicker" style={{color:"#a9c8e8"}}>sec</div></div></div><div style={{display:"flex",gap:8,marginTop:12}}><button onClick={()=>{setPitchStarted(true);setPitchRunning(x=>!x)}} style={{padding:"10px 16px",border:0,borderRadius:10,background:f.color,color:"white",fontWeight:800,cursor:"pointer"}}>{pitchRunning?L("Pauză","Pause"):pitchSeconds<60?L("Continuă","Resume"):L("Pornește","Start")}</button><button onClick={()=>{setPitchSeconds(60);setPitchRunning(false)}} style={{padding:"10px 16px",border:"1px solid #cbd5e1",borderRadius:10,background:"white",color:"#475569",fontWeight:700,cursor:"pointer"}}>↺ 60</button></div></div>
-        <div style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}><div className="mission-kicker" style={{color:f.color,marginBottom:10}}>{L("Structura prezentării","Presentation structure")}</div><ol style={{paddingLeft:20,margin:0,color:"#334155",fontSize:13,lineHeight:1.8}}><li><strong>{L("Verdict:","Verdict:")}</strong> {f.diagnosis.options[diagnosisChoice]}</li><li><strong>{L("Dovezi:","Evidence:")}</strong> {selectedEvidence.map(i=>f.evidence[i]?.text).join(" · ")}</li><li><strong>{L("Decizie:","Decision:")}</strong> {selectedActions.map(i=>f.actions[i]?.text).join(" · ")}</li></ol></div>
-        <div style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:14}}><div className="mission-kicker" style={{color:f.color,marginBottom:10}}>{L("Concluzia pe o singură pagină","One-page conclusion")}</div><div className="fisa-conc-grid" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8}}>{(f.conc||[]).map((label,i)=><div key={i}><label style={{fontSize:11,fontWeight:750,color:"#64748b"}}>{label}</label><textarea value={conclusions[i]||""} onChange={e=>setConclusions(x=>({...x,[i]:e.target.value}))} style={{...FS.ta,minHeight:64,marginTop:4}}/></div>)}</div></div>
-        <div style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:18}}><div className="mission-kicker" style={{color:f.color,marginBottom:10}}>{L("Autoevaluarea echipei","Team self-rating")}</div>{[["clarity",L("Claritatea mesajului","Clarity")],["evidence",L("Folosirea dovezilor","Use of evidence")],["feasibility",L("Fezabilitatea planului","Plan feasibility")]].map(([key,label])=><div key={key} style={{display:"grid",gridTemplateColumns:"1fr 160px",gap:10,alignItems:"center",marginBottom:8}}><span style={{fontSize:12,color:"#475569"}}>{label}</span><div style={{display:"flex",gap:4}}>{[1,2,3,4,5].map(n=><button key={n} onClick={()=>setTeamRating(x=>({...x,[key]:n}))} style={{width:28,height:28,borderRadius:8,border:"1px solid "+(teamRating[key]===n?f.color:"#cbd5e1"),background:teamRating[key]===n?f.color:"#fff",color:teamRating[key]===n?"#fff":"#64748b",fontWeight:800,cursor:"pointer"}}>{n}</button>)}</div></div>)}</div>
-        <button onClick={async()=>{setPitchRunning(false);setPhase("evaluating");const state={roleSeen,diagnosisChoice,selectedEvidence,selectedActions,answers,conclusions,confidence,pitchStarted,pitchSeconds,teamRating};const scored=scoreTeamMission(f,state);await saveTeamMissionResult(f,state,scored,student,session);setResult({...scored,state});setPhase("done");}} style={{width:"100%",padding:15,border:0,borderRadius:14,background:"linear-gradient(135deg,#059669,#047857)",color:"white",fontSize:15,fontWeight:850,cursor:"pointer"}}>{L("Trimite verdictul echipei","Submit team verdict")}</button>
-      </div>
-    </div>
-  );
-
-  if(phase==="evaluating") return <div style={{minHeight:"100vh",background:"#071a33",display:"grid",placeItems:"center",padding:20,color:"white"}}><div style={{textAlign:"center"}}><div className="spin" style={{fontSize:44}}>⏳</div><h2 style={{margin:"14px 0 6px"}}>{L("Se generează raportul…","Generating report…")}</h2><p style={{color:"#a9c8e8",fontSize:13}}>{L("Punctaj determinist: verdict + dovezi + buget + colaborare.","Deterministic score: verdict + evidence + budget + collaboration.")}</p></div></div>;
-
-  if(phase==="done"&&result){
-    const sc=result.pct>=80?"#059669":result.pct>=60?"#d97706":"#dc2626";
-    const labels={diagnosis:L("Verdict","Verdict"),evidence:L("Dovezi","Evidence"),actions:L("Acțiuni","Actions"),roles:L("Roluri","Roles"),pitch:"Pitch"};
-    return <div style={{...FS.page,background:"#eef3f7",paddingBottom:40}}>
-      {header(L("Raportul misiunii","Mission report"),student?.name+" · "+(session?.labCode||""),null)}
-      <div className="mission-report" style={{maxWidth:820,margin:"22px auto",padding:"0 14px"}}>
-        <div style={{background:"#fff",borderRadius:20,padding:22,border:"1px solid #dbe7f1",boxShadow:"0 12px 32px rgba(15,39,66,.08)",marginBottom:14}}>
-          <div style={{display:"flex",alignItems:"center",gap:16,flexWrap:"wrap"}}><div style={{width:104,height:104,borderRadius:"50%",border:"8px solid "+sc,display:"grid",placeItems:"center",flexShrink:0}}><div style={{textAlign:"center"}}><div style={{fontSize:28,fontWeight:900,color:sc}}>{result.totalScore}</div><div style={{fontSize:11,color:"#64748b"}}>/{result.maxScore}</div></div></div><div style={{flex:1,minWidth:220}}><span className="mission-chip" style={{background:sc+"18",color:sc}}>{result.pct}% · {result.pct>=80?L("decizie solidă","strong decision"):result.pct>=60?L("decizie bună","good decision"):L("revizuire necesară","review needed")}</span><h2 style={{margin:"10px 0 5px",fontSize:22,color:"#0f2742"}}>{f.emoji} {f.title}</h2><p style={{margin:0,fontSize:12,color:"#64748b"}}>{student?.name} · {L("Grupa","Group")} {student?.group||"—"} · {new Date().toLocaleDateString(lang==="en"?"en-GB":"ro-RO")}</p></div></div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:7,marginTop:18}}>{Object.entries(result.breakdown).map(([k,v])=><div key={k} style={{background:"#f8fafc",borderRadius:10,padding:"9px 6px",textAlign:"center"}}><div style={{fontSize:10,color:"#64748b"}}>{labels[k]}</div><div style={{fontSize:15,fontWeight:900,color:"#0f2742"}}>{v.score}/{v.max}</div></div>)}</div>
-        </div>
-        <div style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:12}}><div className="mission-kicker" style={{color:f.color,marginBottom:9}}>{L("Verdictul echipei","Team verdict")}</div><div style={{fontSize:16,fontWeight:850,color:"#0f2742"}}>{f.diagnosis.options[diagnosisChoice]}</div><div style={{fontSize:12,color:"#64748b",marginTop:4}}>{L("Încredere declarată","Declared confidence")}: {confidence}%</div></div>
-        <div style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:12}}><div className="mission-kicker" style={{color:f.color,marginBottom:9}}>{L("Dovezi selectate","Selected evidence")}</div>{selectedEvidence.map(i=>{const e=f.evidence[i];return <div key={i} style={{padding:"8px 10px",borderRadius:9,background:e.relevant?"#ecfdf5":"#fef2f2",color:e.relevant?"#047857":"#b91c1c",fontSize:12,marginBottom:6}}>{e.relevant?"✓":"✕"} {e.text}</div>})}</div>
-        <div style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:12}}><div className="mission-kicker" style={{color:f.color,marginBottom:9}}>{L("Decizii și consecințe","Decisions and consequences")}</div>{selectedActions.map(i=>{const a=f.actions[i];return <div key={i} style={{padding:"9px 10px",borderBottom:"1px solid #eef2f6",fontSize:12,color:"#334155"}}><strong>{a.text}</strong><div style={{color:a.score>0?"#047857":"#b91c1c",marginTop:3}}>→ {a.consequence}</div></div>})}</div>
-        <div style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:12}}><div className="mission-kicker" style={{color:f.color,marginBottom:9}}>{L("Concluzia echipei","Team conclusion")}</div><div className="fisa-conc-grid" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8}}>{(f.conc||[]).map((label,i)=><div key={i} style={{background:"#f8fafc",borderRadius:10,padding:10}}><div style={{fontSize:10,color:"#64748b",marginBottom:4}}>{label}</div><div style={{fontSize:12,fontWeight:700,color:"#0f2742"}}>{conclusions[i]||"—"}</div></div>)}</div></div>
-        <div style={{background:"#ecfeff",borderRadius:18,padding:18,border:"1px solid #a5f3fc",marginBottom:14}}><div className="mission-kicker" style={{color:"#0e7490",marginBottom:9}}>📚 {L("Trasabilitate în material","Source traceability")}</div>{(f.sourceRefs||[]).map((s,i)=><div key={i} style={{fontSize:12,color:"#155e75",marginBottom:4}}>• {s}</div>)}<p style={{fontSize:11,color:"#0e7490",margin:"8px 0 0"}}>{L("Aceste surse se referă la prezentarea originală încărcată; banca de examen nu a fost modificată.","These references point to the uploaded original presentation; the exam bank was not modified.")}</p></div>
-        <div className="mission-no-print" style={{display:"flex",gap:9,flexWrap:"wrap"}}><button onClick={()=>window.print()} style={{flex:1,minWidth:180,padding:13,border:"1px solid #94a3b8",borderRadius:12,background:"#fff",color:"#334155",fontWeight:800,cursor:"pointer"}}>🖨️ {L("Tipărește / salvează PDF","Print / save PDF")}</button><button onClick={onBack} style={{flex:1,minWidth:180,padding:13,border:0,borderRadius:12,background:"#071a33",color:"white",fontWeight:800,cursor:"pointer"}}>🏠 {L("Pagina principală","Home")}</button></div>
-      </div>
-    </div>;
+  if(phase==="done"){
+    const scored=finalData.scored||{totalScore:0,maxScore:0,pct:0,breakdown:{}};
+    const st=finalData.state||synthesis.state||{};
+    const sc=scored.pct>=80?"#059669":scored.pct>=60?"#d97706":"#dc2626";
+    return <div style={{...FS.page,background:"#eef3f7",paddingBottom:40}}>{header(L("Raport final sincronizat","Synchronized final report"))}<div style={{maxWidth:820,margin:"20px auto",padding:"0 14px"}}><div style={{background:"#fff",borderRadius:20,padding:22,border:"1px solid #dbe7f1",marginBottom:14}}><div style={{display:"flex",alignItems:"center",gap:16,flexWrap:"wrap"}}><div style={{width:96,height:96,borderRadius:"50%",border:"8px solid "+sc,display:"grid",placeItems:"center"}}><div style={{textAlign:"center",fontWeight:900,color:sc,fontSize:25}}>{scored.totalScore}<div style={{fontSize:10,color:"#64748b"}}>/{scored.maxScore}</div></div></div><div><span className="mission-chip" style={{background:sc+"18",color:sc}}>{scored.pct}%</span><h2 style={{margin:"9px 0 4px",color:"#0f2742"}}>{f.emoji} {f.title}</h2><p style={{margin:0,fontSize:12,color:"#64748b"}}>{L("Grupa","Group")} {student?.group} · {memberCards.length} {L("contribuții individuale","individual contributions")}</p></div></div></div><div style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1",marginBottom:12}}><div className="mission-kicker" style={{color:f.color,marginBottom:8}}>{L("Verdictul grupului","Group verdict")}</div><strong style={{color:"#0f2742"}}>{f.diagnosis.options[st.diagnosisChoice]}</strong></div><div style={{background:"#ecfeff",borderRadius:18,padding:18,border:"1px solid #a5f3fc",marginBottom:14}}><div className="mission-kicker" style={{color:"#0e7490",marginBottom:8}}>📚 {L("Trasabilitate în material","Source traceability")}</div>{(f.sourceRefs||[]).map((s,i)=><div key={i} style={{fontSize:12,color:"#155e75",marginBottom:4}}>• {s}</div>)}</div><div className="mission-no-print" style={{display:"flex",gap:9,flexWrap:"wrap"}}><button onClick={()=>window.print()} style={{flex:1,padding:13,border:"1px solid #94a3b8",borderRadius:12,background:"white",fontWeight:800,cursor:"pointer"}}>🖨️ {L("Tipărește / salvează PDF","Print / save PDF")}</button><button onClick={onBack} style={{flex:1,padding:13,border:0,borderRadius:12,background:"#071a33",color:"white",fontWeight:800,cursor:"pointer"}}>🏠 {L("Pagina principală","Home")}</button></div></div></div>;
   }
   return null;
 }
 
-async function saveTeamMissionResult(f,state,scored,student,session){
-  const selectedEvidence=state.selectedEvidence.map(i=>f.evidence[i]?.text).filter(Boolean);
-  const selectedActions=state.selectedActions.map(i=>f.actions[i]?.text).filter(Boolean);
-  const answerText=(f.qs||[]).map((q,i)=>"Q"+(i+1)+": "+q.q+"\nA: "+(state.answers[i]||"—")).join("\n\n");
+async function saveTeamMissionResult(f,state,scored,student,session,members=[]){
+  const selectedEvidence=(state.selectedEvidence||[]).map(i=>f.evidence[i]?.text).filter(Boolean);
+  const selectedActions=(state.selectedActions||[]).map(i=>f.actions[i]?.text).filter(Boolean);
+  const answerText=(f.qs||[]).map((q,i)=>"Q"+(i+1)+": "+q.q+"\nA: "+(state.answers?.[i]||"—")).join("\n\n");
+  const memberText=members.map(m=>{const p=m.payload||{};return `${m.seat}. ${m.row?.name||"—"} — ${p.focus||p.roleName||"Rol"}\nAnaliză: ${p.analysis||"—"}\nImpact: ${p.impact||"—"}\nPropunere: ${p.proposal||"—"}`;}).join("\n\n");
   const report=[
-    "MISIUNE: "+f.title,
+    "ACTIVITATE: "+f.title,
     "VERDICT: "+f.diagnosis.options[state.diagnosisChoice],
     "DOVEZI: "+selectedEvidence.join(" | "),
     "ACȚIUNI: "+selectedActions.join(" | "),
-    "ÎNCREDERE: "+state.confidence+"%",
-    "AUTOEVALUARE: claritate "+state.teamRating.clarity+"/5, dovezi "+state.teamRating.evidence+"/5, fezabilitate "+state.teamRating.feasibility+"/5",
+    "ÎNCREDERE: "+(state.confidence||0)+"%",
     "SURSE: "+(f.sourceRefs||[]).join(" | "),
-    "---",
+    "--- CONTRIBUȚII INDIVIDUALE ---",
+    memberText,
+    "--- SINTEZA GRUPULUI ---",
     answerText,
   ].join("\n");
-  const SB="https://hgknirjorjvlofhngvcp.supabase.co";
-  const SK="sb_publishable_PnUOkG2Tpw3wKa9hTZc3Yw_T0bnhFAO";
-  try{
-    const ctrl=new AbortController();setTimeout(()=>ctrl.abort(),5000);
-    await fetch(SB+"/rest/v1/results",{signal:ctrl.signal,method:"POST",headers:{"Content-Type":"application/json","apikey":SK,"Authorization":"Bearer "+SK,"Prefer":"return=minimal"},body:JSON.stringify({session_id:session?.token||null,name:student?.name,grp:student?.group,lab_id:session?.labId,lab_code:session?.labCode,module:"mission_"+f.id,module_title:report,score:scored.totalScore,total:scored.maxScore,pct:scored.pct,time_used:60-state.pitchSeconds,teacher:session?.teacher||"",semester:session?.semester||"",specialization:student?.spec||""})});
-  }catch(e){console.error("mission save error",e);}
+  const result={token:session?.token||null,name:student?.name,group:student?.group,labId:session?.labId,labCode:session?.labCode,module:"group_activity_"+f.id,moduleTitle:report,score:scored.totalScore,total:scored.maxScore,pct:scored.pct,timeUsed:60-(state.pitchSeconds||0),teacher:session?.teacher||"",semester:session?.semester||"",specialization:student?.spec||"",answersText:report};
+  const saved=await addResult(result);
+  if(!saved?.ok) throw new Error(saved?.error||"Save failed");
 }
 
 </script>
@@ -4392,6 +4445,7 @@ const QR_DURATIONS = [
   {label:"10 minute", value:10},
   {label:"15 minute", value:15},
   {label:"30 minute", value:30},
+  {label:"60 minute", value:60},
 ];
 
 // ════════════════════════════════════════════════════════════
@@ -4635,6 +4689,9 @@ async function loadResults() {
     if (page.length < PAGE) done = true;
     else from += PAGE;
   }
+  // Keep synchronized room events out of the normal results list. The single
+  // group_activity_* final report remains visible as the assessed result.
+  all = all.filter(r => !String(r.module || "").startsWith("activity_"));
   let mapped = all.map(r => {
     const base = {
       name: r.name, group: r.grp, labId: r.lab_id, labCode: r.lab_code,
@@ -4834,19 +4891,19 @@ const T_STRINGS = {
     // Nav
     tab_qr:"Generează QR", tab_preview:"Previzualizare Quiz", tab_results:"Rezultate",
     tab_prezentari:"Prezentări", tab_prezenta:"Prezență", tab_exam_preview:"🎓 Previzualizare Examen", tab_exam_edit:"✏️ Editor Examen", tab_fisiere:"Fișiere", tab_nomenclator:"Nomenclator",
-    tab_fise_preview:"Previzualizare Fișe de Grup", tab_fise_edit:"Editor Fișe",
+    tab_fise_preview:"Previzualizare Activități de Grup", tab_fise_edit:"Editor Activități",
     // QR
     qr_config:"⚙️ Configurare sesiune", qr_select_lab:"Selectează practica",
     qr_classify:"📅 Clasificare sesiune", qr_optional:"(opțional)",
     qr_spec:"— Specializare —", qr_year:"— An —", qr_module:"— Modul —",
-    qr_type:"Tip activitate", qr_quiz:"Quiz interactiv", qr_fisa:"Misiune de echipă", qr_exam:"Examen",
+    qr_type:"Tip activitate", qr_quiz:"Quiz interactiv", qr_fisa:"Activitate de grup", qr_exam:"Examen",
     qr_duration:"Durată valabilitate QR", qr_generate:"📱 Generează cod QR",
     qr_cancel:"✕ Anulează sesiunea curentă", qr_download:"💾 Descarcă imaginea QR",
     qr_time_left:"timp rămas",
     qr_empty:"Configurează sesiunea și apasă „Generează cod QR\"",
     qr_used_by:"Utilizat de:", qr_students:"studenți",
     qr_not_ready:"⚠️ Practica nu are quiz activ",
-    qr_fisa_info:"🧭 Studenții aleg misiunea grupei, distribuie rolurile, selectează dovezi și decid cu buget limitat. Punctajul este determinist și legat de materialul LP.",
+    qr_fisa_info:"📱 Fiecare student scanează codul pe propriul telefon și completează individual rolul primit. Contribuțiile rămân sigilate până când întreaga grupă termină sau profesorul deschide sinteza.",
     qr_results_tab:"📊 Rezultate",
     // Results
     res_total:"Total răspunsuri", res_unique:"Studenți unici",
@@ -5019,19 +5076,19 @@ const T_STRINGS = {
     // Nav
     tab_qr:"Generate QR", tab_preview:"Quiz Preview", tab_results:"Results",
     tab_prezentari:"Presentations", tab_prezenta:"Attendance", tab_exam_preview:"🎓 Exam Preview", tab_exam_edit:"✏️ Exam Editor", tab_fisiere:"Files", tab_nomenclator:"Nomenclature",
-    tab_fise_preview:"Group Worksheet Preview", tab_fise_edit:"Worksheet Editor",
+    tab_fise_preview:"Group Activity Preview", tab_fise_edit:"Activity Editor",
     // QR
     qr_config:"⚙️ Session setup", qr_select_lab:"Select practice",
     qr_classify:"📅 Session classification", qr_optional:"(optional)",
     qr_spec:"— Specialization —", qr_year:"— Year —", qr_module:"— Module —",
-    qr_type:"Activity type", qr_quiz:"Interactive quiz", qr_fisa:"Team mission", qr_exam:"Exam",
+    qr_type:"Activity type", qr_quiz:"Interactive quiz", qr_fisa:"Group activity", qr_exam:"Exam",
     qr_duration:"QR code validity", qr_generate:"📱 Generate QR code",
     qr_cancel:"✕ Cancel current session", qr_download:"💾 Download QR image",
     qr_time_left:"time remaining",
     qr_empty:"Configure the session and press \"Generate QR code\"",
     qr_used_by:"Used by:", qr_students:"students",
     qr_not_ready:"⚠️ This practice has no active quiz",
-    qr_fisa_info:"🧭 Students choose their group mission, assign roles, select evidence and decide within a limited budget. Scoring is deterministic and linked to the LP material.",
+    qr_fisa_info:"📱 Every student scans the code on their own phone and completes the assigned role individually. Contributions stay sealed until the whole group finishes or the teacher opens synthesis.",
     qr_results_tab:"📊 Results",
     // Results
     res_total:"Total responses", res_unique:"Unique students",
@@ -5430,6 +5487,9 @@ function AdminPanel({onBack, teacherName}) {
   const [timeLeft, setTimeLeft]   = useState(0);
   const [generating, setGenerating] = useState(false);
   const [activityType, setActivityType] = useState('quiz');  // quiz | fisa | exam
+  const [teamSize, setTeamSize]     = useState(14);
+  const [roomOverview, setRoomOverview] = useState({});
+  const [unlockingGroup, setUnlockingGroup] = useState(null);
   const timerRef = useRef();
 
   // results state
@@ -5466,15 +5526,27 @@ function AdminPanel({onBack, teacherName}) {
     return () => clearInterval(timerRef.current);
   }, [activeSession]);
 
+  // Live overview of the six synchronized group rooms.
+  useEffect(() => {
+    if (!activeSession?.labCode?.endsWith("-FISA")) { setRoomOverview({}); return; }
+    let alive = true;
+    const load = () => loadActivitySessionRooms(activeSession)
+      .then(data => { if (alive) setRoomOverview(data); })
+      .catch(e => console.warn("activity rooms:", e));
+    load();
+    const id = setInterval(load, 4000);
+    return () => { alive = false; clearInterval(id); };
+  }, [activeSession?.token]);
+
   const generateQR = async () => {
     setGenerating(true);
     try {
       const token = generateToken();
       const expiresAt = Date.now() + duration * 60 * 1000;
       const fisaCode = activityType==='fisa' ? selLab.code+'-FISA' : activityType==='exam' ? selLab.code+'-EXAM' : selLab.code;
-      const session = { token, labId: selLab.id, labTitle: selLab.title, labCode: fisaCode, duration, expiresAt, createdAt: Date.now(), usedBy:[], teacher: teacherName, semester: semester.trim(), lang };
+      const session = { token, labId: selLab.id, labTitle: selLab.title, labCode: fisaCode, duration, expiresAt, createdAt: Date.now(), usedBy:[], teacher: teacherName, semester: semester.trim(), lang, teamSize: activityType==='fisa' ? teamSize : undefined };
       await addSession(session);
-      const url = `${getBaseURL()}?token=${token}&lang=${lang}`;
+      const url = `${getBaseURL()}?token=${token}&lang=${lang}${activityType==='fisa' ? `&teamSize=${teamSize}` : ''}`;
       const dataURL = await generateQRDataURL(url);
       setQrDataURL(dataURL);
       setActiveSession(session);
@@ -5629,7 +5701,7 @@ function AdminPanel({onBack, teacherName}) {
               <label style={S.label}>Tip activitate</label>
               <div style={{display:"flex",gap:8,marginBottom:16}}>
                 {[{id:'quiz',icon:"🎯",label:T("qr_quiz")},{id:'fisa',icon:"📋",label:T("qr_fisa")},{id:'exam',icon:"📝",label:T("qr_exam")||"Exam"}].map(t=>(
-                  <button key={t.id} onClick={()=>setActivityType(t.id)}
+                  <button key={t.id} onClick={()=>{setActivityType(t.id);if(t.id==='fisa'&&duration<60)setDuration(60);}}
                     style={{flex:1,padding:"10px 8px",borderRadius:10,border:`1.5px solid ${activityType===t.id?"#a5b4fc":"#e0e7ff"}`,
                       background:activityType===t.id?"#EEF2FF":"#F8FAFF",color:activityType===t.id?"#6366f1":"#64748b",
                       fontSize:13,fontWeight:activityType===t.id?700:500,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
@@ -5638,8 +5710,17 @@ function AdminPanel({onBack, teacherName}) {
                 ))}
               </div>
               {activityType==="fisa" && <div style={{background:"#FFFBEB",border:"1px solid #fde68a",borderRadius:9,padding:"8px 14px",marginBottom:16,fontSize:12,color:"#92400e"}}>
-                📋 Studenții vor alege grupa și completa fișa interactivă cu evaluare AI.<br/>
-                Rezultatele apar în tab-ul <strong>📊 Rezultate</strong>.
+                📱 Fiecare student scanează același cod pe telefonul propriu, alege grupa 1–6 și primește automat un rol individual.<br/>
+                Răspunsurile rămân sigilate până când toți termină sau profesorul deschide sinteza.
+              </div>}
+
+              {activityType==="fisa" && <div style={{marginBottom:16}}>
+                <label style={S.label}>👥 Număr așteptat de studenți / grupă</label>
+                <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                  {[10,12,14,16].map(n=><button key={n} onClick={()=>setTeamSize(n)} style={{flex:1,padding:"8px 4px",borderRadius:8,border:`1.5px solid ${teamSize===n?"#a5b4fc":"#e0e7ff"}`,background:teamSize===n?"#EEF2FF":"#F8FAFF",color:teamSize===n?"#6366f1":"#64748b",fontWeight:teamSize===n?700:500,cursor:"pointer"}}>{n}</button>)}
+                  <input type="number" min="2" max="20" value={teamSize} onChange={e=>setTeamSize(Math.min(20,Math.max(2,Number(e.target.value)||14)))} style={{...S.input,width:72,textAlign:"center",padding:"8px 4px"}} title="2–20"/>
+                </div>
+                <p style={{fontSize:11,color:"#64748b",margin:"6px 0 0"}}>Sinteza se deschide automat după {teamSize} contribuții individuale.</p>
               </div>}
 
               <label style={S.label}>Durată valabilitate QR</label>
@@ -5719,6 +5800,36 @@ function AdminPanel({onBack, teacherName}) {
                       Utilizat de: <strong>{activeSession.usedBy?.length||0}</strong> studenți
                     </p>
                   </div>
+
+                  {activeSession.labCode?.endsWith("-FISA") && (
+                    <div style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:12,padding:12,width:"100%",marginBottom:12}}>
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,marginBottom:9}}>
+                        <strong style={{fontSize:12,color:"#0f2742"}}>Săli de grup · în direct</strong>
+                        <span style={{fontSize:10,color:"#64748b"}}>țintă: {activeSession.teamSize||14}/grupă</span>
+                      </div>
+                      <div style={{display:"grid",gap:7}}>
+                        {Array.from({length:6},(_,i)=>i+1).map(g=>{
+                          const state=roomOverview[String(g)]||{};
+                          const mission=(window.TEAM_MISSIONS?.[activeSession.labId]||[])[g-1];
+                          const completed=state.memberCount||0;
+                          const target=activeSession.teamSize||14;
+                          const opened=state.unlocked||completed>=target;
+                          return <div key={g} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:8,alignItems:"center",background:state.final?"#ecfdf5":"#f8fafc",border:"1px solid "+(opened?"#86efac":"#e2e8f0"),borderRadius:9,padding:"8px 9px"}}>
+                            <div style={{minWidth:0}}>
+                              <div style={{fontSize:11,fontWeight:750,color:"#0f2742",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>Grupa {g}{mission?.title?" · "+mission.title:""}</div>
+                              <div style={{fontSize:10,color:"#64748b",marginTop:2}}>conectați {state.joinCount||0} · au trimis {completed}/{target} {state.final?"· raport final ✓":opened?"· sinteză deschisă":"· răspunsuri sigilate"}</div>
+                            </div>
+                            {!state.final && <button disabled={!mission||!(state.joinCount||0)||opened||unlockingGroup===g} onClick={async()=>{
+                              setUnlockingGroup(g);
+                              try { await unlockTeamRoom(activeSession,g,mission,teacherName); setRoomOverview(await loadActivitySessionRooms(activeSession)); }
+                              catch(e) { alert("Nu s-a putut deschide sinteza: "+e.message); }
+                              setUnlockingGroup(null);
+                            }} style={{border:0,borderRadius:7,padding:"6px 8px",background:opened?"#dcfce7":"#6366f1",color:opened?"#166534":"white",fontSize:10,fontWeight:750,cursor:(!mission||!(state.joinCount||0)||opened)?"default":"pointer",opacity:(!mission||!(state.joinCount||0)||opened)?0.65:1}}>{opened?"Deschis":unlockingGroup===g?"…":"Deschide"}</button>}
+                          </div>;
+                        })}
+                      </div>
+                    </div>
+                  )}
 
                   {/* print button */}
                   {qrDataURL && (
@@ -7497,12 +7608,12 @@ function FiseGrupTab({selLab}) {
   const fisaInfo=FISE_LABS[labId];
   return (
     <div>
-      <h3 style={{color:"#0a2a18",fontSize:17,margin:"0 0 4px"}}>🧭 Misiuni de Echipă</h3>
+      <h3 style={{color:"#0a2a18",fontSize:17,margin:"0 0 4px"}}>🧭 Activități de Grup</h3>
       <p style={{color:"#4a9a6a",fontSize:13,margin:"0 0 20px"}}>Activitate practică pe telefon: roluri, indicii diferite, tablă comună de dovezi, buget de intervenție, pitch de 60 secunde și raport imprimabil.</p>
       <div style={{background:"#eff6ff",border:"1.5px solid #bfdbfe",borderRadius:12,padding:"14px 18px",marginBottom:16}}>
         <h4 style={{color:"#1e40af",fontSize:13,fontWeight:700,margin:"0 0 10px"}}>⚙️ Cum funcționează — 3 pași</h4>
         <div className="fisa-grid-3" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
-          {[["1️⃣","Mergeți la","📱 Generează QR"],["2️⃣","Alegeți tipul","🧭 Misiune de echipă"],["3️⃣","Studenții scanează","activează rolurile și decid"]].map(([n,t,s],i)=>(
+          {[["1️⃣","Mergeți la","📱 Generează QR"],["2️⃣","Alegeți tipul","🧭 Activitate de grup"],["3️⃣","Studenții scanează","activează rolurile și decid"]].map(([n,t,s],i)=>(
             <div key={i} style={{background:"white",borderRadius:9,padding:"14px 10px",textAlign:"center",border:"1px solid #dbeafe"}}>
               <div style={{fontSize:26,marginBottom:6}}>{n}</div>
               <div style={{fontSize:12,fontWeight:700,color:"#1e3a8a"}}>{t}</div>
@@ -7515,13 +7626,13 @@ function FiseGrupTab({selLab}) {
         <span style={{fontSize:28}}>{selLab?.icon||"📋"}</span>
         <div style={{flex:1}}>
           <div style={{fontWeight:700,fontSize:15,color:"#0a2a18"}}>{selLab?.code} — {selLab?.title}</div>
-          <div style={{fontSize:12,color:"#4a9a6a",marginTop:2}}>{hasFisa?(fisaInfo?.grupe||0)+" fișe disponibile":"Fișe în pregătire"}</div>
+          <div style={{fontSize:12,color:"#4a9a6a",marginTop:2}}>{hasFisa?(fisaInfo?.grupe||0)+" activități disponibile":"Activități în pregătire"}</div>
         </div>
         {hasFisa?<span style={{background:"#dcfce7",color:"#16a34a",padding:"5px 12px",borderRadius:20,fontSize:12,fontWeight:700}}>✅ Disponibil</span>
           :<span style={{background:"#f1f5f9",color:"#94a3b8",padding:"5px 12px",borderRadius:20,fontSize:12,fontWeight:600}}>🔜 În pregătire</span>}
       </div>
       <div style={{background:"#fef9c3",border:"1.5px solid #fde68a",borderRadius:12,padding:"12px 16px",marginBottom:14,fontSize:13,color:"#92400e"}}>
-        <strong>⚠️ Important:</strong> Misiunile se activează prin QR din <strong>📱 Generează QR</strong> — alegeți <em>🧭 Misiune de echipă</em>.
+        <strong>⚠️ Important:</strong> Activitățile de grup se activează prin QR din <strong>📱 Generează QR</strong> — alegeți <em>🧭 Activitate de grup</em>.
       </div>
       <div style={{background:"#f0fdf4",border:"1.5px solid #bbf7d0",borderRadius:12,padding:"12px 16px",fontSize:13,color:"#166534"}}>
         <strong>📊 Rezultatele:</strong> Apar în <strong>📊 Rezultate</strong> după trimitere. Apăsați <em>📄 Vezi răspunsuri</em> pentru textul complet.
@@ -7672,6 +7783,7 @@ function StudentLogin({session, onLogin}) {
   const [spec, setSpec]   = useState("");
   const [err, setErr]     = useState("");
   const lab = LABS.find(l=>l.id===session.labId) || {};
+  const isGroupActivity = session?.labCode?.endsWith("-FISA");
 
   const go = () => {
     if (name.trim().length < 3) { setErr(T("st_err_name")); return; }
@@ -7693,10 +7805,10 @@ function StudentLogin({session, onLogin}) {
         <input style={{...S.input,marginBottom:12}} placeholder={T("st_name_ph")}
           value={name} onChange={e=>{setName(e.target.value);setErr("");}}
           onKeyDown={e=>e.key==="Enter"&&go()}/>
-        <label style={S.label}>{T("st_group")||"Fișă"}</label>
+        <label style={S.label}>{isGroupActivity ? (lang==="en"?"Activity group":"Grupa activității") : (T("st_group")||"Fișă")}</label>
         <select style={{...S.input,marginBottom:12}} value={group} onChange={e=>{setGroup(e.target.value);setErr("");}}>
-          <option value="">{T("st_group_ph")||"— Selectați fișa —"}</option>
-          {Array.from({length:40},(_,i)=><option key={i+1} value={String(i+1)}>{i+1}</option>)}
+          <option value="">{isGroupActivity ? (lang==="en"?"— Select group 1–6 —":"— Selectați grupa 1–6 —") : (T("st_group_ph")||"— Selectați fișa —")}</option>
+          {Array.from({length:isGroupActivity?6:40},(_,i)=><option key={i+1} value={String(i+1)}>{isGroupActivity?(lang==="en"?"Group ":"Grupa "):""}{i+1}</option>)}
         </select>
         <label style={S.label}>{T("st_spec")||"Specializare"}</label>
         <select style={{...S.input,marginBottom:16}} value={spec} onChange={e=>{setSpec(e.target.value);setErr("");}}>
@@ -8918,7 +9030,7 @@ function App() {
   if (screen==="admin")       return <AdminPanel teacherName={teacherName} onBack={()=>setScreen("home")}/>;
   if (screen==="tokenJoin")   return (
     <TokenJoin token={pendingToken}
-      onValid={s=>{const sl=resolveSessionLang(s, lang); setLang(sl); try{localStorage.setItem("igiena_lang",sl);}catch(e){} setSession({...s, lang:sl}); setScreen(s?.labCode?.endsWith("-EXAM")?"exam_code":"studentLogin");}}
+      onValid={s=>{const sl=resolveSessionLang(s, lang); const rawSize=new URLSearchParams(window.location.search).get("teamSize"); const qrTeamSize=Math.min(20,Math.max(2,parseInt(rawSize||"14",10)||14)); setLang(sl); try{localStorage.setItem("igiena_lang",sl);}catch(e){} setSession({...s, lang:sl, teamSize:qrTeamSize}); setScreen(s?.labCode?.endsWith("-EXAM")?"exam_code":"studentLogin");}}
       onInvalid={msg=>{setErrMsg(msg);setScreen("error");}}/>
   );
   if (screen==="error")       return <ErrorScreen message={errMsg} onBack={()=>{setScreen("home");window.history.pushState({},"",window.location.pathname);}}/>;
