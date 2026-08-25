@@ -104,6 +104,10 @@
   /* ── Fisa screens ── */
   @media(max-width:640px){
     .fisa-grid-3{grid-template-columns:repeat(2,1fr) !important}
+    .activity-editor-grid{grid-template-columns:1fr !important}
+    .activity-role-row{grid-template-columns:48px 1fr !important}
+    .activity-role-row input:last-child{grid-column:1/-1}
+    .activity-action-row{grid-template-columns:1fr 62px 62px auto !important}
     .fisa-conc-grid{grid-template-columns:1fr !important}
     .mission-role-grid{grid-template-columns:1fr 1fr !important}
     .mission-choice-grid{grid-template-columns:1fr !important}
@@ -4027,6 +4031,7 @@ function TeamMissionScreen({session,student,onBack}){
   const teamSize=Math.min(14,Math.max(6,Number(session?.teamSize)||14));
   const [f,setF]=React.useState(null);
   const [loaded,setLoaded]=React.useState(editsAreReady());
+  const [loadError,setLoadError]=React.useState("");
   const [room,setRoom]=React.useState({joins:[],members:[],seatByName:{},unlocked:false,synthesis:null,final:null});
   const [seat,setSeat]=React.useState(null);
   const [phase,setPhase]=React.useState("joining");
@@ -4051,13 +4056,11 @@ function TeamMissionScreen({session,student,onBack}){
 
   React.useEffect(()=>{
     const build=()=>{
-      const rawBank=lang==="en"?FISE_DATA_EN:(window.TEAM_MISSIONS||FISE_DATA);
-      const edits=loadFisaEdits();
-      const base=(rawBank[labId]||rawBank.lp1a||[]).slice(0,6).map(x=>normalizeTeamMission(x,lang));
+      const base=getActiveFiseForLab(labId,lang).slice(0,6).map(x=>normalizeTeamMission(x,lang));
       const groupNumber=Math.min(6,Math.max(1,parseInt(String(student?.group||"1").match(/\d+/)?.[0]||"1",10)));
-      const item=base[groupNumber-1]||base[0];
-      const ov=edits[labId+":"+item.id];
-      setF(ov?{...item,...ov,caz:ov.caz||item.caz,qs:ov.qs||item.qs,conc:ov.conc||item.conc}:item);
+      const item=base[groupNumber-1];
+      setF(item||null);
+      setLoadError(item?"":L("Această grupă nu are încă o activitate configurată. Profesorul trebuie să completeze setul de 6 activități.","This group does not yet have a configured activity. The teacher must complete the set of six activities."));
       setLoaded(true);
     };
     if(editsAreReady()) build(); else fetchAllEditsRemote().then(build).catch(build);
@@ -4105,7 +4108,8 @@ function TeamMissionScreen({session,student,onBack}){
     return()=>clearInterval(id);
   },[pitchRunning]);
 
-  if(!loaded||!f) return <div style={{minHeight:"100vh",background:"#071a33",display:"grid",placeItems:"center",color:"#a9c8e8",padding:20,textAlign:"center"}}>{L("Se pregătește activitatea sincronizată…","Preparing the synchronized activity…")}</div>;
+  if(!loaded) return <div style={{minHeight:"100vh",background:"#071a33",display:"grid",placeItems:"center",color:"#a9c8e8",padding:20,textAlign:"center"}}>{L("Se pregătește activitatea sincronizată…","Preparing the synchronized activity…")}</div>;
+  if(!f) return <div style={{minHeight:"100vh",background:"#071a33",display:"grid",placeItems:"center",color:"#fff",padding:20,textAlign:"center"}}><div><div style={{fontSize:42,marginBottom:10}}>⚠️</div><strong>{loadError}</strong><div><button onClick={onBack} style={{marginTop:18,padding:"10px 16px",border:0,borderRadius:10,background:"#fff",color:"#071a33",fontWeight:800,cursor:"pointer"}}>{L("Înapoi","Back")}</button></div></div></div>;
 
   const slot=participantSlot(f,seat||1,teamSize,lang);
   const memberCards=room.members.map(r=>({row:r,payload:activityPayload(r),seat:room.seatByName[activityNameKey(r.name)]||activityPayload(r).seat||0})).sort((a,b)=>a.seat-b.seat);
@@ -4335,6 +4339,86 @@ function saveFisaEdits(edits) {
   _fisaEditsCache = edits;
   try { localStorage.setItem("igiena_fisa_edits", JSON.stringify(edits)); } catch(e) {}
 }
+
+function mergeFisaRecord(baseFisa, override) {
+  if (!override) return baseFisa;
+  if (!baseFisa) return override;
+  return {
+    ...baseFisa,
+    ...override,
+    caz: override.caz || baseFisa.caz,
+    qs: override.qs || baseFisa.qs,
+    conc: override.conc || baseFisa.conc,
+    diagnosis: override.diagnosis || baseFisa.diagnosis,
+    evidence: override.evidence || baseFisa.evidence,
+    actions: override.actions || baseFisa.actions,
+    roles: override.roles || baseFisa.roles,
+    sourceRefs: override.sourceRefs || baseFisa.sourceRefs,
+  };
+}
+
+// Returns the teacher-configured activity set in its visible order. Base
+// activities can be hidden with a reversible tombstone; teacher-created items
+// are appended. Quiz and exam banks are intentionally not touched here.
+function getActiveFiseForLab(labId, lang="ro", editsOverride=null) {
+  const bank = lang === "en" ? FISE_DATA_EN : (window.TEAM_MISSIONS || FISE_DATA);
+  const base = bank?.[labId] || [];
+  const edits = editsOverride || loadFisaEdits();
+  const baseIds = new Set(base.map(f=>String(f.id)));
+  const visibleBase = base
+    .filter(f=>!edits[labId+":"+f.id]?._deleted)
+    .map(f=>mergeFisaRecord(f, edits[labId+":"+f.id]));
+  const custom = Object.entries(edits)
+    .filter(([key,payload])=>key.startsWith(labId+":") && payload?._custom && !payload?._deleted && !baseIds.has(String(payload.id)))
+    .map(([,payload])=>payload)
+    .sort((a,b)=>(a._createdAt||0)-(b._createdAt||0));
+  return [...visibleBase, ...custom];
+}
+
+function createBlankTeamMission(labId) {
+  const id = "custom_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,6);
+  const evidence = [
+    {text:"Introduceți o dovadă decisivă din materialul LP.",relevant:true},
+    {text:"Introduceți o valoare, normă sau principiu de comparație.",relevant:true},
+    {text:"Introduceți un efect posibil asupra sănătății.",relevant:true},
+    {text:"Introduceți metoda sau investigația de confirmare.",relevant:true},
+    {text:"Introduceți un distractor plauzibil.",relevant:false},
+    {text:"Introduceți încă un distractor plauzibil.",relevant:false},
+  ];
+  const roleDefs = [
+    ["coord","🧭","Coordonator","ține echipa pe traseu și fixează verdictul"],
+    ["clinic","🩺","Medic","leagă expunerea de efectele asupra sănătății"],
+    ["lab","🧪","Analist","verifică metoda, unitățile și rezultatele"],
+    ["epi","🔎","Epidemiolog","caută sursa, calea și populația expusă"],
+    ["prevent","🛡️","Prevenție","propune măsuri realizabile în ordinea priorității"],
+    ["report","🎤","Raportor","pregătește argumentarea de 60 de secunde"],
+  ];
+  return {
+    id,_custom:true,_createdAt:Date.now(),mission:true,emoji:"🧩",title:"Activitate nouă",color:"#2563eb",
+    context:"Descrieți situația-problemă și decizia pe care trebuie să o ia echipa.",
+    briefing:"Descrieți situația-problemă și decizia pe care trebuie să o ia echipa.",
+    caz:[{l:"Parametru / observație",v:"Valoare"},{l:"Context",v:"Detaliu relevant"}],
+    diagnosis:{prompt:"Care este verdictul principal?",options:["Varianta corectă","Alternativă plauzibilă","Date insuficiente"],correct:0},
+    evidence,
+    actions:[
+      {text:"Măsură prioritară",cost:3,score:3,consequence:"Explicați efectul măsurii."},
+      {text:"Măsură de confirmare",cost:2,score:2,consequence:"Explicați ce verifică."},
+      {text:"Măsură de monitorizare",cost:1,score:1,consequence:"Explicați urmărirea."},
+      {text:"Măsură ineficientă",cost:2,score:0,consequence:"Explicați de ce nu rezolvă cauza."},
+    ],
+    budget:6,
+    roles:roleDefs.map((r,i)=>({id:r[0],icon:r[1],name:r[2],task:r[3],clue:evidence[i].text})),
+    qs:[
+      {q:"Formulați verdictul igienico-sanitar principal și argumentați-l.",h:"Indicați răspunsul așteptat."},
+      {q:"Care sunt cele mai importante date din dosar?",h:"Indicați dovezile decisive."},
+      {q:"Ce efecte asupra sănătății pot apărea?",h:"Indicați efectele relevante."},
+      {q:"Ce metodă sau investigație confirmă evaluarea?",h:"Indicați metoda din material."},
+      {q:"Construiți planul de intervenție și justificați bugetul.",h:"Ordonați măsurile după prioritate."},
+    ],
+    conc:["Verdictul echipei","Dovezile decisive","Prima măsură"],
+    sourceRefs:[String(labId||"").toUpperCase()+" · completați diapozitivele-sursă"],
+  };
+}
 function editsAreReady() {
   return _quizEditsCache !== null && _fisaEditsCache !== null;
 }
@@ -4344,7 +4428,7 @@ function applyFisaEdits(labId, fisaId, baseFisa) {
   const key = labId + ":" + fisaId;
   const override = edits[key];
   if (!override) return baseFisa;
-  return {...baseFisa, ...override};
+  return mergeFisaRecord(baseFisa, override);
 }
 
 function applyQuizEdits(labId, modId, baseQs) {
@@ -5556,6 +5640,15 @@ function AdminPanel({onBack, teacherName}) {
   const generateQR = async () => {
     setGenerating(true);
     try {
+      if (activityType === "fisa") {
+        try { await fetchAllEditsRemote(); } catch(e) { console.warn("activity editor sync:", e); }
+        const configured = getActiveFiseForLab(selLab.id, lang);
+        if (configured.length !== 6) {
+          alert(`Pentru a genera QR-ul, configurați exact 6 activități la ${selLab.code}. Acum sunt active ${configured.length}. Mergeți la fila „Activități” pentru completare sau restaurare.`);
+          setGenerating(false);
+          return;
+        }
+      }
       const token = generateToken();
       const expiresAt = Date.now() + duration * 60 * 1000;
       const fisaCode = activityType==='fisa' ? selLab.code+'-FISA' : activityType==='exam' ? selLab.code+'-EXAM' : selLab.code;
@@ -5641,6 +5734,7 @@ function AdminPanel({onBack, teacherName}) {
             {[
               {id:"qr",          icon:"📱", label:"QR"},
               {id:"preview",     icon:"👁️", label:"Quiz"},
+              {id:"activities",  icon:"🧩", label:"Activități"},
               {id:"results",     icon:"📊", label:T("tab_results")},
               {id:"examResults", icon:"📝", label:"Rezultate examen"},
               {id:"prezentari",  icon:"📽️", label:T("tab_prezentari")},
@@ -5825,7 +5919,7 @@ function AdminPanel({onBack, teacherName}) {
                       <div style={{display:"grid",gap:7}}>
                         {Array.from({length:6},(_,i)=>i+1).map(g=>{
                           const state=roomOverview[String(g)]||{};
-                          const mission=(window.TEAM_MISSIONS?.[activeSession.labId]||[])[g-1];
+                          const mission=getActiveFiseForLab(activeSession.labId,lang)[g-1];
                           const completed=state.memberCount||0;
                           const target=activeSession.teamSize||14;
                           const opened=state.unlocked||completed>=target;
@@ -5862,6 +5956,10 @@ function AdminPanel({onBack, teacherName}) {
         {/* ── RESULTS TAB ── */}
         {tab==="preview" && (
           <QuizPreviewTab selLab={selLab} onSelectLab={lab=>setSelLab(lab)} teacherName={teacherName}/>
+        )}
+
+        {tab==="activities" && (
+          <ActivityEditorTab selLab={selLab} onSelectLab={lab=>setSelLab(lab)} teacherName={teacherName}/>
         )}
 
         {tab==="results" && (
@@ -6795,6 +6893,30 @@ async function submitFisaGrup(f,answers,concluzii,student,session,setPhase,setEv
 }
 
 // ════════════════════════════════════════════════════════════
+// ACTIVITATE DE GRUP EDITOR — direct teacher access
+// ════════════════════════════════════════════════════════════
+function ActivityEditorTab({selLab, onSelectLab, teacherName}) {
+  const lang = React.useContext(LangContext);
+  const [, setRevision] = useState(0);
+  return (
+    <div>
+      <div style={{marginBottom:16}}>
+        <h3 style={{color:"#1e1b4b",fontSize:18,margin:"0 0 4px",fontWeight:800}}>🧩 Activități de grup — Editor</h3>
+        <p style={{color:"#64748b",fontSize:13,margin:0,lineHeight:1.55}}>Modificați activitățile existente, înlocuiți una cu o activitate nouă sau restaurați conținutul original. Pentru generarea QR-ului trebuie să rămână exact 6 activități active la fiecare LP.</p>
+      </div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:16}}>
+        {LABS.map(lab=>{
+          const active=selLab?.id===lab.id;
+          const count=getActiveFiseForLab(lab.id,lang).length;
+          return <button key={lab.id} onClick={()=>onSelectLab(lab)} style={{display:"flex",alignItems:"center",gap:6,padding:"7px 12px",borderRadius:10,border:`1.5px solid ${active?"#a5b4fc":"#e0e7ff"}`,background:active?"#EEF2FF":"#fff",cursor:"pointer"}}><span>{lab.icon}</span><span style={{fontSize:12,fontWeight:active?700:500,color:active?"#6366f1":"#475569"}}>{lab.code}</span><span style={{fontSize:10,color:count===6?"#047857":"#b45309",background:count===6?"#ecfdf5":"#fffbeb",borderRadius:8,padding:"1px 6px"}}>{count}/6</span></button>;
+        })}
+      </div>
+      <FisaPreviewPanel labId={selLab?.id} mode="edit" teacherName={teacherName} onActivitiesChange={()=>setRevision(x=>x+1)}/>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
 // QUIZ PREVIEW TAB — teacher sees all questions per lab/module
 // ════════════════════════════════════════════════════════════
 function QuizPreviewTab({selLab, onSelectLab, teacherName}) {
@@ -6970,8 +7092,8 @@ function QuizPreviewTab({selLab, onSelectLab, teacherName}) {
         {[
           {id:"preview",      label:"👁️ Previzualizare Quiz"},
           {id:"edit",         label:"✏️ Editor Quiz"},
-          {id:"fise_preview", label:"📋 Previzualizare Fișe de Grup"},
-          {id:"fise_edit",    label:"✏️ Editor Fișe"},
+          {id:"fise_preview", label:"📋 Previzualizare Activități"},
+          {id:"fise_edit",    label:"✏️ Editor Activități"},
         ].map(t=>(
           <button key={t.id} onClick={()=>setSubTab(t.id)}
             style={{padding:"8px 18px",borderRadius:9,border:"none",cursor:"pointer",fontSize:13,fontWeight:subTab===t.id?700:400,
@@ -7296,7 +7418,68 @@ function FisaMetaForm({title, emoji, onSave, onCancel}) {
   );
 }
 
-function FisaPreviewPanel({labId, mode="preview", teacherName}) {
+function FisaMissionForm({initial, onSave, onCancel}) {
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const [draft, setDraft] = useState(()=>clone(initial));
+  const inputStyle={width:"100%",padding:"8px 10px",border:"1.5px solid #c7d2fe",borderRadius:8,fontSize:12,boxSizing:"border-box",outline:"none"};
+  const labelStyle={fontSize:11,fontWeight:800,color:"#4f46e5",textTransform:"uppercase",letterSpacing:".07em",display:"block",marginBottom:5};
+  const cardStyle={background:"#fff",border:"1px solid #e0e7ff",borderRadius:11,padding:12,marginBottom:10};
+  const diagnosis=draft.diagnosis||{prompt:"",options:["",""],correct:0};
+  const evidence=draft.evidence||[];
+  const actions=draft.actions||[];
+  const roles=draft.roles||[];
+  const sourceRefs=draft.sourceRefs||[];
+  const valid=diagnosis.prompt?.trim() && diagnosis.options.filter(x=>x?.trim()).length>=2 && evidence.filter(x=>x.text?.trim()).length>=2 && actions.some(x=>x.text?.trim()) && roles.length===6;
+  const update=(field,value)=>setDraft(d=>({...d,[field]:value}));
+  return <div style={{background:"#F8FAFF",border:"2px solid #a5b4fc",borderRadius:14,padding:14,marginBottom:12}}>
+    <div style={{fontSize:12,fontWeight:850,color:"#4f46e5",marginBottom:12}}>⚙️ Editarea mecanicii activității</div>
+    <div style={cardStyle}>
+      <label style={labelStyle}>Context / briefing</label>
+      <textarea value={draft.context||""} onChange={e=>setDraft(d=>({...d,context:e.target.value,briefing:e.target.value}))} rows={3} style={{...inputStyle,resize:"vertical"}}/>
+    </div>
+    <div style={cardStyle}>
+      <label style={labelStyle}>Verdict / diagnostic</label>
+      <input value={diagnosis.prompt||""} onChange={e=>update("diagnosis",{...diagnosis,prompt:e.target.value})} style={{...inputStyle,marginBottom:8}} placeholder="Întrebarea verdictului"/>
+      {(diagnosis.options||[]).map((option,i)=><div key={i} style={{display:"flex",gap:7,alignItems:"center",marginBottom:6}}>
+        <button type="button" onClick={()=>update("diagnosis",{...diagnosis,correct:i})} style={{width:28,height:28,borderRadius:"50%",border:`2px solid ${diagnosis.correct===i?"#16a34a":"#cbd5e1"}`,background:diagnosis.correct===i?"#16a34a":"#fff",color:diagnosis.correct===i?"#fff":"#64748b",fontWeight:800,cursor:"pointer",flexShrink:0}}>{diagnosis.correct===i?"✓":String.fromCharCode(65+i)}</button>
+        <input value={option} onChange={e=>{const options=[...diagnosis.options];options[i]=e.target.value;update("diagnosis",{...diagnosis,options});}} style={inputStyle}/>
+        {diagnosis.options.length>2&&<button onClick={()=>{const options=diagnosis.options.filter((_,j)=>j!==i);update("diagnosis",{...diagnosis,options,correct:Math.min(diagnosis.correct,options.length-1)});}} style={{border:0,background:"#fef2f2",color:"#dc2626",borderRadius:7,padding:"7px 9px",cursor:"pointer"}}>✕</button>}
+      </div>)}
+      <button onClick={()=>update("diagnosis",{...diagnosis,options:[...diagnosis.options,""]})} style={{padding:"6px 10px",border:"1px dashed #a5b4fc",borderRadius:7,background:"#EEF2FF",color:"#4f46e5",fontSize:11,fontWeight:700,cursor:"pointer"}}>+ Variantă</button>
+      <div style={{fontSize:10,color:"#64748b",marginTop:7}}>Cercul verde marchează varianta corectă.</div>
+    </div>
+    <div style={cardStyle}>
+      <label style={labelStyle}>Dovezi și distractori</label>
+      {evidence.map((item,i)=><div key={i} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) auto auto",gap:7,alignItems:"center",marginBottom:6}}>
+        <textarea value={item.text||""} onChange={e=>{const rows=[...evidence];rows[i]={...rows[i],text:e.target.value};update("evidence",rows);}} rows={2} style={{...inputStyle,resize:"vertical"}}/>
+        <label style={{fontSize:10,color:item.relevant?"#166534":"#b45309",fontWeight:700,display:"flex",alignItems:"center",gap:4,whiteSpace:"nowrap"}}><input type="checkbox" checked={!!item.relevant} onChange={e=>{const rows=[...evidence];rows[i]={...rows[i],relevant:e.target.checked};update("evidence",rows);}}/> relevantă</label>
+        <button onClick={()=>update("evidence",evidence.filter((_,j)=>j!==i))} style={{border:0,background:"#fef2f2",color:"#dc2626",borderRadius:7,padding:"7px 9px",cursor:"pointer"}}>✕</button>
+      </div>)}
+      <button onClick={()=>update("evidence",[...evidence,{text:"",relevant:true}])} style={{padding:"6px 10px",border:"1px dashed #a5b4fc",borderRadius:7,background:"#EEF2FF",color:"#4f46e5",fontSize:11,fontWeight:700,cursor:"pointer"}}>+ Dovadă</button>
+    </div>
+    <div style={cardStyle}>
+      <div style={{display:"flex",gap:12,alignItems:"end",marginBottom:8}}><div style={{flex:1}}><label style={labelStyle}>Acțiuni / intervenții</label></div><div style={{width:110}}><label style={labelStyle}>Buget</label><input type="number" min="1" max="30" value={draft.budget||1} onChange={e=>update("budget",Math.max(1,Number(e.target.value)||1))} style={inputStyle}/></div></div>
+      {actions.map((item,i)=><div key={i} style={{border:"1px solid #e2e8f0",borderRadius:9,padding:9,marginBottom:7}}>
+        <div className="activity-action-row" style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) 70px 70px auto",gap:7,marginBottom:6}}><input value={item.text||""} onChange={e=>{const rows=[...actions];rows[i]={...rows[i],text:e.target.value};update("actions",rows);}} style={inputStyle} placeholder="Acțiune"/><input type="number" min="0" value={item.cost??0} onChange={e=>{const rows=[...actions];rows[i]={...rows[i],cost:Math.max(0,Number(e.target.value)||0)};update("actions",rows);}} style={inputStyle} title="Cost"/><input type="number" min="0" value={item.score??0} onChange={e=>{const rows=[...actions];rows[i]={...rows[i],score:Math.max(0,Number(e.target.value)||0)};update("actions",rows);}} style={inputStyle} title="Punctaj"/><button onClick={()=>update("actions",actions.filter((_,j)=>j!==i))} style={{border:0,background:"#fef2f2",color:"#dc2626",borderRadius:7,padding:"7px 9px",cursor:"pointer"}}>✕</button></div>
+        <input value={item.consequence||""} onChange={e=>{const rows=[...actions];rows[i]={...rows[i],consequence:e.target.value};update("actions",rows);}} style={inputStyle} placeholder="Consecința / justificarea acțiunii"/><div style={{fontSize:9,color:"#94a3b8",marginTop:4}}>Cost: al doilea câmp · punctaj didactic: al treilea câmp</div>
+      </div>)}
+      <button onClick={()=>update("actions",[...actions,{text:"",cost:1,score:1,consequence:""}])} style={{padding:"6px 10px",border:"1px dashed #a5b4fc",borderRadius:7,background:"#EEF2FF",color:"#4f46e5",fontSize:11,fontWeight:700,cursor:"pointer"}}>+ Acțiune</button>
+    </div>
+    <div style={cardStyle}>
+      <label style={labelStyle}>Cele 6 roluri de bază</label>
+      <div style={{fontSize:10,color:"#64748b",marginBottom:8}}>Se păstrează exact șase familii de roluri; pentru grupele mai mari aplicația distribuie automat subroluri.</div>
+      {roles.map((role,i)=><div className="activity-role-row" key={i} style={{display:"grid",gridTemplateColumns:"50px 130px minmax(0,1fr)",gap:7,marginBottom:6}}><input value={role.icon||""} onChange={e=>{const rows=[...roles];rows[i]={...rows[i],icon:e.target.value};update("roles",rows);}} style={{...inputStyle,textAlign:"center",fontSize:16}}/><input value={role.name||""} onChange={e=>{const rows=[...roles];rows[i]={...rows[i],name:e.target.value};update("roles",rows);}} style={inputStyle}/><input value={role.task||""} onChange={e=>{const rows=[...roles];rows[i]={...rows[i],task:e.target.value};update("roles",rows);}} style={inputStyle}/></div>)}
+    </div>
+    <div style={cardStyle}>
+      <label style={labelStyle}>Surse / referințe</label>
+      {sourceRefs.map((src,i)=><div key={i} style={{display:"flex",gap:7,marginBottom:6}}><input value={src} onChange={e=>{const rows=[...sourceRefs];rows[i]=e.target.value;update("sourceRefs",rows);}} style={inputStyle}/><button onClick={()=>update("sourceRefs",sourceRefs.filter((_,j)=>j!==i))} style={{border:0,background:"#fef2f2",color:"#dc2626",borderRadius:7,padding:"7px 9px",cursor:"pointer"}}>✕</button></div>)}
+      <button onClick={()=>update("sourceRefs",[...sourceRefs,""])} style={{padding:"6px 10px",border:"1px dashed #a5b4fc",borderRadius:7,background:"#EEF2FF",color:"#4f46e5",fontSize:11,fontWeight:700,cursor:"pointer"}}>+ Sursă</button>
+    </div>
+    <div style={{display:"flex",gap:8}}><button disabled={!valid} onClick={()=>onSave(draft)} style={{flex:1,padding:11,border:0,borderRadius:9,background:valid?"linear-gradient(135deg,#4f46e5,#7c3aed)":"#e2e8f0",color:valid?"#fff":"#94a3b8",fontWeight:800,cursor:valid?"pointer":"not-allowed"}}>💾 Salvează mecanica</button><button onClick={onCancel} style={{padding:"10px 16px",background:"#fff",border:"1.5px solid #cbd5e1",borderRadius:9,color:"#64748b",cursor:"pointer"}}>Anulează</button></div>
+  </div>;
+}
+
+function FisaPreviewPanel({labId, mode="preview", teacherName, onActivitiesChange}) {
   const T = useT();
   const ALL_LABS = ["lp1a","lp1b","lp2a","lp2b","lp3a","lp3b","lp4a","lp4b","lp5a","lp5b","lp6a","lp6b"];
   const hasFisa = ALL_LABS.includes(labId);
@@ -7307,37 +7490,27 @@ function FisaPreviewPanel({labId, mode="preview", teacherName}) {
   const [newQDraft, setNewQDraft] = useState(null);
   const [editingCase, setEditingCase] = useState(false);
   const [editingMeta, setEditingMeta] = useState(false);
+  const [editingMission, setEditingMission] = useState(false);
   const [saveMsg, setSaveMsg] = useState("");
   const [subTab, setSubTab] = useState(mode||"preview");
 
   React.useEffect(() => {
-    fetchAllEditsRemote().then(([, f]) => setFisaEdits(f)).catch(() => setFisaEdits(loadFisaEdits()));
+    fetchAllEditsRemote().then(([, f]) => { setFisaEdits(f); onActivitiesChange?.(); }).catch(() => setFisaEdits(loadFisaEdits()));
   }, []);
 
-  React.useEffect(()=>{ setSelFisaId(null); setExpandedQ(null); setEditingQ(null); setNewQDraft(null); setEditingCase(false); setEditingMeta(false); }, [labId]);
-  React.useEffect(()=>{ setSubTab(mode||"preview"); setEditingQ(null); setNewQDraft(null); setEditingCase(false); setEditingMeta(false); }, [mode]);
+  React.useEffect(()=>{ setSelFisaId(null); setExpandedQ(null); setEditingQ(null); setNewQDraft(null); setEditingCase(false); setEditingMeta(false); setEditingMission(false); }, [labId]);
+  React.useEffect(()=>{ setSubTab(mode||"preview"); setEditingQ(null); setNewQDraft(null); setEditingCase(false); setEditingMeta(false); setEditingMission(false); }, [mode]);
 
   const lang = React.useContext(LangContext);
-    const _fb = lang==="en" ? FISE_DATA_EN : (window.TEAM_MISSIONS || FISE_DATA);
-  const baseFise = hasFisa ? (_fb[labId]||[]) : [];
-
-  // Get active fisa (with edits applied)
-  const getActiveFisa = (f) => {
-    const key = labId+":"+f.id;
-    const ov = fisaEdits[key];
-    if (!ov) return f;
-    return {...f, ...ov,
-      caz: ov.caz || f.caz,
-      qs:  ov.qs  || f.qs,
-      conc:ov.conc|| f.conc,
-    };
-  };
-
-  const activeFise = baseFise.map(getActiveFisa);
+  const _fb = lang==="en" ? FISE_DATA_EN : (window.TEAM_MISSIONS || FISE_DATA);
+  const baseFise = hasFisa ? (_fb[labId]||[]).map(f=>normalizeTeamMission(f,lang)) : [];
+  const activeFise = getActiveFiseForLab(labId,lang,fisaEdits).map(f=>normalizeTeamMission(f,lang));
+  const deletedBaseFise = baseFise.filter(f=>fisaEdits[labId+":"+f.id]?._deleted);
   const selFisa = selFisaId ? activeFise.find(f=>f.id===selFisaId) : null;
   const baseFisa = selFisaId ? baseFise.find(f=>f.id===selFisaId) : null;
   const edKey = labId+":"+selFisaId;
   const hasEdits = selFisaId && !!fisaEdits[edKey];
+  const isCustom = !!selFisa?._custom;
 
   const persist = (key, newData) => {
     const ne = {...fisaEdits, [key]: newData};
@@ -7346,10 +7519,11 @@ function FisaPreviewPanel({labId, mode="preview", teacherName}) {
     setSaveMsg(T("saved"));
     setTimeout(()=>setSaveMsg(""), 2000);
     upsertFisaEdit(key, newData, teacherName).catch(e => console.warn("persist fisa:", e));
+    onActivitiesChange?.();
   };
 
   const resetFisa = () => {
-    if (!confirm("Resetați la fișa originală?")) return;
+    if (!baseFisa || !confirm("Resetați această activitate la conținutul original?")) return;
     const ne = {...fisaEdits};
     delete ne[edKey];
     setFisaEdits(ne);
@@ -7357,7 +7531,48 @@ function FisaPreviewPanel({labId, mode="preview", teacherName}) {
     deleteFisaEditRemote(edKey).catch(e => console.warn("reset fisa:", e));
     setSaveMsg("✓ Resetat");
     setTimeout(()=>setSaveMsg(""), 2000);
-    setEditingQ(null); setNewQDraft(null); setEditingCase(false); setEditingMeta(false);
+    setEditingQ(null); setNewQDraft(null); setEditingCase(false); setEditingMeta(false); setEditingMission(false);
+    onActivitiesChange?.();
+  };
+
+  const addActivity = () => {
+    if (activeFise.length >= 6) {
+      alert("Sunt deja 6 activități active. Ștergeți sau ascundeți una înainte de a adăuga alta.");
+      return;
+    }
+    const item=createBlankTeamMission(labId);
+    const key=labId+":"+item.id;
+    persist(key,item);
+    setSelFisaId(item.id);
+    setEditingMeta(true);
+  };
+
+  const deleteActivity = () => {
+    if (!selFisa || !confirm(`Eliminați activitatea „${selFisa.title}”? QR-ul nu poate fi generat până când setul revine la 6 activități.`)) return;
+    if (isCustom) {
+      const ne={...fisaEdits};
+      delete ne[edKey];
+      setFisaEdits(ne); saveFisaEdits(ne);
+      deleteFisaEditRemote(edKey).catch(e=>console.warn("delete custom activity:",e));
+    } else {
+      const tombstone={id:selFisa.id,_deleted:true,_deletedAt:Date.now()};
+      const ne={...fisaEdits,[edKey]:tombstone};
+      setFisaEdits(ne); saveFisaEdits(ne);
+      upsertFisaEdit(edKey,tombstone,teacherName).catch(e=>console.warn("delete activity:",e));
+    }
+    setSelFisaId(null); setEditingMission(false); setEditingMeta(false); setEditingCase(false);
+    setSaveMsg("✓ Activitate eliminată"); setTimeout(()=>setSaveMsg(""),2000);
+    onActivitiesChange?.();
+  };
+
+  const restoreActivity = (fisa) => {
+    const key=labId+":"+fisa.id;
+    if (activeFise.length>=6) { alert("Există deja 6 activități active. Eliminați una înainte de restaurare."); return; }
+    const ne={...fisaEdits}; delete ne[key];
+    setFisaEdits(ne); saveFisaEdits(ne);
+    deleteFisaEditRemote(key).catch(e=>console.warn("restore activity:",e));
+    setSelFisaId(fisa.id); setSaveMsg("✓ Activitate restaurată"); setTimeout(()=>setSaveMsg(""),2000);
+    onActivitiesChange?.();
   };
 
   const saveQ = (idx, updated) => {
@@ -7402,6 +7617,11 @@ function FisaPreviewPanel({labId, mode="preview", teacherName}) {
     persist(edKey, {...(fisaEdits[edKey]||baseFisa), conc: newConc});
   };
 
+  const saveMission = (updated) => {
+    persist(edKey,{...(fisaEdits[edKey]||baseFisa||selFisa),...updated,_custom:isCustom||undefined,mission:true});
+    setEditingMission(false);
+  };
+
 
   if (!hasFisa) return (
     <div style={{background:"#fff",borderRadius:14,border:"1px solid #e0e7ff",padding:"48px 24px",textAlign:"center"}}>
@@ -7412,34 +7632,37 @@ function FisaPreviewPanel({labId, mode="preview", teacherName}) {
 
   return (
     <div>
-      {/* Save msg + reset */}
+      {/* Save status + activity set controls */}
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14,flexWrap:"wrap"}}>
+        <span style={{fontSize:12,fontWeight:800,color:activeFise.length===6?"#047857":"#b45309",background:activeFise.length===6?"#ecfdf5":"#fffbeb",padding:"6px 12px",borderRadius:8,border:`1px solid ${activeFise.length===6?"#a7f3d0":"#fde68a"}`}}>{activeFise.length}/6 activități active</span>
         {saveMsg && <span style={{fontSize:13,color:"#16a34a",fontWeight:700,background:"#f0fdf4",padding:"5px 12px",borderRadius:8,border:"1px solid #bbf7d0"}}>{saveMsg}</span>}
-        {hasEdits && subTab==="edit" && (
+        {subTab==="edit" && <button onClick={addActivity} disabled={activeFise.length>=6} style={{padding:"7px 14px",background:activeFise.length<6?"linear-gradient(135deg,#4f46e5,#7c3aed)":"#e2e8f0",border:0,borderRadius:8,color:activeFise.length<6?"#fff":"#94a3b8",fontSize:12,fontWeight:800,cursor:activeFise.length<6?"pointer":"not-allowed"}}>＋ Activitate nouă</button>}
+        {hasEdits && baseFisa && subTab==="edit" && (
           <button onClick={resetFisa} style={{padding:"6px 14px",background:"#fef2f2",border:"1px solid #fca5a5",borderRadius:8,color:"#dc2626",fontSize:12,fontWeight:700,cursor:"pointer"}}>
-            ↺ Reset fișă
+            ↺ Restaurează conținutul original
           </button>
         )}
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"200px 1fr",gap:14,alignItems:"start"}}>
-        {/* Fise list */}
+      <div className="activity-editor-grid" style={{display:"grid",gridTemplateColumns:"200px 1fr",gap:14,alignItems:"start"}}>
+        {/* Activity list */}
         <div style={{background:"#fff",borderRadius:14,border:"1px solid #e0e7ff",overflow:"hidden",boxShadow:"0 2px 8px rgba(99,102,241,0.05)"}}>
           <div style={{padding:"10px 14px",borderBottom:"1px solid #e0e7ff",background:"#F8FAFF"}}>
-            <div style={{fontSize:11,fontWeight:700,color:"#6366f1",textTransform:"uppercase",letterSpacing:".1em"}}>Fișe — {labId?.toUpperCase()}</div>
+            <div style={{fontSize:11,fontWeight:700,color:"#6366f1",textTransform:"uppercase",letterSpacing:".08em"}}>Activități — {labId?.toUpperCase()}</div>
           </div>
+          {activeFise.length===0&&<div style={{padding:16,fontSize:11,color:"#b45309",background:"#fffbeb"}}>Nu există activități active. Adăugați sau restaurați activități.</div>}
           {activeFise.map((f,i)=>{
             const active = selFisaId===f.id;
             const edited = !!fisaEdits[labId+":"+f.id];
             return (
-              <button key={f.id} onClick={()=>{setSelFisaId(f.id);setExpandedQ(null);setEditingQ(null);setNewQDraft(null);setEditingCase(false);setEditingMeta(false);}}
+              <button key={f.id} onClick={()=>{setSelFisaId(f.id);setExpandedQ(null);setEditingQ(null);setNewQDraft(null);setEditingCase(false);setEditingMeta(false);setEditingMission(false);}}
                 style={{width:"100%",textAlign:"left",padding:"10px 12px",border:"none",borderBottom:"1px solid #f1f5f9",
                   background:active?"#EEF2FF":"transparent",cursor:"pointer",display:"flex",alignItems:"center",gap:8}}>
                 <span style={{fontSize:17}}>{f.emoji}</span>
                 <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:12,fontWeight:active?700:500,color:active?"#6366f1":"#1e293b",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{lang==="en"?"Group":"Fișă"} {i+1}</div>
+                  <div style={{fontSize:12,fontWeight:active?700:500,color:active?"#6366f1":"#1e293b",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{lang==="en"?"Activity":"Activitate"} {i+1}</div>
                   <div style={{fontSize:10,color:active?"#818cf8":"#94a3b8",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",marginTop:1,display:"flex",gap:4,alignItems:"center"}}>
-                    {f.qs.length}Q
+                    {(f.qs||[]).length}Q {f._custom&&<span style={{color:"#7c3aed"}}>· nouă</span>}
                     {edited && <span style={{color:"#f59e0b",background:"#fffbeb",borderRadius:5,padding:"0 4px",fontSize:9}}>✎</span>}
                   </div>
                 </div>
@@ -7447,13 +7670,14 @@ function FisaPreviewPanel({labId, mode="preview", teacherName}) {
               </button>
             );
           })}
+          {deletedBaseFise.length>0&&<div style={{borderTop:"2px solid #e2e8f0",background:"#fff7ed"}}><div style={{padding:"8px 10px",fontSize:10,fontWeight:800,color:"#9a3412",textTransform:"uppercase"}}>Eliminate · pot fi restaurate</div>{deletedBaseFise.map(f=><div key={f.id} style={{display:"flex",alignItems:"center",gap:6,padding:"7px 9px",borderTop:"1px solid #fed7aa"}}><span>{f.emoji}</span><span style={{flex:1,minWidth:0,fontSize:10,color:"#7c2d12",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.title}</span><button onClick={()=>restoreActivity(f)} disabled={activeFise.length>=6} style={{border:"1px solid #fdba74",background:"#fff",color:"#c2410c",borderRadius:6,padding:"4px 6px",fontSize:9,fontWeight:800,cursor:activeFise.length<6?"pointer":"not-allowed",opacity:activeFise.length<6?1:.5}}>Restaurează</button></div>)}</div>}
         </div>
 
         {/* Right panel */}
         {!selFisa ? (
           <div style={{background:"#fff",borderRadius:14,border:"1px solid #e0e7ff",padding:"50px 24px",textAlign:"center"}}>
             <div style={{fontSize:44,marginBottom:10,opacity:.25}}>👈</div>
-            <p style={{color:"#94a3b8",fontSize:13}}>Selectați o fișă din stânga</p>
+            <p style={{color:"#94a3b8",fontSize:13}}>Selectați o activitate din stânga</p>
           </div>
         ) : (
           <div>
@@ -7463,16 +7687,13 @@ function FisaPreviewPanel({labId, mode="preview", teacherName}) {
                 <span style={{fontSize:24}}>{selFisa.emoji}</span>
                 <div style={{flex:1}}>
                   <div style={{fontSize:10,color:"rgba(255,255,255,.75)",fontWeight:700,textTransform:"uppercase",letterSpacing:".08em"}}>
-                    {lang==="en"?"Group":"Fișă Grupă"} {activeFise.indexOf(selFisa)+1}
+                    {lang==="en"?"Group activity":"Activitate de grup"} {activeFise.indexOf(selFisa)+1}
                     {hasEdits && <span style={{marginLeft:8,background:"rgba(255,255,255,.25)",borderRadius:8,padding:"1px 6px",fontSize:9}}>EDITAT</span>}
                   </div>
                   <div style={{fontSize:15,fontWeight:800,color:"#fff"}}>{selFisa.title}</div>
                 </div>
                 {subTab==="edit" && (
-                  <button onClick={()=>setEditingMeta(!editingMeta)}
-                    style={{padding:"5px 12px",background:"rgba(255,255,255,.2)",border:"1px solid rgba(255,255,255,.4)",borderRadius:8,color:"#fff",fontSize:12,cursor:"pointer",fontWeight:600}}>
-                    ✏️ Titlu
-                  </button>
+                  <div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"flex-end"}}><button onClick={()=>setEditingMeta(!editingMeta)} style={{padding:"5px 10px",background:"rgba(255,255,255,.2)",border:"1px solid rgba(255,255,255,.4)",borderRadius:8,color:"#fff",fontSize:11,cursor:"pointer",fontWeight:700}}>✏️ Titlu</button><button onClick={deleteActivity} style={{padding:"5px 10px",background:"rgba(127,29,29,.35)",border:"1px solid rgba(255,255,255,.45)",borderRadius:8,color:"#fff",fontSize:11,cursor:"pointer",fontWeight:700}}>🗑 Elimină</button></div>
                 )}
               </div>
 
@@ -7515,11 +7736,25 @@ function FisaPreviewPanel({labId, mode="preview", teacherName}) {
               </div>
             </div>
 
+            {/* Interactive mission mechanics */}
+            {editingMission && subTab==="edit" ? (
+              <FisaMissionForm initial={selFisa} onSave={saveMission} onCancel={()=>setEditingMission(false)}/>
+            ) : (
+              <div style={{background:"#fff",border:"1.5px solid #c7d2fe",borderRadius:12,padding:"13px 14px",marginBottom:10}}>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:9}}><div style={{fontSize:11,fontWeight:800,color:"#4f46e5",textTransform:"uppercase",letterSpacing:".08em"}}>⚙️ Mecanica interactivă</div>{subTab==="edit"&&<button onClick={()=>setEditingMission(true)} style={{padding:"5px 10px",background:"#EEF2FF",border:"1px solid #c7d2fe",borderRadius:7,color:"#4f46e5",fontSize:11,fontWeight:800,cursor:"pointer"}}>✏️ Editează tot</button>}</div>
+                <p style={{fontSize:12,color:"#334155",lineHeight:1.55,margin:"0 0 10px"}}>{selFisa.context||selFisa.briefing}</p>
+                <div style={{fontSize:11,fontWeight:800,color:"#1e293b",marginBottom:5}}>{selFisa.diagnosis?.prompt}</div>
+                <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:9}}>{(selFisa.diagnosis?.options||[]).map((o,i)=><span key={i} style={{fontSize:10,padding:"4px 7px",borderRadius:7,background:i===selFisa.diagnosis?.correct?"#dcfce7":"#f1f5f9",color:i===selFisa.diagnosis?.correct?"#166534":"#475569",fontWeight:i===selFisa.diagnosis?.correct?800:500}}>{i===selFisa.diagnosis?.correct?"✓ ":""}{o}</span>)}</div>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(145px,1fr))",gap:6}}>{[["🧾",(selFisa.evidence||[]).length+" dovezi"],["🛠️",(selFisa.actions||[]).length+" acțiuni"],["⚡","buget "+(selFisa.budget||0)],["👥",(selFisa.roles||[]).length+" roluri"],["📚",(selFisa.sourceRefs||[]).length+" surse"]].map((x,i)=><div key={i} style={{fontSize:10,color:"#475569",background:"#F8FAFF",border:"1px solid #e2e8f0",borderRadius:7,padding:"6px 8px"}}>{x[0]} {x[1]}</div>)}</div>
+                {(selFisa.sourceRefs||[]).length>0&&<div style={{fontSize:10,color:"#0e7490",marginTop:9,lineHeight:1.5}}><strong>Trasabilitate:</strong> {selFisa.sourceRefs.join(" · ")}</div>}
+              </div>
+            )}
+
             {/* Questions */}
             <div style={{marginBottom:10}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
                 <div style={{fontSize:11,fontWeight:700,color:"#1e1b4b",textTransform:"uppercase",letterSpacing:".1em"}}>
-                  📝 Întrebările fișei ({selFisa.qs.length})
+                  📝 Întrebările activității ({(selFisa.qs||[]).length})
                 </div>
                 {subTab==="edit" && !newQDraft && (
                   <button onClick={()=>setNewQDraft({q:"",h:""})}
@@ -7533,7 +7768,7 @@ function FisaPreviewPanel({labId, mode="preview", teacherName}) {
                 <FisaQForm initial={newQDraft} isNew={true} onSave={addQ} onCancel={()=>setNewQDraft(null)}/>
               )}
 
-              {selFisa.qs.map((q,i)=>{
+              {(selFisa.qs||[]).map((q,i)=>{
                 const open=expandedQ===i;
                 const isEditing=editingQ===i && subTab==="edit";
 
@@ -7559,8 +7794,8 @@ function FisaPreviewPanel({labId, mode="preview", teacherName}) {
                         <div style={{display:"flex",flexDirection:"column",borderLeft:"1px solid #f1f5f9",padding:"4px 3px",gap:1,justifyContent:"center"}}>
                           <button onClick={()=>moveQ(i,-1)} disabled={i===0}
                             style={{padding:"3px 7px",background:"none",border:"none",cursor:i===0?"not-allowed":"pointer",color:i===0?"#e0e7ff":"#94a3b8",fontSize:12}}>↑</button>
-                          <button onClick={()=>moveQ(i,1)} disabled={i===selFisa.qs.length-1}
-                            style={{padding:"3px 7px",background:"none",border:"none",cursor:i===selFisa.qs.length-1?"not-allowed":"pointer",color:i===selFisa.qs.length-1?"#e0e7ff":"#94a3b8",fontSize:12}}>↓</button>
+                          <button onClick={()=>moveQ(i,1)} disabled={i===(selFisa.qs||[]).length-1}
+                            style={{padding:"3px 7px",background:"none",border:"none",cursor:i===(selFisa.qs||[]).length-1?"not-allowed":"pointer",color:i===(selFisa.qs||[]).length-1?"#e0e7ff":"#94a3b8",fontSize:12}}>↓</button>
                           <button onClick={()=>setEditingQ(i)}
                             style={{padding:"3px 7px",background:"none",border:"none",cursor:"pointer",color:"#6366f1",fontSize:11}}>✏️</button>
                           <button onClick={()=>deleteQ(i)}
@@ -7583,22 +7818,22 @@ function FisaPreviewPanel({labId, mode="preview", teacherName}) {
             {/* Conclusions */}
             <div style={{background:"#F0FDF4",border:"1.5px solid #bbf7d0",borderRadius:12,padding:"12px 14px"}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
-                <div style={{fontSize:11,fontWeight:700,color:"#16a34a",textTransform:"uppercase",letterSpacing:".1em"}}>✅ Concluzia grupei — câmpuri ({selFisa.conc.length})</div>
+                <div style={{fontSize:11,fontWeight:700,color:"#16a34a",textTransform:"uppercase",letterSpacing:".1em"}}>✅ Concluzia grupei — câmpuri ({(selFisa.conc||[]).length})</div>
                 {subTab==="edit" && (
                   <button onClick={()=>{
                     const label = prompt("Adaugă câmp concluzie:");
-                    if (label?.trim()) saveConc([...selFisa.conc, label.trim()]);
+                    if (label?.trim()) saveConc([...(selFisa.conc||[]), label.trim()]);
                   }} style={{padding:"4px 10px",background:"#dcfce7",border:"1px solid #86efac",borderRadius:7,color:"#16a34a",fontSize:11,fontWeight:700,cursor:"pointer"}}>
                     + Adaugă
                   </button>
                 )}
               </div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7}}>
-                {selFisa.conc.map((label,i)=>(
+                {(selFisa.conc||[]).map((label,i)=>(
                   <div key={i} style={{background:"#fff",borderRadius:8,padding:"8px 10px",border:"1px solid #bbf7d0",fontSize:12,color:"#166534",fontWeight:600,display:"flex",alignItems:"center",justifyContent:"space-between",gap:6}}>
                     <span>{i+1}. {label}</span>
                     {subTab==="edit" && (
-                      <button onClick={()=>saveConc(selFisa.conc.filter((_,j)=>j!==i))}
+                      <button onClick={()=>saveConc((selFisa.conc||[]).filter((_,j)=>j!==i))}
                         style={{background:"none",border:"none",cursor:"pointer",color:"#dc2626",fontSize:13,flexShrink:0,padding:0}}>✕</button>
                     )}
                   </div>
