@@ -5602,7 +5602,15 @@ function AdminLogin({onSuccess, onBack}) {
 }
 
 function isGroupActivityResult(result) {
-  return String(result?.module||"").startsWith("group_activity_");
+  const module=String(result?.module||"");
+  const title=String(result?.moduleTitle||"");
+  const answers=String(result?.answersText||"");
+  return module.startsWith("group_activity_")
+    || /^Activitate de grup\s*[·:]/i.test(title.trim())
+    || /(?:^|\n)ACTIVITATE:/i.test(title)
+    || /(?:^|\n)ACTIVITATE:/i.test(answers)
+    || /CONTRIBUȚII INDIVIDUALE/i.test(title)
+    || /CONTRIBUȚII INDIVIDUALE/i.test(answers);
 }
 
 function parseGroupActivityResult(result) {
@@ -6096,7 +6104,7 @@ function AdminPanel({onBack, teacherName}) {
                 <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
                   <thead>
                     <tr style={{background:"rgba(99,102,241,0.08)"}}>
-                      {[T("res_col_sem"),T("res_col_spec"),T("res_col_prof"),T("res_col_name"),T("res_col_grp"),T("res_col_lab"),T("res_col_mod"),T("res_col_score"),"%",T("res_col_time"),T("res_col_date")].map(h=>(
+                      {[T("res_col_sem"),T("res_col_spec"),T("res_col_prof"),T("res_col_name"),T("res_col_grp"),T("res_col_lab"),T("res_col_mod"),"DETALII",T("res_col_score"),"%",T("res_col_time"),T("res_col_date")].map(h=>(
                         <th key={h} style={{textAlign:"left",padding:"10px 12px",borderBottom:"1.5px solid #e0e7ff",color:"#6366f1",fontSize:11,textTransform:"uppercase",letterSpacing:"0.06em"}}>{h}</th>
                       ))}
                     </tr>
@@ -6128,18 +6136,22 @@ function AdminPanel({onBack, teacherName}) {
                           const parts=(r.moduleTitle||"").split("\n---\n");
                           const groupData=groupResult?parseGroupActivityResult(r):null;
                           const title=groupResult?`Activitate de grup · ${groupData?.activityTitle||"—"}`:parts[0];
-                          const hasAnswers=groupResult?!!(r.answersText||r.moduleTitle):parts.length>1;
-                          return (
+                          const legacyGroupDetails=/VERDICT:|CONTRIBUȚII INDIVIDUALE|SINTEZA GRUPULUI/i.test(String(r.moduleTitle||""));
+                          const hasAnswers=groupResult?!!r.answersText||legacyGroupDetails:parts.length>1;
+                          return <>
                             <td style={{padding:"9px 12px",color:"#475569",fontSize:12}}>
                               <div>{title||"–"}</div>
+                            </td>
+                            <td style={{padding:"9px 12px",whiteSpace:"nowrap"}}>
                               {hasAnswers && (
                                 <button onClick={()=>setSelectedResult(r)}
-                                  style={{marginTop:4,padding:"3px 10px",background:"#dcfce7",color:"#16a34a",border:"1px solid #86efac",borderRadius:6,fontSize:11,fontWeight:700,cursor:"pointer"}}>
+                                  style={{padding:"5px 10px",background:groupResult?"#ede9fe":"#dcfce7",color:groupResult?"#6d28d9":"#16a34a",border:`1px solid ${groupResult?"#c4b5fd":"#86efac"}`,borderRadius:7,fontSize:11,fontWeight:800,cursor:"pointer"}}>
                                   {groupResult?"👥 Vezi contribuțiile":"📄 Vezi răspunsuri"}
                                 </button>
                               )}
+                              {!hasAnswers && <span style={{color:"#94a3b8"}}>–</span>}
                             </td>
-                          );
+                          </>;
                         })()}
                           <td style={{padding:"9px 12px",color:"#6366f1",fontWeight:700}}>{r.score}/{r.total}</td>
                           <td style={{padding:"9px 12px"}}>
