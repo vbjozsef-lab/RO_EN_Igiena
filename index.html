@@ -3934,6 +3934,37 @@ function activityNameKey(value){
   return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
 }
 
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
 function activityPayload(row){
   try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
 }
@@ -3958,11 +3989,11 @@ async function activityWriteEvent(kind,f,payload,session,student,moduleTitle){
     lab_id:session?.labId||"",
     lab_code:session?.labCode||"",
     module:"activity_"+kind+"_"+f.id,
-    module_title:moduleTitle||("Activitate sincronizată · "+f.title),
+    module_title:activityStoredTitle(moduleTitle||("Activitate sincronizată · "+f.title),student),
     score:0,total:0,pct:0,time_used:0,
     teacher:session?.teacher||"",semester:session?.semester||"",
     specialization:student?.spec||"",
-    answers_text:JSON.stringify({version:2,kind,...payload}),
+    answers_text:JSON.stringify({version:3,kind,studentMeta:activityStudentMeta(student),...payload}),
   };
   const res=await sb("results",{method:"POST",prefer:"return=minimal",body:JSON.stringify(body)});
   if(!res.ok) throw new Error((await res.text().catch(()=>""))||("HTTP "+res.status));
@@ -3978,7 +4009,7 @@ async function loadActivityRoom(session,student,f,target=14){
   if(!res.ok) throw new Error("Room sync failed");
   const metaRows=(await res.json()).filter(r=>String(r.module||"").startsWith("activity_")&&String(r.module||"").endsWith("_"+f.id));
   const metaMembers=metaRows.filter(r=>r.module==="activity_member_"+f.id);
-  const metaMemberCount=new Set(metaMembers.map(r=>activityNameKey(r.name))).size;
+  const metaMemberCount=new Set(metaMembers.map(activityRowKey)).size;
   const metaUnlocked=metaRows.some(r=>r.module==="activity_unlock_"+f.id);
   let rows=metaRows;
   if(metaUnlocked||metaMemberCount>=Number(target||14)){
@@ -3987,10 +4018,10 @@ async function loadActivityRoom(session,student,f,target=14){
     rows=(await full.json()).filter(r=>String(r.module||"").startsWith("activity_")&&String(r.module||"").endsWith("_"+f.id));
   }
   const joins=[],joinNames=new Set();
-  rows.filter(r=>r.module==="activity_join_"+f.id).forEach(r=>{const k=activityNameKey(r.name);if(k&&!joinNames.has(k)){joinNames.add(k);joins.push(r);}});
+  rows.filter(r=>r.module==="activity_join_"+f.id).forEach(r=>{const k=activityRowKey(r);if(k&&!joinNames.has(k)){joinNames.add(k);joins.push(r);}});
   const latestBy=(kind)=>{
     const map=new Map();
-    rows.filter(r=>r.module===`activity_${kind}_${f.id}`).forEach(r=>map.set(activityNameKey(r.name),r));
+    rows.filter(r=>r.module===`activity_${kind}_${f.id}`).forEach(r=>map.set(activityRowKey(r),r));
     return [...map.values()];
   };
   const members=latestBy("member");
@@ -3998,23 +4029,23 @@ async function loadActivityRoom(session,student,f,target=14){
   const synthesis=rows.filter(r=>r.module==="activity_synthesis_"+f.id).slice(-1)[0]||null;
   const final=rows.filter(r=>r.module==="activity_final_"+f.id).slice(-1)[0]||null;
   const unlocked=rows.some(r=>r.module==="activity_unlock_"+f.id);
-  const seatByName={};joins.forEach((r,i)=>{seatByName[activityNameKey(r.name)]=i+1;});
+  const seatByName={};joins.forEach((r,i)=>{seatByName[activityRowKey(r)]=i+1;});
   return {rows,joins,members,approvals,synthesis,final,unlocked,seatByName};
 }
 
 async function loadActivitySessionRooms(session){
   const token=encodeURIComponent(session?.token||"");
   if(!token) return {};
-  const res=await sb(`results?session_id=eq.${token}&select=name,grp,module,created_at`);
+  const res=await sb(`results?session_id=eq.${token}&select=name,grp,module,module_title,created_at`);
   if(!res.ok) return {};
   const rows=(await res.json()).filter(r=>String(r.module||"").startsWith("activity_"));
   const out={};
   rows.forEach(r=>{
     const g=String(r.grp||"");if(!g)return;
     if(!out[g]) out[g]={joins:new Set(),members:new Set(),approvals:new Set(),unlocked:false,final:false};
-    if(String(r.module).startsWith("activity_join_")) out[g].joins.add(activityNameKey(r.name));
-    if(String(r.module).startsWith("activity_member_")) out[g].members.add(activityNameKey(r.name));
-    if(String(r.module).startsWith("activity_approval_")) out[g].approvals.add(activityNameKey(r.name));
+    if(String(r.module).startsWith("activity_join_")) out[g].joins.add(activityRowKey(r));
+    if(String(r.module).startsWith("activity_member_")) out[g].members.add(activityRowKey(r));
+    if(String(r.module).startsWith("activity_approval_")) out[g].approvals.add(activityRowKey(r));
     if(String(r.module).startsWith("activity_unlock_")) out[g].unlocked=true;
     if(String(r.module).startsWith("activity_final_")) out[g].final=true;
   });
@@ -4074,16 +4105,16 @@ function TeamMissionScreen({session,student,onBack}){
     try{
       const next=await loadActivityRoom(session,student,f,teamSize);
       setRoom(next);setSyncError("");
-      const mySeat=next.seatByName[activityNameKey(student?.name)]||null;
+      const mySeat=next.seatByName[activityStudentKey(student)]||null;
       if(mySeat)setSeat(mySeat);
-      const own=next.members.find(r=>activityNameKey(r.name)===activityNameKey(student?.name));
+      const own=next.members.find(r=>activityRowKey(r)===activityStudentKey(student));
       const revealed=next.unlocked||next.members.length>=teamSize;
       if(next.final)setPhase("done");
       else if(revealed)setPhase("synthesis");
       else if(own)setPhase("waiting");
       else if(mySeat)setPhase("private");
     }catch(e){setSyncError(L("Conexiunea cu sala de grup a fost întreruptă. Reîncercăm automat…","Group room connection was interrupted. Retrying automatically…"));}
-  },[f,session?.token,student?.group,student?.name,teamSize,lang]);
+  },[f,session?.token,student?.group,student?.name,student?.matricol,teamSize,lang]);
 
   React.useEffect(()=>{
     if(!f||joinStarted.current)return;
@@ -4091,7 +4122,7 @@ function TeamMissionScreen({session,student,onBack}){
     (async()=>{
       try{
         const current=await loadActivityRoom(session,student,f,teamSize);
-        if(!current.seatByName[activityNameKey(student?.name)]){
+        if(!current.seatByName[activityStudentKey(student)]){
           await activityWriteEvent("join",f,{joinedAt:Date.now()},session,student,"Participant conectat · "+f.title);
         }
         await refreshRoom();
@@ -4115,10 +4146,10 @@ function TeamMissionScreen({session,student,onBack}){
   if(!f) return <div style={{minHeight:"100vh",background:"#071a33",display:"grid",placeItems:"center",color:"#fff",padding:20,textAlign:"center"}}><div><div style={{fontSize:42,marginBottom:10}}>⚠️</div><strong>{loadError}</strong><div><button onClick={onBack} style={{marginTop:18,padding:"10px 16px",border:0,borderRadius:10,background:"#fff",color:"#071a33",fontWeight:800,cursor:"pointer"}}>{L("Înapoi","Back")}</button></div></div></div>;
 
   const slot=participantSlot(f,seat||1,teamSize,lang);
-  const memberCards=room.members.map(r=>({row:r,payload:activityPayload(r),seat:room.seatByName[activityNameKey(r.name)]||activityPayload(r).seat||0})).sort((a,b)=>a.seat-b.seat);
+  const memberCards=room.members.map(r=>({row:r,payload:activityPayload(r),seat:room.seatByName[activityRowKey(r)]||activityPayload(r).seat||0})).sort((a,b)=>a.seat-b.seat);
   const synthesis=activityPayload(room.synthesis);
   const finalData=activityPayload(room.final);
-  const currentMaxSeat=Math.max(1,...room.joins.map(r=>room.seatByName[activityNameKey(r.name)]||0));
+  const currentMaxSeat=Math.max(1,...room.joins.map(r=>room.seatByName[activityRowKey(r)]||0));
   const isCoordinator=seat===1;
   const isReporter=seat===currentMaxSeat;
   const budgetUsed=selectedActions.reduce((s,i)=>s+(f.actions[i]?.cost||0),0);
@@ -4163,7 +4194,7 @@ function TeamMissionScreen({session,student,onBack}){
     const stateFromSynthesis=synthesis.state||{};
     const hasSynthesis=!!room.synthesis;
     const approvals=room.approvals||[];
-    const myApproved=approvals.some(r=>activityNameKey(r.name)===activityNameKey(student?.name));
+    const myApproved=approvals.some(r=>activityRowKey(r)===activityStudentKey(student));
     const approvalTarget=Math.max(1,memberCards.length);
     const consensusReady=approvals.length>=approvalTarget;
     const toggleEvidence=i=>setSelectedEvidence(prev=>prev.includes(i)?prev.filter(x=>x!==i):(prev.length>=4?prev:[...prev,i]));
@@ -4217,7 +4248,7 @@ async function saveTeamMissionResult(f,state,scored,student,session,members=[],a
   const selectedEvidence=(state.selectedEvidence||[]).map(i=>f.evidence[i]?.text).filter(Boolean);
   const selectedActions=(state.selectedActions||[]).map(i=>f.actions[i]?.text).filter(Boolean);
   const answerText=(f.qs||[]).map((q,i)=>"Q"+(i+1)+": "+q.q+"\nA: "+(state.answers?.[i]||"—")).join("\n\n");
-  const memberText=members.map(m=>{const p=m.payload||{};return `${m.seat}. ${m.row?.name||"—"} — ${p.focus||p.roleName||"Rol"}\nAnaliză: ${p.analysis||"—"}\nImpact: ${p.impact||"—"}\nPropunere: ${p.proposal||"—"}`;}).join("\n\n");
+  const memberText=members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};const matricol=meta.matricol?` [${meta.matricol}]`:"";return `${m.seat}. ${meta.name||m.row?.name||"—"}${matricol} — ${p.focus||p.roleName||"Rol"}\nAnaliză: ${p.analysis||"—"}\nImpact: ${p.impact||"—"}\nPropunere: ${p.proposal||"—"}`;}).join("\n\n");
   const report=[
     "ACTIVITATE: "+f.title,
     "VERDICT: "+f.diagnosis.options[state.diagnosisChoice],
@@ -4235,7 +4266,7 @@ async function saveTeamMissionResult(f,state,scored,student,session,members=[],a
     verdict:f.diagnosis.options[state.diagnosisChoice]||"—",
     evidence:selectedEvidence,actions:selectedActions,confidence:state.confidence||0,
     sources:f.sourceRefs||[],approvedBy:approvals.map(r=>r.name).filter(Boolean),
-    members:members.map(m=>{const p=m.payload||{};return {seat:m.seat,name:m.row?.name||"—",role:p.roleName||"Rol",roleIcon:p.roleIcon||"",focus:p.focus||"",clue:p.clue||"",question:p.question||"",verdict:f.diagnosis.options[p.verdictChoice]||"—",clueClass:p.clueClass||"—",analysis:p.analysis||"—",impact:p.impact||"—",proposal:p.proposal||"—"};}),
+    members:members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};return {seat:m.seat,name:meta.name||m.row?.name||"—",matricol:meta.matricol||"",yearLabel:meta.yearLabel||meta.year||"",seria:meta.seria||"",officialGroup:meta.officialGroup||"",role:p.roleName||"Rol",roleIcon:p.roleIcon||"",focus:p.focus||"",clue:p.clue||"",question:p.question||"",verdict:f.diagnosis.options[p.verdictChoice]||"—",clueClass:p.clueClass||"—",analysis:p.analysis||"—",impact:p.impact||"—",proposal:p.proposal||"—"};}),
     commonAnswers:(f.qs||[]).map((q,i)=>({question:q.q,answer:state.answers?.[i]||"—"})),
     report,generatedAt:Date.now(),
   };
@@ -4529,6 +4560,26 @@ function findStudentByMatricol(matricol) {
   return STUDENT_BY_MATRICOL[cleanMatricol(matricol)] || null;
 }
 
+function buildStudentIdentity(student) {
+  return {
+    type:"student_identity_v1",
+    matricol:cleanMatricol(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||formatStudentYear(student?.year||student?.an||"")),
+    seria:String(student?.seria||""),
+    grupa:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function parseStudentIdentity(text) {
+  try {
+    const parsed=JSON.parse(String(text||"{}"));
+    return parsed?.type==="student_identity_v1"?parsed:{};
+  } catch(e) { return {}; }
+}
+
 function buildExamMeta(meta) {
   try { return "EXAM_META:" + JSON.stringify(meta || {}); } catch(e) { return "EXAM_META:{}"; }
 }
@@ -4741,6 +4792,7 @@ async function addResult(result) {
     teacher: result.teacher || "",
     semester: result.semester || "",
     specialization: result.specialization || "",
+    study_year: result.studyYear || "",
     answers_text: result.answersText || ""
   };
   try {
@@ -4827,22 +4879,31 @@ async function loadResults() {
   // group_activity_* final report remains visible as the assessed result.
   all = all.filter(r => !String(r.module || "").startsWith("activity_"));
   let mapped = all.map(r => {
+    const identity=parseStudentIdentity(r.answers_text||"");
     const base = {
       name: r.name, group: r.grp, labId: r.lab_id, labCode: r.lab_code,
       module: r.module, moduleTitle: r.module_title,
       answersText: r.answers_text||"",
+      matricol: identity.matricol||"",
+      studentYear: identity.yearLabel||formatStudentYear(identity.year||""),
+      studentSeries: identity.seria||"",
+      studentOfficialGroup: identity.grupa||"",
       score: r.score, total: r.total, pct: r.pct,
       timestamp: new Date(r.created_at).getTime(), timeUsed: r.time_used,
       teacher: r.teacher || "",
       semester: r.semester || "",
       specialization: r.specialization || "",
-      studyYear: r.study_year || ""
+      studyYear: r.study_year || identity.yearLabel || ""
     };
     return isExamResult(base) ? enrichExamResult(base) : base;
   });
   try {
     const pending = JSON.parse(localStorage.getItem("igiena_pending_results") || "[]");
-    const localRows = pending.map(r => isExamResult(r) ? enrichExamResult(r) : r);
+    const localRows = pending.map(r => {
+      if (isExamResult(r)) return enrichExamResult(r);
+      const identity=parseStudentIdentity(r?.answersText||"");
+      return {...r,matricol:r?.matricol||identity.matricol||"",studentYear:r?.studentYear||identity.yearLabel||formatStudentYear(identity.year||""),studentSeries:r?.studentSeries||identity.seria||"",studentOfficialGroup:r?.studentOfficialGroup||identity.grupa||"",studyYear:r?.studyYear||identity.yearLabel||""};
+    });
     mapped = [...localRows, ...mapped];
   } catch(e) {}
   return mapped.filter(r => !(isExamResult(r) && Number(r.timestamp || 0) < EXAM_RESULTS_RESET_AT));
@@ -5042,7 +5103,7 @@ const T_STRINGS = {
     // Results
     res_total:"Total răspunsuri", res_unique:"Studenți unici",
     res_avg:"Medie generală", res_active:"Lab-uri active",
-    res_search:"🔍 Caută după nume...",
+    res_search:"🔍 Caută după nume sau nr. matricol...",
     res_all_sem:"📅 Toate semestrele", res_all_spec:"🎓 Toate specializările",
     res_all_grp:"Toate grupele", res_all_lab:"Toate lab-urile",
     res_no_sem:"Fără semestru", res_no_spec:"Fără specializare",
@@ -5227,7 +5288,7 @@ const T_STRINGS = {
     // Results
     res_total:"Total responses", res_unique:"Unique students",
     res_avg:"Overall average", res_active:"Active labs",
-    res_search:"🔍 Search by name...",
+    res_search:"🔍 Search by name or matriculation number...",
     res_all_sem:"📅 All semesters", res_all_spec:"🎓 All specializations",
     res_all_grp:"All groups", res_all_lab:"All labs",
     res_no_sem:"No semester", res_no_spec:"No specialization",
@@ -5633,13 +5694,13 @@ function parseGroupActivityResult(result) {
 
 function GroupActivityResultModal({result,onClose}) {
   const data=parseGroupActivityResult(result);
-  return <div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(15,23,42,.58)",zIndex:2200,display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"18px 12px",overflowY:"auto"}}>
-    <div style={{background:"#f8fafc",borderRadius:20,padding:"20px",maxWidth:980,width:"100%",boxShadow:"0 25px 80px rgba(15,23,42,.35)",margin:"10px 0 30px"}}>
+  return <div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(15,23,42,.58)",zIndex:2200,display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"82px 12px 28px",overflowY:"auto"}}>
+    <div style={{background:"#f8fafc",borderRadius:20,padding:"20px",maxWidth:980,width:"100%",boxShadow:"0 25px 80px rgba(15,23,42,.35)",margin:"0 0 30px"}}>
       <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"flex-start",marginBottom:14}}><div><div style={{fontSize:11,fontWeight:900,color:"#4f46e5",letterSpacing:".09em",textTransform:"uppercase",marginBottom:5}}>Activitate de grup · contribuții individuale</div><h3 style={{margin:"0 0 6px",fontSize:20,color:"#0f172a"}}>{data.activityTitle||"Activitate de grup"}</h3><div style={{fontSize:12,color:"#64748b"}}>Grupa {result.group||"—"} · {result.labCode||"—"} · {data.members?.length||0} contribuții · {result.pct||0}%</div></div><button onClick={onClose} style={{padding:"7px 12px",border:"1px solid #cbd5e1",borderRadius:9,background:"#fff",color:"#475569",fontWeight:850,cursor:"pointer"}}>✕</button></div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:9,marginBottom:14}}><div style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#4f46e5",textTransform:"uppercase",marginBottom:5}}>Verdict comun</div><div style={{fontSize:13,fontWeight:800,color:"#0f172a",lineHeight:1.5}}>{data.verdict||"—"}</div></div><div style={{background:"#ecfdf5",border:"1px solid #86efac",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#15803d",textTransform:"uppercase",marginBottom:5}}>Aprobare comună</div><div style={{fontSize:13,fontWeight:800,color:"#166534"}}>{data.approvedBy?.length?`${data.approvedBy.length} membri au aprobat`:data.type==="group_activity_legacy"?"Rezultat din versiunea anterioară":"Nicio aprobare înregistrată"}</div>{data.approvedBy?.length>0&&<div style={{fontSize:10,color:"#15803d",marginTop:4}}>{data.approvedBy.join(" · ")}</div>}</div><div style={{background:"#fff7ed",border:"1px solid #fed7aa",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#c2410c",textTransform:"uppercase",marginBottom:5}}>Scor</div><div style={{fontSize:20,fontWeight:900,color:"#9a3412"}}>{result.score}/{result.total} · {result.pct}%</div></div></div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}><div style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#0e7490",textTransform:"uppercase",marginBottom:7}}>Dovezi selectate</div>{(data.evidence||[]).map((x,i)=><div key={i} style={{fontSize:11,color:"#334155",marginBottom:4}}>• {x}</div>)}</div><div style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#047857",textTransform:"uppercase",marginBottom:7}}>Acțiuni selectate</div>{(data.actions||[]).map((x,i)=><div key={i} style={{fontSize:11,color:"#334155",marginBottom:4}}>• {x}</div>)}</div></div>
       <div style={{fontSize:11,fontWeight:900,color:"#0f172a",textTransform:"uppercase",letterSpacing:".08em",margin:"0 0 8px"}}>Contribuția fiecărui student</div>
-      {(data.members||[]).length?<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:10,marginBottom:16}}>{data.members.map((m,i)=><div key={i} style={{background:"#fff",border:"1px solid #dbe7f1",borderTop:"4px solid #4f46e5",borderRadius:13,padding:13}}><div style={{fontSize:10,fontWeight:900,color:"#4f46e5",textTransform:"uppercase"}}>Locul {m.seat||i+1} · {m.roleIcon||""} {m.focus||m.role||"Rol"}</div><div style={{fontSize:15,fontWeight:900,color:"#0f172a",margin:"5px 0 9px"}}>{m.name||"—"}</div>{m.question&&<div style={{fontSize:11,color:"#64748b",marginBottom:7}}><strong>Întrebare:</strong> {m.question}</div>}{m.verdict&&<div style={{fontSize:11,color:"#334155",marginBottom:6}}><strong>Verdict individual:</strong> {m.verdict}</div>}<div style={{fontSize:11,color:"#334155",lineHeight:1.55,marginBottom:5}}><strong>Analiză:</strong> {m.analysis||"—"}</div><div style={{fontSize:11,color:"#334155",lineHeight:1.55,marginBottom:5}}><strong>Impact:</strong> {m.impact||"—"}</div><div style={{fontSize:11,color:"#047857",lineHeight:1.55}}><strong>Propunere:</strong> {m.proposal||"—"}</div></div>)}</div>:<div style={{background:"#fff",padding:18,borderRadius:12,color:"#94a3b8",textAlign:"center",marginBottom:14}}>Nu există contribuții individuale stocate pentru acest rezultat.</div>}
+      {(data.members||[]).length?<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:10,marginBottom:16}}>{data.members.map((m,i)=><div key={i} style={{background:"#fff",border:"1px solid #dbe7f1",borderTop:"4px solid #4f46e5",borderRadius:13,padding:13}}><div style={{fontSize:10,fontWeight:900,color:"#4f46e5",textTransform:"uppercase"}}>Locul {m.seat||i+1} · {m.roleIcon||""} {m.focus||m.role||"Rol"}</div><div style={{fontSize:15,fontWeight:900,color:"#0f172a",margin:"5px 0 2px"}}>{m.name||"—"}</div>{m.matricol&&<div style={{fontSize:11,color:"#6366f1",fontFamily:"JetBrains Mono,monospace",fontWeight:800,marginBottom:8}}>Nr. matricol: {m.matricol}{m.yearLabel?" · "+m.yearLabel:""}{m.seria?" · Seria "+m.seria:""}</div>}{m.question&&<div style={{fontSize:11,color:"#64748b",marginBottom:7}}><strong>Întrebare:</strong> {m.question}</div>}{m.verdict&&<div style={{fontSize:11,color:"#334155",marginBottom:6}}><strong>Verdict individual:</strong> {m.verdict}</div>}<div style={{fontSize:11,color:"#334155",lineHeight:1.55,marginBottom:5}}><strong>Analiză:</strong> {m.analysis||"—"}</div><div style={{fontSize:11,color:"#334155",lineHeight:1.55,marginBottom:5}}><strong>Impact:</strong> {m.impact||"—"}</div><div style={{fontSize:11,color:"#047857",lineHeight:1.55}}><strong>Propunere:</strong> {m.proposal||"—"}</div></div>)}</div>:<div style={{background:"#fff",padding:18,borderRadius:12,color:"#94a3b8",textAlign:"center",marginBottom:14}}>Nu există contribuții individuale stocate pentru acest rezultat.</div>}
       {(data.commonAnswers||[]).length>0&&<><div style={{fontSize:11,fontWeight:900,color:"#0f172a",textTransform:"uppercase",letterSpacing:".08em",margin:"0 0 8px"}}>Sinteza comună</div><div style={{display:"grid",gap:7,marginBottom:14}}>{data.commonAnswers.map((x,i)=><div key={i} style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:11,padding:11}}><div style={{fontSize:11,fontWeight:800,color:"#0f172a",marginBottom:4}}>{i+1}. {x.question}</div><div style={{fontSize:11,color:"#475569",lineHeight:1.55}}>{x.answer||"—"}</div></div>)}</div></>}
       {(data.sources||[]).length>0&&<div style={{background:"#ecfeff",border:"1px solid #a5f3fc",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#0e7490",textTransform:"uppercase",marginBottom:6}}>Surse</div>{data.sources.map((x,i)=><div key={i} style={{fontSize:10,color:"#155e75",marginBottom:3}}>• {x}</div>)}</div>}
     </div>
@@ -5768,10 +5829,10 @@ function AdminPanel({onBack, teacherName}) {
       (grpFilter==="all"||r.group===grpFilter) &&
       (semFilter==="all"||r.semester===semFilter) &&
       (specFilter==="all"||r.specialization===specFilter) &&
-      (!nameFilter||r.name.toLowerCase().includes(nameFilter.toLowerCase()))
+      (!nameFilter||String(r.name||"").toLowerCase().includes(nameFilter.toLowerCase())||String(r.matricol||"").includes(nameFilter.trim()))
     );
-    const header = "Semestru,Specializare,Profesor,Nume,Grupă,Laborator,Modul,Scor,Procent,Timp,Data\n";
-    const rows = toExport.map(r=>`"${r.semester||""}","${r.specialization||""}","${r.teacher||""}","${r.name}","${r.group||""}","${r.labCode||""}","${r.moduleTitle||""}",${r.score}/${r.total},${r.pct}%,${r.timeUsed}s,"${new Date(r.timestamp).toLocaleString("ro-RO", { timeZone: "Europe/Bucharest" })}"`).join("\n");
+    const header = "Semestru,Specializare,Profesor,Nr. matricol,Nume,Grupă,Laborator,Modul,Scor,Procent,Timp,Data\n";
+    const rows = toExport.map(r=>`"${r.semester||""}","${r.specialization||""}","${r.teacher||""}","${r.matricol||""}","${r.name}","${r.group||""}","${r.labCode||""}","${r.moduleTitle||""}",${r.score}/${r.total},${r.pct}%,${r.timeUsed}s,"${new Date(r.timestamp).toLocaleString("ro-RO", { timeZone: "Europe/Bucharest" })}"`).join("\n");
     const blob = new Blob(["\uFEFF"+header+rows],{type:"text/csv;charset=utf-8"});
     const a = document.createElement("a"); a.href=URL.createObjectURL(blob);
     a.download=`igiena_rezultate_${new Date().toISOString().slice(0,10)}.csv`; a.click();
@@ -5788,7 +5849,7 @@ function AdminPanel({onBack, teacherName}) {
     .filter(r => grpFilter==="all"||r.group===grpFilter)
     .filter(r => semFilter==="all"||r.semester===semFilter)
     .filter(r => specFilter==="all"||r.specialization===specFilter)
-    .filter(r => !nameFilter||r.name.toLowerCase().includes(nameFilter.toLowerCase()));
+    .filter(r => !nameFilter||String(r.name||"").toLowerCase().includes(nameFilter.toLowerCase())||String(r.matricol||"").includes(nameFilter.trim()));
 
   const DISPLAY_LIMIT = 500;
   const displayResults = filteredResults.slice(0, DISPLAY_LIMIT);
@@ -6104,7 +6165,7 @@ function AdminPanel({onBack, teacherName}) {
                 <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
                   <thead>
                     <tr style={{background:"rgba(99,102,241,0.08)"}}>
-                      {[T("res_col_sem"),T("res_col_spec"),T("res_col_prof"),T("res_col_name"),T("res_col_grp"),T("res_col_lab"),T("res_col_mod"),"DETALII",T("res_col_score"),"%",T("res_col_time"),T("res_col_date")].map(h=>(
+                      {[T("res_col_sem"),T("res_col_spec"),T("res_col_prof"),"NR. MATRICOL",T("res_col_name"),T("res_col_grp"),T("res_col_lab"),T("res_col_mod"),"DETALII",T("res_col_score"),"%",T("res_col_time"),T("res_col_date")].map(h=>(
                         <th key={h} style={{textAlign:"left",padding:"10px 12px",borderBottom:"1.5px solid #e0e7ff",color:"#6366f1",fontSize:11,textTransform:"uppercase",letterSpacing:"0.06em"}}>{h}</th>
                       ))}
                     </tr>
@@ -6124,6 +6185,7 @@ function AdminPanel({onBack, teacherName}) {
                           <td style={{padding:"9px 12px"}}>
                             {r.teacher ? <span style={{background:"#dcfce7",color:"#166534",borderRadius:6,padding:"2px 8px",fontSize:11,fontWeight:600}}>👤 {r.teacher}</span> : <span style={{color:"#94a3b8",fontSize:11}}>–</span>}
                           </td>
+                          <td style={{padding:"9px 12px",fontFamily:"JetBrains Mono,monospace",fontWeight:800,color:"#4338ca"}}>{r.matricol||"–"}</td>
                           <td style={{padding:"9px 12px",color:"#1e293b",fontWeight:600}}>{r.name}</td>
                           <td style={{padding:"9px 12px"}}>
                             <span style={{background:"#eff6ff",color:"#1d4ed8",borderRadius:6,padding:"2px 8px",fontSize:11,fontWeight:700}}>🏫 {r.group||"–"}</span>
@@ -8121,19 +8183,27 @@ function TokenJoin({token, onValid, onInvalid}) {
 function StudentLogin({session, onLogin}) {
   const T = useT();
   const lang = React.useContext(LangContext);
-  const [name, setName]   = useState("");
+  const [matricol, setMatricol] = useState("");
   const [group, setGroup] = useState("");
-  const [spec, setSpec]   = useState("");
   const [err, setErr]     = useState("");
   const lab = LABS.find(l=>l.id===session.labId) || {};
   const isGroupActivity = session?.labCode?.endsWith("-FISA");
+  const clean = cleanMatricol(matricol);
+  const identified = findStudentByMatricol(clean);
 
   const go = () => {
-    if (name.trim().length < 3) { setErr(T("st_err_name")); return; }
-    if (!group) { setErr(T("st_err_group")); return; }
-    if (!spec) { setErr(T("st_err_spec")); return; }
-    markSessionUsed(session.token, name.trim());
-    onLogin(name.trim(), group, spec);
+    const student=findStudentByMatricol(clean);
+    if (!student) {
+      setErr(lang==="en"?"The matriculation number was not found in the student list. Please check and try again.":"Numărul matricol nu a fost găsit în lista studenților. Verificați și încercați din nou.");
+      return;
+    }
+    if (isGroupActivity && !group) { setErr(lang==="en"?"Select activity group 1–6.":"Selectați grupa activității 1–6."); return; }
+    const academicGroup=student.group||buildStudentGroupLabel(student);
+    const officialGroup=String(student.grupa||"");
+    const resultGroup=isGroupActivity?group:(officialGroup||String(student.seria||"")||"—");
+    const specialization=student.specialization||student.spec||student.yearLabel||"";
+    markSessionUsed(session.token, student.name);
+    onLogin({...student,academicGroup,officialGroup,activityGroup:isGroupActivity?group:"",group:resultGroup,spec:specialization});
   };
 
   return (
@@ -8144,22 +8214,27 @@ function StudentLogin({session, onLogin}) {
           <h2 style={{color:"#0a2a18",fontSize:20,margin:"8px 0 4px"}}>{lab.code} — {lang==="en" && lab.titleEn ? lab.titleEn : lab.title}</h2>
           <p style={{color:"#4a9a6a",fontSize:13,margin:0}}>{T("teacher_label")||"Profesor"}: {session.teacher||"–"}</p>
         </div>
-        <label style={S.label}>{T("st_name")||"Numele și prenumele"}</label>
-        <input style={{...S.input,marginBottom:12}} placeholder={T("st_name_ph")}
-          value={name} onChange={e=>{setName(e.target.value);setErr("");}}
+        <div style={{background:"#eef2ff",border:"1px solid #c7d2fe",borderRadius:11,padding:"10px 12px",fontSize:12,color:"#4338ca",lineHeight:1.5,marginBottom:16}}>
+          {lang==="en"?"Enter only your matriculation number. Your name and academic data are completed automatically.":"Introduceți doar numărul matricol. Numele și datele academice se completează automat."}
+        </div>
+        <label style={S.label}>{lang==="en"?"Matriculation number":"Număr matricol"}</label>
+        <input style={{...S.input,marginBottom:12,borderColor:err?"#ef4444":identified?"#22c55e":"#dbe7f1",fontFamily:"JetBrains Mono,monospace",fontSize:18,textAlign:"center",letterSpacing:1}} placeholder={lang==="en"?"e.g. 1762":"ex. 19519"}
+          value={matricol} inputMode="numeric" autoFocus onChange={e=>{setMatricol(e.target.value);setErr("");}}
           onKeyDown={e=>e.key==="Enter"&&go()}/>
-        <label style={S.label}>{isGroupActivity ? (lang==="en"?"Activity group":"Grupa activității") : (T("st_group")||"Fișă")}</label>
-        <select style={{...S.input,marginBottom:12}} value={group} onChange={e=>{setGroup(e.target.value);setErr("");}}>
-          <option value="">{isGroupActivity ? (lang==="en"?"— Select group 1–6 —":"— Selectați grupa 1–6 —") : (T("st_group_ph")||"— Selectați fișa —")}</option>
-          {Array.from({length:isGroupActivity?6:40},(_,i)=><option key={i+1} value={String(i+1)}>{isGroupActivity?(lang==="en"?"Group ":"Grupa "):""}{i+1}</option>)}
-        </select>
-        <label style={S.label}>{T("st_spec")||"Specializare"}</label>
-        <select style={{...S.input,marginBottom:16}} value={spec} onChange={e=>{setSpec(e.target.value);setErr("");}}>
-          <option value="">{T("st_spec_ph")||"— Selectați specializarea —"}</option>
-          {loadNomenclator().specializations.map(s=><option key={s} value={s}>{s}</option>)}
-        </select>
+        {identified&&<div style={{marginBottom:14,background:"#f0fdf4",border:"1.5px solid #86efac",borderRadius:12,padding:"12px 14px"}}>
+          <div style={{fontSize:10,fontWeight:900,color:"#15803d",textTransform:"uppercase",letterSpacing:".07em",marginBottom:4}}>{lang==="en"?"Student identified":"Student identificat"}</div>
+          <div style={{fontSize:15,fontWeight:900,color:"#0f172a",lineHeight:1.35}}>{identified.name}</div>
+          <div style={{fontSize:12,color:"#166534",fontWeight:700,marginTop:4}}>
+            #{identified.matricol}{identified.yearLabel?" · "+identified.yearLabel:""}{identified.seria?" · Seria "+identified.seria:""}{identified.grupa?" · Grupa "+identified.grupa:""}
+          </div>
+        </div>}
+        {isGroupActivity&&<><label style={S.label}>{lang==="en"?"Activity group":"Grupa activității"}</label>
+          <select style={{...S.input,marginBottom:16}} value={group} onChange={e=>{setGroup(e.target.value);setErr("");}}>
+            <option value="">{lang==="en"?"— Select group 1–6 —":"— Selectați grupa 1–6 —"}</option>
+            {Array.from({length:6},(_,i)=><option key={i+1} value={String(i+1)}>{lang==="en"?"Group ":"Grupa "}{i+1}</option>)}
+          </select></>}
         {err && <p style={{color:"#dc2626",fontSize:13,margin:"0 0 10px",fontWeight:600}}>{err}</p>}
-        <button style={S.btnG} onClick={go}>{T("st_enter")||"Intră la test →"}</button>
+        <button style={S.btnG} onClick={go}>{isGroupActivity?(lang==="en"?"Enter group activity →":"Intră în activitatea de grup →"):(lang==="en"?"Enter quiz →":"Intră la quiz →")}</button>
       </div>
     </div>
   );
@@ -8262,7 +8337,7 @@ function LP4BModuleSelect({studentName, onSelect, onDemo}) {
 // ════════════════════════════════════════════════════════════
 // QUIZ SCREEN
 // ════════════════════════════════════════════════════════════
-function QuizScreen({studentName, studentGroup, studentSpec, labId, module, onFinish, sessionTeacher, sessionSemester}) {
+function QuizScreen({student, studentName, studentGroup, studentSpec, labId, module, onFinish, sessionTeacher, sessionSemester}) {
   const T = useT();
   const lang = React.useContext(LangContext);
   const _getQBank = (l) => ({
@@ -8330,7 +8405,9 @@ function QuizScreen({studentName, studentGroup, studentSpec, labId, module, onFi
         score, total:qs.length, pct, timeUsed,
         timestamp:Date.now(),
         teacher:sessionTeacher||"", semester:sessionSemester||"",
-        specialization:studentSpec||""
+        specialization:studentSpec||"",
+        studyYear:student?.yearLabel||formatStudentYear(student?.year||student?.an||""),
+        answersText:JSON.stringify(buildStudentIdentity(student||{}))
       };
       addResult(entry).catch(()=>{});
       onFinish(entry, newAns, qs);
@@ -9377,7 +9454,7 @@ function App() {
       onInvalid={msg=>{setErrMsg(msg);setScreen("error");}}/>
   );
   if (screen==="error")       return <ErrorScreen message={errMsg} onBack={()=>{setScreen("home");window.history.pushState({},"",window.location.pathname);}}/>;
-  if (screen==="studentLogin")return <StudentLogin session={session} onLogin={(n,g,sp)=>{setStudent({name:n,group:g,spec:sp||""});setScreen("labRouter");}}/>;
+  if (screen==="studentLogin")return <StudentLogin session={session} onLogin={(studentData)=>{setStudent(studentData);setScreen("labRouter");}}/>;
 
   if (screen==="labRouter") {
     if (session?.labCode?.endsWith("-FISA")) { setScreen("fisa_grup"); }
@@ -9477,7 +9554,7 @@ function App() {
   if (screen==="lp4b_modules") return <LP4BModuleSelect studentName={student?.name} onSelect={m=>{setModule(m);setScreen("quiz");}} onDemo={()=>setShowDemo(true)}/>;
   if (showDemo) return <DemoScreen lab={LABS.find(l=>l.id===session?.labId)} onBack={()=>setShowDemo(false)}/>;
   if (screen==="quiz" && module) return (
-    <QuizScreen studentName={student?.name} studentGroup={student?.group} studentSpec={student?.spec||""}
+    <QuizScreen student={student} studentName={student?.name} studentGroup={student?.group} studentSpec={student?.spec||""}
       labId={session?.labId} module={module} sessionTeacher={session?.teacher||""} sessionSemester={session?.semester||""}
       onFinish={(e,a,q)=>{setResult(e);setAnswers(a);setQuizQs(q);setScreen("result");}}/>
   );
