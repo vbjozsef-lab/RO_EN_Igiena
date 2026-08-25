@@ -10,15 +10,16 @@
   const sources=s=>s.blocks.filter(b=>b.source);
   const current=()=>deck.slides[state.cur];
   let deck=null;
+
   async function unpack(){
     const bin=Uint8Array.from(atob(window.PRESENTATION_LIBRARY_GZIP),c=>c.charCodeAt(0));
     let txt;
     if('DecompressionStream' in window){const ds=new DecompressionStream('gzip');txt=await new Response(new Blob([bin]).stream().pipeThrough(ds)).text();}
     else throw new Error('Browserul nu poate deschide pachetul comprimat. Folosiți Chrome/Edge actualizat.');
-    const all=JSON.parse(txt),d=all[lp]; if(!d) throw new Error('Prezentarea nu a fost găsită.');
+    const d=JSON.parse(txt); if(!d) throw new Error('Prezentarea nu a fost găsită.');
     deck={meta:d.m,slides:d.s.map(x=>({number:x[0],title:x[1],blocks:x[2].map(b=>({text:b[0],fontSize:b[1],source:!!b[2],x:b[3],y:b[4],cx:b[5],cy:b[6]})),quickChecks:x[3]||[]}))};
   }
-  function load(){const s=document.createElement('script');s.src='content/all-compact-gz.js';s.onload=()=>unpack().then(render).catch(showError);s.onerror=()=>showError(new Error('Pachetul de prezentări nu poate fi încărcat.'));document.head.appendChild(s)}
+  function load(){const s=document.createElement('script');s.src=`content/${lp}-gz.js`;s.onload=()=>{window.PRESENTATION_LIBRARY_GZIP=window.PRESENTATION_DECK_GZIP;unpack().then(render).catch(showError)};s.onerror=()=>showError(new Error('Pachetul de prezentare nu poate fi încărcat.'));document.head.appendChild(s)}
   function showError(e){app.className='error-screen';app.innerHTML=`<h1>Prezentarea nu este disponibilă</h1><p>${esc(e.message||e)}</p>`}
   function material(slide){
     const seen=new Set(),items=[];
