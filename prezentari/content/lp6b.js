@@ -1087,9 +1087,7 @@ window.PRESENTATION_CONTENT = {
           "cx": 603504,
           "cy": 201168,
           "originalIndex": 24
-        }
-      ],
-      "sourceBlocks": [
+        },
         {
           "order": 54,
           "paragraphs": [
@@ -1101,7 +1099,8 @@ window.PRESENTATION_CONTENT = {
           "x": 457200,
           "y": 4187952,
           "cx": 8229600,
-          "cy": 237744
+          "cy": 237744,
+          "originalIndex": 25
         },
         {
           "order": 55,
@@ -1114,8 +1113,11 @@ window.PRESENTATION_CONTENT = {
           "x": 457200,
           "y": 4443984,
           "cx": 8229600,
-          "cy": 365760
-        },
+          "cy": 365760,
+          "originalIndex": 26
+        }
+      ],
+      "sourceBlocks": [
         {
           "order": 57,
           "paragraphs": [
@@ -2306,6 +2308,34 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 9
         },
         {
+          "order": 26,
+          "paragraphs": [
+            "Date România (INSP 2022)"
+          ],
+          "text": "Date România (INSP 2022)",
+          "fontSize": 1200,
+          "source": true,
+          "x": 5449824,
+          "y": 3273552,
+          "cx": 3429000,
+          "cy": 292608,
+          "originalIndex": 10
+        },
+        {
+          "order": 22,
+          "paragraphs": [
+            "Epuizare maximă — risc de burnout școlar, mai ales la clasele terminale (XII). Studiu INSP 2022: 22% elevi clasa XII cu simptome de burnout semnificativ clinic."
+          ],
+          "text": "Epuizare maximă — risc de burnout școlar, mai ales la clasele terminale (XII). Studiu INSP 2022: 22% elevi clasa XII cu simptome de burnout semnificativ clinic.",
+          "fontSize": 950,
+          "source": true,
+          "x": 466344,
+          "y": 3621024,
+          "cx": 3977640,
+          "cy": 877824,
+          "originalIndex": 13
+        },
+        {
           "order": 27,
           "paragraphs": [
             "22% elevi din clasa XII prezintă simptome de burnout școlar semnificativ clinic. Absenteismul crește cu 35% în ultimele 4 săptămâni ale anului."
@@ -2321,32 +2351,6 @@ window.PRESENTATION_CONTENT = {
         }
       ],
       "sourceBlocks": [
-        {
-          "order": 26,
-          "paragraphs": [
-            "Date România (INSP 2022)"
-          ],
-          "text": "Date România (INSP 2022)",
-          "fontSize": 1200,
-          "source": true,
-          "x": 5449824,
-          "y": 3273552,
-          "cx": 3429000,
-          "cy": 292608
-        },
-        {
-          "order": 22,
-          "paragraphs": [
-            "Epuizare maximă — risc de burnout școlar, mai ales la clasele terminale (XII). Studiu INSP 2022: 22% elevi clasa XII cu simptome de burnout semnificativ clinic."
-          ],
-          "text": "Epuizare maximă — risc de burnout școlar, mai ales la clasele terminale (XII). Studiu INSP 2022: 22% elevi clasa XII cu simptome de burnout semnificativ clinic.",
-          "fontSize": 950,
-          "source": true,
-          "x": 466344,
-          "y": 3621024,
-          "cx": 3977640,
-          "cy": 877824
-        },
         {
           "order": 29,
           "paragraphs": [
@@ -3460,6 +3464,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 15
         },
         {
+          "order": 35,
+          "paragraphs": [
+            "Liceu. Maximum 6 ore/zi cu pauze obligatorii de 15 minute. OMS recomandă start ≥ 8:30 pentru adolescenți (biologie circadiană)."
+          ],
+          "text": "Liceu. Maximum 6 ore/zi cu pauze obligatorii de 15 minute. OMS recomandă start ≥ 8:30 pentru adolescenți (biologie circadiană).",
+          "fontSize": 950,
+          "source": true,
+          "x": 3950208,
+          "y": 4279392,
+          "cx": 4773168,
+          "cy": 603504,
+          "originalIndex": 16
+        },
+        {
           "order": 34,
           "paragraphs": [
             "5–6 ore/zi"
@@ -3489,19 +3507,6 @@ window.PRESENTATION_CONTENT = {
         }
       ],
       "sourceBlocks": [
-        {
-          "order": 35,
-          "paragraphs": [
-            "Liceu. Maximum 6 ore/zi cu pauze obligatorii de 15 minute. OMS recomandă start ≥ 8:30 pentru adolescenți (biologie circadiană)."
-          ],
-          "text": "Liceu. Maximum 6 ore/zi cu pauze obligatorii de 15 minute. OMS recomandă start ≥ 8:30 pentru adolescenți (biologie circadiană).",
-          "fontSize": 950,
-          "source": true,
-          "x": 3950208,
-          "y": 4279392,
-          "cx": 4773168,
-          "cy": 603504
-        },
         {
           "order": 37,
           "paragraphs": [
@@ -4061,6 +4066,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 9
         },
         {
+          "order": 21,
+          "paragraphs": [
+            "elevi 11–15 ani România · HBSC 2022"
+          ],
+          "text": "elevi 11–15 ani România · HBSC 2022",
+          "fontSize": 1000,
+          "source": true,
+          "x": 1920240,
+          "y": 3072384,
+          "cx": 6766560,
+          "cy": 201168,
+          "originalIndex": 10
+        },
+        {
           "order": 24,
           "paragraphs": [
             "32%"
@@ -4087,6 +4106,20 @@ window.PRESENTATION_CONTENT = {
           "cx": 6766560,
           "cy": 256032,
           "originalIndex": 12
+        },
+        {
+          "order": 26,
+          "paragraphs": [
+            "sub media UE de 40% · ECDC 2022"
+          ],
+          "text": "sub media UE de 40% · ECDC 2022",
+          "fontSize": 1000,
+          "source": true,
+          "x": 1920240,
+          "y": 3758184,
+          "cx": 6766560,
+          "cy": 201168,
+          "originalIndex": 13
         },
         {
           "order": 29,
@@ -4117,6 +4150,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 15
         },
         {
+          "order": 31,
+          "paragraphs": [
+            "adolescenți 13–17 ani · INSP 2022"
+          ],
+          "text": "adolescenți 13–17 ani · INSP 2022",
+          "fontSize": 1000,
+          "source": true,
+          "x": 1920240,
+          "y": 4443984,
+          "cx": 6766560,
+          "cy": 201168,
+          "originalIndex": 16
+        },
+        {
           "order": 33,
           "paragraphs": [
             "✓ Intervenții: Program \"Fructe și legume în școli\" (UE) · baruri de salată · educație nutrițională · regulament cantine școlare (CNSP 2019)"
@@ -4132,45 +4179,6 @@ window.PRESENTATION_CONTENT = {
         }
       ],
       "sourceBlocks": [
-        {
-          "order": 21,
-          "paragraphs": [
-            "elevi 11–15 ani România · HBSC 2022"
-          ],
-          "text": "elevi 11–15 ani România · HBSC 2022",
-          "fontSize": 1000,
-          "source": true,
-          "x": 1920240,
-          "y": 3072384,
-          "cx": 6766560,
-          "cy": 201168
-        },
-        {
-          "order": 26,
-          "paragraphs": [
-            "sub media UE de 40% · ECDC 2022"
-          ],
-          "text": "sub media UE de 40% · ECDC 2022",
-          "fontSize": 1000,
-          "source": true,
-          "x": 1920240,
-          "y": 3758184,
-          "cx": 6766560,
-          "cy": 201168
-        },
-        {
-          "order": 31,
-          "paragraphs": [
-            "adolescenți 13–17 ani · INSP 2022"
-          ],
-          "text": "adolescenți 13–17 ani · INSP 2022",
-          "fontSize": 1000,
-          "source": true,
-          "x": 1920240,
-          "y": 4443984,
-          "cx": 6766560,
-          "cy": 201168
-        },
         {
           "order": 35,
           "paragraphs": [
@@ -4486,6 +4494,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 3
         },
         {
+          "order": 11,
+          "paragraphs": [
+            "↑ față de media UE de 47% · WHO Global Oral Health 2022"
+          ],
+          "text": "↑ față de media UE de 47% · WHO Global Oral Health 2022",
+          "fontSize": 1000,
+          "source": true,
+          "x": 1920240,
+          "y": 1700784,
+          "cx": 6766560,
+          "cy": 201168,
+          "originalIndex": 4
+        },
+        {
           "order": 14,
           "paragraphs": [
             "62%"
@@ -4556,6 +4578,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 9
         },
         {
+          "order": 21,
+          "paragraphs": [
+            "sub media UE de 72% · HBSC Romania 2022"
+          ],
+          "text": "sub media UE de 72% · HBSC Romania 2022",
+          "fontSize": 1000,
+          "source": true,
+          "x": 1920240,
+          "y": 3072384,
+          "cx": 6766560,
+          "cy": 201168,
+          "originalIndex": 10
+        },
+        {
           "order": 24,
           "paragraphs": [
             "35%"
@@ -4584,6 +4620,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 12
         },
         {
+          "order": 26,
+          "paragraphs": [
+            "risc major eroziune dentară · ECDC 2022"
+          ],
+          "text": "risc major eroziune dentară · ECDC 2022",
+          "fontSize": 1000,
+          "source": true,
+          "x": 1920240,
+          "y": 3758184,
+          "cx": 6766560,
+          "cy": 201168,
+          "originalIndex": 13
+        },
+        {
           "order": 29,
           "paragraphs": [
             "12%"
@@ -4610,47 +4660,6 @@ window.PRESENTATION_CONTENT = {
           "cx": 6766560,
           "cy": 256032,
           "originalIndex": 15
-        }
-      ],
-      "sourceBlocks": [
-        {
-          "order": 11,
-          "paragraphs": [
-            "↑ față de media UE de 47% · WHO Global Oral Health 2022"
-          ],
-          "text": "↑ față de media UE de 47% · WHO Global Oral Health 2022",
-          "fontSize": 1000,
-          "source": true,
-          "x": 1920240,
-          "y": 1700784,
-          "cx": 6766560,
-          "cy": 201168
-        },
-        {
-          "order": 21,
-          "paragraphs": [
-            "sub media UE de 72% · HBSC Romania 2022"
-          ],
-          "text": "sub media UE de 72% · HBSC Romania 2022",
-          "fontSize": 1000,
-          "source": true,
-          "x": 1920240,
-          "y": 3072384,
-          "cx": 6766560,
-          "cy": 201168
-        },
-        {
-          "order": 26,
-          "paragraphs": [
-            "risc major eroziune dentară · ECDC 2022"
-          ],
-          "text": "risc major eroziune dentară · ECDC 2022",
-          "fontSize": 1000,
-          "source": true,
-          "x": 1920240,
-          "y": 3758184,
-          "cx": 6766560,
-          "cy": 201168
         },
         {
           "order": 31,
@@ -4663,7 +4672,8 @@ window.PRESENTATION_CONTENT = {
           "x": 1920240,
           "y": 4443984,
           "cx": 6766560,
-          "cy": 201168
+          "cy": 201168,
+          "originalIndex": 16
         },
         {
           "order": 33,
@@ -4676,8 +4686,11 @@ window.PRESENTATION_CONTENT = {
           "x": 411480,
           "y": 4800600,
           "cx": 8321040,
-          "cy": 118872
-        },
+          "cy": 118872,
+          "originalIndex": 17
+        }
+      ],
+      "sourceBlocks": [
         {
           "order": 35,
           "paragraphs": [
@@ -4993,6 +5006,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 3
         },
         {
+          "order": 11,
+          "paragraphs": [
+            "HBSC 2022 — 1 din 3 adolescenți fumează. De 2× media UE de 14%"
+          ],
+          "text": "HBSC 2022 — 1 din 3 adolescenți fumează. De 2× media UE de 14%",
+          "fontSize": 1000,
+          "source": true,
+          "x": 1920240,
+          "y": 1700784,
+          "cx": 6766560,
+          "cy": 201168,
+          "originalIndex": 4
+        },
+        {
           "order": 14,
           "paragraphs": [
             "12%"
@@ -5019,6 +5046,20 @@ window.PRESENTATION_CONTENT = {
           "cx": 6766560,
           "cy": 256032,
           "originalIndex": 6
+        },
+        {
+          "order": 16,
+          "paragraphs": [
+            "ESPAD România 2019 — debut precoce → risc adicție mult crescut"
+          ],
+          "text": "ESPAD România 2019 — debut precoce → risc adicție mult crescut",
+          "fontSize": 1000,
+          "source": true,
+          "x": 1920240,
+          "y": 2386584,
+          "cx": 6766560,
+          "cy": 201168,
+          "originalIndex": 7
         },
         {
           "order": 19,
@@ -5049,6 +5090,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 9
         },
         {
+          "order": 21,
+          "paragraphs": [
+            "↑ puternic față de 8% în 2017 · ECDC 2023 · risc substanțe toxice"
+          ],
+          "text": "↑ puternic față de 8% în 2017 · ECDC 2023 · risc substanțe toxice",
+          "fontSize": 1000,
+          "source": true,
+          "x": 1920240,
+          "y": 3072384,
+          "cx": 6766560,
+          "cy": 201168,
+          "originalIndex": 10
+        },
+        {
           "order": 24,
           "paragraphs": [
             "14%"
@@ -5075,6 +5130,34 @@ window.PRESENTATION_CONTENT = {
           "cx": 6766560,
           "cy": 256032,
           "originalIndex": 12
+        },
+        {
+          "order": 26,
+          "paragraphs": [
+            "România = 2× media europeană · ECDC 2022 — unul dintre cele mai ridicate"
+          ],
+          "text": "România = 2× media europeană · ECDC 2022 — unul dintre cele mai ridicate",
+          "fontSize": 1000,
+          "source": true,
+          "x": 1920240,
+          "y": 3758184,
+          "cx": 6766560,
+          "cy": 201168,
+          "originalIndex": 13
+        },
+        {
+          "order": 29,
+          "paragraphs": [
+            "× 15"
+          ],
+          "text": "× 15",
+          "fontSize": 2000,
+          "source": false,
+          "x": 320040,
+          "y": 4096512,
+          "cx": 1508760,
+          "cy": 603504,
+          "originalIndex": 14
         },
         {
           "order": 30,
@@ -5106,58 +5189,6 @@ window.PRESENTATION_CONTENT = {
         }
       ],
       "sourceBlocks": [
-        {
-          "order": 11,
-          "paragraphs": [
-            "HBSC 2022 — 1 din 3 adolescenți fumează. De 2× media UE de 14%"
-          ],
-          "text": "HBSC 2022 — 1 din 3 adolescenți fumează. De 2× media UE de 14%",
-          "fontSize": 1000,
-          "source": true,
-          "x": 1920240,
-          "y": 1700784,
-          "cx": 6766560,
-          "cy": 201168
-        },
-        {
-          "order": 16,
-          "paragraphs": [
-            "ESPAD România 2019 — debut precoce → risc adicție mult crescut"
-          ],
-          "text": "ESPAD România 2019 — debut precoce → risc adicție mult crescut",
-          "fontSize": 1000,
-          "source": true,
-          "x": 1920240,
-          "y": 2386584,
-          "cx": 6766560,
-          "cy": 201168
-        },
-        {
-          "order": 21,
-          "paragraphs": [
-            "↑ puternic față de 8% în 2017 · ECDC 2023 · risc substanțe toxice"
-          ],
-          "text": "↑ puternic față de 8% în 2017 · ECDC 2023 · risc substanțe toxice",
-          "fontSize": 1000,
-          "source": true,
-          "x": 1920240,
-          "y": 3072384,
-          "cx": 6766560,
-          "cy": 201168
-        },
-        {
-          "order": 26,
-          "paragraphs": [
-            "România = 2× media europeană · ECDC 2022 — unul dintre cele mai ridicate"
-          ],
-          "text": "România = 2× media europeană · ECDC 2022 — unul dintre cele mai ridicate",
-          "fontSize": 1000,
-          "source": true,
-          "x": 1920240,
-          "y": 3758184,
-          "cx": 6766560,
-          "cy": 201168
-        },
         {
           "order": 33,
           "paragraphs": [
@@ -5516,6 +5547,34 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 7
         },
         {
+          "order": 14,
+          "paragraphs": [
+            "ESPAD 2019 — cel mai înalt din UE"
+          ],
+          "text": "ESPAD 2019 — cel mai înalt din UE",
+          "fontSize": 900,
+          "source": true,
+          "x": 1417320,
+          "y": 2066544,
+          "cx": 2926080,
+          "cy": 256032,
+          "originalIndex": 8
+        },
+        {
+          "order": 37,
+          "paragraphs": [
+            "EMCDDA 2023 — sub media UE de 16%"
+          ],
+          "text": "EMCDDA 2023 — sub media UE de 16%",
+          "fontSize": 900,
+          "source": true,
+          "x": 5760720,
+          "y": 2066544,
+          "cx": 2980944,
+          "cy": 256032,
+          "originalIndex": 9
+        },
+        {
           "order": 17,
           "paragraphs": [
             "18%"
@@ -5572,6 +5631,34 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 13
         },
         {
+          "order": 19,
+          "paragraphs": [
+            "locul 3 UE · ECDC School Survey 2022"
+          ],
+          "text": "locul 3 UE · ECDC School Survey 2022",
+          "fontSize": 900,
+          "source": true,
+          "x": 1417320,
+          "y": 2798064,
+          "cx": 2926080,
+          "cy": 256032,
+          "originalIndex": 14
+        },
+        {
+          "order": 42,
+          "paragraphs": [
+            "EMCDDA 2023 — România: risc crescut"
+          ],
+          "text": "EMCDDA 2023 — România: risc crescut",
+          "fontSize": 900,
+          "source": true,
+          "x": 5760720,
+          "y": 2798064,
+          "cx": 2980944,
+          "cy": 256032,
+          "originalIndex": 15
+        },
+        {
           "order": 22,
           "paragraphs": [
             "12 ani"
@@ -5626,6 +5713,20 @@ window.PRESENTATION_CONTENT = {
           "cx": 2980944,
           "cy": 256032,
           "originalIndex": 19
+        },
+        {
+          "order": 24,
+          "paragraphs": [
+            "România · INSP 2022"
+          ],
+          "text": "România · INSP 2022",
+          "fontSize": 900,
+          "source": true,
+          "x": 1417320,
+          "y": 3529584,
+          "cx": 2926080,
+          "cy": 256032,
+          "originalIndex": 20
         },
         {
           "order": 47,
@@ -5710,73 +5811,6 @@ window.PRESENTATION_CONTENT = {
           "cx": 2926080,
           "cy": 256032,
           "originalIndex": 26
-        }
-      ],
-      "sourceBlocks": [
-        {
-          "order": 14,
-          "paragraphs": [
-            "ESPAD 2019 — cel mai înalt din UE"
-          ],
-          "text": "ESPAD 2019 — cel mai înalt din UE",
-          "fontSize": 900,
-          "source": true,
-          "x": 1417320,
-          "y": 2066544,
-          "cx": 2926080,
-          "cy": 256032
-        },
-        {
-          "order": 37,
-          "paragraphs": [
-            "EMCDDA 2023 — sub media UE de 16%"
-          ],
-          "text": "EMCDDA 2023 — sub media UE de 16%",
-          "fontSize": 900,
-          "source": true,
-          "x": 5760720,
-          "y": 2066544,
-          "cx": 2980944,
-          "cy": 256032
-        },
-        {
-          "order": 19,
-          "paragraphs": [
-            "locul 3 UE · ECDC School Survey 2022"
-          ],
-          "text": "locul 3 UE · ECDC School Survey 2022",
-          "fontSize": 900,
-          "source": true,
-          "x": 1417320,
-          "y": 2798064,
-          "cx": 2926080,
-          "cy": 256032
-        },
-        {
-          "order": 42,
-          "paragraphs": [
-            "EMCDDA 2023 — România: risc crescut"
-          ],
-          "text": "EMCDDA 2023 — România: risc crescut",
-          "fontSize": 900,
-          "source": true,
-          "x": 5760720,
-          "y": 2798064,
-          "cx": 2980944,
-          "cy": 256032
-        },
-        {
-          "order": 24,
-          "paragraphs": [
-            "România · INSP 2022"
-          ],
-          "text": "România · INSP 2022",
-          "fontSize": 900,
-          "source": true,
-          "x": 1417320,
-          "y": 3529584,
-          "cx": 2926080,
-          "cy": 256032
         },
         {
           "order": 52,
@@ -5789,8 +5823,11 @@ window.PRESENTATION_CONTENT = {
           "x": 5760720,
           "y": 4261104,
           "cx": 2980944,
-          "cy": 256032
-        },
+          "cy": 256032,
+          "originalIndex": 27
+        }
+      ],
+      "sourceBlocks": [
         {
           "order": 54,
           "paragraphs": [
@@ -6208,6 +6245,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 0
         },
         {
+          "order": 9,
+          "paragraphs": [
+            "34.5‰"
+          ],
+          "text": "34.5‰",
+          "fontSize": 1800,
+          "source": false,
+          "x": 320040,
+          "y": 1353312,
+          "cx": 1691640,
+          "cy": 603504,
+          "originalIndex": 2
+        },
+        {
           "order": 10,
           "paragraphs": [
             "Sarcini adolescente 15–19 ani (România)"
@@ -6264,6 +6315,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 6
         },
         {
+          "order": 16,
+          "paragraphs": [
+            "sub media UE 17.2 ani · ECDC 2023"
+          ],
+          "text": "sub media UE 17.2 ani · ECDC 2023",
+          "fontSize": 1000,
+          "source": true,
+          "x": 2103120,
+          "y": 2386584,
+          "cx": 6583680,
+          "cy": 201168,
+          "originalIndex": 7
+        },
+        {
           "order": 19,
           "paragraphs": [
             "48%"
@@ -6290,6 +6355,20 @@ window.PRESENTATION_CONTENT = {
           "cx": 6583680,
           "cy": 256032,
           "originalIndex": 9
+        },
+        {
+          "order": 21,
+          "paragraphs": [
+            "România — sub media UE de 72% · HBSC 2022"
+          ],
+          "text": "România — sub media UE de 72% · HBSC 2022",
+          "fontSize": 1000,
+          "source": true,
+          "x": 2103120,
+          "y": 3072384,
+          "cx": 6583680,
+          "cy": 201168,
+          "originalIndex": 10
         },
         {
           "order": 24,
@@ -6320,6 +6399,34 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 12
         },
         {
+          "order": 26,
+          "paragraphs": [
+            "CNSCBT 2022 — subraportare semnificativă estimată"
+          ],
+          "text": "CNSCBT 2022 — subraportare semnificativă estimată",
+          "fontSize": 1000,
+          "source": true,
+          "x": 2103120,
+          "y": 3758184,
+          "cx": 6583680,
+          "cy": 201168,
+          "originalIndex": 13
+        },
+        {
+          "order": 29,
+          "paragraphs": [
+            "189"
+          ],
+          "text": "189",
+          "fontSize": 1800,
+          "source": false,
+          "x": 320040,
+          "y": 4096512,
+          "cx": 1691640,
+          "cy": 603504,
+          "originalIndex": 14
+        },
+        {
           "order": 30,
           "paragraphs": [
             "Noi cazuri HIV 15–24 ani (România)"
@@ -6332,6 +6439,20 @@ window.PRESENTATION_CONTENT = {
           "cx": 6583680,
           "cy": 256032,
           "originalIndex": 15
+        },
+        {
+          "order": 31,
+          "paragraphs": [
+            "cazuri 2022 — CNSCBT; transmitere predominant sexuală"
+          ],
+          "text": "cazuri 2022 — CNSCBT; transmitere predominant sexuală",
+          "fontSize": 1000,
+          "source": true,
+          "x": 2103120,
+          "y": 4443984,
+          "cx": 6583680,
+          "cy": 201168,
+          "originalIndex": 16
         },
         {
           "order": 33,
@@ -6349,58 +6470,6 @@ window.PRESENTATION_CONTENT = {
         }
       ],
       "sourceBlocks": [
-        {
-          "order": 16,
-          "paragraphs": [
-            "sub media UE 17.2 ani · ECDC 2023"
-          ],
-          "text": "sub media UE 17.2 ani · ECDC 2023",
-          "fontSize": 1000,
-          "source": true,
-          "x": 2103120,
-          "y": 2386584,
-          "cx": 6583680,
-          "cy": 201168
-        },
-        {
-          "order": 21,
-          "paragraphs": [
-            "România — sub media UE de 72% · HBSC 2022"
-          ],
-          "text": "România — sub media UE de 72% · HBSC 2022",
-          "fontSize": 1000,
-          "source": true,
-          "x": 2103120,
-          "y": 3072384,
-          "cx": 6583680,
-          "cy": 201168
-        },
-        {
-          "order": 26,
-          "paragraphs": [
-            "CNSCBT 2022 — subraportare semnificativă estimată"
-          ],
-          "text": "CNSCBT 2022 — subraportare semnificativă estimată",
-          "fontSize": 1000,
-          "source": true,
-          "x": 2103120,
-          "y": 3758184,
-          "cx": 6583680,
-          "cy": 201168
-        },
-        {
-          "order": 31,
-          "paragraphs": [
-            "cazuri 2022 — CNSCBT; transmitere predominant sexuală"
-          ],
-          "text": "cazuri 2022 — CNSCBT; transmitere predominant sexuală",
-          "fontSize": 1000,
-          "source": true,
-          "x": 2103120,
-          "y": 4443984,
-          "cx": 6583680,
-          "cy": 201168
-        },
         {
           "order": 35,
           "paragraphs": [
@@ -6716,6 +6785,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 3
         },
         {
+          "order": 11,
+          "paragraphs": [
+            "elevi 11–15 ani — HBSC Romania 2022 (victimă sau agresor)"
+          ],
+          "text": "elevi 11–15 ani — HBSC Romania 2022 (victimă sau agresor)",
+          "fontSize": 1000,
+          "source": true,
+          "x": 2103120,
+          "y": 1700784,
+          "cx": 6583680,
+          "cy": 201168,
+          "originalIndex": 4
+        },
+        {
           "order": 14,
           "paragraphs": [
             "28%"
@@ -6784,6 +6867,20 @@ window.PRESENTATION_CONTENT = {
           "cx": 6583680,
           "cy": 256032,
           "originalIndex": 9
+        },
+        {
+          "order": 21,
+          "paragraphs": [
+            "INSP 2022 — bullying = factor major de abandon"
+          ],
+          "text": "INSP 2022 — bullying = factor major de abandon",
+          "fontSize": 1000,
+          "source": true,
+          "x": 2103120,
+          "y": 3072384,
+          "cx": 6583680,
+          "cy": 201168,
+          "originalIndex": 10
         },
         {
           "order": 24,
@@ -6885,32 +6982,6 @@ window.PRESENTATION_CONTENT = {
         }
       ],
       "sourceBlocks": [
-        {
-          "order": 11,
-          "paragraphs": [
-            "elevi 11–15 ani — HBSC Romania 2022 (victimă sau agresor)"
-          ],
-          "text": "elevi 11–15 ani — HBSC Romania 2022 (victimă sau agresor)",
-          "fontSize": 1000,
-          "source": true,
-          "x": 2103120,
-          "y": 1700784,
-          "cx": 6583680,
-          "cy": 201168
-        },
-        {
-          "order": 21,
-          "paragraphs": [
-            "INSP 2022 — bullying = factor major de abandon"
-          ],
-          "text": "INSP 2022 — bullying = factor major de abandon",
-          "fontSize": 1000,
-          "source": true,
-          "x": 2103120,
-          "y": 3072384,
-          "cx": 6583680,
-          "cy": 201168
-        },
         {
           "order": 35,
           "paragraphs": [
@@ -7346,6 +7417,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 6
         },
         {
+          "order": 16,
+          "paragraphs": [
+            "Chestionare periodice (HBSC, ESPAD). Interviuri, seminarii, cursuri, teste de cunoștințe → identificare precoce a comportamentelor de risc."
+          ],
+          "text": "Chestionare periodice (HBSC, ESPAD). Interviuri, seminarii, cursuri, teste de cunoștințe → identificare precoce a comportamentelor de risc.",
+          "fontSize": 950,
+          "source": true,
+          "x": 1078992,
+          "y": 2377440,
+          "cx": 7644384,
+          "cy": 256032,
+          "originalIndex": 7
+        },
+        {
           "order": 20,
           "paragraphs": [
             "Monitorizarea medicală periodică de bilanț"
@@ -7431,19 +7516,6 @@ window.PRESENTATION_CONTENT = {
         }
       ],
       "sourceBlocks": [
-        {
-          "order": 16,
-          "paragraphs": [
-            "Chestionare periodice (HBSC, ESPAD). Interviuri, seminarii, cursuri, teste de cunoștințe → identificare precoce a comportamentelor de risc."
-          ],
-          "text": "Chestionare periodice (HBSC, ESPAD). Interviuri, seminarii, cursuri, teste de cunoștințe → identificare precoce a comportamentelor de risc.",
-          "fontSize": 950,
-          "source": true,
-          "x": 1078992,
-          "y": 2377440,
-          "cx": 7644384,
-          "cy": 256032
-        },
         {
           "order": 33,
           "paragraphs": [
@@ -7787,6 +7859,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 4
         },
         {
+          "order": 14,
+          "paragraphs": [
+            "Caz 2:  Programul European HBSC — Sănătatea tinerilor în context școlar"
+          ],
+          "text": "Caz 2:  Programul European HBSC — Sănătatea tinerilor în context școlar",
+          "fontSize": 1100,
+          "source": true,
+          "x": 457200,
+          "y": 2523744,
+          "cx": 8321040,
+          "cy": 310896,
+          "originalIndex": 5
+        },
+        {
           "order": 15,
           "paragraphs": [
             "42 țări, 250.000 elevi de 11/13/15 ani chestionați la fiecare 4 ani. România 2022: date alarmante privind obezitatea (12.8%), fumatul (28%), sarcinile adolescente (locul 1 UE). Datele au generat revizuirea Strategiei Naționale de Sănătate a Copilului 2022–2028 (MS/MEN)."
@@ -7799,6 +7885,20 @@ window.PRESENTATION_CONTENT = {
           "cx": 8321040,
           "cy": 566928,
           "originalIndex": 6
+        },
+        {
+          "order": 16,
+          "paragraphs": [
+            "HBSC International Report 2022; MS România; OMS"
+          ],
+          "text": "HBSC International Report 2022; MS România; OMS",
+          "fontSize": 750,
+          "source": true,
+          "x": 457200,
+          "y": 3493008,
+          "cx": 8321040,
+          "cy": 146304,
+          "originalIndex": 7
         },
         {
           "order": 19,
@@ -7827,34 +7927,6 @@ window.PRESENTATION_CONTENT = {
           "cx": 8321040,
           "cy": 566928,
           "originalIndex": 9
-        }
-      ],
-      "sourceBlocks": [
-        {
-          "order": 14,
-          "paragraphs": [
-            "Caz 2:  Programul European HBSC — Sănătatea tinerilor în context școlar"
-          ],
-          "text": "Caz 2:  Programul European HBSC — Sănătatea tinerilor în context școlar",
-          "fontSize": 1100,
-          "source": true,
-          "x": 457200,
-          "y": 2523744,
-          "cx": 8321040,
-          "cy": 310896
-        },
-        {
-          "order": 16,
-          "paragraphs": [
-            "HBSC International Report 2022; MS România; OMS"
-          ],
-          "text": "HBSC International Report 2022; MS România; OMS",
-          "fontSize": 750,
-          "source": true,
-          "x": 457200,
-          "y": 3493008,
-          "cx": 8321040,
-          "cy": 146304
         },
         {
           "order": 21,
@@ -7867,8 +7939,11 @@ window.PRESENTATION_CONTENT = {
           "x": 457200,
           "y": 4718304,
           "cx": 8321040,
-          "cy": 146304
-        },
+          "cy": 146304,
+          "originalIndex": 10
+        }
+      ],
+      "sourceBlocks": [
         {
           "order": 23,
           "paragraphs": [
@@ -8079,6 +8154,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 2
         },
         {
+          "order": 10,
+          "paragraphs": [
+            "Maxim 9–11h. Minim luni/vineri. Maxim marți–joi. Curbele fiziologice = baza orarului igienic. OMS: start ≥ 8:30 pentru adolescenți."
+          ],
+          "text": "Maxim 9–11h. Minim luni/vineri. Maxim marți–joi. Curbele fiziologice = baza orarului igienic. OMS: start ≥ 8:30 pentru adolescenți.",
+          "fontSize": 1000,
+          "source": true,
+          "x": 530352,
+          "y": 1499616,
+          "cx": 3913632,
+          "cy": 1042416,
+          "originalIndex": 5
+        },
+        {
           "order": 15,
           "paragraphs": [
             "Cl.I: 3–4 ore · Cl.II–IV: 4 ore · Cl.V–VIII: 5 ore · Cl.IX–XII: 5–6 ore. Pauze min. 10 min. Alternare activități intelectuale/fizice."
@@ -8135,6 +8224,20 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 11
         },
         {
+          "order": 25,
+          "paragraphs": [
+            "Educație sanitară + monitorizare + legislație + cercetare. WHO 2022: 1 leu în prevenție școlară economisește 5 lei în tratament."
+          ],
+          "text": "Educație sanitară + monitorizare + legislație + cercetare. WHO 2022: 1 leu în prevenție școlară economisește 5 lei în tratament.",
+          "fontSize": 1000,
+          "source": true,
+          "x": 4937760,
+          "y": 3328416,
+          "cx": 3913632,
+          "cy": 1042416,
+          "originalIndex": 12
+        },
+        {
           "order": 26,
           "paragraphs": [
             "Igienă · LP6B · UMFST Târgu Mureș · Departamentul de Igienă și Sănătatea Mediului"
@@ -8149,34 +8252,7 @@ window.PRESENTATION_CONTENT = {
           "originalIndex": 13
         }
       ],
-      "sourceBlocks": [
-        {
-          "order": 10,
-          "paragraphs": [
-            "Maxim 9–11h. Minim luni/vineri. Maxim marți–joi. Curbele fiziologice = baza orarului igienic. OMS: start ≥ 8:30 pentru adolescenți."
-          ],
-          "text": "Maxim 9–11h. Minim luni/vineri. Maxim marți–joi. Curbele fiziologice = baza orarului igienic. OMS: start ≥ 8:30 pentru adolescenți.",
-          "fontSize": 1000,
-          "source": true,
-          "x": 530352,
-          "y": 1499616,
-          "cx": 3913632,
-          "cy": 1042416
-        },
-        {
-          "order": 25,
-          "paragraphs": [
-            "Educație sanitară + monitorizare + legislație + cercetare. WHO 2022: 1 leu în prevenție școlară economisește 5 lei în tratament."
-          ],
-          "text": "Educație sanitară + monitorizare + legislație + cercetare. WHO 2022: 1 leu în prevenție școlară economisește 5 lei în tratament.",
-          "fontSize": 1000,
-          "source": true,
-          "x": 4937760,
-          "y": 3328416,
-          "cx": 3913632,
-          "cy": 1042416
-        }
-      ],
+      "sourceBlocks": [],
       "allBlocks": [
         {
           "order": 5,
