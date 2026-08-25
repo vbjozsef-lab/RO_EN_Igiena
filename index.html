@@ -3844,8 +3844,8 @@ window.EXAM_BANK_RAW_EN = EXAM_BANK_RAW_EN;
 
 </script>
 <script type="text/babel">
-// Activitate de grup v2: multi-device, individual sealed work, synchronized
-// reveal, coordinator synthesis, reporter pitch and one final team report.
+// Activitate de grup v3: multi-device, automatic role confirmation,
+// sealed work, synchronized reveal, team approval and final report.
 
 function normalizeTeamMission(f, lang){
   if (f?.mission) return f;
@@ -3994,11 +3994,12 @@ async function loadActivityRoom(session,student,f,target=14){
     return [...map.values()];
   };
   const members=latestBy("member");
+  const approvals=latestBy("approval");
   const synthesis=rows.filter(r=>r.module==="activity_synthesis_"+f.id).slice(-1)[0]||null;
   const final=rows.filter(r=>r.module==="activity_final_"+f.id).slice(-1)[0]||null;
   const unlocked=rows.some(r=>r.module==="activity_unlock_"+f.id);
   const seatByName={};joins.forEach((r,i)=>{seatByName[activityNameKey(r.name)]=i+1;});
-  return {rows,joins,members,synthesis,final,unlocked,seatByName};
+  return {rows,joins,members,approvals,synthesis,final,unlocked,seatByName};
 }
 
 async function loadActivitySessionRooms(session){
@@ -4010,13 +4011,14 @@ async function loadActivitySessionRooms(session){
   const out={};
   rows.forEach(r=>{
     const g=String(r.grp||"");if(!g)return;
-    if(!out[g]) out[g]={joins:new Set(),members:new Set(),unlocked:false,final:false};
+    if(!out[g]) out[g]={joins:new Set(),members:new Set(),approvals:new Set(),unlocked:false,final:false};
     if(String(r.module).startsWith("activity_join_")) out[g].joins.add(activityNameKey(r.name));
     if(String(r.module).startsWith("activity_member_")) out[g].members.add(activityNameKey(r.name));
+    if(String(r.module).startsWith("activity_approval_")) out[g].approvals.add(activityNameKey(r.name));
     if(String(r.module).startsWith("activity_unlock_")) out[g].unlocked=true;
     if(String(r.module).startsWith("activity_final_")) out[g].final=true;
   });
-  Object.values(out).forEach(x=>{x.joinCount=x.joins.size;x.memberCount=x.members.size;delete x.joins;delete x.members;});
+  Object.values(out).forEach(x=>{x.joinCount=x.joins.size;x.memberCount=x.members.size;x.approvalCount=x.approvals.size;delete x.joins;delete x.members;delete x.approvals;});
   return out;
 }
 
@@ -4032,9 +4034,10 @@ function TeamMissionScreen({session,student,onBack}){
   const [f,setF]=React.useState(null);
   const [loaded,setLoaded]=React.useState(editsAreReady());
   const [loadError,setLoadError]=React.useState("");
-  const [room,setRoom]=React.useState({joins:[],members:[],seatByName:{},unlocked:false,synthesis:null,final:null});
+  const [room,setRoom]=React.useState({joins:[],members:[],approvals:[],seatByName:{},unlocked:false,synthesis:null,final:null});
   const [seat,setSeat]=React.useState(null);
   const [phase,setPhase]=React.useState("joining");
+  const [roleConfirmed,setRoleConfirmed]=React.useState(false);
   const [syncError,setSyncError]=React.useState("");
   const [saving,setSaving]=React.useState(false);
   const joinStarted=React.useRef(false);
@@ -4125,6 +4128,8 @@ function TeamMissionScreen({session,student,onBack}){
 
   if(phase==="joining") return <div style={{...FS.page,background:"#f4f8fb"}}>{header(L("Conectare la sala privată","Connecting to the private room"))}<div style={{maxWidth:560,margin:"0 auto",padding:"40px 16px",textAlign:"center"}}>{syncBanner}<div className="spin" style={{fontSize:46}}>⏳</div><h2 style={{color:"#0f2742"}}>{L("Se atribuie rolul individual…","Assigning your individual role…")}</h2><p style={{color:"#64748b",fontSize:13}}>{L("Fiecare student lucrează pe telefonul propriu. Răspunsurile celorlalți rămân ascunse.","Each student works on their own phone. Other answers remain hidden.")}</p></div></div>;
 
+  if(phase==="private"&&!roleConfirmed) return <div style={{...FS.page,background:"radial-gradient(circle at 10% 0%,"+f.color+"20,transparent 34%),#f4f8fb",paddingBottom:40}}>{header(L("Rol individual atribuit automat","Individual role assigned automatically"))}<div style={{maxWidth:620,margin:"0 auto",padding:"28px 14px"}}>{syncBanner}<div style={{background:"#fff",borderRadius:22,padding:24,border:"1px solid #dbe7f1",boxShadow:"0 14px 40px rgba(15,39,66,.10)",textAlign:"center"}}><div style={{fontSize:11,fontWeight:900,letterSpacing:".12em",textTransform:"uppercase",color:f.color,marginBottom:10}}>{L("Rolul dumneavoastră în această echipă","Your role in this team")}</div><div style={{width:86,height:86,borderRadius:"50%",background:f.color+"18",display:"grid",placeItems:"center",fontSize:42,margin:"0 auto 12px",border:"3px solid "+f.color+"55"}}>{slot.icon}</div><h2 style={{margin:"0 0 5px",color:"#0f2742",fontSize:24}}>{slot.name}</h2><div style={{display:"inline-block",background:"#eef2ff",color:"#4338ca",borderRadius:99,padding:"6px 11px",fontSize:11,fontWeight:850,marginBottom:14}}>{slot.focus}</div><p style={{fontSize:14,color:"#475569",lineHeight:1.65,margin:"0 auto 16px",maxWidth:470}}>{slot.task}</p><div style={{background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:12,padding:12,fontSize:12,color:"#64748b",lineHeight:1.55,marginBottom:18}}>ℹ️ {L("Rolul este distribuit automat în ordinea conectării, astfel încât echipa să acopere toate perspectivele profesionale. Nu trebuie să alegeți un rol.","The role is assigned automatically in connection order so the team covers every professional perspective. You do not need to choose a role.")}</div><button onClick={()=>setRoleConfirmed(true)} style={{width:"100%",padding:14,border:0,borderRadius:12,background:f.color,color:"#fff",fontWeight:900,cursor:"pointer",fontSize:14}}>{L("Am înțeles · încep contribuția mea","Understood · start my contribution")}</button></div></div></div>;
+
   if(phase==="private"){
     const missing=[];
     if(privateVerdict===null)missing.push(L("verdictul provizoriu","provisional verdict"));
@@ -4157,6 +4162,10 @@ function TeamMissionScreen({session,student,onBack}){
   if(phase==="synthesis"){
     const stateFromSynthesis=synthesis.state||{};
     const hasSynthesis=!!room.synthesis;
+    const approvals=room.approvals||[];
+    const myApproved=approvals.some(r=>activityNameKey(r.name)===activityNameKey(student?.name));
+    const approvalTarget=Math.max(1,memberCards.length);
+    const consensusReady=approvals.length>=approvalTarget;
     const toggleEvidence=i=>setSelectedEvidence(prev=>prev.includes(i)?prev.filter(x=>x!==i):(prev.length>=4?prev:[...prev,i]));
     const toggleAction=i=>setSelectedActions(prev=>{if(prev.includes(i))return prev.filter(x=>x!==i);const cost=budgetUsed+(f.actions[i]?.cost||0);if(cost>f.budget){alert(L("Bugetul activității ar fi depășit.","The activity budget would be exceeded."));return prev;}return [...prev,i];});
     const submitSynthesis=async()=>{
@@ -4165,17 +4174,34 @@ function TeamMissionScreen({session,student,onBack}){
       setSaving(true);
       try{const state={diagnosisChoice,selectedEvidence,selectedActions,answers,confidence,roleSeen:Object.fromEntries(room.joins.map((r,i)=>[String(i+1),true]))};await activityWriteEvent("synthesis",f,{state,coordinator:student?.name,createdAt:Date.now()},session,student,"Sinteza grupului · "+f.title);await refreshRoom();}catch(e){setSyncError(L("Sinteza nu a fost salvată.","Synthesis was not saved."));}setSaving(false);
     };
+    const approveSynthesis=async()=>{
+      if(myApproved||saving)return;
+      setSaving(true);
+      try{await activityWriteEvent("approval",f,{approved:true,approvedAt:Date.now()},session,student,"Aprobare sinteză · "+f.title);await refreshRoom();}
+      catch(e){setSyncError(L("Aprobarea nu a fost salvată.","Approval was not saved."));}
+      setSaving(false);
+    };
     const finalize=async()=>{
+      if(!consensusReady){alert(L("Raportul final poate fi trimis după ce toți membrii care au contribuit aprobă sinteza.","The final report can be submitted after every contributing member approves the synthesis."));return;}
       const st={...stateFromSynthesis,pitchStarted:true,pitchSeconds,teamRating:{clarity:3,evidence:3,feasibility:3}};
       const scored=scoreTeamMission(f,st);
       setSaving(true);setPitchRunning(false);
-      try{await saveTeamMissionResult(f,st,scored,{...student,name:"Grupa "+student.group},session,memberCards);await activityWriteEvent("final",f,{scored,state:st,reporter:student?.name,finishedAt:Date.now()},session,student,"Raport final · "+f.title);await refreshRoom();setPhase("done");}catch(e){setSyncError(L("Raportul final nu a fost trimis.","Final report was not submitted."));}setSaving(false);
+      try{await saveTeamMissionResult(f,st,scored,{...student,name:"Grupa "+student.group},session,memberCards,approvals);await activityWriteEvent("final",f,{scored,state:st,reporter:student?.name,approvals:approvals.map(r=>r.name),finishedAt:Date.now()},session,student,"Raport final · "+f.title);await refreshRoom();setPhase("done");}catch(e){setSyncError(L("Raportul final nu a fost trimis.","Final report was not submitted."));}setSaving(false);
     };
     return <div style={{...FS.page,background:"#eef3f7",paddingBottom:50}}>{header(L("Sinteza deschisă · răspunsurile sunt vizibile","Synthesis open · answers are visible"))}<div style={{maxWidth:980,margin:"0 auto",padding:"18px 14px"}}>{syncBanner}<div style={{background:"#ecfdf5",border:"1px solid #86efac",color:"#166534",borderRadius:14,padding:14,marginBottom:14,fontSize:13}}>🔓 <strong>{L("Toți membrii pot vedea acum contribuțiile individuale.","All members can now see the individual contributions.")}</strong> {L("Discutați diferențele și construiți o singură decizie de grup.","Discuss differences and build one group decision.")}</div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:10,marginBottom:18}}>{memberCards.map((m,i)=><div key={i} style={{background:"#fff",border:"1px solid #dbe7f1",borderTop:"4px solid "+f.color,borderRadius:14,padding:14}}><div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"flex-start"}}><div><div className="mission-kicker" style={{color:f.color}}>{L("Locul","Seat")} {m.seat} · {m.payload.roleIcon} {m.payload.focus||m.payload.roleName}</div><div style={{fontWeight:850,color:"#0f2742",marginTop:5}}>{m.row.name}</div></div><span className="mission-chip" style={{background:"#f1f5f9",color:"#475569"}}>{m.payload.clueClass||"—"}</span></div><div style={{fontSize:12,color:"#334155",lineHeight:1.55,marginTop:10}}><strong>{L("Analiză:","Analysis:")}</strong> {m.payload.analysis||"—"}</div><div style={{fontSize:12,color:"#334155",lineHeight:1.55,marginTop:7}}><strong>{L("Impact:","Impact:")}</strong> {m.payload.impact||"—"}</div><div style={{fontSize:12,color:"#047857",lineHeight:1.55,marginTop:7}}><strong>{L("Propunere:","Proposal:")}</strong> {m.payload.proposal||"—"}</div></div>)}</div>
       {!hasSynthesis&&isCoordinator&&<div style={{background:"#fff",borderRadius:18,padding:18,border:"2px solid "+f.color}}><div className="mission-kicker" style={{color:f.color,marginBottom:6}}>{L("Coordonator · decizia comună","Coordinator · team decision")}</div><p style={{fontSize:12,color:"#64748b",margin:"0 0 14px"}}>{L("Completați această secțiune după discuția cu toți membrii.","Complete this section after discussing with all members.")}</p><h3 style={{fontSize:14,color:"#0f2742"}}>{f.diagnosis.prompt}</h3><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:7,marginBottom:14}}>{f.diagnosis.options.map((o,i)=><button key={i} onClick={()=>setDiagnosisChoice(i)} style={{padding:11,borderRadius:10,border:"2px solid "+(diagnosisChoice===i?f.color:"#dbe7f1"),background:diagnosisChoice===i?f.color+"12":"white",textAlign:"left",cursor:"pointer",fontSize:12,fontWeight:700}}>{diagnosisChoice===i?"● ":"○ "}{o}</button>)}</div><div className="mission-kicker" style={{color:f.color,marginBottom:7}}>{L("Dovezi comune · maximum 4","Team evidence · maximum 4")}</div><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:7,marginBottom:14}}>{f.evidence.map((e,i)=>{const on=selectedEvidence.includes(i);return <button key={i} onClick={()=>toggleEvidence(i)} style={{padding:10,borderRadius:10,border:"2px solid "+(on?f.color:"#dbe7f1"),background:on?f.color+"10":"white",textAlign:"left",cursor:"pointer",fontSize:12}}>{on?"✓ ":"+ "}{e.text}</button>})}</div><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:7}}><div className="mission-kicker" style={{color:f.color}}>{L("Acțiuni comune","Team actions")}</div><span className="mission-chip" style={{background:"#ecfdf5",color:"#047857"}}>⚡ {budgetUsed}/{f.budget}</span></div><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:7,marginBottom:14}}>{f.actions.map((a,i)=>{const on=selectedActions.includes(i);return <button key={i} onClick={()=>toggleAction(i)} style={{padding:10,borderRadius:10,border:"2px solid "+(on?"#059669":"#dbe7f1"),background:on?"#ecfdf5":"white",textAlign:"left",cursor:"pointer",fontSize:12}}><strong>{a.text}</strong> · −{a.cost}</button>})}</div>{(f.qs||[]).map((q,i)=><div key={i} style={{marginBottom:10}}><label style={FS.label}>{i+1}. {q.q}</label><textarea value={answers[i]||""} onChange={e=>setAnswers(x=>({...x,[i]:e.target.value}))} style={{...FS.ta,minHeight:64,marginTop:4}}/></div>)}<label style={FS.label}>{L("Încrederea grupului","Group confidence")}: {confidence}%</label><input type="range" min="20" max="100" step="5" value={confidence} onChange={e=>setConfidence(Number(e.target.value))} style={{width:"100%",margin:"8px 0 14px"}}/><button disabled={saving} onClick={submitSynthesis} style={{width:"100%",padding:14,border:0,borderRadius:12,background:f.color,color:"white",fontWeight:850,cursor:"pointer"}}>{saving?L("Se salvează…","Saving…"):L("Închide sinteza coordonatorului","Lock coordinator synthesis")}</button></div>}
       {!hasSynthesis&&!isCoordinator&&<div style={{background:"#fff",borderRadius:16,padding:20,border:"1px solid #dbe7f1",textAlign:"center"}}><div style={{fontSize:36}}>🧭</div><h3 style={{color:"#0f2742"}}>{L("Coordonatorul pregătește decizia comună","The coordinator is preparing the team decision")}</h3><p style={{color:"#64748b",fontSize:13}}>{L("Discutați cu grupul. Ecranul se actualizează automat.","Discuss with the group. This screen updates automatically.")}</p></div>}
-      {hasSynthesis&&<div style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1"}}><div className="mission-kicker" style={{color:f.color,marginBottom:10}}>{L("Decizia comună este pregătită","Team decision is ready")}</div><h3 style={{margin:"0 0 8px",color:"#0f2742"}}>{f.diagnosis.options[stateFromSynthesis.diagnosisChoice]}</h3><p style={{fontSize:12,color:"#475569"}}><strong>{L("Dovezi:","Evidence:")}</strong> {(stateFromSynthesis.selectedEvidence||[]).map(i=>f.evidence[i]?.text).join(" · ")}</p><p style={{fontSize:12,color:"#475569"}}><strong>{L("Acțiuni:","Actions:")}</strong> {(stateFromSynthesis.selectedActions||[]).map(i=>f.actions[i]?.text).join(" · ")}</p>{isReporter?<div style={{marginTop:18,borderTop:"1px solid #eef2f6",paddingTop:18,textAlign:"center"}}><div style={{width:140,height:140,borderRadius:"50%",background:"#071a33",border:"9px solid "+(pitchSeconds<=10?"#ef4444":f.color),display:"grid",placeItems:"center",margin:"0 auto 12px",color:"white",fontSize:38,fontWeight:900}}>{pitchSeconds}</div><div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:14}}><button onClick={()=>{setPitchStarted(true);setPitchRunning(x=>!x)}} style={{padding:"9px 15px",border:0,borderRadius:9,background:f.color,color:"white",fontWeight:800,cursor:"pointer"}}>{pitchRunning?L("Pauză","Pause"):pitchSeconds<60?L("Continuă","Resume"):L("Pornește pitch-ul","Start pitch")}</button><button onClick={()=>{setPitchSeconds(60);setPitchRunning(false)}} style={{padding:"9px 15px",border:"1px solid #cbd5e1",borderRadius:9,background:"white",cursor:"pointer"}}>↺ 60</button></div><button disabled={saving} onClick={finalize} style={{width:"100%",padding:14,border:0,borderRadius:12,background:"linear-gradient(135deg,#059669,#047857)",color:"white",fontWeight:850,cursor:"pointer"}}>{saving?L("Se trimite…","Submitting…"):L("Trimite raportul final al grupului","Submit the group's final report")}</button></div>:<div style={{background:"#eff6ff",color:"#1e40af",padding:12,borderRadius:10,fontSize:12,marginTop:14}}>🎤 {L("Raportorul grupului prezintă și trimite raportul final. Ecranul se actualizează automat.","The group reporter presents and submits the final report. This screen updates automatically.")}</div>}</div>}</div></div>;
+      {hasSynthesis&&<div style={{background:"#fff",borderRadius:18,padding:18,border:"1px solid #dbe7f1"}}>
+        <div className="mission-kicker" style={{color:f.color,marginBottom:10}}>{L("Decizia comună este pregătită","Team decision is ready")}</div>
+        <h3 style={{margin:"0 0 8px",color:"#0f2742"}}>{f.diagnosis.options[stateFromSynthesis.diagnosisChoice]}</h3>
+        <p style={{fontSize:12,color:"#475569"}}><strong>{L("Dovezi:","Evidence:")}</strong> {(stateFromSynthesis.selectedEvidence||[]).map(i=>f.evidence[i]?.text).join(" · ")}</p>
+        <p style={{fontSize:12,color:"#475569"}}><strong>{L("Acțiuni:","Actions:")}</strong> {(stateFromSynthesis.selectedActions||[]).map(i=>f.actions[i]?.text).join(" · ")}</p>
+        <div style={{marginTop:16,padding:14,borderRadius:13,background:consensusReady?"#ecfdf5":"#fffbeb",border:"1px solid "+(consensusReady?"#86efac":"#fde68a")}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,flexWrap:"wrap"}}><div><div style={{fontSize:12,fontWeight:900,color:consensusReady?"#166534":"#92400e"}}>{consensusReady?L("✓ Sinteză aprobată de întreaga echipă","✓ Synthesis approved by the whole team"):L("Aprobarea comună a sintezei","Team approval of the synthesis")}</div><div style={{fontSize:11,color:consensusReady?"#15803d":"#a16207",marginTop:3}}>{approvals.length}/{approvalTarget} {L("membri au aprobat","members approved")}</div></div>{!myApproved?<button disabled={saving} onClick={approveSynthesis} style={{padding:"9px 13px",border:0,borderRadius:9,background:f.color,color:"#fff",fontWeight:850,cursor:saving?"wait":"pointer"}}>{saving?L("Se salvează…","Saving…"):L("Aprob sinteza echipei","I approve the team synthesis")}</button>:<span style={{padding:"7px 10px",borderRadius:99,background:"#dcfce7",color:"#166534",fontSize:11,fontWeight:850}}>✓ {L("Ați aprobat","You approved")}</span>}</div>
+        </div>
+        {isReporter?<div style={{marginTop:18,borderTop:"1px solid #eef2f6",paddingTop:18,textAlign:"center"}}><div style={{width:140,height:140,borderRadius:"50%",background:"#071a33",border:"9px solid "+(pitchSeconds<=10?"#ef4444":f.color),display:"grid",placeItems:"center",margin:"0 auto 12px",color:"white",fontSize:38,fontWeight:900}}>{pitchSeconds}</div><div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:14}}><button onClick={()=>{setPitchStarted(true);setPitchRunning(x=>!x)}} style={{padding:"9px 15px",border:0,borderRadius:9,background:f.color,color:"white",fontWeight:800,cursor:"pointer"}}>{pitchRunning?L("Pauză","Pause"):pitchSeconds<60?L("Continuă","Resume"):L("Pornește pitch-ul","Start pitch")}</button><button onClick={()=>{setPitchSeconds(60);setPitchRunning(false)}} style={{padding:"9px 15px",border:"1px solid #cbd5e1",borderRadius:9,background:"white",cursor:"pointer"}}>↺ 60</button></div><button disabled={saving||!consensusReady} onClick={finalize} style={{width:"100%",padding:14,border:0,borderRadius:12,background:consensusReady?"linear-gradient(135deg,#059669,#047857)":"#cbd5e1",color:"white",fontWeight:850,cursor:consensusReady?"pointer":"not-allowed"}}>{saving?L("Se trimite…","Submitting…"):consensusReady?L("Trimite raportul final al grupului","Submit the group's final report"):L("Așteaptă aprobarea tuturor membrilor","Waiting for every member's approval")}</button></div>:<div style={{background:"#eff6ff",color:"#1e40af",padding:12,borderRadius:10,fontSize:12,marginTop:14}}>🎤 {L("După aprobarea tuturor, raportorul prezintă și trimite raportul final. Ecranul se actualizează automat.","After everyone approves, the reporter presents and submits the final report. This screen updates automatically.")}</div>}
+      </div>}</div></div>;
   }
 
   if(phase==="done"){
@@ -4187,7 +4213,7 @@ function TeamMissionScreen({session,student,onBack}){
   return null;
 }
 
-async function saveTeamMissionResult(f,state,scored,student,session,members=[]){
+async function saveTeamMissionResult(f,state,scored,student,session,members=[],approvals=[]){
   const selectedEvidence=(state.selectedEvidence||[]).map(i=>f.evidence[i]?.text).filter(Boolean);
   const selectedActions=(state.selectedActions||[]).map(i=>f.actions[i]?.text).filter(Boolean);
   const answerText=(f.qs||[]).map((q,i)=>"Q"+(i+1)+": "+q.q+"\nA: "+(state.answers?.[i]||"—")).join("\n\n");
@@ -4204,7 +4230,16 @@ async function saveTeamMissionResult(f,state,scored,student,session,members=[]){
     "--- SINTEZA GRUPULUI ---",
     answerText,
   ].join("\n");
-  const result={token:session?.token||null,name:student?.name,group:student?.group,labId:session?.labId,labCode:session?.labCode,module:"group_activity_"+f.id,moduleTitle:report,score:scored.totalScore,total:scored.maxScore,pct:scored.pct,timeUsed:60-(state.pitchSeconds||0),teacher:session?.teacher||"",semester:session?.semester||"",specialization:student?.spec||"",answersText:report};
+  const details={
+    type:"group_activity_v3",activityId:f.id,activityTitle:f.title,
+    verdict:f.diagnosis.options[state.diagnosisChoice]||"—",
+    evidence:selectedEvidence,actions:selectedActions,confidence:state.confidence||0,
+    sources:f.sourceRefs||[],approvedBy:approvals.map(r=>r.name).filter(Boolean),
+    members:members.map(m=>{const p=m.payload||{};return {seat:m.seat,name:m.row?.name||"—",role:p.roleName||"Rol",roleIcon:p.roleIcon||"",focus:p.focus||"",clue:p.clue||"",question:p.question||"",verdict:f.diagnosis.options[p.verdictChoice]||"—",clueClass:p.clueClass||"—",analysis:p.analysis||"—",impact:p.impact||"—",proposal:p.proposal||"—"};}),
+    commonAnswers:(f.qs||[]).map((q,i)=>({question:q.q,answer:state.answers?.[i]||"—"})),
+    report,generatedAt:Date.now(),
+  };
+  const result={token:session?.token||null,name:student?.name,group:student?.group,labId:session?.labId,labCode:session?.labCode,module:"group_activity_"+f.id,moduleTitle:"Activitate de grup · "+f.title,score:scored.totalScore,total:scored.maxScore,pct:scored.pct,timeUsed:60-(state.pitchSeconds||0),teacher:session?.teacher||"",semester:session?.semester||"",specialization:student?.spec||"",answersText:JSON.stringify(details)};
   const saved=await addResult(result);
   if(!saved?.ok) throw new Error(saved?.error||"Save failed");
 }
@@ -5566,6 +5601,43 @@ function AdminLogin({onSuccess, onBack}) {
   );
 }
 
+function isGroupActivityResult(result) {
+  return String(result?.module||"").startsWith("group_activity_");
+}
+
+function parseGroupActivityResult(result) {
+  const raw=String(result?.answersText||result?.moduleTitle||"");
+  try {
+    const parsed=JSON.parse(raw);
+    if(parsed?.type==="group_activity_v3") return parsed;
+  } catch(e) {}
+  const line=(prefix)=>raw.split("\n").find(x=>x.startsWith(prefix))?.slice(prefix.length).trim()||"";
+  const memberSection=raw.split("--- CONTRIBUȚII INDIVIDUALE ---")[1]?.split("--- SINTEZA GRUPULUI ---")[0]?.trim()||"";
+  const members=memberSection.split(/\n\n+/).filter(Boolean).map(block=>{
+    const rows=block.split("\n");
+    const head=rows[0]?.match(/^(\d+)\.\s*(.*?)\s+—\s+(.*)$/);
+    return {seat:Number(head?.[1]||0),name:head?.[2]||rows[0]||"—",focus:head?.[3]||"",analysis:rows.find(x=>x.startsWith("Analiză:"))?.slice(8).trim()||"—",impact:rows.find(x=>x.startsWith("Impact:"))?.slice(7).trim()||"—",proposal:rows.find(x=>x.startsWith("Propunere:"))?.slice(10).trim()||"—"};
+  });
+  const commonRaw=raw.split("--- SINTEZA GRUPULUI ---")[1]?.trim()||"";
+  const commonAnswers=commonRaw.split(/\n\n(?=Q\d+:)/).filter(Boolean).map(block=>{const m=block.match(/^Q\d+:\s*([\s\S]*?)\nA:\s*([\s\S]*)$/);return {question:m?.[1]||block,answer:m?.[2]||"—"};});
+  return {type:"group_activity_legacy",activityTitle:line("ACTIVITATE:")||String(result?.moduleTitle||"").replace(/^Activitate de grup\s*·\s*/,""),verdict:line("VERDICT:"),evidence:line("DOVEZI:").split(" | ").filter(Boolean),actions:line("ACȚIUNI:").split(" | ").filter(Boolean),sources:line("SURSE:").split(" | ").filter(Boolean),confidence:Number(line("ÎNCREDERE:").replace("%",""))||0,members,commonAnswers,approvedBy:[],report:raw};
+}
+
+function GroupActivityResultModal({result,onClose}) {
+  const data=parseGroupActivityResult(result);
+  return <div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(15,23,42,.58)",zIndex:2200,display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"18px 12px",overflowY:"auto"}}>
+    <div style={{background:"#f8fafc",borderRadius:20,padding:"20px",maxWidth:980,width:"100%",boxShadow:"0 25px 80px rgba(15,23,42,.35)",margin:"10px 0 30px"}}>
+      <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"flex-start",marginBottom:14}}><div><div style={{fontSize:11,fontWeight:900,color:"#4f46e5",letterSpacing:".09em",textTransform:"uppercase",marginBottom:5}}>Activitate de grup · contribuții individuale</div><h3 style={{margin:"0 0 6px",fontSize:20,color:"#0f172a"}}>{data.activityTitle||"Activitate de grup"}</h3><div style={{fontSize:12,color:"#64748b"}}>Grupa {result.group||"—"} · {result.labCode||"—"} · {data.members?.length||0} contribuții · {result.pct||0}%</div></div><button onClick={onClose} style={{padding:"7px 12px",border:"1px solid #cbd5e1",borderRadius:9,background:"#fff",color:"#475569",fontWeight:850,cursor:"pointer"}}>✕</button></div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:9,marginBottom:14}}><div style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#4f46e5",textTransform:"uppercase",marginBottom:5}}>Verdict comun</div><div style={{fontSize:13,fontWeight:800,color:"#0f172a",lineHeight:1.5}}>{data.verdict||"—"}</div></div><div style={{background:"#ecfdf5",border:"1px solid #86efac",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#15803d",textTransform:"uppercase",marginBottom:5}}>Aprobare comună</div><div style={{fontSize:13,fontWeight:800,color:"#166534"}}>{data.approvedBy?.length?`${data.approvedBy.length} membri au aprobat`:data.type==="group_activity_legacy"?"Rezultat din versiunea anterioară":"Nicio aprobare înregistrată"}</div>{data.approvedBy?.length>0&&<div style={{fontSize:10,color:"#15803d",marginTop:4}}>{data.approvedBy.join(" · ")}</div>}</div><div style={{background:"#fff7ed",border:"1px solid #fed7aa",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#c2410c",textTransform:"uppercase",marginBottom:5}}>Scor</div><div style={{fontSize:20,fontWeight:900,color:"#9a3412"}}>{result.score}/{result.total} · {result.pct}%</div></div></div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}><div style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#0e7490",textTransform:"uppercase",marginBottom:7}}>Dovezi selectate</div>{(data.evidence||[]).map((x,i)=><div key={i} style={{fontSize:11,color:"#334155",marginBottom:4}}>• {x}</div>)}</div><div style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#047857",textTransform:"uppercase",marginBottom:7}}>Acțiuni selectate</div>{(data.actions||[]).map((x,i)=><div key={i} style={{fontSize:11,color:"#334155",marginBottom:4}}>• {x}</div>)}</div></div>
+      <div style={{fontSize:11,fontWeight:900,color:"#0f172a",textTransform:"uppercase",letterSpacing:".08em",margin:"0 0 8px"}}>Contribuția fiecărui student</div>
+      {(data.members||[]).length?<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:10,marginBottom:16}}>{data.members.map((m,i)=><div key={i} style={{background:"#fff",border:"1px solid #dbe7f1",borderTop:"4px solid #4f46e5",borderRadius:13,padding:13}}><div style={{fontSize:10,fontWeight:900,color:"#4f46e5",textTransform:"uppercase"}}>Locul {m.seat||i+1} · {m.roleIcon||""} {m.focus||m.role||"Rol"}</div><div style={{fontSize:15,fontWeight:900,color:"#0f172a",margin:"5px 0 9px"}}>{m.name||"—"}</div>{m.question&&<div style={{fontSize:11,color:"#64748b",marginBottom:7}}><strong>Întrebare:</strong> {m.question}</div>}{m.verdict&&<div style={{fontSize:11,color:"#334155",marginBottom:6}}><strong>Verdict individual:</strong> {m.verdict}</div>}<div style={{fontSize:11,color:"#334155",lineHeight:1.55,marginBottom:5}}><strong>Analiză:</strong> {m.analysis||"—"}</div><div style={{fontSize:11,color:"#334155",lineHeight:1.55,marginBottom:5}}><strong>Impact:</strong> {m.impact||"—"}</div><div style={{fontSize:11,color:"#047857",lineHeight:1.55}}><strong>Propunere:</strong> {m.proposal||"—"}</div></div>)}</div>:<div style={{background:"#fff",padding:18,borderRadius:12,color:"#94a3b8",textAlign:"center",marginBottom:14}}>Nu există contribuții individuale stocate pentru acest rezultat.</div>}
+      {(data.commonAnswers||[]).length>0&&<><div style={{fontSize:11,fontWeight:900,color:"#0f172a",textTransform:"uppercase",letterSpacing:".08em",margin:"0 0 8px"}}>Sinteza comună</div><div style={{display:"grid",gap:7,marginBottom:14}}>{data.commonAnswers.map((x,i)=><div key={i} style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:11,padding:11}}><div style={{fontSize:11,fontWeight:800,color:"#0f172a",marginBottom:4}}>{i+1}. {x.question}</div><div style={{fontSize:11,color:"#475569",lineHeight:1.55}}>{x.answer||"—"}</div></div>)}</div></>}
+      {(data.sources||[]).length>0&&<div style={{background:"#ecfeff",border:"1px solid #a5f3fc",borderRadius:12,padding:12}}><div style={{fontSize:10,fontWeight:900,color:"#0e7490",textTransform:"uppercase",marginBottom:6}}>Surse</div>{data.sources.map((x,i)=><div key={i} style={{fontSize:10,color:"#155e75",marginBottom:3}}>• {x}</div>)}</div>}
+    </div>
+  </div>;
+}
+
 // ════════════════════════════════════════════════════════════
 // ③ ADMIN PANEL — QR generator + results
 // ════════════════════════════════════════════════════════════
@@ -5589,6 +5661,7 @@ function AdminPanel({onBack, teacherName}) {
   const [teamSize, setTeamSize]     = useState(14);
   const [roomOverview, setRoomOverview] = useState({});
   const [unlockingGroup, setUnlockingGroup] = useState(null);
+  const [unlockMsg, setUnlockMsg] = useState("");
   const timerRef = useRef();
 
   // results state
@@ -5636,6 +5709,7 @@ function AdminPanel({onBack, teacherName}) {
     const id = setInterval(load, 4000);
     return () => { alive = false; clearInterval(id); };
   }, [activeSession?.token]);
+  useEffect(()=>setUnlockMsg(""),[activeSession?.token]);
 
   const generateQR = async () => {
     setGenerating(true);
@@ -5916,6 +5990,8 @@ function AdminPanel({onBack, teacherName}) {
                         <strong style={{fontSize:12,color:"#0f2742"}}>Săli de grup · în direct</strong>
                         <span style={{fontSize:10,color:"#64748b"}}>țintă: {activeSession.teamSize||14}/grupă</span>
                       </div>
+                      <div style={{fontSize:10,color:"#64748b",lineHeight:1.45,background:"#f8fafc",borderRadius:8,padding:"7px 8px",marginBottom:8}}>„Deschide sinteza” nu deschide o pagină în panoul profesorului. Deblochează contribuțiile pe telefoanele studenților, astfel încât aceștia să le vadă și să pregătească decizia comună.</div>
+                      {unlockMsg&&<div style={{fontSize:10,color:"#166534",background:"#ecfdf5",border:"1px solid #86efac",borderRadius:8,padding:"7px 8px",marginBottom:8}}>✓ {unlockMsg}</div>}
                       <div style={{display:"grid",gap:7}}>
                         {Array.from({length:6},(_,i)=>i+1).map(g=>{
                           const state=roomOverview[String(g)]||{};
@@ -5926,14 +6002,15 @@ function AdminPanel({onBack, teacherName}) {
                           return <div key={g} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:8,alignItems:"center",background:state.final?"#ecfdf5":"#f8fafc",border:"1px solid "+(opened?"#86efac":"#e2e8f0"),borderRadius:9,padding:"8px 9px"}}>
                             <div style={{minWidth:0}}>
                               <div style={{fontSize:11,fontWeight:750,color:"#0f2742",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>Grupa {g}{mission?.title?" · "+mission.title:""}</div>
-                              <div style={{fontSize:10,color:"#64748b",marginTop:2}}>conectați {state.joinCount||0} · au trimis {completed}/{target} {state.final?"· raport final ✓":opened?"· sinteză deschisă":"· răspunsuri sigilate"}</div>
+                              <div style={{fontSize:10,color:"#64748b",marginTop:2}}>conectați {state.joinCount||0} · au trimis {completed}/{target} {state.final?"· raport final ✓":opened?`· sinteză deschisă · aprobări ${state.approvalCount||0}/${completed}`:"· răspunsuri sigilate"}</div>
                             </div>
                             {!state.final && <button disabled={!mission||!(state.joinCount||0)||opened||unlockingGroup===g} onClick={async()=>{
+                              if(!confirm(`Deschideți sinteza pentru grupa ${g}? Răspunsurile individuale vor deveni vizibile pe telefoanele membrilor care au contribuit.`))return;
                               setUnlockingGroup(g);
-                              try { await unlockTeamRoom(activeSession,g,mission,teacherName); setRoomOverview(await loadActivitySessionRooms(activeSession)); }
+                              try { await unlockTeamRoom(activeSession,g,mission,teacherName); setRoomOverview(await loadActivitySessionRooms(activeSession)); setUnlockMsg(`Sinteza grupei ${g} a fost deschisă. Telefoanele se actualizează automat în câteva secunde.`); }
                               catch(e) { alert("Nu s-a putut deschide sinteza: "+e.message); }
                               setUnlockingGroup(null);
-                            }} style={{border:0,borderRadius:7,padding:"6px 8px",background:opened?"#dcfce7":"#6366f1",color:opened?"#166534":"white",fontSize:10,fontWeight:750,cursor:(!mission||!(state.joinCount||0)||opened)?"default":"pointer",opacity:(!mission||!(state.joinCount||0)||opened)?0.65:1}}>{opened?"Deschis":unlockingGroup===g?"…":"Deschide"}</button>}
+                            }} style={{border:0,borderRadius:7,padding:"6px 8px",background:opened?"#dcfce7":"#6366f1",color:opened?"#166534":"white",fontSize:10,fontWeight:750,cursor:(!mission||!(state.joinCount||0)||opened)?"default":"pointer",opacity:(!mission||!(state.joinCount||0)||opened)?0.65:1}}>{opened?"Sinteză deschisă":unlockingGroup===g?"Se deschide…":"Deschide sinteza"}</button>}
                           </div>;
                         })}
                       </div>
@@ -6047,15 +6124,18 @@ function AdminPanel({onBack, teacherName}) {
                             {lab && <span style={{background:lab.dim,color:lab.color,borderRadius:6,padding:"2px 8px",fontSize:11,fontWeight:700}}>{lab.icon} {r.labCode}</span>}
                           </td>
                           {(()=>{
+                          const groupResult=isGroupActivityResult(r);
                           const parts=(r.moduleTitle||"").split("\n---\n");
-                          const title=parts[0]; const hasAnswers=parts.length>1;
+                          const groupData=groupResult?parseGroupActivityResult(r):null;
+                          const title=groupResult?`Activitate de grup · ${groupData?.activityTitle||"—"}`:parts[0];
+                          const hasAnswers=groupResult?!!(r.answersText||r.moduleTitle):parts.length>1;
                           return (
                             <td style={{padding:"9px 12px",color:"#475569",fontSize:12}}>
                               <div>{title||"–"}</div>
                               {hasAnswers && (
                                 <button onClick={()=>setSelectedResult(r)}
                                   style={{marginTop:4,padding:"3px 10px",background:"#dcfce7",color:"#16a34a",border:"1px solid #86efac",borderRadius:6,fontSize:11,fontWeight:700,cursor:"pointer"}}>
-                                  📄 Vezi răspunsuri
+                                  {groupResult?"👥 Vezi contribuțiile":"📄 Vezi răspunsuri"}
                                 </button>
                               )}
                             </td>
@@ -6123,7 +6203,8 @@ function AdminPanel({onBack, teacherName}) {
         {tab==="nomenclator" && (
           <NomenclatorEditor nomenclator={nomenclator} onChange={n=>{setNomenclator(n);saveNomenclator(n);}} />
         )}
-        {selectedResult && (()=>{
+        {selectedResult && isGroupActivityResult(selectedResult) && <GroupActivityResultModal result={selectedResult} onClose={()=>setSelectedResult(null)}/>}
+        {selectedResult && !isGroupActivityResult(selectedResult) && (()=>{
         const parts=(selectedResult.moduleTitle||"").split("\n---\n");
         const title=parts[0];
         const answersRaw=parts[1]||"";
