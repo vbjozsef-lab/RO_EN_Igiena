@@ -11,9 +11,15 @@
     light.rel='stylesheet';
     light.href='presentation-light.css';
     document.head.appendChild(light);
+
+    const lp1a=document.createElement('link');
+    lp1a.rel='stylesheet';
+    lp1a.href='presentation-lp1a.css';
+    document.head.appendChild(lp1a);
+
     document.documentElement.style.colorScheme='light';
   }
   const s=document.createElement('script');
-  s.src=lp==='lp6b'?'presentation-engine.js':'presentation-engine-generic.js';
+  s.src=lp==='lp6b'?'presentation-engine.js':lp==='lp1a'?'presentation-engine-lp1a.js':'presentation-engine-generic.js';
   document.body.appendChild(s);
 })();
