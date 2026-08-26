@@ -1,7 +1,17 @@
 (() => {
   const lp=(new URLSearchParams(location.search).get('lp')||'lp6b').toLowerCase();
   if(lp!=='lp6b'){
-    const css=document.createElement('link');css.rel='stylesheet';css.href='presentation-generic.css';document.head.appendChild(css);
+    const css=document.createElement('link');
+    css.rel='stylesheet';
+    css.href='presentation-generic.css';
+    document.head.appendChild(css);
+  }
+  if(lp==='lp1a'){
+    const light=document.createElement('link');
+    light.rel='stylesheet';
+    light.href='presentation-light.css';
+    document.head.appendChild(light);
+    document.documentElement.style.colorScheme='light';
   }
   const s=document.createElement('script');
   s.src=lp==='lp6b'?'presentation-engine.js':'presentation-engine-generic.js';
