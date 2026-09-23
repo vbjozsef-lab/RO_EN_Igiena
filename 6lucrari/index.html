@@ -1585,18 +1585,12 @@ var LP4B_QUESTIONS = {
 
 
 var FISE_LABS = {
-  lp1a: { title:"LP1A · Igiena Aerului",          available:true, grupe:6, desc:"6 activități: microclimat ATI, hartă termică, psihrometrie, mișcarea aerului, radiație calorică, confort" },
-  lp1b: { title:"LP1B · Pulberi & Gaze",          available:true, grupe:6, desc:"6 activități: fracții PM, gravimetrie, coniodispersiogramă, SidePak, latex, intoxicație CO" },
-  lp2a: { title:"LP2A · Fumat & Microbi",         available:true, grupe:6, desc:"6 activități: VBA, Fagerström, CO expirat, Koch, aspirare, control MRSA" },
-  lp2b: { title:"LP2B · Iluminat & Sonometrie",   available:true, grupe:6, desc:"6 activități: CL/CA, CIN, CU/CR, LED, sonometrie spital, plan anti-zgomot" },
-  lp3a: { title:"LP3A · Apa fizico-chimic",       available:true, grupe:6, desc:"6 activități: anchetă sanitară, pH/cloruri, fluor, ciclul azotului, teste NO₂/NO₃, methemoglobinemie" },
-  lp3b: { title:"LP3B · Apa microbiologie",       available:true, grupe:6, desc:"6 activități: indicatori fecali, calcul NTG, E. coli, clor rezidual, uzina de apă, focar hidric" },
-  lp4a: { title:"LP4A · Starea de nutriție",      available:true, grupe:6, desc:"6 activități: IMC/talie, copil, pliuri, BIA, chestionar 24 h, malnutriție spital" },
-  lp4b: { title:"LP4B · Produse Animale",         available:true, grupe:6, desc:"6 activități: prospețime carne, amoniac, conserve, ouă, frauda laptelui, pasteurizare" },
-  lp5a: { title:"LP5A · Produse Vegetale",        available:true, grupe:6, desc:"6 activități: aflatoxine, făină, pâine, nitrați, metanol, conserve vegetale" },
-  lp5b: { title:"LP5B · Bacterii și Paraziți",   available:true, grupe:6, desc:"6 activități: bacterioscopie, patogeni, Trichinella, teniaze, lapte, HACCP" },
-  lp6a: { title:"LP6A · Radiații Ionizante",      available:true, grupe:6, desc:"6 activități: unități, limite, dozimetrie, protecție, ALARA, audit de incident" },
-  lp6b: { title:"LP6B · Igiena Școlară",          available:true, grupe:6, desc:"6 activități: curbe zilnice, săptămânale, anuale, ore/clase, profil de risc, anti-bullying" },
+  lp1: { title:"LP1 · Aer", available:true, grupe:6, desc:"Combină conținutul fostelor LP1A + LP1B: microclimat, proprietăți fizice, pulberi, gaze și calitatea aerului." },
+  lp2: { title:"LP2 · Fumat, microbiologie, iluminat și zgomot", available:true, grupe:6, desc:"Combină fostele LP2A + LP2B." },
+  lp3: { title:"LP3 · Apă", available:true, grupe:6, desc:"Combină fostele LP3A + LP3B: fizico-chimic, nitrați, microbiologie și dezinfecție." },
+  lp4: { title:"LP4 · Nutriție și produse animale", available:true, grupe:6, desc:"Combină fostele LP4A + LP4B." },
+  lp5: { title:"LP5 · Produse vegetale și microbiologia alimentelor", available:true, grupe:6, desc:"Combină fostele LP5A + LP5B." },
+  lp6: { title:"LP6 · Radiații și igienă școlară", available:true, grupe:6, desc:"Combină fostele LP6A + LP6B." },
 };
 
 
@@ -4296,43 +4290,31 @@ const TEACHERS = {
 
 // Animált bemutatók laboronként (beépítve iframe-ben)
 const LAB_DEMOS = {
-  lp1a: [
-    { title: "🌡️ Laborator Animat LP1A", url: "laborator_animat_lp1a.html" },
-    { title: "📋 Fișe de Lucru LP1A", url: "fise_lucru_lp1a.html" },
+  lp1: [
+    { title: "🌡️ Partea fostă LP1A · Laborator animat", url: "laborator_animat_lp1a.html" },
+    { title: "📋 Partea fostă LP1A · Fișe de lucru", url: "fise_lucru_lp1a.html" },
+    { title: "🌫️ Partea fostă LP1B · Laborator animat", url: "laborator_animat_lp1b.html" },
   ],
-  lp1b: [
-    { title: "🌫️ Laborator Animat LP1B", url: "laborator_animat_lp1b.html" },
+  lp2: [
+    { title: "🚬 Partea fostă LP2A · Laborator animat", url: "laborator_animat_lp2a.html" },
+    { title: "💡 Partea fostă LP2B · Laborator animat", url: "laborator_animat_lp2b.html" },
   ],
-  lp2a: [
-    { title: "🚬 Laborator Animat LP2A", url: "laborator_animat_lp2a.html" },
+  lp3: [
+    { title: "💧 Partea fostă LP3A · Laborator animat", url: "laborator_animat_lp3a.html" },
+    { title: "🦠 Partea fostă LP3B · Laborator animat", url: "laborator_animat_lp3b.html" },
   ],
-  lp4b: [
-    { title: "🔬 Laborator Interactiv LP4B", url: "laborator_animat_lp4b.html" },
+  lp4: [
+    { title: "🍎 Partea fostă LP4A · Laborator animat", url: "laborator_animat_lp4a.html" },
+    { title: "🔬 Partea fostă LP4B · Laborator interactiv", url: "laborator_animat_lp4b.html" },
   ],
-  lp5a: [
-    { title: "🌾 Laborator Animat LP5A", url: "laborator_animat_lp5a.html" },
+  lp5: [
+    { title: "🌾 Partea fostă LP5A · Laborator animat", url: "laborator_animat_lp5a.html" },
+    { title: "🧫 Partea fostă LP5B · Laborator animat", url: "laborator_animat_lp5b.html" },
+    { title: "📋 HACCP · Diagramă interactivă", url: "haccp_interactiv.html" },
   ],
-  lp6a: [
-    { title: "☢️ Laborator Animat LP6A", url: "laborator_animat_lp6a.html" },
-  ],
-  lp6b: [
-    { title: "🏫 Prezentare Interactivă LP6B · Clasă conectată", url: "prezentari/index.html?lp=lp6b" },
-  ],
-  lp2b: [
-    { title: "💡 Laborator Animat LP2B", url: "laborator_animat_lp2b.html" },
-  ],
-  lp3a: [
-    { title: "💧 Laborator Animat LP3A", url: "laborator_animat_lp3a.html" },
-  ],
-  lp3b: [
-    { title: "🦠 Laborator Animat LP3B", url: "laborator_animat_lp3b.html" },
-  ],
-  lp4a: [
-    { title: "🍎 Laborator Animat LP4A", url: "laborator_animat_lp4a.html" },
-  ],
-  lp5b: [
-    { title: "🧫 Laborator Animat LP5B", url: "laborator_animat_lp5b.html" },
-    { title: "📋 HACCP – Diagramă Interactivă", url: "haccp_interactiv.html" },
+  lp6: [
+    { title: "☢️ Partea fostă LP6A · Laborator animat", url: "laborator_animat_lp6a.html" },
+    { title: "🏫 Partea fostă LP6B · Prezentare interactivă", url: "prezentari/index.html?lp=lp6b" },
   ],
 };
 // ════════════════════════════════════════════════════════════
@@ -4426,9 +4408,50 @@ function mergeFisaRecord(baseFisa, override) {
 // Returns the teacher-configured activity set in its visible order. Base
 // activities can be hidden with a reversible tombstone; teacher-created items
 // are appended. Quiz and exam banks are intentionally not touched here.
+function mergePairQuestions(aQs=[], bQs=[]) {
+  const out=[];
+  const n=Math.max(aQs.length,bQs.length);
+  for(let i=0;i<n;i++){ if(aQs[i]) out.push(aQs[i]); if(bQs[i]) out.push(bQs[i]); }
+  return out;
+}
+
+function buildMergedBaseActivities(labId, bank) {
+  const parts=MERGED_LAB_PARTS[labId];
+  if(!parts) return bank?.[labId] || [];
+  const left=bank?.[parts[0]] || [];
+  const right=bank?.[parts[1]] || [];
+  return Array.from({length:6},(_,i)=>{
+    const a=left[i]||null, b=right[i]||null;
+    if(!a&&!b) return null;
+    if(!a) return {...b,id:labId+"_g"+(i+1)};
+    if(!b) return {...a,id:labId+"_g"+(i+1)};
+    const caz=[
+      ...(a.caz||[]).map(x=>({...x,l:"A · "+x.l})),
+      ...(b.caz||[]).map(x=>({...x,l:"B · "+x.l}))
+    ];
+    return {
+      ...a,
+      id:labId+"_g"+(i+1),
+      mission:false,
+      title:(a.title||parts[0].toUpperCase())+" + "+(b.title||parts[1].toUpperCase()),
+      emoji:a.emoji||b.emoji||"🧩",
+      color:a.color||b.color||"#6366f1",
+      caz,
+      qs:mergePairQuestions(a.qs||[],b.qs||[]),
+      conc:[...(a.conc||[]),...(b.conc||[])].slice(0,6),
+      sourceRefs:[
+        ...(a.sourceRefs||[parts[0].toUpperCase()]),
+        ...(b.sourceRefs||[parts[1].toUpperCase()])
+      ]
+    };
+  }).filter(Boolean);
+}
+
+// Returns six visible activities for the new six-practical structure.
+// Each activity pairs the corresponding task from the former A and B practicals.
 function getActiveFiseForLab(labId, lang="ro", editsOverride=null) {
   const bank = lang === "en" ? FISE_DATA_EN : (window.TEAM_MISSIONS || FISE_DATA);
-  const base = bank?.[labId] || [];
+  const base = buildMergedBaseActivities(labId, bank);
   const edits = editsOverride || loadFisaEdits();
   const baseIds = new Set(base.map(f=>String(f.id)));
   const visibleBase = base
@@ -4637,19 +4660,22 @@ const QR_DURATIONS = [
 // ════════════════════════════════════════════════════════════
 // PRACTICALS REGISTRY
 // ════════════════════════════════════════════════════════════
+const MERGED_LAB_PARTS = {
+  lp1:["lp1a","lp1b"],
+  lp2:["lp2a","lp2b"],
+  lp3:["lp3a","lp3b"],
+  lp4:["lp4a","lp4b"],
+  lp5:["lp5a","lp5b"],
+  lp6:["lp6a","lp6b"],
+};
+
 const LABS = [
-  {id:"lp1a", code:"LP1A", icon:"🌬️", title:"Proprietăți fizice ale aerului",         titleEn:"Physical properties of air",              color:"#0ea5e9", dim:"rgba(14,165,233,.12)",  border:"rgba(14,165,233,.3)",  ready:true },
-  {id:"lp1b", code:"LP1B", icon:"🏭", title:"Pulberi, gaze, calitatea aerului",        titleEn:"Dust, gases and air quality",              color:"#64748b", dim:"rgba(100,116,139,.12)", border:"rgba(100,116,139,.3)", ready:true },
-  {id:"lp2a", code:"LP2A", icon:"🚬", title:"Fumat și microbiologia aerului",          titleEn:"Smoking and air microbiology",             color:"#78716c", dim:"rgba(120,113,108,.12)", border:"rgba(120,113,108,.3)", ready:true },
-  {id:"lp2b", code:"LP2B", icon:"💡", title:"Iluminat și sonometrie",                  titleEn:"Lighting and noise measurement",           color:"#eab308", dim:"rgba(234,179,8,.12)",   border:"rgba(234,179,8,.3)",   ready:true },
-  {id:"lp3a", code:"LP3A", icon:"💧", title:"Apă – fizico-chimic, nitrați",            titleEn:"Water – physico-chemical, nitrates",       color:"#3b82f6", dim:"rgba(59,130,246,.12)",  border:"rgba(59,130,246,.3)",  ready:true },
-  {id:"lp3b", code:"LP3B", icon:"🦠", title:"Apă – microbiologie, dezinfecție",        titleEn:"Water – microbiology, disinfection",       color:"#06b6d4", dim:"rgba(6,182,212,.12)",   border:"rgba(6,182,212,.3)",   ready:true },
-  {id:"lp4a", code:"LP4A", icon:"🍎", title:"Evaluarea stării de nutriție",            titleEn:"Nutritional status assessment",            color:"#f97316", dim:"rgba(249,115,22,.12)",  border:"rgba(249,115,22,.3)",  ready:true },
-  {id:"lp4b", code:"LP4B", icon:"🥩", title:"Produse de origine animală",              titleEn:"Animal-origin food products",              color:"#ef4444", dim:"rgba(239,68,68,.12)",   border:"rgba(239,68,68,.3)",   ready:true },
-  {id:"lp5a", code:"LP5A", icon:"🥦", title:"Produse vegetale",                        titleEn:"Plant-based food products",                color:"#22c55e", dim:"rgba(34,197,94,.12)",   border:"rgba(34,197,94,.3)",   ready:true },
-  {id:"lp5b", code:"LP5B", icon:"🧫", title:"Alimente – bacterii și paraziți",         titleEn:"Food – bacteria and parasites",            color:"#a855f7", dim:"rgba(168,85,247,.12)",  border:"rgba(168,85,247,.3)",  ready:true },
-  {id:"lp6a", code:"LP6A", icon:"☢️", title:"Radiații",                                titleEn:"Ionising radiation",                       color:"#f59e0b", dim:"rgba(245,158,11,.12)",  border:"rgba(245,158,11,.3)",  ready:true },
-  {id:"lp6b", code:"LP6B", icon:"🏫", title:"Igienă școlară, comportamente de risc",   titleEn:"School hygiene and risk behaviours",       color:"#8b5cf6", dim:"rgba(139,92,246,.12)",  border:"rgba(139,92,246,.3)",  ready:true },
+  {id:"lp1", code:"LP1", icon:"🌬️", title:"Aer: proprietăți fizice, pulberi, gaze și calitatea aerului", titleEn:"Air: physical properties, dust, gases and air quality", color:"#0ea5e9", dim:"rgba(14,165,233,.12)", border:"rgba(14,165,233,.3)", ready:true, parts:["lp1a","lp1b"]},
+  {id:"lp2", code:"LP2", icon:"🚬", title:"Fumat, microbiologia aerului, iluminat și sonometrie", titleEn:"Smoking, air microbiology, lighting and noise measurement", color:"#78716c", dim:"rgba(120,113,108,.12)", border:"rgba(120,113,108,.3)", ready:true, parts:["lp2a","lp2b"]},
+  {id:"lp3", code:"LP3", icon:"💧", title:"Apă: fizico-chimic, nitrați, microbiologie și dezinfecție", titleEn:"Water: physico-chemical, nitrates, microbiology and disinfection", color:"#3b82f6", dim:"rgba(59,130,246,.12)", border:"rgba(59,130,246,.3)", ready:true, parts:["lp3a","lp3b"]},
+  {id:"lp4", code:"LP4", icon:"🍎", title:"Evaluarea stării de nutriție și produse de origine animală", titleEn:"Nutritional status assessment and animal-origin food products", color:"#f97316", dim:"rgba(249,115,22,.12)", border:"rgba(249,115,22,.3)", ready:true, parts:["lp4a","lp4b"]},
+  {id:"lp5", code:"LP5", icon:"🥦", title:"Produse vegetale, bacterii și paraziți alimentari", titleEn:"Plant products, food bacteria and parasites", color:"#22c55e", dim:"rgba(34,197,94,.12)", border:"rgba(34,197,94,.3)", ready:true, parts:["lp5a","lp5b"]},
+  {id:"lp6", code:"LP6", icon:"☢️", title:"Radiații, igienă școlară și comportamente de risc", titleEn:"Radiation, school hygiene and risk behaviours", color:"#8b5cf6", dim:"rgba(139,92,246,.12)", border:"rgba(139,92,246,.3)", ready:true, parts:["lp6a","lp6b"]},
 ];
 
 // ════════════════════════════════════════════════════════════
@@ -6283,7 +6309,7 @@ function AdminPanel({onBack, teacherName}) {
               <div style={{position:"absolute",width:220,height:220,borderRadius:"50%",right:-70,top:-90,background:"rgba(255,255,255,.08)"}}/>
               <div style={{position:"relative"}}>
                 <div style={{fontSize:11,fontWeight:900,letterSpacing:".12em",textTransform:"uppercase",color:"#c7d2fe",marginBottom:7}}>Bibliotecă didactică</div>
-                <h3 style={{fontSize:23,margin:"0 0 7px",fontWeight:900,letterSpacing:"-.02em"}}>📽️ Prezentări LP1A–LP6B</h3>
+                <h3 style={{fontSize:23,margin:"0 0 7px",fontWeight:900,letterSpacing:"-.02em"}}>📽️ Prezentări LP1–LP6</h3>
                 <p style={{fontSize:13,color:"#e0e7ff",margin:0,lineHeight:1.65,maxWidth:780}}>Prezentările pentru proiector sunt în format 16:9 și se adaptează automat la ecran, fără derulare verticală în interiorul diapozitivului. Versiunea „PDF / Studiu” este pregătită pentru salvare PDF, câte un diapozitiv pe pagină.</p>
               </div>
             </div>
@@ -6300,11 +6326,15 @@ function AdminPanel({onBack, teacherName}) {
                     </div>
                   </div>
                   <div style={{fontSize:12,color:"#64748b",lineHeight:1.55,marginBottom:14,flex:1}}>Prezentare didactică pentru curs, separată de modulul „Laborator animat”.</div>
-                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-                    <a href={`prezentari/index.html?lp=${lab.id}&teacher=${encodeURIComponent(teacherName)}`} target="_blank" rel="noreferrer"
-                      style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6,textDecoration:"none",padding:"10px 8px",borderRadius:10,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",color:"#fff",fontSize:11,fontWeight:800,boxShadow:"0 4px 12px rgba(99,102,241,.20)"}}>▶ Deschide</a>
-                    <a href={`prezentari/studiu.html?lp=${lab.id}`} target="_blank" rel="noreferrer"
-                      style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6,textDecoration:"none",padding:"10px 8px",borderRadius:10,background:"#f8faff",color:"#4338ca",border:"1px solid #c7d2fe",fontSize:11,fontWeight:800}}>⬇ PDF / Studiu</a>
+                  <div style={{display:"grid",gap:7}}>
+                    {(lab.parts||[lab.id]).map((part,pi)=>(
+                      <div key={part} style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7}}>
+                        <a href={`prezentari/index.html?lp=${part}&teacher=${encodeURIComponent(teacherName)}`} target="_blank" rel="noreferrer"
+                          style={{display:"flex",alignItems:"center",justifyContent:"center",gap:5,textDecoration:"none",padding:"9px 7px",borderRadius:9,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",color:"#fff",fontSize:10,fontWeight:800}}>▶ {pi===0?"Partea A":"Partea B"}</a>
+                        <a href={`prezentari/studiu.html?lp=${part}`} target="_blank" rel="noreferrer"
+                          style={{display:"flex",alignItems:"center",justifyContent:"center",gap:5,textDecoration:"none",padding:"9px 7px",borderRadius:9,background:"#f8faff",color:"#4338ca",border:"1px solid #c7d2fe",fontSize:10,fontWeight:800}}>⬇ Studiu</a>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -8059,8 +8089,8 @@ function FisaPreviewPanel({labId, mode="preview", teacherName, onActivitiesChang
 // ════════════════════════════════════════════════════════════
 function FiseGrupTab({selLab}) {
   const T = useT();
-  const labId=selLab?.id||"lp1a";
-  const hasFisa=["lp1a","lp1b","lp2a","lp2b","lp3a","lp3b","lp4a","lp4b","lp5a","lp5b","lp6a","lp6b"].includes(labId);
+  const labId=selLab?.id||"lp1";
+  const hasFisa=!!FISE_LABS[labId];
   const fisaInfo=FISE_LABS[labId];
   return (
     <div>
@@ -8483,6 +8513,50 @@ function LP4BModuleSelect({studentName, onSelect, onDemo}) {
 }
 
 // ════════════════════════════════════════════════════════════
+// MERGED QUIZ HELPERS — LP1...LP6
+// ════════════════════════════════════════════════════════════
+const LEGACY_FULL_MAP = {lp1a:"full1a",lp1b:"full1b",lp2a:"full2a",lp2b:"full2b",lp3a:"full3a",lp3b:"full3b",lp4a:"full4a",lp4b:"full",lp5a:"full5a",lp5b:"full5b",lp6a:"full6a",lp6b:"full6b"};
+
+function legacyModulesForLab(id){
+  return {lp1a:LP1A_MODULES,lp1b:LP1B_MODULES,lp2a:LP2A_MODULES,lp2b:LP2B_MODULES,lp3a:LP3A_MODULES,lp3b:LP3B_MODULES,lp4a:LP4A_MODULES,lp4b:LP4B_MODULES,lp5a:LP5A_MODULES,lp5b:LP5B_MODULES,lp6a:LP6A_MODULES,lp6b:LP6B_MODULES}[id]||[];
+}
+
+function legacyQuestionsForLab(id,lang){
+  const ro={lp1a:LP1A_QUESTIONS,lp1b:LP1B_QUESTIONS,lp2a:LP2A_QUESTIONS,lp2b:LP2B_QUESTIONS,lp3a:LP3A_QUESTIONS,lp3b:LP3B_QUESTIONS,lp4a:LP4A_QUESTIONS,lp4b:LP4B_QUESTIONS,lp5a:LP5A_QUESTIONS,lp5b:LP5B_QUESTIONS,lp6a:LP6A_QUESTIONS,lp6b:LP6B_QUESTIONS};
+  const en={lp1a:LP1A_QUESTIONS_EN,lp1b:LP1B_QUESTIONS_EN,lp2a:LP2A_QUESTIONS_EN,lp2b:LP2B_QUESTIONS_EN,lp3a:LP3A_QUESTIONS_EN,lp3b:LP3B_QUESTIONS_EN,lp4a:LP4A_QUESTIONS_EN,lp4b:LP4B_QUESTIONS_EN,lp5a:LP5A_QUESTIONS_EN,lp5b:LP5B_QUESTIONS_EN,lp6a:LP6A_QUESTIONS_EN,lp6b:LP6B_QUESTIONS_EN};
+  return (lang==="en"?en:ro)[id]||ro[id]||{};
+}
+
+function legacyFullQuestions(id,lang){
+  const bank=legacyQuestionsForLab(id,lang);
+  const fullId=LEGACY_FULL_MAP[id];
+  if(bank?.[fullId]?.length) return bank[fullId];
+  const mods=legacyModulesForLab(id);
+  const fallback=mods[mods.length-1]?.id;
+  return bank?.[fallback]||[];
+}
+
+function getMergedQuizModule(labId,lang){
+  const lab=LABS.find(l=>l.id===labId);
+  const parts=MERGED_LAB_PARTS[labId]||[];
+  const questions=parts.flatMap(p=>legacyFullQuestions(p,lang));
+  if(!lab||!questions.length) return null;
+  return {
+    id:"full"+labId.replace("lp",""),
+    icon:lab.icon,
+    title:(lang==="en"?"Complete quiz ":"Quiz complet ")+lab.code,
+    sub:(lang==="en"?"Combined content from the former A and B practicals":"Conținut combinat din fostele practici A și B"),
+    color:lab.color,
+    dim:lab.dim,
+    border:lab.border,
+    time:20,
+    count:Math.min(20,questions.length),
+    labCode:lab.code,
+    _questions:questions
+  };
+}
+
+// ════════════════════════════════════════════════════════════
 // QUIZ SCREEN
 // ════════════════════════════════════════════════════════════
 function QuizScreen({student, studentName, studentGroup, studentSpec, labId, module, onFinish, sessionTeacher, sessionSemester}) {
@@ -8513,7 +8587,7 @@ function QuizScreen({student, studentName, studentGroup, studentSpec, labId, mod
 
   React.useEffect(() => {
     const init = () => {
-      const base = (_getQBank(lang)[labId] || LP4B_QUESTIONS)[module.id] || [];
+      const base = module._questions || ((_getQBank(lang)[labId] || LP4B_QUESTIONS)[module.id] || []);
       const all = applyQuizEdits(labId, module.id, base);
       setQs(shufflePick(all, module.count || all.length));
       setStartT(Date.now());
@@ -9609,14 +9683,10 @@ function App() {
     else if (session?.labCode?.endsWith("-EXAM")) { setScreen("exam_code"); }
     else if (session?.labCode?.endsWith("-LIVE")) { setScreen("livePresentation"); }
     else {
-      const FULL_MAP = {lp1a:"full1a",lp1b:"full1b",lp2a:"full2a",lp2b:"full2b",lp3a:"full3a",lp3b:"full3b",lp4a:"full4a",lp4b:"full",lp5a:"full5a",lp5b:"full5b",lp6a:"full6a",lp6b:"full6b"};
-      const MOD_MAP = {lp1a:window.LP1A_MODULES,lp1b:window.LP1B_MODULES,lp2a:window.LP2A_MODULES,lp2b:window.LP2B_MODULES,lp3a:window.LP3A_MODULES,lp3b:window.LP3B_MODULES,lp4a:window.LP4A_MODULES,lp4b:window.LP4B_MODULES,lp5a:window.LP5A_MODULES,lp5b:window.LP5B_MODULES,lp6a:window.LP6A_MODULES,lp6b:window.LP6B_MODULES};
       const labId = session?.labId;
-      const mods = MOD_MAP[labId] || [];
-      const fullId = FULL_MAP[labId];
-      const fullMod = mods.find(m=>m.id===fullId) || mods[mods.length-1];
+      const fullMod = getMergedQuizModule(labId,lang);
       if (fullMod) { setModule(fullMod); setScreen("quiz"); }
-      else { setErrMsg("Practica "+session?.labCode+" nu are quiz activ inca."); setScreen("error"); }
+      else { setErrMsg("Practica "+session?.labCode+" nu are quiz activ încă."); setScreen("error"); }
     }
     return null;
   }
