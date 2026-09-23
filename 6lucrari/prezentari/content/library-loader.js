@@ -1,0 +1,2 @@
+window.PRESENTATION_LIBRARY_PARTS=[];
+(async()=>{for(let i=1;i<=13;i++){await new Promise((ok,fail)=>{const s=document.createElement("script");s.src=`content/library-${String(i).padStart(2,"0")}.js`;s.onload=ok;s.onerror=fail;document.head.appendChild(s);});}window.PRESENTATION_LIBRARY_GZIP=window.PRESENTATION_LIBRARY_PARTS.join("");window.dispatchEvent(new Event("presentation-library-ready"));})();

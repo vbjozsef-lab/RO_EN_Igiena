@@ -1,0 +1,191 @@
+/* LP1 light classroom theme — clean medical / academic UI */
+:root{
+  --lp-bg:#f6f9fc;
+  --lp-panel:#ffffff;
+  --lp-ink:#17324d;
+  --lp-muted:#6f8195;
+  --lp-line:#dfe8f0;
+  --lp-blue:#2563eb;
+  --lp-cyan:#0891b2;
+  --lp-teal:#0f9f91;
+  --lp-mint:#eaf8f5;
+  --lp-sky:#eef6ff;
+  --lp-amber:#d97706;
+  --lp-shadow:0 18px 48px rgba(31,55,81,.10);
+}
+
+body{
+  background:linear-gradient(145deg,#f8fbff 0%,#f2f7fb 48%,#eef8f6 100%);
+  color:var(--lp-ink);
+}
+
+.presentation-app{background:transparent}
+
+.topbar{
+  border-bottom:1px solid var(--lp-line);
+  background:rgba(255,255,255,.94);
+  box-shadow:0 8px 28px rgba(31,55,81,.05);
+}
+.brand-mark{
+  color:#fff;
+  background:linear-gradient(135deg,var(--lp-blue),var(--lp-teal));
+  box-shadow:0 8px 22px rgba(37,99,235,.18);
+}
+.brand-copy strong,.top-title strong{color:#183653}
+.brand-copy span,.top-title span{color:#7b8da0}
+.icon-button,.ghost-button,.download-button,.live-top-button{
+  border:1px solid #d9e5ee;
+  color:#35516b;
+  background:#fff;
+  box-shadow:0 3px 10px rgba(31,55,81,.04);
+}
+.icon-button:hover,.ghost-button:hover,.download-button:hover{background:#f2f7fb}
+
+.workspace{background:transparent}
+.slide-rail{
+  border-right:1px solid var(--lp-line);
+  background:rgba(249,252,255,.94);
+}
+.slide-list{padding:18px 14px 24px}
+.thumb{
+  border:1px solid #dde7ef;
+  background:#fff;
+  color:var(--lp-ink);
+  box-shadow:0 3px 12px rgba(31,55,81,.035);
+}
+.thumb:hover{border-color:#9fd5cd;box-shadow:0 8px 20px rgba(15,159,145,.08)}
+.thumb.active{
+  border-color:var(--lp-teal);
+  background:linear-gradient(145deg,#f0fbf9,#eef7ff);
+  box-shadow:0 0 0 2px rgba(15,159,145,.08),0 8px 20px rgba(31,55,81,.06);
+}
+.thumb-preview b{color:var(--lp-teal)}
+.thumb-preview span{color:#64788d}
+
+.stage-wrap{padding:22px 28px}
+.stage{
+  border:1px solid #e2eaf1;
+  background:linear-gradient(145deg,#ffffff,#f9fcff);
+  box-shadow:var(--lp-shadow);
+}
+.stage::before{background:linear-gradient(180deg,var(--lp-blue),var(--lp-teal),#61cdbf)}
+.stage::after{background:radial-gradient(circle,rgba(37,99,235,.08),transparent 68%)}
+
+.generic-teaching{
+  min-height:100%;
+  padding:38px 46px 84px;
+  background:
+    radial-gradient(circle at 92% 3%,rgba(37,99,235,.08),transparent 26%),
+    radial-gradient(circle at 8% 94%,rgba(15,159,145,.07),transparent 26%),
+    linear-gradient(145deg,#ffffff,#f8fbfe);
+  color:var(--lp-ink);
+}
+.slide-kicker{color:var(--lp-teal)}
+.slide-kicker::before{background:#f2b84b}
+.slide-title,.slide-title.compact{color:#173b5e;letter-spacing:-.035em}
+
+.auto-grid{gap:14px}
+.auto-card{
+  border:1px solid #dfe8f0;
+  background:rgba(255,255,255,.96);
+  color:#294861;
+  box-shadow:0 8px 24px rgba(31,55,81,.055);
+}
+.auto-card:nth-child(6n+1){border-top:4px solid #3b82f6}
+.auto-card:nth-child(6n+2){border-top:4px solid #14b8a6}
+.auto-card:nth-child(6n+3){border-top:4px solid #f59e0b}
+.auto-card:nth-child(6n+4){border-top:4px solid #8b5cf6}
+.auto-card:nth-child(6n+5){border-top:4px solid #10b981}
+.auto-card:nth-child(6n+6){border-top:4px solid #06b6d4}
+.auto-card.text-card{color:#34546d}
+.auto-card.key-card{color:#173b5e;font-weight:800;background:linear-gradient(145deg,#fff,#f3f8fc)}
+.auto-card.metric-card{
+  color:#0f766e;
+  border-color:#bfe6df;
+  background:linear-gradient(145deg,#f0fdfa,#ffffff);
+  box-shadow:0 10px 24px rgba(15,159,145,.08);
+}
+.auto-card.source-card{
+  color:#4d667c;
+  border:1px solid #dce8ef;
+  border-left:4px solid var(--lp-teal);
+  background:#f5faf9;
+  box-shadow:none;
+}
+.source-tag{color:var(--lp-teal)}
+.phone-ready{
+  background:linear-gradient(145deg,#edf9f6,#f4fbff);
+  border:1px solid #bee6de;
+  color:#176a61;
+}
+
+.application-layout{gap:20px}
+.quiz-card,.send-panel,.empty-application{
+  border:1px solid #dfe8f0;
+  background:#fff;
+  color:var(--lp-ink);
+  box-shadow:0 10px 28px rgba(31,55,81,.06);
+}
+.quiz-card h2,.send-panel h3{color:#173b5e}
+.scenario{background:#fff8e8;color:#7a5414;border-left-color:#f59e0b}
+.quiz-option{
+  border:1px solid #dce6ef;
+  background:#f9fbfd;
+  color:#294861;
+}
+.quiz-option:hover{border-color:#9edbd2;background:#f3fbf9}
+.quiz-option span{background:#edf3f8;color:#48657e}
+.quiz-option.correct{border-color:#86d7a6;background:#effaf3;color:#166534}
+.quiz-option.wrong{border-color:#f4b2b2;background:#fff5f5;color:#a12222}
+.feedback{background:#eff8f7;color:#235f59;border:1px solid #cce9e4}
+.send-panel p{color:#74879a}
+.send-panel .action-button{background:linear-gradient(135deg,#2563eb,#0f9f91);box-shadow:0 8px 20px rgba(37,99,235,.16)}
+.send-panel .secondary-action{
+  min-height:42px;border:1px solid #d8e4ec;border-radius:11px;background:#f7fafc;color:#35516b;font-weight:800;cursor:pointer;
+}
+.bridge-msg{color:#0f766e}
+
+.source-layout{
+  background:linear-gradient(145deg,#f7fafc,#eef5f9);
+  gap:20px;
+}
+.original-canvas{box-shadow:0 15px 36px rgba(31,55,81,.12);border:1px solid #dce6ee}
+.source-side{
+  border:1px solid #dce7ef;
+  background:#fff;
+  color:var(--lp-ink);
+  box-shadow:0 10px 28px rgba(31,55,81,.06);
+}
+.source-side p{color:#74879a}
+.source-line{color:#4f687d;border-bottom:1px solid #e7eef4}
+
+.bottombar{
+  border-top:1px solid var(--lp-line);
+  background:rgba(255,255,255,.95);
+  box-shadow:0 -8px 28px rgba(31,55,81,.04);
+}
+.mode-actions{border:1px solid #dce6ee;background:#f4f8fb}
+.nav-button{
+  border:1px solid #d7e2eb;
+  background:#fff;
+  color:#35516b;
+}
+.nav-button.primary{
+  border-color:transparent;
+  background:linear-gradient(135deg,#2563eb,#0f9f91);
+  color:#fff;
+  box-shadow:0 8px 18px rgba(37,99,235,.15);
+}
+.mode-button{color:#71859a}
+.mode-button.active{background:#fff;color:#173b5e;box-shadow:0 5px 14px rgba(31,55,81,.08)}
+.utility-button{border:1px solid #d7e2eb;background:#fff;color:#5c7186}
+.slide-counter{color:#6e8194}
+.progress-track{background:#e8eef3}
+.progress-fill{background:linear-gradient(90deg,#2563eb,#14b8a6)}
+
+.loading-screen{color:#6f8195;background:#f7fafc}
+.loading-mark{color:#fff;background:linear-gradient(135deg,#2563eb,#0f9f91);box-shadow:0 14px 32px rgba(37,99,235,.16)}
+
+@media(max-width:900px){
+  .generic-teaching{padding:24px 20px 76px}
+}
