@@ -18,16 +18,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-      - name: Patch index.html
-        run: |\n          python .github/scripts/patch_main_ui.py\n          python .github/scripts/extract_students.py
-      - name: Commit main app update
+      - name: Inspect student registry
+        run: python .github/scripts/extract_students.py
+      - name: Commit diagnostic
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html .github/student-snippets.txt
-          if git diff --cached --quiet; then
-            echo "No index.html changes to commit."
-            exit 0
-          fi
-          git commit -m "Separate laboratory and teaching presentations"
+          git add .github/student-snippets.txt
+          git commit -m "Inspect student registry structure"
           git push
