@@ -1,0 +1,22 @@
+name: Replace group activity runtime
+on:
+  push:
+    paths:
+      - '.github/trigger-replace-activity'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: python .github/scripts/replace_group_activity.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html 6lucrari/index.html
+          git commit -m "Replace legacy role-based activity with individual locked responses"
+          git push
