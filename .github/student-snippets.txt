@@ -1,4 +1,143 @@
 
+--- 2507 @ 861913 ---
+tor() {
+  try {
+    const saved = localStorage.getItem("igiena_nomenclator");
+    return saved ? JSON.parse(saved) : DEFAULT_NOMENCLATOR;
+  } catch(e) { return DEFAULT_NOMENCLATOR; }
+}
+function saveNomenclator(n) {
+  localStorage.setItem("igiena_nomenclator", JSON.stringify(n));
+}
+// Keep SPECIALIZATIONS for backwards compat
+const SPECIALIZATIONS = loadNomenclator().specializations;
+
+
+
+// ════════════════════════════════════════════════════════════
+// STUDENT REGISTRY — AMG Anul I 2026/2027 (lista oficială)
+// Sursa: TABEL NOMINAL, actualizat 2026-09-21
+// ════════════════════════════════════════════════════════════
+const STUDENT_REGISTRY = [{"name":"AGACHE M. F. AMALIA-ANDREEA","matricol":"2507","an":"I","seria":"1","grupa":"3"},{"name":"AILENI V. GABRIELA-SABINA","matricol":"2508","an":"I","seria":"1","grupa":"3"},{"name":"AMARIEI G. VASILICA-CĂTĂLINA","matricol":"2509","an":"I","seria":"1","grupa":"3"},{"name":"ARMANU R. TEODORA","matricol":"2613","an":"I","seria":"1","grupa":"1"},{"name":"BAGHIU E. (ONIȚIU) VERONICA-DARIA","matricol":"2510","an":"I","seria":"1","grupa":"3"},{"name":"BAKI S. ANDREA-ERIKA","matricol":"2511","an":"I","seria":"2","grupa":"1"},{"name":"BAKOS - MIHÁLY K. ZSELYKE","matricol":"2512","an":"I","seria":"2","grupa":"1"},{"name":"BALÁZSI L. TÍMEA-ANDREA","matricol":"2513","an":"I","seria":"2","grupa":"1"},{"name":"BÁLINT L. VIKTÓRIA","matricol":"2515","an":"I","seria":"2","grupa":"1"},{"name":"BÉRES K. KRISZTA-GABRIELLA","matricol":"2516","an":"I","seria":"2","grupa":"2"},{"name":"BODONI S. L. DALMA","matricol":"2517","an":"I","seria":"2","grupa":"2"},{"name":"BOGATEAN (MATASARU) MARIA","matricol":"2514","an":"I","seria":"1","grupa":"4"},{"name":"BORBÉLY P. MELINDA-IZABELLA","matricol":"2518","an":"I","seria":"1","grupa":"4"},{"name":"BOT M. ANDREEA-NICOLETA","matricol":"2519","an":"I","seria":"1","grupa":"4"},{"name":"BOTH-SIMÓ S. DÓRA","matricol":"2520","an":"I","seria":"1","grupa":"4"},{"name":"CASONI G. A. BIANCA-ALEXANDRA","matricol":"2615","an":"I","seria":"1","grupa":"1"},{"name":"CIRILĂ F. G. RAUL-GABRIEL","matricol":"2521","an":"I","s
+
+--- 2612 @ 871383 ---
+","matricol":"2604","an":"I","seria":"1","grupa":"12"},{"name":"VARGA C. M. MAIA-CRISTIANA","matricol":"2605","an":"I","seria":"1","grupa":"12"},{"name":"VARGA I. RITA-BEATA","matricol":"2606","an":"I","seria":"2","grupa":"12"},{"name":"VARGA-IMRE S. FLÓRA","matricol":"2607","an":"I","seria":"2","grupa":"12"},{"name":"VLAICU G. VLAD","matricol":"2608","an":"I","seria":"1","grupa":"12"},{"name":"VLAS M. O. ANDRA-IOANA","matricol":"2609","an":"I","seria":"1","grupa":"12"},{"name":"VOLOȘINCU D. I. ANDREI-MIHAI","matricol":"2610","an":"I","seria":"1","grupa":"12"},{"name":"ZAHARESCU I. SÎNZIANA-ALEXANDRA","matricol":"2611","an":"I","seria":"1","grupa":"2"},{"name":"ZSOMBORI C. RÉKA","matricol":"2612","an":"I","seria":"2","grupa":"12"}];
+
+function cleanMatricol(value) {
+  return String(value || "").trim().replace(/\s+/g, "").toUpperCase();
+}
+
+function formatStudentYear(value) {
+  const v = String(value || "").trim().toUpperCase();
+  if (v === "I" || v === "1" || v === "AN I" || v === "ANUL I") return "Anul I";
+  if (v === "II" || v === "2" || v === "AN II" || v === "ANUL II") return "Anul II";
+  return value ? String(value) : "";
+}
+
+function buildStudentGroupLabel(student) {
+  if (!student) return "";
+  const parts = [];
+  if (student.seria) parts.push("Seria " + student.seria);
+  if (student.grupa) parts.push("Grupa " + student.grupa);
+  return parts.join(" · ");
+}
+
+const STUDENT_BY_MATRICOL = STUDENT_REGISTRY.reduce((acc, s) => {
+  const key = cleanMatricol(s.matricol);
+  if (key) acc[key] = {
+    ...s,
+    matricol: cleanMatricol(s.matricol),
+    year: s.an || "",
+    yearLabel: formatStudentYear(s.an),
+    group: buildStudentGroupLabel(s),
+    spec: formatStudentYear(s.an)
+  };
+  return acc;
+}, {});
+
+function findStudentByMatricol(matricol) {
+  return STUDENT_BY_MATRICOL[cleanMatricol(matricol)] || null;
+}
+
+function buildStudentIdentity(student) {
+  return {
+    type:"student_identity_v1",
+    matricol:cleanMatricol(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||formatStu
+
+--- AGACHE @ 861872 ---
+ment when edited
+}
+
+function loadNomenclator() {
+  try {
+    const saved = localStorage.getItem("igiena_nomenclator");
+    return saved ? JSON.parse(saved) : DEFAULT_NOMENCLATOR;
+  } catch(e) { return DEFAULT_NOMENCLATOR; }
+}
+function saveNomenclator(n) {
+  localStorage.setItem("igiena_nomenclator", JSON.stringify(n));
+}
+// Keep SPECIALIZATIONS for backwards compat
+const SPECIALIZATIONS = loadNomenclator().specializations;
+
+
+
+// ════════════════════════════════════════════════════════════
+// STUDENT REGISTRY — AMG Anul I 2026/2027 (lista oficială)
+// Sursa: TABEL NOMINAL, actualizat 2026-09-21
+// ════════════════════════════════════════════════════════════
+const STUDENT_REGISTRY = [{"name":"AGACHE M. F. AMALIA-ANDREEA","matricol":"2507","an":"I","seria":"1","grupa":"3"},{"name":"AILENI V. GABRIELA-SABINA","matricol":"2508","an":"I","seria":"1","grupa":"3"},{"name":"AMARIEI G. VASILICA-CĂTĂLINA","matricol":"2509","an":"I","seria":"1","grupa":"3"},{"name":"ARMANU R. TEODORA","matricol":"2613","an":"I","seria":"1","grupa":"1"},{"name":"BAGHIU E. (ONIȚIU) VERONICA-DARIA","matricol":"2510","an":"I","seria":"1","grupa":"3"},{"name":"BAKI S. ANDREA-ERIKA","matricol":"2511","an":"I","seria":"2","grupa":"1"},{"name":"BAKOS - MIHÁLY K. ZSELYKE","matricol":"2512","an":"I","seria":"2","grupa":"1"},{"name":"BALÁZSI L. TÍMEA-ANDREA","matricol":"2513","an":"I","seria":"2","grupa":"1"},{"name":"BÁLINT L. VIKTÓRIA","matricol":"2515","an":"I","seria":"2","grupa":"1"},{"name":"BÉRES K. KRISZTA-GABRIELLA","matricol":"2516","an":"I","seria":"2","grupa":"2"},{"name":"BODONI S. L. DALMA","matricol":"2517","an":"I","seria":"2","grupa":"2"},{"name":"BOGATEAN (MATASARU) MARIA","matricol":"2514","an":"I","seria":"1","grupa":"4"},{"name":"BORBÉLY P. MELINDA-IZABELLA","matricol":"2518","an":"I","seria":"1","grupa":"4"},{"name":"BOT M. ANDREEA-NICOLETA","matricol":"2519","an":"I","seria":"1","grupa":"4"},{"name":"BOTH-SIMÓ S. DÓRA","matricol":"2520","an":"I","seria":"1","grupa":"4"},{"name":"CASONI G. A. BIANCA-ALEXANDRA","matricol":"2615","an":"I","seria":"1","grupa":"1"},{"name":"CIRILĂ F. G. RAUL
+
+--- ZSOMBORI @ 871353 ---
+":"UNGUR D. I. PAUL-CONSTANTIN","matricol":"2604","an":"I","seria":"1","grupa":"12"},{"name":"VARGA C. M. MAIA-CRISTIANA","matricol":"2605","an":"I","seria":"1","grupa":"12"},{"name":"VARGA I. RITA-BEATA","matricol":"2606","an":"I","seria":"2","grupa":"12"},{"name":"VARGA-IMRE S. FLÓRA","matricol":"2607","an":"I","seria":"2","grupa":"12"},{"name":"VLAICU G. VLAD","matricol":"2608","an":"I","seria":"1","grupa":"12"},{"name":"VLAS M. O. ANDRA-IOANA","matricol":"2609","an":"I","seria":"1","grupa":"12"},{"name":"VOLOȘINCU D. I. ANDREI-MIHAI","matricol":"2610","an":"I","seria":"1","grupa":"12"},{"name":"ZAHARESCU I. SÎNZIANA-ALEXANDRA","matricol":"2611","an":"I","seria":"1","grupa":"2"},{"name":"ZSOMBORI C. RÉKA","matricol":"2612","an":"I","seria":"2","grupa":"12"}];
+
+function cleanMatricol(value) {
+  return String(value || "").trim().replace(/\s+/g, "").toUpperCase();
+}
+
+function formatStudentYear(value) {
+  const v = String(value || "").trim().toUpperCase();
+  if (v === "I" || v === "1" || v === "AN I" || v === "ANUL I") return "Anul I";
+  if (v === "II" || v === "2" || v === "AN II" || v === "ANUL II") return "Anul II";
+  return value ? String(value) : "";
+}
+
+function buildStudentGroupLabel(student) {
+  if (!student) return "";
+  const parts = [];
+  if (student.seria) parts.push("Seria " + student.seria);
+  if (student.grupa) parts.push("Grupa " + student.grupa);
+  return parts.join(" · ");
+}
+
+const STUDENT_BY_MATRICOL = STUDENT_REGISTRY.reduce((acc, s) => {
+  const key = cleanMatricol(s.matricol);
+  if (key) acc[key] = {
+    ...s,
+    matricol: cleanMatricol(s.matricol),
+    year: s.an || "",
+    yearLabel: formatStudentYear(s.an),
+    group: buildStudentGroupLabel(s),
+    spec: formatStudentYear(s.an)
+  };
+  return acc;
+}, {});
+
+function findStudentByMatricol(matricol) {
+  return STUDENT_BY_MATRICOL[cleanMatricol(matricol)] || null;
+}
+
+function buildStudentIdentity(student) {
+  return {
+    type:"student_identity_v1",
+    matricol:cleanMatricol(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(stu
+
 --- matricol @ 811138 ---
 ,"analyst_c","epidemiologist_a","epidemiologist_b","prevention_a","prevention_b","prevention_c","evidence_auditor","critical_auditor"];
 
@@ -1273,801 +1412,6 @@ const STUDENT_REGISTRY = [{"name":"AGACHE M. F. AMALIA-ANDREEA","matricol":"2507
 // Sursa: TABEL NOMINAL, actualizat 2026-09-21
 // ════════════════════════════════════════════════════════════
 const STUDENT_REGISTRY = [{"name":"AGACHE M. F. AMALIA-ANDREEA","matricol":"2507","an":"I","seria":"1","grupa":"3"},{"name":"AILENI V. GABRIELA-SABINA","matricol":"2508","an":"I","seria":"1","grupa":"3"},{"name":"AMARIEI G. VASILICA-CĂTĂLINA","matricol":"2509","an":"I","seria":"1","grupa":"3"},{"name":"ARMANU R. TEODORA","matricol":"2613","an":"I","seria":"1","grupa":"1"},{"name":"BAGHIU E. (ONIȚIU) VERONICA-DARIA","matricol":"2510","an":"I","seria":"1","grupa":"3"},{"name":"BAKI S. ANDREA-ERIKA","matricol":"2511","an":"I","seria":"2","grupa":"1"},{"name":"BAKOS - MIHÁLY K. ZSELYKE","matricol":"2512","an":"I","seria":"2","grupa":"1"},{"name":"BALÁZSI L. TÍMEA-ANDREA","matricol":"2513","an":"I","seria":"2","grupa":"1"},{"name":"BÁLINT L. VIKTÓRIA","matricol":"2515","an":"I","seria":"2","grupa":"1"},{"name":"BÉRES K. KRISZTA-GABRIELLA","matricol":"2516","an":"I","seria":"2","grupa":"2"},{"name":"BODONI S. L. DALMA","matricol":"2517","an":"I","seria":"2","grupa":"2"},{"name":"BOGATEAN (MATASARU) MARIA","matricol":"2514","an":"I","seria":"1","grupa":"4"},{"name":"BORBÉLY P. MELINDA-IZABELLA","matricol":"2518","an":"I","seria":"1","grupa":"4"},{"name":"BOT M. ANDREEA-NICOLETA","matricol":"2519","an":"I","seria":"1","grupa":"4"},{"name":"BOTH-SIMÓ S. DÓRA","matricol":"2520","an":"I","seria":"1","grupa":"4"},{"name":"CASONI G. A. BIANCA-ALEXANDRA","matricol":"2615","an":"I","seria":"1","grupa":"1"},{"name":"CIRILĂ F. G. RAUL-GABRIEL","matricol":"2521","an":"I","seria":"1","grupa":"1"},{"name":"COJOCEA A. M. RADIA-IOANA","matricol":"2522","an":"I","seria":"1","grupa":"5"},{"name":"CONSTANTIN G. N. IANIS ȘTEFAN","matricol":"2617","an":"I","seria":"1","grupa":"1"},{"name":"CORNEA A. EDINA","matricol":"2523","an":"I","seria":"2","grupa":"2"},{"name":"COTOI M. C. YASMINE-MARIA","matricol":"2524","an":"I","seria":"1","grupa":"5"},{"name":"DAN P. C. IOANA-ȘTEFANIA","matricol":"2525","an":"I",
-
---- students @ 117563 ---
-ning:",o:["Raw plant foods exclusively","Foods of animal origin (meat, eggs) + desserts, ice cream, pastry","Only canned foods","Only contaminated water"],c:1,e:"Most common: foods of animal origin (meat, eggs) + desserts, ice cream, pastry. Also fresh unwashed vegetables."},
-        {q:"Among the WHO rules for preventing food poisoning, which is correct?",o:["Keeping prepared foods at room temperature for max 24h","Avoiding contact between raw and prepared/cooked foods","Consuming foods 2-3h after preparation","Washing hands once before cooking"],c:1,e:"WHO Rule 5: avoid contact between raw and prepared foods. Rule 3: consume IMMEDIATELY after preparation."},
-        {s:"School canteen: 45 students develop nausea, vomiting, diarrhoea 4-6h after lunch with chicken and mayonnaise.",q:"Most likely aetiological agent:",o:["Clostridium botulinum","Enterotoxic staphylococcus or Salmonella","Trichinella spiralis","Hepatitis A virus"],c:1,e:"Collective food poisoning + short incubation (4-6h) + animal foods (chicken + mayonnaise) = Salmonella or enterotoxic Staphylococcus."},
-        {q:"HACCP (Hazard Analysis and Critical Control Points) aims to:",o:["Only correct product labelling","Eliminate chemical and bacterial contamination risk through prevention, training, improving sanitary quality","Only control at the final point of sale","Replace microbiological analyses"],c:1,e:"HACCP: food circuit monitoring system (FAO/WHO). Purpose: prevention of food poisoning outbreaks + sanitary quality improvement + staff training."},
-        {q:"The food circuit must be:",o:["Bidirectional, with possibility of restarting phases","One-way, without crossings between clean and unclean phases, efficient and operational","Circular, with repeatable phases","Flexible, with possibility to bypass phases"],c:1,e:"Food circuit: ONE WAY, without crossings between clean/unclean phases, efficient and operational (Collection→Transport→Processing→Preparation→Distribution→Consumption)."},
-        {q:"TGC standard for pasteurised milk:",o:["Below 10,000 bacteria/mL","Below 100,000 bacteria/mL","Below 300,000
-
---- students @ 120994 ---
-nimal-origin foods (meat, eggs) + desserts, ice cream, pastries","Only canned goods","Only contaminated water"],
-     c:1, e:"Cel mai des: animal-origin foods (carne, oua) + deserturi, inghetata, patiserie. Si legume proaspete nespalate."},
-        {q:"Which of the WHO rules for foodborne illness prevention is correct?",
-     o:["Pastrarea alimentelor preparate at temperatura camerei max 24h","Avoiding contact between raw and prepared/cooked foods","Consuming food 2-3h after preparation","Washing hands once before cooking"],
-     c:1, e:"WHO rule 5: avoid contact between raw and prepared foods. Rule 3: consume IMMEDIATELY after preparation or refrigerate."},
-        {s:"School cafeteria: 45 students with nausea, vomiting, diarrhoea 4-6h after lunch with chicken and eggs.",
-     q:"Most likely aetiological agent:",
-     o:["Clostridium botulinum","Enterotoxic Staphylococcus or Salmonella","Trichinella spiralis","Hepatitis A virus"],
-     c:1, e:"TIA colectiva + incubatie scurta (4-6h) + alimente of origine animala (pui + maioneza) = Salmonella or Stafilococ enterotoxic."},
-        {q:"HACCP (Hazard Analysis Critical Control Points) aims to:",
-     o:["Only correct product labelling","Eliminating chemical and bacterial contamination risk through prevention, training, improving hygienic-sanitary quality","Only control at the final point of sale","Replacing microbiological analyses"],
-     c:1, e:"HACCP: sistem of monitorizare a circuitelor alimentare (FAO/OMS). Scop: preventie fowhich TIA + crisre calitate igienico-sanitara + instruire personal."},
-        {q:"The food circulation circuit must be:",
-     o:["Bidirectional, with possibility to repeat phases","Unidirectional, without cross-contamination between clean and unclean phases, efficient and operational","Circular, with phases that can be repeated","Flexible, with possibility to bypass phases"],
-     c:1, e:"Food circuit: ONE DIRECTION, no crossing between clean/unclean phases, efficient and operational."},
-        {q:"TGC standard for pasteurised milk:",
-     o:["Below 10,000 germs/ml","Below 100,000 germs/ml","Below
-
---- students @ 396614 ---
-s","Main mistake"] },
-    { id:"g3", emoji:"📆", title:"Seasonal and annual performance variations", color:"#059669",
-      caz:[{l:"Observed symptoms",v:"fatigue, irritability, decreased performance"},{l:"Period 1",v:"end of semester"},{l:"Period 2",v:"after consecutive assessments"},{l:"Period 3",v:"before final exam"},{l:"Period 4",v:"end of school year"}],
-      qs:[
-        {q:"Explain the annual performance variations known in school hygiene.",h:"Drops: end of semesters, after assessments, before exams, end of year."},
-        {q:"Why do performance drops occur at the end of the semester?",h:"Cumulative fatigue, chronic stress."},
-        {q:"What health effects can occur in overloaded students?",h:"Burnout, insomnia, irritability."},
-        {q:"What organisational measures could prevent overload?",h:"Balanced test scheduling."},
-        {q:"Formulate 3 recommendations for teachers.",h:"Max 1-2 assessments/week, advance notice."},
-        {q:"Formulate 3 recommendations for students during critical periods.",h:"Regular sleep, active breaks, study planning."},
-      ], conc:["Most critical period","Main cause","3 measures for the school"] },
-    { id:"g4", emoji:"📋", title:"School timetable — analysis and correction", color:"#d97706",
-      caz:[{l:"Secondary school class, Monday",v:"7 periods"},{l:"First 3 periods",v:"mathematics, physics, chemistry"},{l:"Alternation",v:"absent"},{l:"Last period",v:"written test"},{l:"Friday",v:"6 periods + 2 difficult subjects"}],
-      qs:[
-        {q:"Identify all organisational errors in the timetable.",h:"7 periods Monday, 3 heavy subjects, no alternation, test in last period."},
-        {q:"What hygienic principles must be respected when drawing up a timetable?",h:"Physiological curves, alternation of activity and rest."},
-        {q:"Why is it important to alternate intellectual and physical activities?",h:"Prevents fatigue, restores attention."},
-        {q:"How many periods per day are recommended for grades 5-8?",h:"5 periods/day — recommended hygienic standard."},
-        {q:"Propose a corrected Monday timetable.",h:"Max 
-
---- students @ 396909 ---
- 3",v:"before final exam"},{l:"Period 4",v:"end of school year"}],
-      qs:[
-        {q:"Explain the annual performance variations known in school hygiene.",h:"Drops: end of semesters, after assessments, before exams, end of year."},
-        {q:"Why do performance drops occur at the end of the semester?",h:"Cumulative fatigue, chronic stress."},
-        {q:"What health effects can occur in overloaded students?",h:"Burnout, insomnia, irritability."},
-        {q:"What organisational measures could prevent overload?",h:"Balanced test scheduling."},
-        {q:"Formulate 3 recommendations for teachers.",h:"Max 1-2 assessments/week, advance notice."},
-        {q:"Formulate 3 recommendations for students during critical periods.",h:"Regular sleep, active breaks, study planning."},
-      ], conc:["Most critical period","Main cause","3 measures for the school"] },
-    { id:"g4", emoji:"📋", title:"School timetable — analysis and correction", color:"#d97706",
-      caz:[{l:"Secondary school class, Monday",v:"7 periods"},{l:"First 3 periods",v:"mathematics, physics, chemistry"},{l:"Alternation",v:"absent"},{l:"Last period",v:"written test"},{l:"Friday",v:"6 periods + 2 difficult subjects"}],
-      qs:[
-        {q:"Identify all organisational errors in the timetable.",h:"7 periods Monday, 3 heavy subjects, no alternation, test in last period."},
-        {q:"What hygienic principles must be respected when drawing up a timetable?",h:"Physiological curves, alternation of activity and rest."},
-        {q:"Why is it important to alternate intellectual and physical activities?",h:"Prevents fatigue, restores attention."},
-        {q:"How many periods per day are recommended for grades 5-8?",h:"5 periods/day — recommended hygienic standard."},
-        {q:"Propose a corrected Monday timetable.",h:"Max 5 periods, heavy subjects 9-11, sport interspersed."},
-        {q:"Explain why Tuesday, Wednesday and Thursday are more suitable for demanding tasks.",h:"Maximum weekly capacity."},
-      ], conc:["Principle violated","Biggest error","Proposed corrected timetable"] },
-    { id:"g5", emoji:"⚠️",
-
---- students @ 399284 ---
-ong peers"}],
-      qs:[
-        {q:"Identify all risk behaviours and classify them.",h:"Dietary, substances (smoking/alcohol), hygienic (oral), behavioural."},
-        {q:"Explain why these behaviours are addressed in school hygiene.",h:"School = environment for forming habits."},
-        {q:"What short-term and long-term consequences can occur?",h:"Short: performance. Long: chronic diseases, addictions."},
-        {q:"Which student groups are more vulnerable?",h:"Those with family difficulties, socially isolated."},
-        {q:"Formulate 3 concrete school-level prevention measures.",h:"Health education, peer education, anti-bullying."},
-        {q:"Formulate 3 key messages for high school students.",h:"Positive messages, real consequences, age-relevant."},
-      ], conc:["Risk behaviours identified","Most urgent risk","3 measures for the school"] },
-    { id:"g6", emoji:"🛡️", title:"Risk behaviour prevention plan", color:"#7c3aed",
-      caz:[{l:"Problem",v:""},{l:"Observation 1",v:"lack of information"},{l:"Observation 2",v:"unhealthy habits"},{l:"Observation 3",v:"growing interest in smoking and alcohol"},{l:"Observation 4",v:"low participation in educational activities"}],
-      qs:[
-        {q:"What prevention methods are recommended in school hygiene?",h:"Health education, monitoring, questionnaires, peer education."},
-        {q:"What role does health education play in preventing risk behaviours?",h:"Information → attitude change → healthy habits."},
-        {q:"Why are questionnaires and interviews useful?",h:"Identify real problems, allow targeted planning."},
-        {q:"What role does periodic medical monitoring play?",h:"Early detection, tracking health indicators."},
-        {q:"Develop a mini intervention plan for one month.",h:"Week 1: assessment. Week 2: information. Week 3: activity. Week 4: evaluation."},
-        {q:"How would you evaluate whether the programme was successful?",h:"Pre-post questionnaire, absences, incidents."},
-      ], conc:["Main objective","Main method","3 proposed activities"] },
-  ],
-  lp6a: [
-    { id:"g1", emoji:"☢️", title:"Sour
-
---- students @ 443749 ---
-n → DO NOT wipe immediately! Unidirectional movements (not circular — recontamination). Single-use gloves. Change cloths at each surface."},
-        {q:"What monitoring log do you implement to track disinfection efficacy?",h:"Record: date/time, product, batch, concentration, surface treated, responsible person. Monthly bacteriological check. Colourimetric surface indicators (ATP bioluminescence test). Quarterly protocol audit."},
-      ], conc:["Main error identified","Recommended disinfectant","Optimal disinfection frequency"] },
-  ],
-  lp2b: [
-    { id:"g1", emoji:"💡", title:"Insufficient lighting in a classroom", color:"#f59e0b",
-      caz:[{l:"Location",v:"Secondary school classroom, 28 students"},{l:"Mean illuminance",v:"180 lux (min standard: 300 lux)"},{l:"Lighting uniformity",v:"0.3 (min standard: 0.7)"},{l:"Windows",v:"north-facing, partially blocked by trees"},{l:"Student age",v:"11-14 years"},{l:"Reported symptoms",v:"eye fatigue, headache, reading difficulties in 40% of students"}],
-      qs:[
-        {q:"Calculate the illuminance deficit against the standard. What long-term ocular risk does this imply?",h:"Deficit: 300-180 = 120 lux = 40% below standard. Risk: asthenopia (eye fatigue), progressive myopia (excessive accommodation stimulus), postural kyphoscoliosis (leaning over paper)."},
-        {q:"What does uniformity 0.3 mean versus the standard of 0.7? How does it manifest in practice?",h:"0.3 = very bright areas near windows and dark areas at the back of the room (10:1 ratio). Eyes constantly re-adapt → fatigue. Students at the back see 3× less than those at the front."},
-        {q:"What type of artificial light source do you recommend for a classroom?",h:"LED 4000K (neutral white) with CRI >90. Fittings with anti-glare diffuser (UGR <19). Placed perpendicular to board and desks. Dimmer for adaptation to natural light."},
-        {q:"North-facing windows — advantages and disadvantages from a visual hygiene perspective.",h:"Advantage: diffuse uniform light, no harsh shadows or direct glare. Disadvantage: lower natural illuminance, greater need for artifi
-
---- students @ 444046 ---
-onsible person. Monthly bacteriological check. Colourimetric surface indicators (ATP bioluminescence test). Quarterly protocol audit."},
-      ], conc:["Main error identified","Recommended disinfectant","Optimal disinfection frequency"] },
-  ],
-  lp2b: [
-    { id:"g1", emoji:"💡", title:"Insufficient lighting in a classroom", color:"#f59e0b",
-      caz:[{l:"Location",v:"Secondary school classroom, 28 students"},{l:"Mean illuminance",v:"180 lux (min standard: 300 lux)"},{l:"Lighting uniformity",v:"0.3 (min standard: 0.7)"},{l:"Windows",v:"north-facing, partially blocked by trees"},{l:"Student age",v:"11-14 years"},{l:"Reported symptoms",v:"eye fatigue, headache, reading difficulties in 40% of students"}],
-      qs:[
-        {q:"Calculate the illuminance deficit against the standard. What long-term ocular risk does this imply?",h:"Deficit: 300-180 = 120 lux = 40% below standard. Risk: asthenopia (eye fatigue), progressive myopia (excessive accommodation stimulus), postural kyphoscoliosis (leaning over paper)."},
-        {q:"What does uniformity 0.3 mean versus the standard of 0.7? How does it manifest in practice?",h:"0.3 = very bright areas near windows and dark areas at the back of the room (10:1 ratio). Eyes constantly re-adapt → fatigue. Students at the back see 3× less than those at the front."},
-        {q:"What type of artificial light source do you recommend for a classroom?",h:"LED 4000K (neutral white) with CRI >90. Fittings with anti-glare diffuser (UGR <19). Placed perpendicular to board and desks. Dimmer for adaptation to natural light."},
-        {q:"North-facing windows — advantages and disadvantages from a visual hygiene perspective.",h:"Advantage: diffuse uniform light, no harsh shadows or direct glare. Disadvantage: lower natural illuminance, greater need for artificial lighting. Optimal orientation: south-east."},
-        {q:"Propose technical and organisational remediation measures.",h:"Technical: install additional LED fittings (target 400 lux), clean windows, prune trees. Organisational: rotate seats each semester, A4 notebook for visually impaired stud
-
---- students @ 444605 ---
-rtially blocked by trees"},{l:"Student age",v:"11-14 years"},{l:"Reported symptoms",v:"eye fatigue, headache, reading difficulties in 40% of students"}],
-      qs:[
-        {q:"Calculate the illuminance deficit against the standard. What long-term ocular risk does this imply?",h:"Deficit: 300-180 = 120 lux = 40% below standard. Risk: asthenopia (eye fatigue), progressive myopia (excessive accommodation stimulus), postural kyphoscoliosis (leaning over paper)."},
-        {q:"What does uniformity 0.3 mean versus the standard of 0.7? How does it manifest in practice?",h:"0.3 = very bright areas near windows and dark areas at the back of the room (10:1 ratio). Eyes constantly re-adapt → fatigue. Students at the back see 3× less than those at the front."},
-        {q:"What type of artificial light source do you recommend for a classroom?",h:"LED 4000K (neutral white) with CRI >90. Fittings with anti-glare diffuser (UGR <19). Placed perpendicular to board and desks. Dimmer for adaptation to natural light."},
-        {q:"North-facing windows — advantages and disadvantages from a visual hygiene perspective.",h:"Advantage: diffuse uniform light, no harsh shadows or direct glare. Disadvantage: lower natural illuminance, greater need for artificial lighting. Optimal orientation: south-east."},
-        {q:"Propose technical and organisational remediation measures.",h:"Technical: install additional LED fittings (target 400 lux), clean windows, prune trees. Organisational: rotate seats each semester, A4 notebook for visually impaired students at the back."},
-        {q:"What legal regulations do you invoke in the inspection report?",h:"Ministry of Health Order 1955/1995 (hygiene in educational institutions). NP 061/2002 (indoor lighting standard). Order MDRAP 4/2017. Law 272/2004 (child protection)."},
-      ], conc:["Deficit calculated against standard","Main risk for students","Priority remediation measure"] },
-    { id:"g2", emoji:"🔊", title:"Excessive noise in school canteen", color:"#ef4444",
-      caz:[{l:"Location",v:"School canteen, 150 students simultaneously"},{l:"Noise level"
-
---- students @ 445450 ---
-h:"LED 4000K (neutral white) with CRI >90. Fittings with anti-glare diffuser (UGR <19). Placed perpendicular to board and desks. Dimmer for adaptation to natural light."},
-        {q:"North-facing windows — advantages and disadvantages from a visual hygiene perspective.",h:"Advantage: diffuse uniform light, no harsh shadows or direct glare. Disadvantage: lower natural illuminance, greater need for artificial lighting. Optimal orientation: south-east."},
-        {q:"Propose technical and organisational remediation measures.",h:"Technical: install additional LED fittings (target 400 lux), clean windows, prune trees. Organisational: rotate seats each semester, A4 notebook for visually impaired students at the back."},
-        {q:"What legal regulations do you invoke in the inspection report?",h:"Ministry of Health Order 1955/1995 (hygiene in educational institutions). NP 061/2002 (indoor lighting standard). Order MDRAP 4/2017. Law 272/2004 (child protection)."},
-      ], conc:["Deficit calculated against standard","Main risk for students","Priority remediation measure"] },
-    { id:"g2", emoji:"🔊", title:"Excessive noise in school canteen", color:"#ef4444",
-      caz:[{l:"Location",v:"School canteen, 150 students simultaneously"},{l:"Noise level",v:"87 dB(A) during meal service"},{l:"School space standard",v:"max 55 dB(A)"},{l:"Exposure time",v:"30 minutes/day (lunch) + 15 min (snack)"},{l:"Materials",v:"untreated concrete ceilings and walls, tiled floor"},{l:"Symptoms",v:"stress, agitation, difficulty in verbal communication"}],
-      qs:[
-        {q:"Calculate the exceedance against the standard in decibels. What does 32 dB extra mean in practice?",h:"87-55 = 32 dB exceedance. On logarithmic scale: every 3 dB = double sound energy. 32 dB = ~1000× above standard. 87 dB = busy street or industrial equipment level."},
-        {q:"What is the mechanism by which chronic noise affects learning capacity?",h:"Noise >65 dB → cortisol activation (chronic stress) → impaired working memory (hippocampus). Attention distraction → 30-40% reduction in concentration capacity (UNESCO studie
-
---- students @ 445792 ---
- Disadvantage: lower natural illuminance, greater need for artificial lighting. Optimal orientation: south-east."},
-        {q:"Propose technical and organisational remediation measures.",h:"Technical: install additional LED fittings (target 400 lux), clean windows, prune trees. Organisational: rotate seats each semester, A4 notebook for visually impaired students at the back."},
-        {q:"What legal regulations do you invoke in the inspection report?",h:"Ministry of Health Order 1955/1995 (hygiene in educational institutions). NP 061/2002 (indoor lighting standard). Order MDRAP 4/2017. Law 272/2004 (child protection)."},
-      ], conc:["Deficit calculated against standard","Main risk for students","Priority remediation measure"] },
-    { id:"g2", emoji:"🔊", title:"Excessive noise in school canteen", color:"#ef4444",
-      caz:[{l:"Location",v:"School canteen, 150 students simultaneously"},{l:"Noise level",v:"87 dB(A) during meal service"},{l:"School space standard",v:"max 55 dB(A)"},{l:"Exposure time",v:"30 minutes/day (lunch) + 15 min (snack)"},{l:"Materials",v:"untreated concrete ceilings and walls, tiled floor"},{l:"Symptoms",v:"stress, agitation, difficulty in verbal communication"}],
-      qs:[
-        {q:"Calculate the exceedance against the standard in decibels. What does 32 dB extra mean in practice?",h:"87-55 = 32 dB exceedance. On logarithmic scale: every 3 dB = double sound energy. 32 dB = ~1000× above standard. 87 dB = busy street or industrial equipment level."},
-        {q:"What is the mechanism by which chronic noise affects learning capacity?",h:"Noise >65 dB → cortisol activation (chronic stress) → impaired working memory (hippocampus). Attention distraction → 30-40% reduction in concentration capacity (UNESCO studies)."},
-        {q:"Identify noise sources and reverberation factors in this canteen.",h:"Sources: 150 students' voices (cocktail party effect), cutlery, distribution trolleys. Reverberation: concrete + tiles = hard reflective surfaces. Estimated RT60 >3 seconds (recommended: <0.8s for school spaces)."},
-        {q:"What sound-absorbing mate
-
---- students @ 445971 ---
-asures.",h:"Technical: install additional LED fittings (target 400 lux), clean windows, prune trees. Organisational: rotate seats each semester, A4 notebook for visually impaired students at the back."},
-        {q:"What legal regulations do you invoke in the inspection report?",h:"Ministry of Health Order 1955/1995 (hygiene in educational institutions). NP 061/2002 (indoor lighting standard). Order MDRAP 4/2017. Law 272/2004 (child protection)."},
-      ], conc:["Deficit calculated against standard","Main risk for students","Priority remediation measure"] },
-    { id:"g2", emoji:"🔊", title:"Excessive noise in school canteen", color:"#ef4444",
-      caz:[{l:"Location",v:"School canteen, 150 students simultaneously"},{l:"Noise level",v:"87 dB(A) during meal service"},{l:"School space standard",v:"max 55 dB(A)"},{l:"Exposure time",v:"30 minutes/day (lunch) + 15 min (snack)"},{l:"Materials",v:"untreated concrete ceilings and walls, tiled floor"},{l:"Symptoms",v:"stress, agitation, difficulty in verbal communication"}],
-      qs:[
-        {q:"Calculate the exceedance against the standard in decibels. What does 32 dB extra mean in practice?",h:"87-55 = 32 dB exceedance. On logarithmic scale: every 3 dB = double sound energy. 32 dB = ~1000× above standard. 87 dB = busy street or industrial equipment level."},
-        {q:"What is the mechanism by which chronic noise affects learning capacity?",h:"Noise >65 dB → cortisol activation (chronic stress) → impaired working memory (hippocampus). Attention distraction → 30-40% reduction in concentration capacity (UNESCO studies)."},
-        {q:"Identify noise sources and reverberation factors in this canteen.",h:"Sources: 150 students' voices (cocktail party effect), cutlery, distribution trolleys. Reverberation: concrete + tiles = hard reflective surfaces. Estimated RT60 >3 seconds (recommended: <0.8s for school spaces)."},
-        {q:"What sound-absorbing materials do you recommend and where do you place them?",h:"Ceiling: sound-absorbing panels NRC >0.85 (mineral wool covered with textile). Side walls: acoustic panels. Floor: partial 
-
---- students @ 446960 ---
-on, difficulty in verbal communication"}],
-      qs:[
-        {q:"Calculate the exceedance against the standard in decibels. What does 32 dB extra mean in practice?",h:"87-55 = 32 dB exceedance. On logarithmic scale: every 3 dB = double sound energy. 32 dB = ~1000× above standard. 87 dB = busy street or industrial equipment level."},
-        {q:"What is the mechanism by which chronic noise affects learning capacity?",h:"Noise >65 dB → cortisol activation (chronic stress) → impaired working memory (hippocampus). Attention distraction → 30-40% reduction in concentration capacity (UNESCO studies)."},
-        {q:"Identify noise sources and reverberation factors in this canteen.",h:"Sources: 150 students' voices (cocktail party effect), cutlery, distribution trolleys. Reverberation: concrete + tiles = hard reflective surfaces. Estimated RT60 >3 seconds (recommended: <0.8s for school spaces)."},
-        {q:"What sound-absorbing materials do you recommend and where do you place them?",h:"Ceiling: sound-absorbing panels NRC >0.85 (mineral wool covered with textile). Side walls: acoustic panels. Floor: partial non-slip carpet. Heavy curtains. Target: 15-20 dB reduction."},
-        {q:"What organisational measures reduce noise without major investment?",h:"Smaller sittings (50 students/sitting vs 150). Background music at 60-65 dB (reverse Lombard effect). Train students on voice level. Plastic vs metal cups/trays."},
-        {q:"What regulation governs the noise level in educational institutions?",h:"Ministry of Health Order 1955/1995. STAS 6161/1-82 (acoustics in construction). Law 121/2019 (environmental noise). EU Directive 2002/49/CE transposed in GD 321/2005."},
-      ], conc:["Exceedance calculated and significance","Main noise sources","Intervention with best efficiency"] },
-    { id:"g3", emoji:"🌡️", title:"Improper microclimate — neonatal ward", color:"#06b6d4",
-      caz:[{l:"Location",v:"Neonatal ward, 12 incubators"},{l:"Air temperature",v:"19°C (neonatal standard: 24-26°C)"},{l:"Humidity",v:"30% (standard: 50-70%)"},{l:"Air velocity",v:"0.4 m/s (standard: max 0.1 m/s)
-
---- students @ 447548 ---
-SCO studies)."},
-        {q:"Identify noise sources and reverberation factors in this canteen.",h:"Sources: 150 students' voices (cocktail party effect), cutlery, distribution trolleys. Reverberation: concrete + tiles = hard reflective surfaces. Estimated RT60 >3 seconds (recommended: <0.8s for school spaces)."},
-        {q:"What sound-absorbing materials do you recommend and where do you place them?",h:"Ceiling: sound-absorbing panels NRC >0.85 (mineral wool covered with textile). Side walls: acoustic panels. Floor: partial non-slip carpet. Heavy curtains. Target: 15-20 dB reduction."},
-        {q:"What organisational measures reduce noise without major investment?",h:"Smaller sittings (50 students/sitting vs 150). Background music at 60-65 dB (reverse Lombard effect). Train students on voice level. Plastic vs metal cups/trays."},
-        {q:"What regulation governs the noise level in educational institutions?",h:"Ministry of Health Order 1955/1995. STAS 6161/1-82 (acoustics in construction). Law 121/2019 (environmental noise). EU Directive 2002/49/CE transposed in GD 321/2005."},
-      ], conc:["Exceedance calculated and significance","Main noise sources","Intervention with best efficiency"] },
-    { id:"g3", emoji:"🌡️", title:"Improper microclimate — neonatal ward", color:"#06b6d4",
-      caz:[{l:"Location",v:"Neonatal ward, 12 incubators"},{l:"Air temperature",v:"19°C (neonatal standard: 24-26°C)"},{l:"Humidity",v:"30% (standard: 50-70%)"},{l:"Air velocity",v:"0.4 m/s (standard: max 0.1 m/s)"},{l:"Radiant temperature",v:"wall-air difference 7°C (standard: max 4°C)"},{l:"Incidents",v:"increased neonatal hypothermia cases in the past month"}],
-      qs:[
-        {q:"Evaluate each parameter against neonatal-specific standards. How many non-compliances?",h:"4 non-compliances: T 19°C (below 24°C), RH 30% (below 50%), velocity 0.4 m/s (4× standard), radiant difference 7°C (1.75× standard). All 4 parameters simultaneously = major risk."},
-        {q:"Why are neonates more vulnerable to these parameters than adults?",h:"High surface/body volume ratio → convective heat loss mu
-
---- students @ 447635 ---
-anteen.",h:"Sources: 150 students' voices (cocktail party effect), cutlery, distribution trolleys. Reverberation: concrete + tiles = hard reflective surfaces. Estimated RT60 >3 seconds (recommended: <0.8s for school spaces)."},
-        {q:"What sound-absorbing materials do you recommend and where do you place them?",h:"Ceiling: sound-absorbing panels NRC >0.85 (mineral wool covered with textile). Side walls: acoustic panels. Floor: partial non-slip carpet. Heavy curtains. Target: 15-20 dB reduction."},
-        {q:"What organisational measures reduce noise without major investment?",h:"Smaller sittings (50 students/sitting vs 150). Background music at 60-65 dB (reverse Lombard effect). Train students on voice level. Plastic vs metal cups/trays."},
-        {q:"What regulation governs the noise level in educational institutions?",h:"Ministry of Health Order 1955/1995. STAS 6161/1-82 (acoustics in construction). Law 121/2019 (environmental noise). EU Directive 2002/49/CE transposed in GD 321/2005."},
-      ], conc:["Exceedance calculated and significance","Main noise sources","Intervention with best efficiency"] },
-    { id:"g3", emoji:"🌡️", title:"Improper microclimate — neonatal ward", color:"#06b6d4",
-      caz:[{l:"Location",v:"Neonatal ward, 12 incubators"},{l:"Air temperature",v:"19°C (neonatal standard: 24-26°C)"},{l:"Humidity",v:"30% (standard: 50-70%)"},{l:"Air velocity",v:"0.4 m/s (standard: max 0.1 m/s)"},{l:"Radiant temperature",v:"wall-air difference 7°C (standard: max 4°C)"},{l:"Incidents",v:"increased neonatal hypothermia cases in the past month"}],
-      qs:[
-        {q:"Evaluate each parameter against neonatal-specific standards. How many non-compliances?",h:"4 non-compliances: T 19°C (below 24°C), RH 30% (below 50%), velocity 0.4 m/s (4× standard), radiant difference 7°C (1.75× standard). All 4 parameters simultaneously = major risk."},
-        {q:"Why are neonates more vulnerable to these parameters than adults?",h:"High surface/body volume ratio → convective heat loss much faster. Absence of functional brown adipose tissue in preterm infants. Immature ther
-
---- students @ 710673 ---
-17 = slight increase."],["The recommended number of hours per day for 8th grade:",["3–4 hours","5 hours","4 hours","5–6 hours"],[1],1,"Grades 5–8: 5 hours/day. Grades 9–12: 5–6 hours/day."],["Alternating periods of activity with periods of rest in the school schedule is important because:",["Reduces costs","Adheres to the physiological curves of work capacity","It is a legal requirement","Reduce the number of absences"],[1],1,"Alternating between activity and rest + varying the types of activities = fundamental principles of a healthy school schedule."],["The purpose of periodic medical checkups for children is:",["Weight and height only","Hematological parameters only","Vaccinations only","Students’ activities, habits, attitudes, and knowledge + health status"],[3],1,"Medical monitoring: health assessment + activity + habits + attitudes + knowledge. Complemented by legislative and socioeconomic measures."],["The time of day when students perform best:",["9–11 a.m.","7–9 a.m.","2:00–4:00 p.m.","5–7 p.m."],[0],1,"Daily variations: 8 AM = average, 9–11 AM = MAXIMUM, 1–2 PM = low, 3–5 PM = slight increase (without reaching the maximum)."],["The lowest work capacity during the week:",["Tuesday and Thursday","Mondays and Fridays","Wednesday","Thursday and Friday"],[1],1,"Low: Monday (recovery) and Friday (fatigue). Peak: Tuesday–Wednesday. Thursday: possible decline."],["The maximum number of hours per day for first grade:",["3–4 hours","2–3 hours","5 hours","6 hours"],[0],1,"Grade 1: 3–4 hours/day. Grades 2–4: 4 hours. Grades 5–8: 5 hours. Grades 9–12: 5–6 hours."],["The days with the most difficult hours MUST NOT be:",["Monday and Friday","Tuesday and Wednesday","Wednesday and Thursday","Thursday and Tuesday"],[0],1,"Mondays and Fridays: NO more than 2 difficult subjects, NO long hours. Maximum number of difficult subjects: Tuesdays, Wednesdays, Thursdays."],["The lowest academic performance is found:",["At the beginning of the semester","Midyear","Summer","At the end of each semester, after exams, at the end of the school year"],[3],1,"Low performance: at the end of semeste
-
---- students @ 710917 ---
- in the school schedule is important because:",["Reduces costs","Adheres to the physiological curves of work capacity","It is a legal requirement","Reduce the number of absences"],[1],1,"Alternating between activity and rest + varying the types of activities = fundamental principles of a healthy school schedule."],["The purpose of periodic medical checkups for children is:",["Weight and height only","Hematological parameters only","Vaccinations only","Students’ activities, habits, attitudes, and knowledge + health status"],[3],1,"Medical monitoring: health assessment + activity + habits + attitudes + knowledge. Complemented by legislative and socioeconomic measures."],["The time of day when students perform best:",["9–11 a.m.","7–9 a.m.","2:00–4:00 p.m.","5–7 p.m."],[0],1,"Daily variations: 8 AM = average, 9–11 AM = MAXIMUM, 1–2 PM = low, 3–5 PM = slight increase (without reaching the maximum)."],["The lowest work capacity during the week:",["Tuesday and Thursday","Mondays and Fridays","Wednesday","Thursday and Friday"],[1],1,"Low: Monday (recovery) and Friday (fatigue). Peak: Tuesday–Wednesday. Thursday: possible decline."],["The maximum number of hours per day for first grade:",["3–4 hours","2–3 hours","5 hours","6 hours"],[0],1,"Grade 1: 3–4 hours/day. Grades 2–4: 4 hours. Grades 5–8: 5 hours. Grades 9–12: 5–6 hours."],["The days with the most difficult hours MUST NOT be:",["Monday and Friday","Tuesday and Wednesday","Wednesday and Thursday","Thursday and Tuesday"],[0],1,"Mondays and Fridays: NO more than 2 difficult subjects, NO long hours. Maximum number of difficult subjects: Tuesdays, Wednesdays, Thursdays."],["The lowest academic performance is found:",["At the beginning of the semester","Midyear","Summer","At the end of each semester, after exams, at the end of the school year"],[3],1,"Low performance: at the end of semesters, after tests/quizzes/exams, and at the end of the school year."],["Risk behaviors in children and adolescents that should be prevented include:",["Drug use only","Violent behavior alone","Eating habits, smoking, alcohol, drugs, sexual behavi
-
---- students @ 809967 ---
-roleIndex:4,clueIndex:2,ro:"Prevenție A · măsuri imediate",en:"Prevention A · immediate measures"},
-  prevention_b:{roleIndex:4,clueIndex:3,ro:"Prevenție B · măsuri tehnice",en:"Prevention B · technical measures"},
-  prevention_c:{roleIndex:4,clueIndex:4,ro:"Prevenție C · monitorizare",en:"Prevention C · monitoring"},
-  evidence_auditor:{roleIndex:2,clueIndex:5,ro:"Auditor dovezi · date decisive",en:"Evidence auditor · decisive facts"},
-  critical_auditor:{roleIndex:0,clueIndex:4,ro:"Auditor critic · verifică distractorii",en:"Critical auditor · checks distractors"},
-  reporter:{roleIndex:5,clueIndex:0,ro:"Raportor · sinteză în 60 de secunde",en:"Reporter · 60-second synthesis"},
-};
-
-// Six students always cover all six professional role families. Additional
-// participants receive distinct sub-roles without making anyone double up.
-const ACTIVITY_REQUIRED_MIDDLE = ["medic_a","analyst_a","epidemiologist_a","prevention_a"];
-const ACTIVITY_ADDITIONAL_MIDDLE = ["evidence_auditor","medic_b","analyst_b","epidemiologist_b","prevention_b","analyst_c","prevention_c","critical_auditor"];
-const ACTIVITY_DISPLAY_ORDER = ["medic_a","medic_b","analyst_a","analyst_b","analyst_c","epidemiologist_a","epidemiologist_b","prevention_a","prevention_b","prevention_c","evidence_auditor","critical_auditor"];
-
-function activityPlanForSize(target){
-  const size=Math.min(14,Math.max(6,Number(target)||14));
-  const extraCount=size-6;
-  const middle=[...ACTIVITY_REQUIRED_MIDDLE,...ACTIVITY_ADDITIONAL_MIDDLE.slice(0,extraCount)]
-    .sort((a,b)=>ACTIVITY_DISPLAY_ORDER.indexOf(a)-ACTIVITY_DISPLAY_ORDER.indexOf(b));
-  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
-}
-
-function activityNameKey(value){
-  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
-}
-
-function activityMatricolKey(value){
-  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
-}
-
-function activityStudentKey(student){
-  const matricol=activityMatricolKey(student?.matricol);
-  return matricol?"matricol:"+matricol:"name:"+acti
-
---- students @ 886300 ---
-e;
-    else from += PAGE;
-  }
-  // Keep synchronized room events out of the normal results list. The single
-  // group_activity_* final report remains visible as the assessed result.
-  all = all.filter(r => !String(r.module || "").startsWith("activity_") && !String(r.module || "").startsWith("live_"));
-  let mapped = all.map(r => {
-    const identity=parseStudentIdentity(r.answers_text||"");
-    const base = {
-      name: r.name, group: r.grp, labId: r.lab_id, labCode: r.lab_code,
-      module: r.module, moduleTitle: r.module_title,
-      answersText: r.answers_text||"",
-      matricol: identity.matricol||"",
-      studentYear: identity.yearLabel||formatStudentYear(identity.year||""),
-      studentSeries: identity.seria||"",
-      studentOfficialGroup: identity.grupa||"",
-      score: r.score, total: r.total, pct: r.pct,
-      timestamp: new Date(r.created_at).getTime(), timeUsed: r.time_used,
-      teacher: r.teacher || "",
-      semester: r.semester || "",
-      specialization: r.specialization || "",
-      studyYear: r.study_year || identity.yearLabel || ""
-    };
-    return isExamResult(base) ? enrichExamResult(base) : base;
-  });
-  try {
-    const pending = JSON.parse(localStorage.getItem("igiena_pending_results") || "[]");
-    const localRows = pending.map(r => {
-      if (isExamResult(r)) return enrichExamResult(r);
-      const identity=parseStudentIdentity(r?.answersText||"");
-      return {...r,matricol:r?.matricol||identity.matricol||"",studentYear:r?.studentYear||identity.yearLabel||formatStudentYear(identity.year||""),studentSeries:r?.studentSeries||identity.seria||"",studentOfficialGroup:r?.studentOfficialGroup||identity.grupa||"",studyYear:r?.studyYear||identity.yearLabel||""};
-    });
-    mapped = [...localRows, ...mapped];
-  } catch(e) {}
-  return mapped.filter(r => !(isExamResult(r) && Number(r.timestamp || 0) < EXAM_RESULTS_RESET_AT));
-}
-
-// Live presentation events use the existing results table as a lightweight
-// synchronized classroom channel. They are hidden from assessed results.
-async function loadLiveClassEvents(token) {
-  if (!token) return [];
-
-
---- students @ 887156 ---
-te(r.created_at).getTime(), timeUsed: r.time_used,
-      teacher: r.teacher || "",
-      semester: r.semester || "",
-      specialization: r.specialization || "",
-      studyYear: r.study_year || identity.yearLabel || ""
-    };
-    return isExamResult(base) ? enrichExamResult(base) : base;
-  });
-  try {
-    const pending = JSON.parse(localStorage.getItem("igiena_pending_results") || "[]");
-    const localRows = pending.map(r => {
-      if (isExamResult(r)) return enrichExamResult(r);
-      const identity=parseStudentIdentity(r?.answersText||"");
-      return {...r,matricol:r?.matricol||identity.matricol||"",studentYear:r?.studentYear||identity.yearLabel||formatStudentYear(identity.year||""),studentSeries:r?.studentSeries||identity.seria||"",studentOfficialGroup:r?.studentOfficialGroup||identity.grupa||"",studyYear:r?.studyYear||identity.yearLabel||""};
-    });
-    mapped = [...localRows, ...mapped];
-  } catch(e) {}
-  return mapped.filter(r => !(isExamResult(r) && Number(r.timestamp || 0) < EXAM_RESULTS_RESET_AT));
-}
-
-// Live presentation events use the existing results table as a lightweight
-// synchronized classroom channel. They are hidden from assessed results.
-async function loadLiveClassEvents(token) {
-  if (!token) return [];
-  const res = await sb(`results?session_id=eq.${encodeURIComponent(token)}&select=*&order=created_at.asc&limit=1000`);
-  if (!res.ok) throw new Error("Sesiunea live nu a putut fi sincronizată.");
-  const rows = await res.json();
-  return rows.map(row=>{
-    let payload={};
-    try { payload=JSON.parse(row.answers_text||"{}"); } catch(e) {}
-    return {...row,payload,timestamp:new Date(row.created_at).getTime()};
-  }).filter(row=>row.payload?.type==="live_class_v1");
-}
-
-async function migrateLocalEditsToServer(quizMap, fisaMap) {
-  const localQuiz = loadQuizEditsLocal();
-  const localFisa = loadFisaEditsLocal();
-  const quizKeys = Object.keys(localQuiz).filter(k => !quizMap[k]);
-  const fisaKeys = Object.keys(localFisa).filter(k => !fisaMap[k]);
-  if (!quizKeys.length && !fisaKeys.length) return;
-  await Promise.all([
-    ...quizKeys.map(k => {
-
-
---- students @ 887173 ---
-getTime(), timeUsed: r.time_used,
-      teacher: r.teacher || "",
-      semester: r.semester || "",
-      specialization: r.specialization || "",
-      studyYear: r.study_year || identity.yearLabel || ""
-    };
-    return isExamResult(base) ? enrichExamResult(base) : base;
-  });
-  try {
-    const pending = JSON.parse(localStorage.getItem("igiena_pending_results") || "[]");
-    const localRows = pending.map(r => {
-      if (isExamResult(r)) return enrichExamResult(r);
-      const identity=parseStudentIdentity(r?.answersText||"");
-      return {...r,matricol:r?.matricol||identity.matricol||"",studentYear:r?.studentYear||identity.yearLabel||formatStudentYear(identity.year||""),studentSeries:r?.studentSeries||identity.seria||"",studentOfficialGroup:r?.studentOfficialGroup||identity.grupa||"",studyYear:r?.studyYear||identity.yearLabel||""};
-    });
-    mapped = [...localRows, ...mapped];
-  } catch(e) {}
-  return mapped.filter(r => !(isExamResult(r) && Number(r.timestamp || 0) < EXAM_RESULTS_RESET_AT));
-}
-
-// Live presentation events use the existing results table as a lightweight
-// synchronized classroom channel. They are hidden from assessed results.
-async function loadLiveClassEvents(token) {
-  if (!token) return [];
-  const res = await sb(`results?session_id=eq.${encodeURIComponent(token)}&select=*&order=created_at.asc&limit=1000`);
-  if (!res.ok) throw new Error("Sesiunea live nu a putut fi sincronizată.");
-  const rows = await res.json();
-  return rows.map(row=>{
-    let payload={};
-    try { payload=JSON.parse(row.answers_text||"{}"); } catch(e) {}
-    return {...row,payload,timestamp:new Date(row.created_at).getTime()};
-  }).filter(row=>row.payload?.type==="live_class_v1");
-}
-
-async function migrateLocalEditsToServer(quizMap, fisaMap) {
-  const localQuiz = loadQuizEditsLocal();
-  const localFisa = loadFisaEditsLocal();
-  const quizKeys = Object.keys(localQuiz).filter(k => !quizMap[k]);
-  const fisaKeys = Object.keys(localFisa).filter(k => !fisaMap[k]);
-  if (!quizKeys.length && !fisaKeys.length) return;
-  await Promise.all([
-    ...quizKeys.map(k => {
-      const [labI
-
---- students @ 895387 ---
-view:"Previzualizare Activități de Grup", tab_fise_edit:"Editor Activități",
-    // QR
-    qr_config:"⚙️ Configurare sesiune", qr_select_lab:"Selectează practica",
-    qr_classify:"📅 Clasificare sesiune", qr_optional:"(opțional)",
-    qr_spec:"— Specializare —", qr_year:"— An —", qr_module:"— Modul —",
-    qr_type:"Tip activitate", qr_quiz:"Quiz interactiv", qr_fisa:"Activitate de grup", qr_exam:"Examen",
-    qr_duration:"Durată valabilitate QR", qr_generate:"📱 Generează cod QR",
-    qr_cancel:"✕ Anulează sesiunea curentă", qr_download:"💾 Descarcă imaginea QR",
-    qr_time_left:"timp rămas",
-    qr_empty:"Configurează sesiunea și apasă „Generează cod QR\"",
-    qr_used_by:"Utilizat de:", qr_students:"studenți",
-    qr_not_ready:"⚠️ Practica nu are quiz activ",
-    qr_fisa_info:"📱 Fiecare student lucrează pe propriul telefon. Pentru 6–14 participanți, toate cele 6 roluri profesionale de bază sunt acoperite, iar studenții suplimentari primesc sarcini distincte.",
-    qr_results_tab:"📊 Rezultate",
-    // Results
-    res_total:"Total răspunsuri", res_unique:"Studenți unici",
-    res_avg:"Medie generală", res_active:"Lab-uri active",
-    res_search:"🔍 Caută după nume sau nr. matricol...",
-    res_all_sem:"📅 Toate semestrele", res_all_spec:"🎓 Toate specializările",
-    res_all_grp:"Toate grupele", res_all_lab:"Toate lab-urile",
-    res_no_sem:"Fără semestru", res_no_spec:"Fără specializare",
-    res_export:"📥 CSV", res_empty:"Nu există rezultate înregistrate.",
-    res_view_ans:"📄 Vezi răspunsuri",
-    res_col_sem:"Semestru", res_col_spec:"Specializare", res_col_prof:"Profesor",
-    res_col_name:"Nume", res_col_grp:"Grupă", res_col_lab:"Lab",
-    res_col_mod:"Modul", res_col_score:"Scor", res_col_pct:"%",
-    res_col_time:"Timp", res_col_date:"Data",
-    res_fisa_title:"Group assessment completed",
-    // Student login
-    st_name:"Numele și prenumele", st_name_ph:"ex. Ionescu Maria",
-    st_group:"Fișă", st_group_ph:"— Selectați fișa —",
-    st_spec:"Specializare", st_spec_ph:"— Selectați specializarea —",
-    st_enter:"Intră la test →", teacher_label:"Profesor", demo_sub:"Pre
-
---- students @ 904606 ---
-   home_stats_active:"Laboratoare active", home_stats_total:"Lab-uri totale",
-    home_stats_ai:"Evaluare automată", home_stats_qr:"Activare rapidă",
-    home_labs_title:"Laboratoare disponibile",
-  },
-  en: {
-    // Login
-    login_title:"Dashboard", login_auth:"Teacher Login", back:"← Back", platform_sub:"Practical Platform", login_sub:"Generate QR · Track results",
-    login_auth:"Teacher Login", login_btn:"Enter dashboard →",
-    login_loading:"Signing in…", login_prof:"Teacher", login_pass:"Password",
-    login_select:"— Select name —", login_err_prof:"Please select a teacher!",
-    login_err_pass:"Please enter password!", login_err_wrong:"Incorrect password!",
-    login_student_title:"Students",
-    login_student_sub:"Scan the QR code received from your teacher. No account needed.",
-    // Nav
-    tab_qr:"Generate QR", tab_preview:"Quiz Preview", tab_results:"Results",
-    tab_prezentari:"Presentations", tab_prezenta:"Attendance", tab_exam_preview:"🎓 Exam Preview", tab_exam_edit:"✏️ Exam Editor", tab_fisiere:"Files", tab_nomenclator:"Nomenclature",
-    tab_fise_preview:"Group Activity Preview", tab_fise_edit:"Activity Editor",
-    // QR
-    qr_config:"⚙️ Session setup", qr_select_lab:"Select practice",
-    qr_classify:"📅 Session classification", qr_optional:"(optional)",
-    qr_spec:"— Specialization —", qr_year:"— Year —", qr_module:"— Module —",
-    qr_type:"Activity type", qr_quiz:"Interactive quiz", qr_fisa:"Group activity", qr_exam:"Exam",
-    qr_duration:"QR code validity", qr_generate:"📱 Generate QR code",
-    qr_cancel:"✕ Cancel current session", qr_download:"💾 Download QR image",
-    qr_time_left:"time remaining",
-    qr_empty:"Configure the session and press \"Generate QR code\"",
-    qr_used_by:"Used by:", qr_students:"students",
-    qr_not_ready:"⚠️ This practice has no active quiz",
-    qr_fisa_info:"📱 Every student works on their own phone. With 6–14 participants, all six core professional roles are covered and additional students receive distinct tasks.",
-    qr_results_tab:"📊 Results",
-    // Results
-    res_total:"Total responses", res_unique:"Uniqu
-
---- students @ 905662 ---
-Nomenclature",
-    tab_fise_preview:"Group Activity Preview", tab_fise_edit:"Activity Editor",
-    // QR
-    qr_config:"⚙️ Session setup", qr_select_lab:"Select practice",
-    qr_classify:"📅 Session classification", qr_optional:"(optional)",
-    qr_spec:"— Specialization —", qr_year:"— Year —", qr_module:"— Module —",
-    qr_type:"Activity type", qr_quiz:"Interactive quiz", qr_fisa:"Group activity", qr_exam:"Exam",
-    qr_duration:"QR code validity", qr_generate:"📱 Generate QR code",
-    qr_cancel:"✕ Cancel current session", qr_download:"💾 Download QR image",
-    qr_time_left:"time remaining",
-    qr_empty:"Configure the session and press \"Generate QR code\"",
-    qr_used_by:"Used by:", qr_students:"students",
-    qr_not_ready:"⚠️ This practice has no active quiz",
-    qr_fisa_info:"📱 Every student works on their own phone. With 6–14 participants, all six core professional roles are covered and additional students receive distinct tasks.",
-    qr_results_tab:"📊 Results",
-    // Results
-    res_total:"Total responses", res_unique:"Unique students",
-    res_avg:"Overall average", res_active:"Active labs",
-    res_search:"🔍 Search by name or matriculation number...",
-    res_all_sem:"📅 All semesters", res_all_spec:"🎓 All specializations",
-    res_all_grp:"All groups", res_all_lab:"All labs",
-    res_no_sem:"No semester", res_no_spec:"No specialization",
-    res_export:"📥 CSV", res_empty:"No results recorded.",
-    res_view_ans:"📄 View answers",
-    res_col_sem:"Semester", res_col_spec:"Specialization", res_col_prof:"Teacher",
-    res_col_name:"Name", res_col_grp:"Group", res_col_lab:"Lab",
-    res_col_mod:"Module", res_col_score:"Score", res_col_pct:"%",
-    res_col_time:"Time", res_col_date:"Date",
-    res_fisa_title:"Completed worksheet",
-    // Student login
-    st_name:"Full name", st_name_ph:"e.g. Maria Ionescu",
-    st_group:"Group", st_group_ph:"— Select group —",
-    st_spec:"Specialization", st_spec_ph:"— Select specialization —",
-    st_enter:"Enter test →", teacher_label:"Teacher", demo_sub:"Interactive presentations and animated labs.", demo_empty:"No materials 
-
---- students @ 905672 ---
-re",
-    tab_fise_preview:"Group Activity Preview", tab_fise_edit:"Activity Editor",
-    // QR
-    qr_config:"⚙️ Session setup", qr_select_lab:"Select practice",
-    qr_classify:"📅 Session classification", qr_optional:"(optional)",
-    qr_spec:"— Specialization —", qr_year:"— Year —", qr_module:"— Module —",
-    qr_type:"Activity type", qr_quiz:"Interactive quiz", qr_fisa:"Group activity", qr_exam:"Exam",
-    qr_duration:"QR code validity", qr_generate:"📱 Generate QR code",
-    qr_cancel:"✕ Cancel current session", qr_download:"💾 Download QR image",
-    qr_time_left:"time remaining",
-    qr_empty:"Configure the session and press \"Generate QR code\"",
-    qr_used_by:"Used by:", qr_students:"students",
-    qr_not_ready:"⚠️ This practice has no active quiz",
-    qr_fisa_info:"📱 Every student works on their own phone. With 6–14 participants, all six core professional roles are covered and additional students receive distinct tasks.",
-    qr_results_tab:"📊 Results",
-    // Results
-    res_total:"Total responses", res_unique:"Unique students",
-    res_avg:"Overall average", res_active:"Active labs",
-    res_search:"🔍 Search by name or matriculation number...",
-    res_all_sem:"📅 All semesters", res_all_spec:"🎓 All specializations",
-    res_all_grp:"All groups", res_all_lab:"All labs",
-    res_no_sem:"No semester", res_no_spec:"No specialization",
-    res_export:"📥 CSV", res_empty:"No results recorded.",
-    res_view_ans:"📄 View answers",
-    res_col_sem:"Semester", res_col_spec:"Specialization", res_col_prof:"Teacher",
-    res_col_name:"Name", res_col_grp:"Group", res_col_lab:"Lab",
-    res_col_mod:"Module", res_col_score:"Score", res_col_pct:"%",
-    res_col_time:"Time", res_col_date:"Date",
-    res_fisa_title:"Completed worksheet",
-    // Student login
-    st_name:"Full name", st_name_ph:"e.g. Maria Ionescu",
-    st_group:"Group", st_group_ph:"— Select group —",
-    st_spec:"Specialization", st_spec_ph:"— Select specialization —",
-    st_enter:"Enter test →", teacher_label:"Teacher", demo_sub:"Interactive presentations and animated labs.", demo_empty:"No materials available 
-
---- students @ 905882 ---
-ptional:"(optional)",
-    qr_spec:"— Specialization —", qr_year:"— Year —", qr_module:"— Module —",
-    qr_type:"Activity type", qr_quiz:"Interactive quiz", qr_fisa:"Group activity", qr_exam:"Exam",
-    qr_duration:"QR code validity", qr_generate:"📱 Generate QR code",
-    qr_cancel:"✕ Cancel current session", qr_download:"💾 Download QR image",
-    qr_time_left:"time remaining",
-    qr_empty:"Configure the session and press \"Generate QR code\"",
-    qr_used_by:"Used by:", qr_students:"students",
-    qr_not_ready:"⚠️ This practice has no active quiz",
-    qr_fisa_info:"📱 Every student works on their own phone. With 6–14 participants, all six core professional roles are covered and additional students receive distinct tasks.",
-    qr_results_tab:"📊 Results",
-    // Results
-    res_total:"Total responses", res_unique:"Unique students",
-    res_avg:"Overall average", res_active:"Active labs",
-    res_search:"🔍 Search by name or matriculation number...",
-    res_all_sem:"📅 All semesters", res_all_spec:"🎓 All specializations",
-    res_all_grp:"All groups", res_all_lab:"All labs",
-    res_no_sem:"No semester", res_no_spec:"No specialization",
-    res_export:"📥 CSV", res_empty:"No results recorded.",
-    res_view_ans:"📄 View answers",
-    res_col_sem:"Semester", res_col_spec:"Specialization", res_col_prof:"Teacher",
-    res_col_name:"Name", res_col_grp:"Group", res_col_lab:"Lab",
-    res_col_mod:"Module", res_col_score:"Score", res_col_pct:"%",
-    res_col_time:"Time", res_col_date:"Date",
-    res_fisa_title:"Completed worksheet",
-    // Student login
-    st_name:"Full name", st_name_ph:"e.g. Maria Ionescu",
-    st_group:"Group", st_group_ph:"— Select group —",
-    st_spec:"Specialization", st_spec_ph:"— Select specialization —",
-    st_enter:"Enter test →", teacher_label:"Teacher", demo_sub:"Interactive presentations and animated labs.", demo_empty:"No materials available for", demo_open:"Open →",
-    st_err_name:"Please enter your full name (min. 3 characters).",
-    st_err_group:"Please select a group!", st_err_spec:"Please select a specialization!",
-    st_teacher:"Teacher:",
-
---- students @ 906016 ---
-iz:"Interactive quiz", qr_fisa:"Group activity", qr_exam:"Exam",
-    qr_duration:"QR code validity", qr_generate:"📱 Generate QR code",
-    qr_cancel:"✕ Cancel current session", qr_download:"💾 Download QR image",
-    qr_time_left:"time remaining",
-    qr_empty:"Configure the session and press \"Generate QR code\"",
-    qr_used_by:"Used by:", qr_students:"students",
-    qr_not_ready:"⚠️ This practice has no active quiz",
-    qr_fisa_info:"📱 Every student works on their own phone. With 6–14 participants, all six core professional roles are covered and additional students receive distinct tasks.",
-    qr_results_tab:"📊 Results",
-    // Results
-    res_total:"Total responses", res_unique:"Unique students",
-    res_avg:"Overall average", res_active:"Active labs",
-    res_search:"🔍 Search by name or matriculation number...",
-    res_all_sem:"📅 All semesters", res_all_spec:"🎓 All specializations",
-    res_all_grp:"All groups", res_all_lab:"All labs",
-    res_no_sem:"No semester", res_no_spec:"No specialization",
-    res_export:"📥 CSV", res_empty:"No results recorded.",
-    res_view_ans:"📄 View answers",
-    res_col_sem:"Semester", res_col_spec:"Specialization", res_col_prof:"Teacher",
-    res_col_name:"Name", res_col_grp:"Group", res_col_lab:"Lab",
-    res_col_mod:"Module", res_col_score:"Score", res_col_pct:"%",
-    res_col_time:"Time", res_col_date:"Date",
-    res_fisa_title:"Completed worksheet",
-    // Student login
-    st_name:"Full name", st_name_ph:"e.g. Maria Ionescu",
-    st_group:"Group", st_group_ph:"— Select group —",
-    st_spec:"Specialization", st_spec_ph:"— Select specialization —",
-    st_enter:"Enter test →", teacher_label:"Teacher", demo_sub:"Interactive presentations and animated labs.", demo_empty:"No materials available for", demo_open:"Open →",
-    st_err_name:"Please enter your full name (min. 3 characters).",
-    st_err_group:"Please select a group!", st_err_spec:"Please select a specialization!",
-    st_teacher:"Teacher:",
-    // Quiz
-    quiz_confirm:"Confirm answer", quiz_next:"Next question →", welcome_student:"Welcome", materials_available:"Available
-
---- students @ 912728 ---
-    prev_q_text_label:"Question *",
-    prev_hint_text_label:"Hint / Expected answer",
-    prev_q_text_ph:"Write the question...",
-    prev_hint_text_ph:"Evaluation hint (teacher only)...",
-    // Nomenclator
-    nom_title:"🗂️ Classification Nomenclature",
-    nom_sub:"Values appear in the classification dropdowns when generating QR sessions.",
-    nom_reset:"↺ Reset",
-    nom_spec:"Specializations", nom_years:"Study years", nom_modules:"Modules",
-    nom_spec_ph:"e.g.: General Medicine", nom_year_ph:"e.g.: Year I", nom_mod_ph:"e.g.: Semester 1",
-    nom_no_val:"No values added",
-    // File manager
-    file_title:"📁 My files",
-    file_sub:"Upload PDFs, presentations or other materials for students.",
-    file_upload:"📤 Upload file", file_uploading:"⏳ Uploading…",
-    file_ok:"✅", file_err:"❌",
-    file_empty_title:"No files uploaded for",
-    file_empty_sub:"Click the button above to upload the first file.",
-    file_own:"Your file", file_other:"Other teacher",
-    file_download:"⬇️ Download", file_delete:"🗑️",
-    file_delete_confirm:"Delete this file?",
-    file_deleted:"File deleted.",
-    file_del_err:"Delete error.",
-    file_up_ok:"File uploaded successfully!",
-    file_up_err:"Upload error:",
-    file_open:"↗ Open",
-    // Presentations
-    prez_title:"📽️ Presentations",
-    prez_sub:"Materials for {lab}. Open in browser, F11 = fullscreen.",
-    prez_no_title:"No presentation available for",
-    prez_no_sub:"Upload a PDF or PPT file below.",
-    // Homepage
-    home_headline1:"Interactive",
-    home_headline2:"Hygiene Practice",
-    home_sub:"Interactive quizzes, group worksheets with AI evaluation and real-time result tracking — for UMFST hygiene labs.",
-    home_stats_active:"Active laboratories", home_stats_total:"Total labs",
-    home_stats_ai:"Automated evaluation", home_stats_qr:"Quick activation",
-    home_labs_title:"Available laboratories",
-  }
-};
-
-const LangContext = React.createContext("ro");
-function useT() {
-  const lang = React.useContext(LangContext);
-  return React.useCallback((key) => T_STRINGS[lang]?.[key] ?? T_STRINGS.ro[key] ?? key, [lang]);
-}
-
---- students @ 1103940 ---
-ang==="en"?"Group ":"Grupa "}{i+1}</option>)}
-          </select></>}
-        {err && <p style={{color:"#dc2626",fontSize:13,margin:"0 0 10px",fontWeight:600}}>{err}</p>}
-        <button style={S.btnG} onClick={go}>{isGroupActivity?(lang==="en"?"Enter group activity →":"Intră în activitatea de grup →"):isLivePresentation?(lang==="en"?"Join live presentation →":"Intră în prezentarea live →"):(lang==="en"?"Enter quiz →":"Intră la quiz →")}</button>
-      </div>
-    </div>
-  );
-}
-
-// ════════════════════════════════════════════════════════════
-// LIVE PRESENTATION — one synchronized question on every phone
-// ════════════════════════════════════════════════════════════
-function LivePresentationStudentScreen({session, student, onExit}) {
-  const lang = React.useContext(LangContext);
-  const [events,setEvents]=useState([]);
-  const [selected,setSelected]=useState(null);
-  const [submitted,setSubmitted]=useState(false);
-  const [saving,setSaving]=useState(false);
-  const [syncError,setSyncError]=useState("");
-  const joinedRef=useRef(false);
-  const lab=LABS.find(l=>l.id===session?.labId)||{};
-  const matricol=cleanMatricol(student?.matricol||"");
-
-  const refresh=useCallback(async()=>{
-    try { setEvents(await loadLiveClassEvents(session?.token)); setSyncError(""); }
-    catch(e) { setSyncError(lang==="en"?"Connection lost. Reconnecting…":"Conexiune întreruptă. Se reconectează…"); }
-  },[session?.token,lang]);
-
-  useEffect(()=>{
-    let alive=true;
-    const run=()=>refresh().catch(()=>{});
-    run(); const id=setInterval(()=>{if(alive)run();},1500);
-    return()=>{alive=false;clearInterval(id);};
-  },[refresh]);
-
-  useEffect(()=>{
-    if(joinedRef.current||!session?.token||!student?.matricol)return;
-    joinedRef.current=true;
-    const identity=buildStudentIdentity(student||{});
-    addResult({token:session.token,name:student.name,group:student.group||student.grupa||"",labId:session.labId,labCode:session.labCode,module:"live_join_room",moduleTitle:"Prezentare live · participant conectat",score:0,total:0,pct:0,timeUsed:0,teacher:session.teacher||"",semester:session.semester|
-
---- students @ 1122586 ---
-acyFullQuestions(p,lang));
-  if(!lab||!questions.length) return null;
-  return {
-    id:"full"+labId.replace("lp",""),
-    icon:lab.icon,
-    title:(lang==="en"?"Complete quiz ":"Quiz complet ")+lab.code,
-    sub:(lang==="en"?"Combined content from the former A and B practicals":"Conținut combinat din fostele practici A și B"),
-    color:lab.color,
-    dim:lab.dim,
-    border:lab.border,
-    time:20,
-    count:Math.min(20,questions.length),
-    labCode:lab.code,
-    _questions:questions
-  };
-}
-
-// ════════════════════════════════════════════════════════════
-// QUIZ SCREEN
-// ════════════════════════════════════════════════════════════
-function QuizScreen({student, studentName, studentGroup, studentSpec, labId, module, onFinish, sessionTeacher, sessionSemester}) {
-  const T = useT();
-  const lang = React.useContext(LangContext);
-  const _getQBank = (l) => ({
-    lp1a: l==="en" ? LP1A_QUESTIONS_EN : LP1A_QUESTIONS,
-    lp1b: l==="en" ? LP1B_QUESTIONS_EN : LP1B_QUESTIONS,
-    lp2a: l==="en" ? LP2A_QUESTIONS_EN : LP2A_QUESTIONS,
-    lp2b: l==="en" ? LP2B_QUESTIONS_EN : LP2B_QUESTIONS,
-    lp3a: l==="en" ? LP3A_QUESTIONS_EN : LP3A_QUESTIONS,
-    lp3b: l==="en" ? LP3B_QUESTIONS_EN : LP3B_QUESTIONS,
-    lp4a: l==="en" ? LP4A_QUESTIONS_EN : LP4A_QUESTIONS,
-    lp4b: l==="en" ? LP4B_QUESTIONS_EN : LP4B_QUESTIONS,
-    lp5a: l==="en" ? LP5A_QUESTIONS_EN : LP5A_QUESTIONS,
-    lp5b: l==="en" ? LP5B_QUESTIONS_EN : LP5B_QUESTIONS,
-    lp6a: l==="en" ? LP6A_QUESTIONS_EN : LP6A_QUESTIONS,
-    lp6b: l==="en" ? LP6B_QUESTIONS_EN : LP6B_QUESTIONS,
-  });
-  const [qs, setQs] = useState(null);
-  const [quizLoaded, setQuizLoaded] = useState(editsAreReady());
-  const [cur, setCur] = useState(0);
-  const [sel, setSel] = useState(null);
-  const [ans, setAns] = useState([]);
-  const [startT, setStartT] = useState(null);
-  const [showExp, setShowExp] = useState(false);
-  const [confirmed, setConfirmed] = useState(false);
-
-  React.useEffect(() => {
-    const init = () => {
-      const base = module._questions || ((_getQBank(lang)[labId] || LP4B_QUESTIONS)[module.id] || []);
-      const all = applyQuiz
-
---- students @ 1125063 ---
-FA",display:"flex",alignItems:"center",justifyContent:"center",color:"#4a9a6a",fontSize:14}}>
-        Se încarcă quiz-ul…
-      </div>
-    );
-  }
-
-  const q = qs[cur];
-  if (!q) return null;
-
-  const confirm = () => {
-    if (sel===null) return;
-    setConfirmed(true);
-    setShowExp(true);
-  };
-
-  const next = () => {
-    const newAns = [...ans, {q:q.q, chosen:sel, correct:q.c, options:q.o, explanation:q.e||""}];
-    if (cur+1 >= qs.length) {
-      const score = newAns.filter(a=>a.chosen===a.correct).length;
-      const pct = Math.round(score/qs.length*100);
-      const timeUsed = Math.round((Date.now()-startT)/1000);
-      const entry = {
-        name:studentName, group:studentGroup, spec:studentSpec||"",
-        labId, labCode:module.labCode||(LABS.find(l=>l.id===labId)||{}).code,
-        module:module.id, moduleTitle:module.title,
-        score, total:qs.length, pct, timeUsed,
-        timestamp:Date.now(),
-        teacher:sessionTeacher||"", semester:sessionSemester||"",
-        specialization:studentSpec||"",
-        studyYear:student?.yearLabel||formatStudentYear(student?.year||student?.an||""),
-        answersText:JSON.stringify(buildStudentIdentity(student||{}))
-      };
-      addResult(entry).catch(()=>{});
-      onFinish(entry, newAns, qs);
-    } else {
-      setAns(newAns);
-      setCur(cur+1);
-      setSel(null);
-      setShowExp(false);
-      setConfirmed(false);
-    }
-  };
-
-  const pct = Math.round((cur)/qs.length*100);
-  const pctColor = (p) => p>=80?"#16a34a":p>=60?"#ca8a04":"#dc2626";
-
-  return (
-    <div style={{minHeight:"100vh",background:"#F8F9FA",padding:"16px"}}>
-      <div style={{maxWidth:680,margin:"0 auto"}}>
-        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,background:"#fff",borderRadius:14,padding:"12px 16px",border:"1.5px solid #b2ddc8"}}>
-          <div style={{flex:1}}>
-            <p style={{fontWeight:700,color:module.color,fontSize:13,margin:"0 0 2px"}}>{module.icon} {module.title}</p>
-            <p style={{color:"#4a9a6a",fontSize:12,margin:0}}>{studentName} · Î{cur+1}/{qs.length}</p>
-          </div>
-     
 
 --- studenti @ 872535 ---
 on buildStudentGroupLabel(student) {
