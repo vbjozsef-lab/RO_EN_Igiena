@@ -1,0 +1,22 @@
+name: Add test students
+on:
+  push:
+    paths:
+      - '.github/trigger-test-students'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: python .github/scripts/add_test_students.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html 6lucrari/index.html
+          git commit -m "Add test matricol users 1111 1112 1113"
+          git push
