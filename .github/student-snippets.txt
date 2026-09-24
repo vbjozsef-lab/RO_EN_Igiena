@@ -1,0 +1,2937 @@
+
+--- matricol @ 811138 ---
+,"analyst_c","epidemiologist_a","epidemiologist_b","prevention_a","prevention_b","prevention_c","evidence_auditor","critical_auditor"];
+
+function activityPlanForSize(target){
+  const size=Math.min(14,Math.max(6,Number(target)||14));
+  const extraCount=size-6;
+  const middle=[...ACTIVITY_REQUIRED_MIDDLE,...ACTIVITY_ADDITIONAL_MIDDLE.slice(0,extraCount)]
+    .sort((a,b)=>ACTIVITY_DISPLAY_ORDER.indexOf(a)-ACTIVITY_DISPLAY_ORDER.indexOf(b));
+  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  co
+
+--- matricol @ 811275 ---
+function activityPlanForSize(target){
+  const size=Math.min(14,Math.max(6,Number(target)||14));
+  const extraCount=size-6;
+  const middle=[...ACTIVITY_REQUIRED_MIDDLE,...ACTIVITY_ADDITIONAL_MIDDLE.slice(0,extraCount)]
+    .sort((a,b)=>ACTIVITY_DISPLAY_ORDER.indexOf(a)-ACTIVITY_DISPLAY_ORDER.indexOf(b));
+  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+ 
+
+--- matricol @ 811292 ---
+PlanForSize(target){
+  const size=Math.min(14,Math.max(6,Number(target)||14));
+  const extraCount=size-6;
+  const middle=[...ACTIVITY_REQUIRED_MIDDLE,...ACTIVITY_ADDITIONAL_MIDDLE.slice(0,extraCount)]
+    .sort((a,b)=>ACTIVITY_DISPLAY_ORDER.indexOf(a)-ACTIVITY_DISPLAY_ORDER.indexOf(b));
+  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[
+
+--- matricol @ 811313 ---
+  const size=Math.min(14,Math.max(6,Number(target)||14));
+  const extraCount=size-6;
+  const middle=[...ACTIVITY_REQUIRED_MIDDLE,...ACTIVITY_ADDITIONAL_MIDDLE.slice(0,extraCount)]
+    .sort((a,b)=>ACTIVITY_DISPLAY_ORDER.indexOf(a)-ACTIVITY_DISPLAY_ORDER.indexOf(b));
+  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.lengt
+
+--- matricol @ 811333 ---
+n(14,Math.max(6,Number(target)||14));
+  const extraCount=size-6;
+  const middle=[...ACTIVITY_REQUIRED_MIDDLE,...ACTIVITY_ADDITIONAL_MIDDLE.slice(0,extraCount)]
+    .sort((a,b)=>ACTIVITY_DISPLAY_ORDER.indexOf(a)-ACTIVITY_DISPLAY_ORDER.indexOf(b));
+  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs
+
+--- matricol @ 811343 ---
+max(6,Number(target)||14));
+  const extraCount=size-6;
+  const middle=[...ACTIVITY_REQUIRED_MIDDLE,...ACTIVITY_ADDITIONAL_MIDDLE.slice(0,extraCount)]
+    .sort((a,b)=>ACTIVITY_DISPLAY_ORDER.indexOf(a)-ACTIVITY_DISPLAY_ORDER.indexOf(b));
+  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{
+
+--- matricol @ 811354 ---
+r(target)||14));
+  const extraCount=size-6;
+  const middle=[...ACTIVITY_REQUIRED_MIDDLE,...ACTIVITY_ADDITIONAL_MIDDLE.slice(0,extraCount)]
+    .sort((a,b)=>ACTIVITY_DISPLAY_ORDER.indexOf(a)-ACTIVITY_DISPLAY_ORDER.indexOf(b));
+  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="e
+
+--- matricol @ 811531 ---
+R.indexOf(a)-ACTIVITY_DISPLAY_ORDER.indexOf(b));
+  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
+  return {...role,clue:privateClue,focus:lang==="en"?plan.en:plan.ro,question:q.q,
+
+--- matricol @ 811550 ---
+TY_DISPLAY_ORDER.indexOf(b));
+  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
+  return {...role,clue:privateClue,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.le
+
+--- matricol @ 811666 ---
+,ACTIVITY_SLOT_LIBRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
+  return {...role,clue:privateClue,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.length?(safeSeat-1)%qs.length:0};
+}
+
+async function activityWriteEvent(kind,f,payload,session,student,moduleTitle){
+  
+
+--- matricol @ 811683 ---
+BRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
+  return {...role,clue:privateClue,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.length?(safeSeat-1)%qs.length:0};
+}
+
+async function activityWriteEvent(kind,f,payload,session,student,moduleTitle){
+  const body={
+    
+
+--- matricol @ 811704 ---
+unction activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
+  return {...role,clue:privateClue,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.length?(safeSeat-1)%qs.length:0};
+}
+
+async function activityWriteEvent(kind,f,payload,session,student,moduleTitle){
+  const body={
+    session_id:session?.t
+
+--- matricol @ 812069 ---
+"+activityNameKey(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
+  return {...role,clue:privateClue,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.length?(safeSeat-1)%qs.length:0};
+}
+
+async function activityWriteEvent(kind,f,payload,session,student,moduleTitle){
+  const body={
+    session_id:session?.token||null,
+    name:student?.name||"—",
+    grp:String(student?.group||""),
+    lab_id:session?.labId||"",
+    lab_code:session?.labCode||"",
+    module:"activity_"+kind+"_"+f.id,
+    module_title:activityStoredTitle(moduleTitle||("Activitate sincronizată · "+f.title),student),
+    score:0,total:0,pct:0,time_used:0,
+    teacher:session?.teacher||"",semester:sess
+
+--- matricol @ 812086 ---
+(student?.name);
+}
+
+function activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
+  return {...role,clue:privateClue,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.length?(safeSeat-1)%qs.length:0};
+}
+
+async function activityWriteEvent(kind,f,payload,session,student,moduleTitle){
+  const body={
+    session_id:session?.token||null,
+    name:student?.name||"—",
+    grp:String(student?.group||""),
+    lab_id:session?.labId||"",
+    lab_code:session?.labCode||"",
+    module:"activity_"+kind+"_"+f.id,
+    module_title:activityStoredTitle(moduleTitle||("Activitate sincronizată · "+f.title),student),
+    score:0,total:0,pct:0,time_used:0,
+    teacher:session?.teacher||"",semester:session?.semester||""
+
+--- matricol @ 812107 ---
+unction activityRowKey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
+  return {...role,clue:privateClue,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.length?(safeSeat-1)%qs.length:0};
+}
+
+async function activityWriteEvent(kind,f,payload,session,student,moduleTitle){
+  const body={
+    session_id:session?.token||null,
+    name:student?.name||"—",
+    grp:String(student?.group||""),
+    lab_id:session?.labId||"",
+    lab_code:session?.labCode||"",
+    module:"activity_"+kind+"_"+f.id,
+    module_title:activityStoredTitle(moduleTitle||("Activitate sincronizată · "+f.title),student),
+    score:0,total:0,pct:0,time_used:0,
+    teacher:session?.teacher||"",semester:session?.semester||"",
+    specialization:
+
+--- matricol @ 812127 ---
+ey(row){
+  const marker=String(row?.module_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
+  return {...role,clue:privateClue,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.length?(safeSeat-1)%qs.length:0};
+}
+
+async function activityWriteEvent(kind,f,payload,session,student,moduleTitle){
+  const body={
+    session_id:session?.token||null,
+    name:student?.name||"—",
+    grp:String(student?.group||""),
+    lab_id:session?.labId||"",
+    lab_code:session?.labCode||"",
+    module:"activity_"+kind+"_"+f.id,
+    module_title:activityStoredTitle(moduleTitle||("Activitate sincronizată · "+f.title),student),
+    score:0,total:0,pct:0,time_used:0,
+    teacher:session?.teacher||"",semester:session?.semester||"",
+    specialization:student?.spec||"",
+ 
+
+--- matricol @ 812164 ---
+odule_title||"").match(/\|\|MID:([A-Z0-9_-]+)/i);
+  return marker?"matricol:"+activityMatricolKey(marker[1]):"name:"+activityNameKey(row?.name);
+}
+
+function activityStudentMeta(student){
+  return {
+    matricol:activityMatricolKey(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||""),
+    seria:String(student?.seria||""),
+    officialGroup:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function activityStoredTitle(title,student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?String(title||"")+" ||MID:"+matricol:String(title||"");
+}
+
+function activityPayload(row){
+  try{return JSON.parse(row?.answers_text||"{}");}catch(e){return {};}
+}
+
+function participantSlot(f,seat,target,lang){
+  const safeSeat=Math.max(1,Number(seat)||1);
+  const slots=activityPlanForSize(target);
+  const plan=slots[Math.min(slots.length-1,safeSeat-1)];
+  const role=f.roles[plan.roleIndex]||f.roles[0];
+  const evidence=f.evidence||[];
+  const privateClue=evidence.length?(evidence[plan.clueIndex%evidence.length]?.text||role.clue):role.clue;
+  const qs=f.qs||[];
+  const q=qs.length?qs[(safeSeat-1)%qs.length]:{q:lang==="en"?"What is your professional conclusion?":"Care este concluzia dumneavoastră profesională?"};
+  return {...role,clue:privateClue,focus:lang==="en"?plan.en:plan.ro,question:q.q,questionIndex:qs.length?(safeSeat-1)%qs.length:0};
+}
+
+async function activityWriteEvent(kind,f,payload,session,student,moduleTitle){
+  const body={
+    session_id:session?.token||null,
+    name:student?.name||"—",
+    grp:String(student?.group||""),
+    lab_id:session?.labId||"",
+    lab_code:session?.labCode||"",
+    module:"activity_"+kind+"_"+f.id,
+    module_title:activityStoredTitle(moduleTitle||("Activitate sincronizată · "+f.title),student),
+    score:0,total:0,pct:0,time_used:0,
+    teacher:session?.teacher||"",semester:session?.semester||"",
+    specialization:student?.spec||"",
+    answers_text:JSON.stringify({versi
+
+--- matricol @ 820537 ---
+f,teamSize);
+      setRoom(next);setSyncError("");
+      const mySeat=next.seatByName[activityStudentKey(student)]||null;
+      if(mySeat)setSeat(mySeat);
+      const own=next.members.find(r=>activityRowKey(r)===activityStudentKey(student));
+      const revealed=next.unlocked||next.members.length>=teamSize;
+      if(next.final)setPhase("done");
+      else if(revealed)setPhase("synthesis");
+      else if(own)setPhase("waiting");
+      else if(mySeat)setPhase("private");
+    }catch(e){setSyncError(L("Conexiunea cu sala de grup a fost întreruptă. Reîncercăm automat…","Group room connection was interrupted. Retrying automatically…"));}
+  },[f,session?.token,student?.group,student?.name,student?.matricol,teamSize,lang]);
+
+  React.useEffect(()=>{
+    if(!f||joinStarted.current)return;
+    joinStarted.current=true;
+    (async()=>{
+      try{
+        const current=await loadActivityRoom(session,student,f,teamSize);
+        if(!current.seatByName[activityStudentKey(student)]){
+          await activityWriteEvent("join",f,{joinedAt:Date.now()},session,student,"Participant conectat · "+f.title);
+        }
+        await refreshRoom();
+      }catch(e){joinStarted.current=false;setSyncError(L("Nu s-a putut intra în sala de grup. Verificați internetul și reîncercați.","Could not enter the group room. Check the internet connection and retry."));}
+    })();
+  },[f]);
+
+  React.useEffect(()=>{
+    if(!f)return;
+    const id=setInterval(refreshRoom,3000);
+    return()=>clearInterval(id);
+  },[f,refreshRoom]);
+
+  React.useEffect(()=>{
+    if(!pitchRunning)return;
+    const id=setInterval(()=>setPitchSeconds(s=>{if(s<=1){setPitchRunning(false);return 0;}return s-1;}),1000);
+    return()=>clearInterval(id);
+  },[pitchRunning]);
+
+  if(!loaded) return <div style={{minHeight:"100vh",background:"#071a33",display:"grid",placeItems:"center",color:"#a9c8e8",padding:20,textAlign:"center"}}>{L("Se pregătește activitatea sincronizată…","Preparing the synchronized activity…")}</div>;
+  if(!f) return <div style={{minHeight:"100vh",background:"#071a33",display:"grid",placeItems:"center",color:"#fff",padding:
+
+--- matricol @ 848472 ---
+ck={onBack} style={{flex:1,padding:13,border:0,borderRadius:12,background:"#071a33",color:"white",fontWeight:800,cursor:"pointer"}}>🏠 {L("Pagina principală","Home")}</button></div></div></div>;
+  }
+  return null;
+}
+
+async function saveTeamMissionResult(f,state,scored,student,session,members=[],approvals=[]){
+  const selectedEvidence=(state.selectedEvidence||[]).map(i=>f.evidence[i]?.text).filter(Boolean);
+  const selectedActions=(state.selectedActions||[]).map(i=>f.actions[i]?.text).filter(Boolean);
+  const answerText=(f.qs||[]).map((q,i)=>"Q"+(i+1)+": "+q.q+"\nA: "+(state.answers?.[i]||"—")).join("\n\n");
+  const memberText=members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};const matricol=meta.matricol?` [${meta.matricol}]`:"";return `${m.seat}. ${meta.name||m.row?.name||"—"}${matricol} — ${p.focus||p.roleName||"Rol"}\nAnaliză: ${p.analysis||"—"}\nImpact: ${p.impact||"—"}\nPropunere: ${p.proposal||"—"}`;}).join("\n\n");
+  const report=[
+    "ACTIVITATE: "+f.title,
+    "VERDICT: "+f.diagnosis.options[state.diagnosisChoice],
+    "DOVEZI: "+selectedEvidence.join(" | "),
+    "ACȚIUNI: "+selectedActions.join(" | "),
+    "ÎNCREDERE: "+(state.confidence||0)+"%",
+    "SURSE: "+(f.sourceRefs||[]).join(" | "),
+    "--- CONTRIBUȚII INDIVIDUALE ---",
+    memberText,
+    "--- SINTEZA GRUPULUI ---",
+    answerText,
+  ].join("\n");
+  const details={
+    type:"group_activity_v3",activityId:f.id,activityTitle:f.title,
+    verdict:f.diagnosis.options[state.diagnosisChoice]||"—",
+    evidence:selectedEvidence,actions:selectedActions,confidence:state.confidence||0,
+    sources:f.sourceRefs||[],approvedBy:approvals.map(r=>r.name).filter(Boolean),
+    members:members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};return {seat:m.seat,name:meta.name||m.row?.name||"—",matricol:meta.matricol||"",yearLabel:meta.yearLabel||meta.year||"",seria:meta.seria||"",officialGroup:meta.officialGroup||"",role:p.roleName||"Rol",roleIcon:p.roleIcon||"",focus:p.focus||"",clue:p.clue||"",question:p.question||"",verdict:f.diagnosis.options[p.verdictChoice]||"—",clueClass:p.clueClass||"—",analysis:p
+
+--- matricol @ 848486 ---
+yle={{flex:1,padding:13,border:0,borderRadius:12,background:"#071a33",color:"white",fontWeight:800,cursor:"pointer"}}>🏠 {L("Pagina principală","Home")}</button></div></div></div>;
+  }
+  return null;
+}
+
+async function saveTeamMissionResult(f,state,scored,student,session,members=[],approvals=[]){
+  const selectedEvidence=(state.selectedEvidence||[]).map(i=>f.evidence[i]?.text).filter(Boolean);
+  const selectedActions=(state.selectedActions||[]).map(i=>f.actions[i]?.text).filter(Boolean);
+  const answerText=(f.qs||[]).map((q,i)=>"Q"+(i+1)+": "+q.q+"\nA: "+(state.answers?.[i]||"—")).join("\n\n");
+  const memberText=members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};const matricol=meta.matricol?` [${meta.matricol}]`:"";return `${m.seat}. ${meta.name||m.row?.name||"—"}${matricol} — ${p.focus||p.roleName||"Rol"}\nAnaliză: ${p.analysis||"—"}\nImpact: ${p.impact||"—"}\nPropunere: ${p.proposal||"—"}`;}).join("\n\n");
+  const report=[
+    "ACTIVITATE: "+f.title,
+    "VERDICT: "+f.diagnosis.options[state.diagnosisChoice],
+    "DOVEZI: "+selectedEvidence.join(" | "),
+    "ACȚIUNI: "+selectedActions.join(" | "),
+    "ÎNCREDERE: "+(state.confidence||0)+"%",
+    "SURSE: "+(f.sourceRefs||[]).join(" | "),
+    "--- CONTRIBUȚII INDIVIDUALE ---",
+    memberText,
+    "--- SINTEZA GRUPULUI ---",
+    answerText,
+  ].join("\n");
+  const details={
+    type:"group_activity_v3",activityId:f.id,activityTitle:f.title,
+    verdict:f.diagnosis.options[state.diagnosisChoice]||"—",
+    evidence:selectedEvidence,actions:selectedActions,confidence:state.confidence||0,
+    sources:f.sourceRefs||[],approvedBy:approvals.map(r=>r.name).filter(Boolean),
+    members:members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};return {seat:m.seat,name:meta.name||m.row?.name||"—",matricol:meta.matricol||"",yearLabel:meta.yearLabel||meta.year||"",seria:meta.seria||"",officialGroup:meta.officialGroup||"",role:p.roleName||"Rol",roleIcon:p.roleIcon||"",focus:p.focus||"",clue:p.clue||"",question:p.question||"",verdict:f.diagnosis.options[p.verdictChoice]||"—",clueClass:p.clueClass||"—",analysis:p.analysis||"—"
+
+--- matricol @ 848505 ---
+g:13,border:0,borderRadius:12,background:"#071a33",color:"white",fontWeight:800,cursor:"pointer"}}>🏠 {L("Pagina principală","Home")}</button></div></div></div>;
+  }
+  return null;
+}
+
+async function saveTeamMissionResult(f,state,scored,student,session,members=[],approvals=[]){
+  const selectedEvidence=(state.selectedEvidence||[]).map(i=>f.evidence[i]?.text).filter(Boolean);
+  const selectedActions=(state.selectedActions||[]).map(i=>f.actions[i]?.text).filter(Boolean);
+  const answerText=(f.qs||[]).map((q,i)=>"Q"+(i+1)+": "+q.q+"\nA: "+(state.answers?.[i]||"—")).join("\n\n");
+  const memberText=members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};const matricol=meta.matricol?` [${meta.matricol}]`:"";return `${m.seat}. ${meta.name||m.row?.name||"—"}${matricol} — ${p.focus||p.roleName||"Rol"}\nAnaliză: ${p.analysis||"—"}\nImpact: ${p.impact||"—"}\nPropunere: ${p.proposal||"—"}`;}).join("\n\n");
+  const report=[
+    "ACTIVITATE: "+f.title,
+    "VERDICT: "+f.diagnosis.options[state.diagnosisChoice],
+    "DOVEZI: "+selectedEvidence.join(" | "),
+    "ACȚIUNI: "+selectedActions.join(" | "),
+    "ÎNCREDERE: "+(state.confidence||0)+"%",
+    "SURSE: "+(f.sourceRefs||[]).join(" | "),
+    "--- CONTRIBUȚII INDIVIDUALE ---",
+    memberText,
+    "--- SINTEZA GRUPULUI ---",
+    answerText,
+  ].join("\n");
+  const details={
+    type:"group_activity_v3",activityId:f.id,activityTitle:f.title,
+    verdict:f.diagnosis.options[state.diagnosisChoice]||"—",
+    evidence:selectedEvidence,actions:selectedActions,confidence:state.confidence||0,
+    sources:f.sourceRefs||[],approvedBy:approvals.map(r=>r.name).filter(Boolean),
+    members:members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};return {seat:m.seat,name:meta.name||m.row?.name||"—",matricol:meta.matricol||"",yearLabel:meta.yearLabel||meta.year||"",seria:meta.seria||"",officialGroup:meta.officialGroup||"",role:p.roleName||"Rol",roleIcon:p.roleIcon||"",focus:p.focus||"",clue:p.clue||"",question:p.question||"",verdict:f.diagnosis.options[p.verdictChoice]||"—",clueClass:p.clueClass||"—",analysis:p.analysis||"—",impact:p.impact||"
+
+--- matricol @ 848571 ---
+ontWeight:800,cursor:"pointer"}}>🏠 {L("Pagina principală","Home")}</button></div></div></div>;
+  }
+  return null;
+}
+
+async function saveTeamMissionResult(f,state,scored,student,session,members=[],approvals=[]){
+  const selectedEvidence=(state.selectedEvidence||[]).map(i=>f.evidence[i]?.text).filter(Boolean);
+  const selectedActions=(state.selectedActions||[]).map(i=>f.actions[i]?.text).filter(Boolean);
+  const answerText=(f.qs||[]).map((q,i)=>"Q"+(i+1)+": "+q.q+"\nA: "+(state.answers?.[i]||"—")).join("\n\n");
+  const memberText=members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};const matricol=meta.matricol?` [${meta.matricol}]`:"";return `${m.seat}. ${meta.name||m.row?.name||"—"}${matricol} — ${p.focus||p.roleName||"Rol"}\nAnaliză: ${p.analysis||"—"}\nImpact: ${p.impact||"—"}\nPropunere: ${p.proposal||"—"}`;}).join("\n\n");
+  const report=[
+    "ACTIVITATE: "+f.title,
+    "VERDICT: "+f.diagnosis.options[state.diagnosisChoice],
+    "DOVEZI: "+selectedEvidence.join(" | "),
+    "ACȚIUNI: "+selectedActions.join(" | "),
+    "ÎNCREDERE: "+(state.confidence||0)+"%",
+    "SURSE: "+(f.sourceRefs||[]).join(" | "),
+    "--- CONTRIBUȚII INDIVIDUALE ---",
+    memberText,
+    "--- SINTEZA GRUPULUI ---",
+    answerText,
+  ].join("\n");
+  const details={
+    type:"group_activity_v3",activityId:f.id,activityTitle:f.title,
+    verdict:f.diagnosis.options[state.diagnosisChoice]||"—",
+    evidence:selectedEvidence,actions:selectedActions,confidence:state.confidence||0,
+    sources:f.sourceRefs||[],approvedBy:approvals.map(r=>r.name).filter(Boolean),
+    members:members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};return {seat:m.seat,name:meta.name||m.row?.name||"—",matricol:meta.matricol||"",yearLabel:meta.yearLabel||meta.year||"",seria:meta.seria||"",officialGroup:meta.officialGroup||"",role:p.roleName||"Rol",roleIcon:p.roleIcon||"",focus:p.focus||"",clue:p.clue||"",question:p.question||"",verdict:f.diagnosis.options[p.verdictChoice]||"—",clueClass:p.clueClass||"—",analysis:p.analysis||"—",impact:p.impact||"—",proposal:p.proposal||"—"};}),
+    commonAnswers:(f.qs||[]).map(
+
+--- matricol @ 849563 ---
+"),
+    "ACȚIUNI: "+selectedActions.join(" | "),
+    "ÎNCREDERE: "+(state.confidence||0)+"%",
+    "SURSE: "+(f.sourceRefs||[]).join(" | "),
+    "--- CONTRIBUȚII INDIVIDUALE ---",
+    memberText,
+    "--- SINTEZA GRUPULUI ---",
+    answerText,
+  ].join("\n");
+  const details={
+    type:"group_activity_v3",activityId:f.id,activityTitle:f.title,
+    verdict:f.diagnosis.options[state.diagnosisChoice]||"—",
+    evidence:selectedEvidence,actions:selectedActions,confidence:state.confidence||0,
+    sources:f.sourceRefs||[],approvedBy:approvals.map(r=>r.name).filter(Boolean),
+    members:members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};return {seat:m.seat,name:meta.name||m.row?.name||"—",matricol:meta.matricol||"",yearLabel:meta.yearLabel||meta.year||"",seria:meta.seria||"",officialGroup:meta.officialGroup||"",role:p.roleName||"Rol",roleIcon:p.roleIcon||"",focus:p.focus||"",clue:p.clue||"",question:p.question||"",verdict:f.diagnosis.options[p.verdictChoice]||"—",clueClass:p.clueClass||"—",analysis:p.analysis||"—",impact:p.impact||"—",proposal:p.proposal||"—"};}),
+    commonAnswers:(f.qs||[]).map((q,i)=>({question:q.q,answer:state.answers?.[i]||"—"})),
+    report,generatedAt:Date.now(),
+  };
+  const result={token:session?.token||null,name:student?.name,group:student?.group,labId:session?.labId,labCode:session?.labCode,module:"group_activity_"+f.id,moduleTitle:"Activitate de grup · "+f.title,score:scored.totalScore,total:scored.maxScore,pct:scored.pct,timeUsed:60-(state.pitchSeconds||0),teacher:session?.teacher||"",semester:session?.semester||"",specialization:student?.spec||"",answersText:JSON.stringify(details)};
+  const saved=await addResult(result);
+  if(!saved?.ok) throw new Error(saved?.error||"Save failed");
+}
+
+</script>
+<script type="text/babel">
+
+const {useState, useEffect, useRef, useCallback} = React;
+
+// ════════════════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════════════════
+// Tanárok: név → jelszó
+const TEACHERS = {
+  "Moldovan Geanina": "moldovan24",
+  "Ábrám Zoltán":     "abram24",
+  "Ferencz 
+
+--- matricol @ 849577 ---
+NI: "+selectedActions.join(" | "),
+    "ÎNCREDERE: "+(state.confidence||0)+"%",
+    "SURSE: "+(f.sourceRefs||[]).join(" | "),
+    "--- CONTRIBUȚII INDIVIDUALE ---",
+    memberText,
+    "--- SINTEZA GRUPULUI ---",
+    answerText,
+  ].join("\n");
+  const details={
+    type:"group_activity_v3",activityId:f.id,activityTitle:f.title,
+    verdict:f.diagnosis.options[state.diagnosisChoice]||"—",
+    evidence:selectedEvidence,actions:selectedActions,confidence:state.confidence||0,
+    sources:f.sourceRefs||[],approvedBy:approvals.map(r=>r.name).filter(Boolean),
+    members:members.map(m=>{const p=m.payload||{},meta=p.studentMeta||{};return {seat:m.seat,name:meta.name||m.row?.name||"—",matricol:meta.matricol||"",yearLabel:meta.yearLabel||meta.year||"",seria:meta.seria||"",officialGroup:meta.officialGroup||"",role:p.roleName||"Rol",roleIcon:p.roleIcon||"",focus:p.focus||"",clue:p.clue||"",question:p.question||"",verdict:f.diagnosis.options[p.verdictChoice]||"—",clueClass:p.clueClass||"—",analysis:p.analysis||"—",impact:p.impact||"—",proposal:p.proposal||"—"};}),
+    commonAnswers:(f.qs||[]).map((q,i)=>({question:q.q,answer:state.answers?.[i]||"—"})),
+    report,generatedAt:Date.now(),
+  };
+  const result={token:session?.token||null,name:student?.name,group:student?.group,labId:session?.labId,labCode:session?.labCode,module:"group_activity_"+f.id,moduleTitle:"Activitate de grup · "+f.title,score:scored.totalScore,total:scored.maxScore,pct:scored.pct,timeUsed:60-(state.pitchSeconds||0),teacher:session?.teacher||"",semester:session?.semester||"",specialization:student?.spec||"",answersText:JSON.stringify(details)};
+  const saved=await addResult(result);
+  if(!saved?.ok) throw new Error(saved?.error||"Save failed");
+}
+
+</script>
+<script type="text/babel">
+
+const {useState, useEffect, useRef, useCallback} = React;
+
+// ════════════════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════════════════
+// Tanárok: név → jelszó
+const TEACHERS = {
+  "Moldovan Geanina": "moldovan24",
+  "Ábrám Zoltán":     "abram24",
+  "Ferencz Lóránd":   "fe
+
+--- matricol @ 861902 ---
+oadNomenclator() {
+  try {
+    const saved = localStorage.getItem("igiena_nomenclator");
+    return saved ? JSON.parse(saved) : DEFAULT_NOMENCLATOR;
+  } catch(e) { return DEFAULT_NOMENCLATOR; }
+}
+function saveNomenclator(n) {
+  localStorage.setItem("igiena_nomenclator", JSON.stringify(n));
+}
+// Keep SPECIALIZATIONS for backwards compat
+const SPECIALIZATIONS = loadNomenclator().specializations;
+
+
+
+// ════════════════════════════════════════════════════════════
+// STUDENT REGISTRY — AMG Anul I 2026/2027 (lista oficială)
+// Sursa: TABEL NOMINAL, actualizat 2026-09-21
+// ════════════════════════════════════════════════════════════
+const STUDENT_REGISTRY = [{"name":"AGACHE M. F. AMALIA-ANDREEA","matricol":"2507","an":"I","seria":"1","grupa":"3"},{"name":"AILENI V. GABRIELA-SABINA","matricol":"2508","an":"I","seria":"1","grupa":"3"},{"name":"AMARIEI G. VASILICA-CĂTĂLINA","matricol":"2509","an":"I","seria":"1","grupa":"3"},{"name":"ARMANU R. TEODORA","matricol":"2613","an":"I","seria":"1","grupa":"1"},{"name":"BAGHIU E. (ONIȚIU) VERONICA-DARIA","matricol":"2510","an":"I","seria":"1","grupa":"3"},{"name":"BAKI S. ANDREA-ERIKA","matricol":"2511","an":"I","seria":"2","grupa":"1"},{"name":"BAKOS - MIHÁLY K. ZSELYKE","matricol":"2512","an":"I","seria":"2","grupa":"1"},{"name":"BALÁZSI L. TÍMEA-ANDREA","matricol":"2513","an":"I","seria":"2","grupa":"1"},{"name":"BÁLINT L. VIKTÓRIA","matricol":"2515","an":"I","seria":"2","grupa":"1"},{"name":"BÉRES K. KRISZTA-GABRIELLA","matricol":"2516","an":"I","seria":"2","grupa":"2"},{"name":"BODONI S. L. DALMA","matricol":"2517","an":"I","seria":"2","grupa":"2"},{"name":"BOGATEAN (MATASARU) MARIA","matricol":"2514","an":"I","seria":"1","grupa":"4"},{"name":"BORBÉLY P. MELINDA-IZABELLA","matricol":"2518","an":"I","seria":"1","grupa":"4"},{"name":"BOT M. ANDREEA-NICOLETA","matricol":"2519","an":"I","seria":"1","grupa":"4"},{"name":"BOTH-SIMÓ S. DÓRA","matricol":"2520","an":"I","seria":"1","grupa":"4"},{"name":"CASONI G. A. BIANCA-ALEXANDRA","matricol":"2615","an":"I","seria":"1","grupa":"1"},{"name":"CIRILĂ F. G. RAUL-GABRIEL","matricol":"2521","an"
+
+--- matricol @ 861990 ---
+
+    return saved ? JSON.parse(saved) : DEFAULT_NOMENCLATOR;
+  } catch(e) { return DEFAULT_NOMENCLATOR; }
+}
+function saveNomenclator(n) {
+  localStorage.setItem("igiena_nomenclator", JSON.stringify(n));
+}
+// Keep SPECIALIZATIONS for backwards compat
+const SPECIALIZATIONS = loadNomenclator().specializations;
+
+
+
+// ════════════════════════════════════════════════════════════
+// STUDENT REGISTRY — AMG Anul I 2026/2027 (lista oficială)
+// Sursa: TABEL NOMINAL, actualizat 2026-09-21
+// ════════════════════════════════════════════════════════════
+const STUDENT_REGISTRY = [{"name":"AGACHE M. F. AMALIA-ANDREEA","matricol":"2507","an":"I","seria":"1","grupa":"3"},{"name":"AILENI V. GABRIELA-SABINA","matricol":"2508","an":"I","seria":"1","grupa":"3"},{"name":"AMARIEI G. VASILICA-CĂTĂLINA","matricol":"2509","an":"I","seria":"1","grupa":"3"},{"name":"ARMANU R. TEODORA","matricol":"2613","an":"I","seria":"1","grupa":"1"},{"name":"BAGHIU E. (ONIȚIU) VERONICA-DARIA","matricol":"2510","an":"I","seria":"1","grupa":"3"},{"name":"BAKI S. ANDREA-ERIKA","matricol":"2511","an":"I","seria":"2","grupa":"1"},{"name":"BAKOS - MIHÁLY K. ZSELYKE","matricol":"2512","an":"I","seria":"2","grupa":"1"},{"name":"BALÁZSI L. TÍMEA-ANDREA","matricol":"2513","an":"I","seria":"2","grupa":"1"},{"name":"BÁLINT L. VIKTÓRIA","matricol":"2515","an":"I","seria":"2","grupa":"1"},{"name":"BÉRES K. KRISZTA-GABRIELLA","matricol":"2516","an":"I","seria":"2","grupa":"2"},{"name":"BODONI S. L. DALMA","matricol":"2517","an":"I","seria":"2","grupa":"2"},{"name":"BOGATEAN (MATASARU) MARIA","matricol":"2514","an":"I","seria":"1","grupa":"4"},{"name":"BORBÉLY P. MELINDA-IZABELLA","matricol":"2518","an":"I","seria":"1","grupa":"4"},{"name":"BOT M. ANDREEA-NICOLETA","matricol":"2519","an":"I","seria":"1","grupa":"4"},{"name":"BOTH-SIMÓ S. DÓRA","matricol":"2520","an":"I","seria":"1","grupa":"4"},{"name":"CASONI G. A. BIANCA-ALEXANDRA","matricol":"2615","an":"I","seria":"1","grupa":"1"},{"name":"CIRILĂ F. G. RAUL-GABRIEL","matricol":"2521","an":"I","seria":"1","grupa":"1"},{"name":"COJOCEA A. M. RADIA-IOANA","matricol":"2522","an"
+
+--- matricol @ 862081 ---
+NOMENCLATOR; }
+}
+function saveNomenclator(n) {
+  localStorage.setItem("igiena_nomenclator", JSON.stringify(n));
+}
+// Keep SPECIALIZATIONS for backwards compat
+const SPECIALIZATIONS = loadNomenclator().specializations;
+
+
+
+// ════════════════════════════════════════════════════════════
+// STUDENT REGISTRY — AMG Anul I 2026/2027 (lista oficială)
+// Sursa: TABEL NOMINAL, actualizat 2026-09-21
+// ════════════════════════════════════════════════════════════
+const STUDENT_REGISTRY = [{"name":"AGACHE M. F. AMALIA-ANDREEA","matricol":"2507","an":"I","seria":"1","grupa":"3"},{"name":"AILENI V. GABRIELA-SABINA","matricol":"2508","an":"I","seria":"1","grupa":"3"},{"name":"AMARIEI G. VASILICA-CĂTĂLINA","matricol":"2509","an":"I","seria":"1","grupa":"3"},{"name":"ARMANU R. TEODORA","matricol":"2613","an":"I","seria":"1","grupa":"1"},{"name":"BAGHIU E. (ONIȚIU) VERONICA-DARIA","matricol":"2510","an":"I","seria":"1","grupa":"3"},{"name":"BAKI S. ANDREA-ERIKA","matricol":"2511","an":"I","seria":"2","grupa":"1"},{"name":"BAKOS - MIHÁLY K. ZSELYKE","matricol":"2512","an":"I","seria":"2","grupa":"1"},{"name":"BALÁZSI L. TÍMEA-ANDREA","matricol":"2513","an":"I","seria":"2","grupa":"1"},{"name":"BÁLINT L. VIKTÓRIA","matricol":"2515","an":"I","seria":"2","grupa":"1"},{"name":"BÉRES K. KRISZTA-GABRIELLA","matricol":"2516","an":"I","seria":"2","grupa":"2"},{"name":"BODONI S. L. DALMA","matricol":"2517","an":"I","seria":"2","grupa":"2"},{"name":"BOGATEAN (MATASARU) MARIA","matricol":"2514","an":"I","seria":"1","grupa":"4"},{"name":"BORBÉLY P. MELINDA-IZABELLA","matricol":"2518","an":"I","seria":"1","grupa":"4"},{"name":"BOT M. ANDREEA-NICOLETA","matricol":"2519","an":"I","seria":"1","grupa":"4"},{"name":"BOTH-SIMÓ S. DÓRA","matricol":"2520","an":"I","seria":"1","grupa":"4"},{"name":"CASONI G. A. BIANCA-ALEXANDRA","matricol":"2615","an":"I","seria":"1","grupa":"1"},{"name":"CIRILĂ F. G. RAUL-GABRIEL","matricol":"2521","an":"I","seria":"1","grupa":"1"},{"name":"COJOCEA A. M. RADIA-IOANA","matricol":"2522","an":"I","seria":"1","grupa":"5"},{"name":"CONSTANTIN G. N. IANIS ȘTEFAN","matricol":"2617","an
+
+--- matricol @ 862161 ---
+menclator", JSON.stringify(n));
+}
+// Keep SPECIALIZATIONS for backwards compat
+const SPECIALIZATIONS = loadNomenclator().specializations;
+
+
+
+// ════════════════════════════════════════════════════════════
+// STUDENT REGISTRY — AMG Anul I 2026/2027 (lista oficială)
+// Sursa: TABEL NOMINAL, actualizat 2026-09-21
+// ════════════════════════════════════════════════════════════
+const STUDENT_REGISTRY = [{"name":"AGACHE M. F. AMALIA-ANDREEA","matricol":"2507","an":"I","seria":"1","grupa":"3"},{"name":"AILENI V. GABRIELA-SABINA","matricol":"2508","an":"I","seria":"1","grupa":"3"},{"name":"AMARIEI G. VASILICA-CĂTĂLINA","matricol":"2509","an":"I","seria":"1","grupa":"3"},{"name":"ARMANU R. TEODORA","matricol":"2613","an":"I","seria":"1","grupa":"1"},{"name":"BAGHIU E. (ONIȚIU) VERONICA-DARIA","matricol":"2510","an":"I","seria":"1","grupa":"3"},{"name":"BAKI S. ANDREA-ERIKA","matricol":"2511","an":"I","seria":"2","grupa":"1"},{"name":"BAKOS - MIHÁLY K. ZSELYKE","matricol":"2512","an":"I","seria":"2","grupa":"1"},{"name":"BALÁZSI L. TÍMEA-ANDREA","matricol":"2513","an":"I","seria":"2","grupa":"1"},{"name":"BÁLINT L. VIKTÓRIA","matricol":"2515","an":"I","seria":"2","grupa":"1"},{"name":"BÉRES K. KRISZTA-GABRIELLA","matricol":"2516","an":"I","seria":"2","grupa":"2"},{"name":"BODONI S. L. DALMA","matricol":"2517","an":"I","seria":"2","grupa":"2"},{"name":"BOGATEAN (MATASARU) MARIA","matricol":"2514","an":"I","seria":"1","grupa":"4"},{"name":"BORBÉLY P. MELINDA-IZABELLA","matricol":"2518","an":"I","seria":"1","grupa":"4"},{"name":"BOT M. ANDREEA-NICOLETA","matricol":"2519","an":"I","seria":"1","grupa":"4"},{"name":"BOTH-SIMÓ S. DÓRA","matricol":"2520","an":"I","seria":"1","grupa":"4"},{"name":"CASONI G. A. BIANCA-ALEXANDRA","matricol":"2615","an":"I","seria":"1","grupa":"1"},{"name":"CIRILĂ F. G. RAUL-GABRIEL","matricol":"2521","an":"I","seria":"1","grupa":"1"},{"name":"COJOCEA A. M. RADIA-IOANA","matricol":"2522","an":"I","seria":"1","grupa":"5"},{"name":"CONSTANTIN G. N. IANIS ȘTEFAN","matricol":"2617","an":"I","seria":"1","grupa":"1"},{"name":"CORNEA A. EDINA","matricol":"2523","an":
+
+--- matricol @ 862257 ---
+IONS = loadNomenclator().specializations;
+
+
+
+// ════════════════════════════════════════════════════════════
+// STUDENT REGISTRY — AMG Anul I 2026/2027 (lista oficială)
+// Sursa: TABEL NOMINAL, actualizat 2026-09-21
+// ════════════════════════════════════════════════════════════
+const STUDENT_REGISTRY = [{"name":"AGACHE M. F. AMALIA-ANDREEA","matricol":"2507","an":"I","seria":"1","grupa":"3"},{"name":"AILENI V. GABRIELA-SABINA","matricol":"2508","an":"I","seria":"1","grupa":"3"},{"name":"AMARIEI G. VASILICA-CĂTĂLINA","matricol":"2509","an":"I","seria":"1","grupa":"3"},{"name":"ARMANU R. TEODORA","matricol":"2613","an":"I","seria":"1","grupa":"1"},{"name":"BAGHIU E. (ONIȚIU) VERONICA-DARIA","matricol":"2510","an":"I","seria":"1","grupa":"3"},{"name":"BAKI S. ANDREA-ERIKA","matricol":"2511","an":"I","seria":"2","grupa":"1"},{"name":"BAKOS - MIHÁLY K. ZSELYKE","matricol":"2512","an":"I","seria":"2","grupa":"1"},{"name":"BALÁZSI L. TÍMEA-ANDREA","matricol":"2513","an":"I","seria":"2","grupa":"1"},{"name":"BÁLINT L. VIKTÓRIA","matricol":"2515","an":"I","seria":"2","grupa":"1"},{"name":"BÉRES K. KRISZTA-GABRIELLA","matricol":"2516","an":"I","seria":"2","grupa":"2"},{"name":"BODONI S. L. DALMA","matricol":"2517","an":"I","seria":"2","grupa":"2"},{"name":"BOGATEAN (MATASARU) MARIA","matricol":"2514","an":"I","seria":"1","grupa":"4"},{"name":"BORBÉLY P. MELINDA-IZABELLA","matricol":"2518","an":"I","seria":"1","grupa":"4"},{"name":"BOT M. ANDREEA-NICOLETA","matricol":"2519","an":"I","seria":"1","grupa":"4"},{"name":"BOTH-SIMÓ S. DÓRA","matricol":"2520","an":"I","seria":"1","grupa":"4"},{"name":"CASONI G. A. BIANCA-ALEXANDRA","matricol":"2615","an":"I","seria":"1","grupa":"1"},{"name":"CIRILĂ F. G. RAUL-GABRIEL","matricol":"2521","an":"I","seria":"1","grupa":"1"},{"name":"COJOCEA A. M. RADIA-IOANA","matricol":"2522","an":"I","seria":"1","grupa":"5"},{"name":"CONSTANTIN G. N. IANIS ȘTEFAN","matricol":"2617","an":"I","seria":"1","grupa":"1"},{"name":"CORNEA A. EDINA","matricol":"2523","an":"I","seria":"2","grupa":"2"},{"name":"COTOI M. C. YASMINE-MARIA","matricol":"2524","an":"I","ser
+
+--- matricol @ 862340 ---
+═════════════════════════
+// STUDENT REGISTRY — AMG Anul I 2026/2027 (lista oficială)
+// Sursa: TABEL NOMINAL, actualizat 2026-09-21
+// ════════════════════════════════════════════════════════════
+const STUDENT_REGISTRY = [{"name":"AGACHE M. F. AMALIA-ANDREEA","matricol":"2507","an":"I","seria":"1","grupa":"3"},{"name":"AILENI V. GABRIELA-SABINA","matricol":"2508","an":"I","seria":"1","grupa":"3"},{"name":"AMARIEI G. VASILICA-CĂTĂLINA","matricol":"2509","an":"I","seria":"1","grupa":"3"},{"name":"ARMANU R. TEODORA","matricol":"2613","an":"I","seria":"1","grupa":"1"},{"name":"BAGHIU E. (ONIȚIU) VERONICA-DARIA","matricol":"2510","an":"I","seria":"1","grupa":"3"},{"name":"BAKI S. ANDREA-ERIKA","matricol":"2511","an":"I","seria":"2","grupa":"1"},{"name":"BAKOS - MIHÁLY K. ZSELYKE","matricol":"2512","an":"I","seria":"2","grupa":"1"},{"name":"BALÁZSI L. TÍMEA-ANDREA","matricol":"2513","an":"I","seria":"2","grupa":"1"},{"name":"BÁLINT L. VIKTÓRIA","matricol":"2515","an":"I","seria":"2","grupa":"1"},{"name":"BÉRES K. KRISZTA-GABRIELLA","matricol":"2516","an":"I","seria":"2","grupa":"2"},{"name":"BODONI S. L. DALMA","matricol":"2517","an":"I","seria":"2","grupa":"2"},{"name":"BOGATEAN (MATASARU) MARIA","matricol":"2514","an":"I","seria":"1","grupa":"4"},{"name":"BORBÉLY P. MELINDA-IZABELLA","matricol":"2518","an":"I","seria":"1","grupa":"4"},{"name":"BOT M. ANDREEA-NICOLETA","matricol":"2519","an":"I","seria":"1","grupa":"4"},{"name":"BOTH-SIMÓ S. DÓRA","matricol":"2520","an":"I","seria":"1","grupa":"4"},{"name":"CASONI G. A. BIANCA-ALEXANDRA","matricol":"2615","an":"I","seria":"1","grupa":"1"},{"name":"CIRILĂ F. G. RAUL-GABRIEL","matricol":"2521","an":"I","seria":"1","grupa":"1"},{"name":"COJOCEA A. M. RADIA-IOANA","matricol":"2522","an":"I","seria":"1","grupa":"5"},{"name":"CONSTANTIN G. N. IANIS ȘTEFAN","matricol":"2617","an":"I","seria":"1","grupa":"1"},{"name":"CORNEA A. EDINA","matricol":"2523","an":"I","seria":"2","grupa":"2"},{"name":"COTOI M. C. YASMINE-MARIA","matricol":"2524","an":"I","seria":"1","grupa":"5"},{"name":"DAN P. C. IOANA-ȘTEFANIA","matricol":"2525","an":"I",
+
+--- students @ 117563 ---
+ning:",o:["Raw plant foods exclusively","Foods of animal origin (meat, eggs) + desserts, ice cream, pastry","Only canned foods","Only contaminated water"],c:1,e:"Most common: foods of animal origin (meat, eggs) + desserts, ice cream, pastry. Also fresh unwashed vegetables."},
+        {q:"Among the WHO rules for preventing food poisoning, which is correct?",o:["Keeping prepared foods at room temperature for max 24h","Avoiding contact between raw and prepared/cooked foods","Consuming foods 2-3h after preparation","Washing hands once before cooking"],c:1,e:"WHO Rule 5: avoid contact between raw and prepared foods. Rule 3: consume IMMEDIATELY after preparation."},
+        {s:"School canteen: 45 students develop nausea, vomiting, diarrhoea 4-6h after lunch with chicken and mayonnaise.",q:"Most likely aetiological agent:",o:["Clostridium botulinum","Enterotoxic staphylococcus or Salmonella","Trichinella spiralis","Hepatitis A virus"],c:1,e:"Collective food poisoning + short incubation (4-6h) + animal foods (chicken + mayonnaise) = Salmonella or enterotoxic Staphylococcus."},
+        {q:"HACCP (Hazard Analysis and Critical Control Points) aims to:",o:["Only correct product labelling","Eliminate chemical and bacterial contamination risk through prevention, training, improving sanitary quality","Only control at the final point of sale","Replace microbiological analyses"],c:1,e:"HACCP: food circuit monitoring system (FAO/WHO). Purpose: prevention of food poisoning outbreaks + sanitary quality improvement + staff training."},
+        {q:"The food circuit must be:",o:["Bidirectional, with possibility of restarting phases","One-way, without crossings between clean and unclean phases, efficient and operational","Circular, with repeatable phases","Flexible, with possibility to bypass phases"],c:1,e:"Food circuit: ONE WAY, without crossings between clean/unclean phases, efficient and operational (Collection→Transport→Processing→Preparation→Distribution→Consumption)."},
+        {q:"TGC standard for pasteurised milk:",o:["Below 10,000 bacteria/mL","Below 100,000 bacteria/mL","Below 300,000
+
+--- students @ 120994 ---
+nimal-origin foods (meat, eggs) + desserts, ice cream, pastries","Only canned goods","Only contaminated water"],
+     c:1, e:"Cel mai des: animal-origin foods (carne, oua) + deserturi, inghetata, patiserie. Si legume proaspete nespalate."},
+        {q:"Which of the WHO rules for foodborne illness prevention is correct?",
+     o:["Pastrarea alimentelor preparate at temperatura camerei max 24h","Avoiding contact between raw and prepared/cooked foods","Consuming food 2-3h after preparation","Washing hands once before cooking"],
+     c:1, e:"WHO rule 5: avoid contact between raw and prepared foods. Rule 3: consume IMMEDIATELY after preparation or refrigerate."},
+        {s:"School cafeteria: 45 students with nausea, vomiting, diarrhoea 4-6h after lunch with chicken and eggs.",
+     q:"Most likely aetiological agent:",
+     o:["Clostridium botulinum","Enterotoxic Staphylococcus or Salmonella","Trichinella spiralis","Hepatitis A virus"],
+     c:1, e:"TIA colectiva + incubatie scurta (4-6h) + alimente of origine animala (pui + maioneza) = Salmonella or Stafilococ enterotoxic."},
+        {q:"HACCP (Hazard Analysis Critical Control Points) aims to:",
+     o:["Only correct product labelling","Eliminating chemical and bacterial contamination risk through prevention, training, improving hygienic-sanitary quality","Only control at the final point of sale","Replacing microbiological analyses"],
+     c:1, e:"HACCP: sistem of monitorizare a circuitelor alimentare (FAO/OMS). Scop: preventie fowhich TIA + crisre calitate igienico-sanitara + instruire personal."},
+        {q:"The food circulation circuit must be:",
+     o:["Bidirectional, with possibility to repeat phases","Unidirectional, without cross-contamination between clean and unclean phases, efficient and operational","Circular, with phases that can be repeated","Flexible, with possibility to bypass phases"],
+     c:1, e:"Food circuit: ONE DIRECTION, no crossing between clean/unclean phases, efficient and operational."},
+        {q:"TGC standard for pasteurised milk:",
+     o:["Below 10,000 germs/ml","Below 100,000 germs/ml","Below
+
+--- students @ 396614 ---
+s","Main mistake"] },
+    { id:"g3", emoji:"📆", title:"Seasonal and annual performance variations", color:"#059669",
+      caz:[{l:"Observed symptoms",v:"fatigue, irritability, decreased performance"},{l:"Period 1",v:"end of semester"},{l:"Period 2",v:"after consecutive assessments"},{l:"Period 3",v:"before final exam"},{l:"Period 4",v:"end of school year"}],
+      qs:[
+        {q:"Explain the annual performance variations known in school hygiene.",h:"Drops: end of semesters, after assessments, before exams, end of year."},
+        {q:"Why do performance drops occur at the end of the semester?",h:"Cumulative fatigue, chronic stress."},
+        {q:"What health effects can occur in overloaded students?",h:"Burnout, insomnia, irritability."},
+        {q:"What organisational measures could prevent overload?",h:"Balanced test scheduling."},
+        {q:"Formulate 3 recommendations for teachers.",h:"Max 1-2 assessments/week, advance notice."},
+        {q:"Formulate 3 recommendations for students during critical periods.",h:"Regular sleep, active breaks, study planning."},
+      ], conc:["Most critical period","Main cause","3 measures for the school"] },
+    { id:"g4", emoji:"📋", title:"School timetable — analysis and correction", color:"#d97706",
+      caz:[{l:"Secondary school class, Monday",v:"7 periods"},{l:"First 3 periods",v:"mathematics, physics, chemistry"},{l:"Alternation",v:"absent"},{l:"Last period",v:"written test"},{l:"Friday",v:"6 periods + 2 difficult subjects"}],
+      qs:[
+        {q:"Identify all organisational errors in the timetable.",h:"7 periods Monday, 3 heavy subjects, no alternation, test in last period."},
+        {q:"What hygienic principles must be respected when drawing up a timetable?",h:"Physiological curves, alternation of activity and rest."},
+        {q:"Why is it important to alternate intellectual and physical activities?",h:"Prevents fatigue, restores attention."},
+        {q:"How many periods per day are recommended for grades 5-8?",h:"5 periods/day — recommended hygienic standard."},
+        {q:"Propose a corrected Monday timetable.",h:"Max 
+
+--- students @ 396909 ---
+ 3",v:"before final exam"},{l:"Period 4",v:"end of school year"}],
+      qs:[
+        {q:"Explain the annual performance variations known in school hygiene.",h:"Drops: end of semesters, after assessments, before exams, end of year."},
+        {q:"Why do performance drops occur at the end of the semester?",h:"Cumulative fatigue, chronic stress."},
+        {q:"What health effects can occur in overloaded students?",h:"Burnout, insomnia, irritability."},
+        {q:"What organisational measures could prevent overload?",h:"Balanced test scheduling."},
+        {q:"Formulate 3 recommendations for teachers.",h:"Max 1-2 assessments/week, advance notice."},
+        {q:"Formulate 3 recommendations for students during critical periods.",h:"Regular sleep, active breaks, study planning."},
+      ], conc:["Most critical period","Main cause","3 measures for the school"] },
+    { id:"g4", emoji:"📋", title:"School timetable — analysis and correction", color:"#d97706",
+      caz:[{l:"Secondary school class, Monday",v:"7 periods"},{l:"First 3 periods",v:"mathematics, physics, chemistry"},{l:"Alternation",v:"absent"},{l:"Last period",v:"written test"},{l:"Friday",v:"6 periods + 2 difficult subjects"}],
+      qs:[
+        {q:"Identify all organisational errors in the timetable.",h:"7 periods Monday, 3 heavy subjects, no alternation, test in last period."},
+        {q:"What hygienic principles must be respected when drawing up a timetable?",h:"Physiological curves, alternation of activity and rest."},
+        {q:"Why is it important to alternate intellectual and physical activities?",h:"Prevents fatigue, restores attention."},
+        {q:"How many periods per day are recommended for grades 5-8?",h:"5 periods/day — recommended hygienic standard."},
+        {q:"Propose a corrected Monday timetable.",h:"Max 5 periods, heavy subjects 9-11, sport interspersed."},
+        {q:"Explain why Tuesday, Wednesday and Thursday are more suitable for demanding tasks.",h:"Maximum weekly capacity."},
+      ], conc:["Principle violated","Biggest error","Proposed corrected timetable"] },
+    { id:"g5", emoji:"⚠️",
+
+--- students @ 399284 ---
+ong peers"}],
+      qs:[
+        {q:"Identify all risk behaviours and classify them.",h:"Dietary, substances (smoking/alcohol), hygienic (oral), behavioural."},
+        {q:"Explain why these behaviours are addressed in school hygiene.",h:"School = environment for forming habits."},
+        {q:"What short-term and long-term consequences can occur?",h:"Short: performance. Long: chronic diseases, addictions."},
+        {q:"Which student groups are more vulnerable?",h:"Those with family difficulties, socially isolated."},
+        {q:"Formulate 3 concrete school-level prevention measures.",h:"Health education, peer education, anti-bullying."},
+        {q:"Formulate 3 key messages for high school students.",h:"Positive messages, real consequences, age-relevant."},
+      ], conc:["Risk behaviours identified","Most urgent risk","3 measures for the school"] },
+    { id:"g6", emoji:"🛡️", title:"Risk behaviour prevention plan", color:"#7c3aed",
+      caz:[{l:"Problem",v:""},{l:"Observation 1",v:"lack of information"},{l:"Observation 2",v:"unhealthy habits"},{l:"Observation 3",v:"growing interest in smoking and alcohol"},{l:"Observation 4",v:"low participation in educational activities"}],
+      qs:[
+        {q:"What prevention methods are recommended in school hygiene?",h:"Health education, monitoring, questionnaires, peer education."},
+        {q:"What role does health education play in preventing risk behaviours?",h:"Information → attitude change → healthy habits."},
+        {q:"Why are questionnaires and interviews useful?",h:"Identify real problems, allow targeted planning."},
+        {q:"What role does periodic medical monitoring play?",h:"Early detection, tracking health indicators."},
+        {q:"Develop a mini intervention plan for one month.",h:"Week 1: assessment. Week 2: information. Week 3: activity. Week 4: evaluation."},
+        {q:"How would you evaluate whether the programme was successful?",h:"Pre-post questionnaire, absences, incidents."},
+      ], conc:["Main objective","Main method","3 proposed activities"] },
+  ],
+  lp6a: [
+    { id:"g1", emoji:"☢️", title:"Sour
+
+--- students @ 443749 ---
+n → DO NOT wipe immediately! Unidirectional movements (not circular — recontamination). Single-use gloves. Change cloths at each surface."},
+        {q:"What monitoring log do you implement to track disinfection efficacy?",h:"Record: date/time, product, batch, concentration, surface treated, responsible person. Monthly bacteriological check. Colourimetric surface indicators (ATP bioluminescence test). Quarterly protocol audit."},
+      ], conc:["Main error identified","Recommended disinfectant","Optimal disinfection frequency"] },
+  ],
+  lp2b: [
+    { id:"g1", emoji:"💡", title:"Insufficient lighting in a classroom", color:"#f59e0b",
+      caz:[{l:"Location",v:"Secondary school classroom, 28 students"},{l:"Mean illuminance",v:"180 lux (min standard: 300 lux)"},{l:"Lighting uniformity",v:"0.3 (min standard: 0.7)"},{l:"Windows",v:"north-facing, partially blocked by trees"},{l:"Student age",v:"11-14 years"},{l:"Reported symptoms",v:"eye fatigue, headache, reading difficulties in 40% of students"}],
+      qs:[
+        {q:"Calculate the illuminance deficit against the standard. What long-term ocular risk does this imply?",h:"Deficit: 300-180 = 120 lux = 40% below standard. Risk: asthenopia (eye fatigue), progressive myopia (excessive accommodation stimulus), postural kyphoscoliosis (leaning over paper)."},
+        {q:"What does uniformity 0.3 mean versus the standard of 0.7? How does it manifest in practice?",h:"0.3 = very bright areas near windows and dark areas at the back of the room (10:1 ratio). Eyes constantly re-adapt → fatigue. Students at the back see 3× less than those at the front."},
+        {q:"What type of artificial light source do you recommend for a classroom?",h:"LED 4000K (neutral white) with CRI >90. Fittings with anti-glare diffuser (UGR <19). Placed perpendicular to board and desks. Dimmer for adaptation to natural light."},
+        {q:"North-facing windows — advantages and disadvantages from a visual hygiene perspective.",h:"Advantage: diffuse uniform light, no harsh shadows or direct glare. Disadvantage: lower natural illuminance, greater need for artifi
+
+--- students @ 444046 ---
+onsible person. Monthly bacteriological check. Colourimetric surface indicators (ATP bioluminescence test). Quarterly protocol audit."},
+      ], conc:["Main error identified","Recommended disinfectant","Optimal disinfection frequency"] },
+  ],
+  lp2b: [
+    { id:"g1", emoji:"💡", title:"Insufficient lighting in a classroom", color:"#f59e0b",
+      caz:[{l:"Location",v:"Secondary school classroom, 28 students"},{l:"Mean illuminance",v:"180 lux (min standard: 300 lux)"},{l:"Lighting uniformity",v:"0.3 (min standard: 0.7)"},{l:"Windows",v:"north-facing, partially blocked by trees"},{l:"Student age",v:"11-14 years"},{l:"Reported symptoms",v:"eye fatigue, headache, reading difficulties in 40% of students"}],
+      qs:[
+        {q:"Calculate the illuminance deficit against the standard. What long-term ocular risk does this imply?",h:"Deficit: 300-180 = 120 lux = 40% below standard. Risk: asthenopia (eye fatigue), progressive myopia (excessive accommodation stimulus), postural kyphoscoliosis (leaning over paper)."},
+        {q:"What does uniformity 0.3 mean versus the standard of 0.7? How does it manifest in practice?",h:"0.3 = very bright areas near windows and dark areas at the back of the room (10:1 ratio). Eyes constantly re-adapt → fatigue. Students at the back see 3× less than those at the front."},
+        {q:"What type of artificial light source do you recommend for a classroom?",h:"LED 4000K (neutral white) with CRI >90. Fittings with anti-glare diffuser (UGR <19). Placed perpendicular to board and desks. Dimmer for adaptation to natural light."},
+        {q:"North-facing windows — advantages and disadvantages from a visual hygiene perspective.",h:"Advantage: diffuse uniform light, no harsh shadows or direct glare. Disadvantage: lower natural illuminance, greater need for artificial lighting. Optimal orientation: south-east."},
+        {q:"Propose technical and organisational remediation measures.",h:"Technical: install additional LED fittings (target 400 lux), clean windows, prune trees. Organisational: rotate seats each semester, A4 notebook for visually impaired stud
+
+--- students @ 444605 ---
+rtially blocked by trees"},{l:"Student age",v:"11-14 years"},{l:"Reported symptoms",v:"eye fatigue, headache, reading difficulties in 40% of students"}],
+      qs:[
+        {q:"Calculate the illuminance deficit against the standard. What long-term ocular risk does this imply?",h:"Deficit: 300-180 = 120 lux = 40% below standard. Risk: asthenopia (eye fatigue), progressive myopia (excessive accommodation stimulus), postural kyphoscoliosis (leaning over paper)."},
+        {q:"What does uniformity 0.3 mean versus the standard of 0.7? How does it manifest in practice?",h:"0.3 = very bright areas near windows and dark areas at the back of the room (10:1 ratio). Eyes constantly re-adapt → fatigue. Students at the back see 3× less than those at the front."},
+        {q:"What type of artificial light source do you recommend for a classroom?",h:"LED 4000K (neutral white) with CRI >90. Fittings with anti-glare diffuser (UGR <19). Placed perpendicular to board and desks. Dimmer for adaptation to natural light."},
+        {q:"North-facing windows — advantages and disadvantages from a visual hygiene perspective.",h:"Advantage: diffuse uniform light, no harsh shadows or direct glare. Disadvantage: lower natural illuminance, greater need for artificial lighting. Optimal orientation: south-east."},
+        {q:"Propose technical and organisational remediation measures.",h:"Technical: install additional LED fittings (target 400 lux), clean windows, prune trees. Organisational: rotate seats each semester, A4 notebook for visually impaired students at the back."},
+        {q:"What legal regulations do you invoke in the inspection report?",h:"Ministry of Health Order 1955/1995 (hygiene in educational institutions). NP 061/2002 (indoor lighting standard). Order MDRAP 4/2017. Law 272/2004 (child protection)."},
+      ], conc:["Deficit calculated against standard","Main risk for students","Priority remediation measure"] },
+    { id:"g2", emoji:"🔊", title:"Excessive noise in school canteen", color:"#ef4444",
+      caz:[{l:"Location",v:"School canteen, 150 students simultaneously"},{l:"Noise level"
+
+--- students @ 445450 ---
+h:"LED 4000K (neutral white) with CRI >90. Fittings with anti-glare diffuser (UGR <19). Placed perpendicular to board and desks. Dimmer for adaptation to natural light."},
+        {q:"North-facing windows — advantages and disadvantages from a visual hygiene perspective.",h:"Advantage: diffuse uniform light, no harsh shadows or direct glare. Disadvantage: lower natural illuminance, greater need for artificial lighting. Optimal orientation: south-east."},
+        {q:"Propose technical and organisational remediation measures.",h:"Technical: install additional LED fittings (target 400 lux), clean windows, prune trees. Organisational: rotate seats each semester, A4 notebook for visually impaired students at the back."},
+        {q:"What legal regulations do you invoke in the inspection report?",h:"Ministry of Health Order 1955/1995 (hygiene in educational institutions). NP 061/2002 (indoor lighting standard). Order MDRAP 4/2017. Law 272/2004 (child protection)."},
+      ], conc:["Deficit calculated against standard","Main risk for students","Priority remediation measure"] },
+    { id:"g2", emoji:"🔊", title:"Excessive noise in school canteen", color:"#ef4444",
+      caz:[{l:"Location",v:"School canteen, 150 students simultaneously"},{l:"Noise level",v:"87 dB(A) during meal service"},{l:"School space standard",v:"max 55 dB(A)"},{l:"Exposure time",v:"30 minutes/day (lunch) + 15 min (snack)"},{l:"Materials",v:"untreated concrete ceilings and walls, tiled floor"},{l:"Symptoms",v:"stress, agitation, difficulty in verbal communication"}],
+      qs:[
+        {q:"Calculate the exceedance against the standard in decibels. What does 32 dB extra mean in practice?",h:"87-55 = 32 dB exceedance. On logarithmic scale: every 3 dB = double sound energy. 32 dB = ~1000× above standard. 87 dB = busy street or industrial equipment level."},
+        {q:"What is the mechanism by which chronic noise affects learning capacity?",h:"Noise >65 dB → cortisol activation (chronic stress) → impaired working memory (hippocampus). Attention distraction → 30-40% reduction in concentration capacity (UNESCO studie
+
+--- students @ 445792 ---
+ Disadvantage: lower natural illuminance, greater need for artificial lighting. Optimal orientation: south-east."},
+        {q:"Propose technical and organisational remediation measures.",h:"Technical: install additional LED fittings (target 400 lux), clean windows, prune trees. Organisational: rotate seats each semester, A4 notebook for visually impaired students at the back."},
+        {q:"What legal regulations do you invoke in the inspection report?",h:"Ministry of Health Order 1955/1995 (hygiene in educational institutions). NP 061/2002 (indoor lighting standard). Order MDRAP 4/2017. Law 272/2004 (child protection)."},
+      ], conc:["Deficit calculated against standard","Main risk for students","Priority remediation measure"] },
+    { id:"g2", emoji:"🔊", title:"Excessive noise in school canteen", color:"#ef4444",
+      caz:[{l:"Location",v:"School canteen, 150 students simultaneously"},{l:"Noise level",v:"87 dB(A) during meal service"},{l:"School space standard",v:"max 55 dB(A)"},{l:"Exposure time",v:"30 minutes/day (lunch) + 15 min (snack)"},{l:"Materials",v:"untreated concrete ceilings and walls, tiled floor"},{l:"Symptoms",v:"stress, agitation, difficulty in verbal communication"}],
+      qs:[
+        {q:"Calculate the exceedance against the standard in decibels. What does 32 dB extra mean in practice?",h:"87-55 = 32 dB exceedance. On logarithmic scale: every 3 dB = double sound energy. 32 dB = ~1000× above standard. 87 dB = busy street or industrial equipment level."},
+        {q:"What is the mechanism by which chronic noise affects learning capacity?",h:"Noise >65 dB → cortisol activation (chronic stress) → impaired working memory (hippocampus). Attention distraction → 30-40% reduction in concentration capacity (UNESCO studies)."},
+        {q:"Identify noise sources and reverberation factors in this canteen.",h:"Sources: 150 students' voices (cocktail party effect), cutlery, distribution trolleys. Reverberation: concrete + tiles = hard reflective surfaces. Estimated RT60 >3 seconds (recommended: <0.8s for school spaces)."},
+        {q:"What sound-absorbing mate
+
+--- students @ 445971 ---
+asures.",h:"Technical: install additional LED fittings (target 400 lux), clean windows, prune trees. Organisational: rotate seats each semester, A4 notebook for visually impaired students at the back."},
+        {q:"What legal regulations do you invoke in the inspection report?",h:"Ministry of Health Order 1955/1995 (hygiene in educational institutions). NP 061/2002 (indoor lighting standard). Order MDRAP 4/2017. Law 272/2004 (child protection)."},
+      ], conc:["Deficit calculated against standard","Main risk for students","Priority remediation measure"] },
+    { id:"g2", emoji:"🔊", title:"Excessive noise in school canteen", color:"#ef4444",
+      caz:[{l:"Location",v:"School canteen, 150 students simultaneously"},{l:"Noise level",v:"87 dB(A) during meal service"},{l:"School space standard",v:"max 55 dB(A)"},{l:"Exposure time",v:"30 minutes/day (lunch) + 15 min (snack)"},{l:"Materials",v:"untreated concrete ceilings and walls, tiled floor"},{l:"Symptoms",v:"stress, agitation, difficulty in verbal communication"}],
+      qs:[
+        {q:"Calculate the exceedance against the standard in decibels. What does 32 dB extra mean in practice?",h:"87-55 = 32 dB exceedance. On logarithmic scale: every 3 dB = double sound energy. 32 dB = ~1000× above standard. 87 dB = busy street or industrial equipment level."},
+        {q:"What is the mechanism by which chronic noise affects learning capacity?",h:"Noise >65 dB → cortisol activation (chronic stress) → impaired working memory (hippocampus). Attention distraction → 30-40% reduction in concentration capacity (UNESCO studies)."},
+        {q:"Identify noise sources and reverberation factors in this canteen.",h:"Sources: 150 students' voices (cocktail party effect), cutlery, distribution trolleys. Reverberation: concrete + tiles = hard reflective surfaces. Estimated RT60 >3 seconds (recommended: <0.8s for school spaces)."},
+        {q:"What sound-absorbing materials do you recommend and where do you place them?",h:"Ceiling: sound-absorbing panels NRC >0.85 (mineral wool covered with textile). Side walls: acoustic panels. Floor: partial 
+
+--- students @ 446960 ---
+on, difficulty in verbal communication"}],
+      qs:[
+        {q:"Calculate the exceedance against the standard in decibels. What does 32 dB extra mean in practice?",h:"87-55 = 32 dB exceedance. On logarithmic scale: every 3 dB = double sound energy. 32 dB = ~1000× above standard. 87 dB = busy street or industrial equipment level."},
+        {q:"What is the mechanism by which chronic noise affects learning capacity?",h:"Noise >65 dB → cortisol activation (chronic stress) → impaired working memory (hippocampus). Attention distraction → 30-40% reduction in concentration capacity (UNESCO studies)."},
+        {q:"Identify noise sources and reverberation factors in this canteen.",h:"Sources: 150 students' voices (cocktail party effect), cutlery, distribution trolleys. Reverberation: concrete + tiles = hard reflective surfaces. Estimated RT60 >3 seconds (recommended: <0.8s for school spaces)."},
+        {q:"What sound-absorbing materials do you recommend and where do you place them?",h:"Ceiling: sound-absorbing panels NRC >0.85 (mineral wool covered with textile). Side walls: acoustic panels. Floor: partial non-slip carpet. Heavy curtains. Target: 15-20 dB reduction."},
+        {q:"What organisational measures reduce noise without major investment?",h:"Smaller sittings (50 students/sitting vs 150). Background music at 60-65 dB (reverse Lombard effect). Train students on voice level. Plastic vs metal cups/trays."},
+        {q:"What regulation governs the noise level in educational institutions?",h:"Ministry of Health Order 1955/1995. STAS 6161/1-82 (acoustics in construction). Law 121/2019 (environmental noise). EU Directive 2002/49/CE transposed in GD 321/2005."},
+      ], conc:["Exceedance calculated and significance","Main noise sources","Intervention with best efficiency"] },
+    { id:"g3", emoji:"🌡️", title:"Improper microclimate — neonatal ward", color:"#06b6d4",
+      caz:[{l:"Location",v:"Neonatal ward, 12 incubators"},{l:"Air temperature",v:"19°C (neonatal standard: 24-26°C)"},{l:"Humidity",v:"30% (standard: 50-70%)"},{l:"Air velocity",v:"0.4 m/s (standard: max 0.1 m/s)
+
+--- students @ 447548 ---
+SCO studies)."},
+        {q:"Identify noise sources and reverberation factors in this canteen.",h:"Sources: 150 students' voices (cocktail party effect), cutlery, distribution trolleys. Reverberation: concrete + tiles = hard reflective surfaces. Estimated RT60 >3 seconds (recommended: <0.8s for school spaces)."},
+        {q:"What sound-absorbing materials do you recommend and where do you place them?",h:"Ceiling: sound-absorbing panels NRC >0.85 (mineral wool covered with textile). Side walls: acoustic panels. Floor: partial non-slip carpet. Heavy curtains. Target: 15-20 dB reduction."},
+        {q:"What organisational measures reduce noise without major investment?",h:"Smaller sittings (50 students/sitting vs 150). Background music at 60-65 dB (reverse Lombard effect). Train students on voice level. Plastic vs metal cups/trays."},
+        {q:"What regulation governs the noise level in educational institutions?",h:"Ministry of Health Order 1955/1995. STAS 6161/1-82 (acoustics in construction). Law 121/2019 (environmental noise). EU Directive 2002/49/CE transposed in GD 321/2005."},
+      ], conc:["Exceedance calculated and significance","Main noise sources","Intervention with best efficiency"] },
+    { id:"g3", emoji:"🌡️", title:"Improper microclimate — neonatal ward", color:"#06b6d4",
+      caz:[{l:"Location",v:"Neonatal ward, 12 incubators"},{l:"Air temperature",v:"19°C (neonatal standard: 24-26°C)"},{l:"Humidity",v:"30% (standard: 50-70%)"},{l:"Air velocity",v:"0.4 m/s (standard: max 0.1 m/s)"},{l:"Radiant temperature",v:"wall-air difference 7°C (standard: max 4°C)"},{l:"Incidents",v:"increased neonatal hypothermia cases in the past month"}],
+      qs:[
+        {q:"Evaluate each parameter against neonatal-specific standards. How many non-compliances?",h:"4 non-compliances: T 19°C (below 24°C), RH 30% (below 50%), velocity 0.4 m/s (4× standard), radiant difference 7°C (1.75× standard). All 4 parameters simultaneously = major risk."},
+        {q:"Why are neonates more vulnerable to these parameters than adults?",h:"High surface/body volume ratio → convective heat loss mu
+
+--- students @ 447635 ---
+anteen.",h:"Sources: 150 students' voices (cocktail party effect), cutlery, distribution trolleys. Reverberation: concrete + tiles = hard reflective surfaces. Estimated RT60 >3 seconds (recommended: <0.8s for school spaces)."},
+        {q:"What sound-absorbing materials do you recommend and where do you place them?",h:"Ceiling: sound-absorbing panels NRC >0.85 (mineral wool covered with textile). Side walls: acoustic panels. Floor: partial non-slip carpet. Heavy curtains. Target: 15-20 dB reduction."},
+        {q:"What organisational measures reduce noise without major investment?",h:"Smaller sittings (50 students/sitting vs 150). Background music at 60-65 dB (reverse Lombard effect). Train students on voice level. Plastic vs metal cups/trays."},
+        {q:"What regulation governs the noise level in educational institutions?",h:"Ministry of Health Order 1955/1995. STAS 6161/1-82 (acoustics in construction). Law 121/2019 (environmental noise). EU Directive 2002/49/CE transposed in GD 321/2005."},
+      ], conc:["Exceedance calculated and significance","Main noise sources","Intervention with best efficiency"] },
+    { id:"g3", emoji:"🌡️", title:"Improper microclimate — neonatal ward", color:"#06b6d4",
+      caz:[{l:"Location",v:"Neonatal ward, 12 incubators"},{l:"Air temperature",v:"19°C (neonatal standard: 24-26°C)"},{l:"Humidity",v:"30% (standard: 50-70%)"},{l:"Air velocity",v:"0.4 m/s (standard: max 0.1 m/s)"},{l:"Radiant temperature",v:"wall-air difference 7°C (standard: max 4°C)"},{l:"Incidents",v:"increased neonatal hypothermia cases in the past month"}],
+      qs:[
+        {q:"Evaluate each parameter against neonatal-specific standards. How many non-compliances?",h:"4 non-compliances: T 19°C (below 24°C), RH 30% (below 50%), velocity 0.4 m/s (4× standard), radiant difference 7°C (1.75× standard). All 4 parameters simultaneously = major risk."},
+        {q:"Why are neonates more vulnerable to these parameters than adults?",h:"High surface/body volume ratio → convective heat loss much faster. Absence of functional brown adipose tissue in preterm infants. Immature ther
+
+--- students @ 710673 ---
+17 = slight increase."],["The recommended number of hours per day for 8th grade:",["3–4 hours","5 hours","4 hours","5–6 hours"],[1],1,"Grades 5–8: 5 hours/day. Grades 9–12: 5–6 hours/day."],["Alternating periods of activity with periods of rest in the school schedule is important because:",["Reduces costs","Adheres to the physiological curves of work capacity","It is a legal requirement","Reduce the number of absences"],[1],1,"Alternating between activity and rest + varying the types of activities = fundamental principles of a healthy school schedule."],["The purpose of periodic medical checkups for children is:",["Weight and height only","Hematological parameters only","Vaccinations only","Students’ activities, habits, attitudes, and knowledge + health status"],[3],1,"Medical monitoring: health assessment + activity + habits + attitudes + knowledge. Complemented by legislative and socioeconomic measures."],["The time of day when students perform best:",["9–11 a.m.","7–9 a.m.","2:00–4:00 p.m.","5–7 p.m."],[0],1,"Daily variations: 8 AM = average, 9–11 AM = MAXIMUM, 1–2 PM = low, 3–5 PM = slight increase (without reaching the maximum)."],["The lowest work capacity during the week:",["Tuesday and Thursday","Mondays and Fridays","Wednesday","Thursday and Friday"],[1],1,"Low: Monday (recovery) and Friday (fatigue). Peak: Tuesday–Wednesday. Thursday: possible decline."],["The maximum number of hours per day for first grade:",["3–4 hours","2–3 hours","5 hours","6 hours"],[0],1,"Grade 1: 3–4 hours/day. Grades 2–4: 4 hours. Grades 5–8: 5 hours. Grades 9–12: 5–6 hours."],["The days with the most difficult hours MUST NOT be:",["Monday and Friday","Tuesday and Wednesday","Wednesday and Thursday","Thursday and Tuesday"],[0],1,"Mondays and Fridays: NO more than 2 difficult subjects, NO long hours. Maximum number of difficult subjects: Tuesdays, Wednesdays, Thursdays."],["The lowest academic performance is found:",["At the beginning of the semester","Midyear","Summer","At the end of each semester, after exams, at the end of the school year"],[3],1,"Low performance: at the end of semeste
+
+--- students @ 710917 ---
+ in the school schedule is important because:",["Reduces costs","Adheres to the physiological curves of work capacity","It is a legal requirement","Reduce the number of absences"],[1],1,"Alternating between activity and rest + varying the types of activities = fundamental principles of a healthy school schedule."],["The purpose of periodic medical checkups for children is:",["Weight and height only","Hematological parameters only","Vaccinations only","Students’ activities, habits, attitudes, and knowledge + health status"],[3],1,"Medical monitoring: health assessment + activity + habits + attitudes + knowledge. Complemented by legislative and socioeconomic measures."],["The time of day when students perform best:",["9–11 a.m.","7–9 a.m.","2:00–4:00 p.m.","5–7 p.m."],[0],1,"Daily variations: 8 AM = average, 9–11 AM = MAXIMUM, 1–2 PM = low, 3–5 PM = slight increase (without reaching the maximum)."],["The lowest work capacity during the week:",["Tuesday and Thursday","Mondays and Fridays","Wednesday","Thursday and Friday"],[1],1,"Low: Monday (recovery) and Friday (fatigue). Peak: Tuesday–Wednesday. Thursday: possible decline."],["The maximum number of hours per day for first grade:",["3–4 hours","2–3 hours","5 hours","6 hours"],[0],1,"Grade 1: 3–4 hours/day. Grades 2–4: 4 hours. Grades 5–8: 5 hours. Grades 9–12: 5–6 hours."],["The days with the most difficult hours MUST NOT be:",["Monday and Friday","Tuesday and Wednesday","Wednesday and Thursday","Thursday and Tuesday"],[0],1,"Mondays and Fridays: NO more than 2 difficult subjects, NO long hours. Maximum number of difficult subjects: Tuesdays, Wednesdays, Thursdays."],["The lowest academic performance is found:",["At the beginning of the semester","Midyear","Summer","At the end of each semester, after exams, at the end of the school year"],[3],1,"Low performance: at the end of semesters, after tests/quizzes/exams, and at the end of the school year."],["Risk behaviors in children and adolescents that should be prevented include:",["Drug use only","Violent behavior alone","Eating habits, smoking, alcohol, drugs, sexual behavi
+
+--- students @ 809967 ---
+roleIndex:4,clueIndex:2,ro:"Prevenție A · măsuri imediate",en:"Prevention A · immediate measures"},
+  prevention_b:{roleIndex:4,clueIndex:3,ro:"Prevenție B · măsuri tehnice",en:"Prevention B · technical measures"},
+  prevention_c:{roleIndex:4,clueIndex:4,ro:"Prevenție C · monitorizare",en:"Prevention C · monitoring"},
+  evidence_auditor:{roleIndex:2,clueIndex:5,ro:"Auditor dovezi · date decisive",en:"Evidence auditor · decisive facts"},
+  critical_auditor:{roleIndex:0,clueIndex:4,ro:"Auditor critic · verifică distractorii",en:"Critical auditor · checks distractors"},
+  reporter:{roleIndex:5,clueIndex:0,ro:"Raportor · sinteză în 60 de secunde",en:"Reporter · 60-second synthesis"},
+};
+
+// Six students always cover all six professional role families. Additional
+// participants receive distinct sub-roles without making anyone double up.
+const ACTIVITY_REQUIRED_MIDDLE = ["medic_a","analyst_a","epidemiologist_a","prevention_a"];
+const ACTIVITY_ADDITIONAL_MIDDLE = ["evidence_auditor","medic_b","analyst_b","epidemiologist_b","prevention_b","analyst_c","prevention_c","critical_auditor"];
+const ACTIVITY_DISPLAY_ORDER = ["medic_a","medic_b","analyst_a","analyst_b","analyst_c","epidemiologist_a","epidemiologist_b","prevention_a","prevention_b","prevention_c","evidence_auditor","critical_auditor"];
+
+function activityPlanForSize(target){
+  const size=Math.min(14,Math.max(6,Number(target)||14));
+  const extraCount=size-6;
+  const middle=[...ACTIVITY_REQUIRED_MIDDLE,...ACTIVITY_ADDITIONAL_MIDDLE.slice(0,extraCount)]
+    .sort((a,b)=>ACTIVITY_DISPLAY_ORDER.indexOf(a)-ACTIVITY_DISPLAY_ORDER.indexOf(b));
+  return [ACTIVITY_SLOT_LIBRARY.coordinator,...middle.map(k=>ACTIVITY_SLOT_LIBRARY[k]),ACTIVITY_SLOT_LIBRARY.reporter];
+}
+
+function activityNameKey(value){
+  return String(value||"").trim().toLocaleLowerCase("ro-RO").replace(/\s+/g," ");
+}
+
+function activityMatricolKey(value){
+  return String(value||"").trim().replace(/\s+/g,"").toUpperCase();
+}
+
+function activityStudentKey(student){
+  const matricol=activityMatricolKey(student?.matricol);
+  return matricol?"matricol:"+matricol:"name:"+acti
+
+--- students @ 886300 ---
+e;
+    else from += PAGE;
+  }
+  // Keep synchronized room events out of the normal results list. The single
+  // group_activity_* final report remains visible as the assessed result.
+  all = all.filter(r => !String(r.module || "").startsWith("activity_") && !String(r.module || "").startsWith("live_"));
+  let mapped = all.map(r => {
+    const identity=parseStudentIdentity(r.answers_text||"");
+    const base = {
+      name: r.name, group: r.grp, labId: r.lab_id, labCode: r.lab_code,
+      module: r.module, moduleTitle: r.module_title,
+      answersText: r.answers_text||"",
+      matricol: identity.matricol||"",
+      studentYear: identity.yearLabel||formatStudentYear(identity.year||""),
+      studentSeries: identity.seria||"",
+      studentOfficialGroup: identity.grupa||"",
+      score: r.score, total: r.total, pct: r.pct,
+      timestamp: new Date(r.created_at).getTime(), timeUsed: r.time_used,
+      teacher: r.teacher || "",
+      semester: r.semester || "",
+      specialization: r.specialization || "",
+      studyYear: r.study_year || identity.yearLabel || ""
+    };
+    return isExamResult(base) ? enrichExamResult(base) : base;
+  });
+  try {
+    const pending = JSON.parse(localStorage.getItem("igiena_pending_results") || "[]");
+    const localRows = pending.map(r => {
+      if (isExamResult(r)) return enrichExamResult(r);
+      const identity=parseStudentIdentity(r?.answersText||"");
+      return {...r,matricol:r?.matricol||identity.matricol||"",studentYear:r?.studentYear||identity.yearLabel||formatStudentYear(identity.year||""),studentSeries:r?.studentSeries||identity.seria||"",studentOfficialGroup:r?.studentOfficialGroup||identity.grupa||"",studyYear:r?.studyYear||identity.yearLabel||""};
+    });
+    mapped = [...localRows, ...mapped];
+  } catch(e) {}
+  return mapped.filter(r => !(isExamResult(r) && Number(r.timestamp || 0) < EXAM_RESULTS_RESET_AT));
+}
+
+// Live presentation events use the existing results table as a lightweight
+// synchronized classroom channel. They are hidden from assessed results.
+async function loadLiveClassEvents(token) {
+  if (!token) return [];
+
+
+--- students @ 887156 ---
+te(r.created_at).getTime(), timeUsed: r.time_used,
+      teacher: r.teacher || "",
+      semester: r.semester || "",
+      specialization: r.specialization || "",
+      studyYear: r.study_year || identity.yearLabel || ""
+    };
+    return isExamResult(base) ? enrichExamResult(base) : base;
+  });
+  try {
+    const pending = JSON.parse(localStorage.getItem("igiena_pending_results") || "[]");
+    const localRows = pending.map(r => {
+      if (isExamResult(r)) return enrichExamResult(r);
+      const identity=parseStudentIdentity(r?.answersText||"");
+      return {...r,matricol:r?.matricol||identity.matricol||"",studentYear:r?.studentYear||identity.yearLabel||formatStudentYear(identity.year||""),studentSeries:r?.studentSeries||identity.seria||"",studentOfficialGroup:r?.studentOfficialGroup||identity.grupa||"",studyYear:r?.studyYear||identity.yearLabel||""};
+    });
+    mapped = [...localRows, ...mapped];
+  } catch(e) {}
+  return mapped.filter(r => !(isExamResult(r) && Number(r.timestamp || 0) < EXAM_RESULTS_RESET_AT));
+}
+
+// Live presentation events use the existing results table as a lightweight
+// synchronized classroom channel. They are hidden from assessed results.
+async function loadLiveClassEvents(token) {
+  if (!token) return [];
+  const res = await sb(`results?session_id=eq.${encodeURIComponent(token)}&select=*&order=created_at.asc&limit=1000`);
+  if (!res.ok) throw new Error("Sesiunea live nu a putut fi sincronizată.");
+  const rows = await res.json();
+  return rows.map(row=>{
+    let payload={};
+    try { payload=JSON.parse(row.answers_text||"{}"); } catch(e) {}
+    return {...row,payload,timestamp:new Date(row.created_at).getTime()};
+  }).filter(row=>row.payload?.type==="live_class_v1");
+}
+
+async function migrateLocalEditsToServer(quizMap, fisaMap) {
+  const localQuiz = loadQuizEditsLocal();
+  const localFisa = loadFisaEditsLocal();
+  const quizKeys = Object.keys(localQuiz).filter(k => !quizMap[k]);
+  const fisaKeys = Object.keys(localFisa).filter(k => !fisaMap[k]);
+  if (!quizKeys.length && !fisaKeys.length) return;
+  await Promise.all([
+    ...quizKeys.map(k => {
+
+
+--- students @ 887173 ---
+getTime(), timeUsed: r.time_used,
+      teacher: r.teacher || "",
+      semester: r.semester || "",
+      specialization: r.specialization || "",
+      studyYear: r.study_year || identity.yearLabel || ""
+    };
+    return isExamResult(base) ? enrichExamResult(base) : base;
+  });
+  try {
+    const pending = JSON.parse(localStorage.getItem("igiena_pending_results") || "[]");
+    const localRows = pending.map(r => {
+      if (isExamResult(r)) return enrichExamResult(r);
+      const identity=parseStudentIdentity(r?.answersText||"");
+      return {...r,matricol:r?.matricol||identity.matricol||"",studentYear:r?.studentYear||identity.yearLabel||formatStudentYear(identity.year||""),studentSeries:r?.studentSeries||identity.seria||"",studentOfficialGroup:r?.studentOfficialGroup||identity.grupa||"",studyYear:r?.studyYear||identity.yearLabel||""};
+    });
+    mapped = [...localRows, ...mapped];
+  } catch(e) {}
+  return mapped.filter(r => !(isExamResult(r) && Number(r.timestamp || 0) < EXAM_RESULTS_RESET_AT));
+}
+
+// Live presentation events use the existing results table as a lightweight
+// synchronized classroom channel. They are hidden from assessed results.
+async function loadLiveClassEvents(token) {
+  if (!token) return [];
+  const res = await sb(`results?session_id=eq.${encodeURIComponent(token)}&select=*&order=created_at.asc&limit=1000`);
+  if (!res.ok) throw new Error("Sesiunea live nu a putut fi sincronizată.");
+  const rows = await res.json();
+  return rows.map(row=>{
+    let payload={};
+    try { payload=JSON.parse(row.answers_text||"{}"); } catch(e) {}
+    return {...row,payload,timestamp:new Date(row.created_at).getTime()};
+  }).filter(row=>row.payload?.type==="live_class_v1");
+}
+
+async function migrateLocalEditsToServer(quizMap, fisaMap) {
+  const localQuiz = loadQuizEditsLocal();
+  const localFisa = loadFisaEditsLocal();
+  const quizKeys = Object.keys(localQuiz).filter(k => !quizMap[k]);
+  const fisaKeys = Object.keys(localFisa).filter(k => !fisaMap[k]);
+  if (!quizKeys.length && !fisaKeys.length) return;
+  await Promise.all([
+    ...quizKeys.map(k => {
+      const [labI
+
+--- students @ 895387 ---
+view:"Previzualizare Activități de Grup", tab_fise_edit:"Editor Activități",
+    // QR
+    qr_config:"⚙️ Configurare sesiune", qr_select_lab:"Selectează practica",
+    qr_classify:"📅 Clasificare sesiune", qr_optional:"(opțional)",
+    qr_spec:"— Specializare —", qr_year:"— An —", qr_module:"— Modul —",
+    qr_type:"Tip activitate", qr_quiz:"Quiz interactiv", qr_fisa:"Activitate de grup", qr_exam:"Examen",
+    qr_duration:"Durată valabilitate QR", qr_generate:"📱 Generează cod QR",
+    qr_cancel:"✕ Anulează sesiunea curentă", qr_download:"💾 Descarcă imaginea QR",
+    qr_time_left:"timp rămas",
+    qr_empty:"Configurează sesiunea și apasă „Generează cod QR\"",
+    qr_used_by:"Utilizat de:", qr_students:"studenți",
+    qr_not_ready:"⚠️ Practica nu are quiz activ",
+    qr_fisa_info:"📱 Fiecare student lucrează pe propriul telefon. Pentru 6–14 participanți, toate cele 6 roluri profesionale de bază sunt acoperite, iar studenții suplimentari primesc sarcini distincte.",
+    qr_results_tab:"📊 Rezultate",
+    // Results
+    res_total:"Total răspunsuri", res_unique:"Studenți unici",
+    res_avg:"Medie generală", res_active:"Lab-uri active",
+    res_search:"🔍 Caută după nume sau nr. matricol...",
+    res_all_sem:"📅 Toate semestrele", res_all_spec:"🎓 Toate specializările",
+    res_all_grp:"Toate grupele", res_all_lab:"Toate lab-urile",
+    res_no_sem:"Fără semestru", res_no_spec:"Fără specializare",
+    res_export:"📥 CSV", res_empty:"Nu există rezultate înregistrate.",
+    res_view_ans:"📄 Vezi răspunsuri",
+    res_col_sem:"Semestru", res_col_spec:"Specializare", res_col_prof:"Profesor",
+    res_col_name:"Nume", res_col_grp:"Grupă", res_col_lab:"Lab",
+    res_col_mod:"Modul", res_col_score:"Scor", res_col_pct:"%",
+    res_col_time:"Timp", res_col_date:"Data",
+    res_fisa_title:"Group assessment completed",
+    // Student login
+    st_name:"Numele și prenumele", st_name_ph:"ex. Ionescu Maria",
+    st_group:"Fișă", st_group_ph:"— Selectați fișa —",
+    st_spec:"Specializare", st_spec_ph:"— Selectați specializarea —",
+    st_enter:"Intră la test →", teacher_label:"Profesor", demo_sub:"Pre
+
+--- students @ 904606 ---
+   home_stats_active:"Laboratoare active", home_stats_total:"Lab-uri totale",
+    home_stats_ai:"Evaluare automată", home_stats_qr:"Activare rapidă",
+    home_labs_title:"Laboratoare disponibile",
+  },
+  en: {
+    // Login
+    login_title:"Dashboard", login_auth:"Teacher Login", back:"← Back", platform_sub:"Practical Platform", login_sub:"Generate QR · Track results",
+    login_auth:"Teacher Login", login_btn:"Enter dashboard →",
+    login_loading:"Signing in…", login_prof:"Teacher", login_pass:"Password",
+    login_select:"— Select name —", login_err_prof:"Please select a teacher!",
+    login_err_pass:"Please enter password!", login_err_wrong:"Incorrect password!",
+    login_student_title:"Students",
+    login_student_sub:"Scan the QR code received from your teacher. No account needed.",
+    // Nav
+    tab_qr:"Generate QR", tab_preview:"Quiz Preview", tab_results:"Results",
+    tab_prezentari:"Presentations", tab_prezenta:"Attendance", tab_exam_preview:"🎓 Exam Preview", tab_exam_edit:"✏️ Exam Editor", tab_fisiere:"Files", tab_nomenclator:"Nomenclature",
+    tab_fise_preview:"Group Activity Preview", tab_fise_edit:"Activity Editor",
+    // QR
+    qr_config:"⚙️ Session setup", qr_select_lab:"Select practice",
+    qr_classify:"📅 Session classification", qr_optional:"(optional)",
+    qr_spec:"— Specialization —", qr_year:"— Year —", qr_module:"— Module —",
+    qr_type:"Activity type", qr_quiz:"Interactive quiz", qr_fisa:"Group activity", qr_exam:"Exam",
+    qr_duration:"QR code validity", qr_generate:"📱 Generate QR code",
+    qr_cancel:"✕ Cancel current session", qr_download:"💾 Download QR image",
+    qr_time_left:"time remaining",
+    qr_empty:"Configure the session and press \"Generate QR code\"",
+    qr_used_by:"Used by:", qr_students:"students",
+    qr_not_ready:"⚠️ This practice has no active quiz",
+    qr_fisa_info:"📱 Every student works on their own phone. With 6–14 participants, all six core professional roles are covered and additional students receive distinct tasks.",
+    qr_results_tab:"📊 Results",
+    // Results
+    res_total:"Total responses", res_unique:"Uniqu
+
+--- students @ 905662 ---
+Nomenclature",
+    tab_fise_preview:"Group Activity Preview", tab_fise_edit:"Activity Editor",
+    // QR
+    qr_config:"⚙️ Session setup", qr_select_lab:"Select practice",
+    qr_classify:"📅 Session classification", qr_optional:"(optional)",
+    qr_spec:"— Specialization —", qr_year:"— Year —", qr_module:"— Module —",
+    qr_type:"Activity type", qr_quiz:"Interactive quiz", qr_fisa:"Group activity", qr_exam:"Exam",
+    qr_duration:"QR code validity", qr_generate:"📱 Generate QR code",
+    qr_cancel:"✕ Cancel current session", qr_download:"💾 Download QR image",
+    qr_time_left:"time remaining",
+    qr_empty:"Configure the session and press \"Generate QR code\"",
+    qr_used_by:"Used by:", qr_students:"students",
+    qr_not_ready:"⚠️ This practice has no active quiz",
+    qr_fisa_info:"📱 Every student works on their own phone. With 6–14 participants, all six core professional roles are covered and additional students receive distinct tasks.",
+    qr_results_tab:"📊 Results",
+    // Results
+    res_total:"Total responses", res_unique:"Unique students",
+    res_avg:"Overall average", res_active:"Active labs",
+    res_search:"🔍 Search by name or matriculation number...",
+    res_all_sem:"📅 All semesters", res_all_spec:"🎓 All specializations",
+    res_all_grp:"All groups", res_all_lab:"All labs",
+    res_no_sem:"No semester", res_no_spec:"No specialization",
+    res_export:"📥 CSV", res_empty:"No results recorded.",
+    res_view_ans:"📄 View answers",
+    res_col_sem:"Semester", res_col_spec:"Specialization", res_col_prof:"Teacher",
+    res_col_name:"Name", res_col_grp:"Group", res_col_lab:"Lab",
+    res_col_mod:"Module", res_col_score:"Score", res_col_pct:"%",
+    res_col_time:"Time", res_col_date:"Date",
+    res_fisa_title:"Completed worksheet",
+    // Student login
+    st_name:"Full name", st_name_ph:"e.g. Maria Ionescu",
+    st_group:"Group", st_group_ph:"— Select group —",
+    st_spec:"Specialization", st_spec_ph:"— Select specialization —",
+    st_enter:"Enter test →", teacher_label:"Teacher", demo_sub:"Interactive presentations and animated labs.", demo_empty:"No materials 
+
+--- students @ 905672 ---
+re",
+    tab_fise_preview:"Group Activity Preview", tab_fise_edit:"Activity Editor",
+    // QR
+    qr_config:"⚙️ Session setup", qr_select_lab:"Select practice",
+    qr_classify:"📅 Session classification", qr_optional:"(optional)",
+    qr_spec:"— Specialization —", qr_year:"— Year —", qr_module:"— Module —",
+    qr_type:"Activity type", qr_quiz:"Interactive quiz", qr_fisa:"Group activity", qr_exam:"Exam",
+    qr_duration:"QR code validity", qr_generate:"📱 Generate QR code",
+    qr_cancel:"✕ Cancel current session", qr_download:"💾 Download QR image",
+    qr_time_left:"time remaining",
+    qr_empty:"Configure the session and press \"Generate QR code\"",
+    qr_used_by:"Used by:", qr_students:"students",
+    qr_not_ready:"⚠️ This practice has no active quiz",
+    qr_fisa_info:"📱 Every student works on their own phone. With 6–14 participants, all six core professional roles are covered and additional students receive distinct tasks.",
+    qr_results_tab:"📊 Results",
+    // Results
+    res_total:"Total responses", res_unique:"Unique students",
+    res_avg:"Overall average", res_active:"Active labs",
+    res_search:"🔍 Search by name or matriculation number...",
+    res_all_sem:"📅 All semesters", res_all_spec:"🎓 All specializations",
+    res_all_grp:"All groups", res_all_lab:"All labs",
+    res_no_sem:"No semester", res_no_spec:"No specialization",
+    res_export:"📥 CSV", res_empty:"No results recorded.",
+    res_view_ans:"📄 View answers",
+    res_col_sem:"Semester", res_col_spec:"Specialization", res_col_prof:"Teacher",
+    res_col_name:"Name", res_col_grp:"Group", res_col_lab:"Lab",
+    res_col_mod:"Module", res_col_score:"Score", res_col_pct:"%",
+    res_col_time:"Time", res_col_date:"Date",
+    res_fisa_title:"Completed worksheet",
+    // Student login
+    st_name:"Full name", st_name_ph:"e.g. Maria Ionescu",
+    st_group:"Group", st_group_ph:"— Select group —",
+    st_spec:"Specialization", st_spec_ph:"— Select specialization —",
+    st_enter:"Enter test →", teacher_label:"Teacher", demo_sub:"Interactive presentations and animated labs.", demo_empty:"No materials available 
+
+--- students @ 905882 ---
+ptional:"(optional)",
+    qr_spec:"— Specialization —", qr_year:"— Year —", qr_module:"— Module —",
+    qr_type:"Activity type", qr_quiz:"Interactive quiz", qr_fisa:"Group activity", qr_exam:"Exam",
+    qr_duration:"QR code validity", qr_generate:"📱 Generate QR code",
+    qr_cancel:"✕ Cancel current session", qr_download:"💾 Download QR image",
+    qr_time_left:"time remaining",
+    qr_empty:"Configure the session and press \"Generate QR code\"",
+    qr_used_by:"Used by:", qr_students:"students",
+    qr_not_ready:"⚠️ This practice has no active quiz",
+    qr_fisa_info:"📱 Every student works on their own phone. With 6–14 participants, all six core professional roles are covered and additional students receive distinct tasks.",
+    qr_results_tab:"📊 Results",
+    // Results
+    res_total:"Total responses", res_unique:"Unique students",
+    res_avg:"Overall average", res_active:"Active labs",
+    res_search:"🔍 Search by name or matriculation number...",
+    res_all_sem:"📅 All semesters", res_all_spec:"🎓 All specializations",
+    res_all_grp:"All groups", res_all_lab:"All labs",
+    res_no_sem:"No semester", res_no_spec:"No specialization",
+    res_export:"📥 CSV", res_empty:"No results recorded.",
+    res_view_ans:"📄 View answers",
+    res_col_sem:"Semester", res_col_spec:"Specialization", res_col_prof:"Teacher",
+    res_col_name:"Name", res_col_grp:"Group", res_col_lab:"Lab",
+    res_col_mod:"Module", res_col_score:"Score", res_col_pct:"%",
+    res_col_time:"Time", res_col_date:"Date",
+    res_fisa_title:"Completed worksheet",
+    // Student login
+    st_name:"Full name", st_name_ph:"e.g. Maria Ionescu",
+    st_group:"Group", st_group_ph:"— Select group —",
+    st_spec:"Specialization", st_spec_ph:"— Select specialization —",
+    st_enter:"Enter test →", teacher_label:"Teacher", demo_sub:"Interactive presentations and animated labs.", demo_empty:"No materials available for", demo_open:"Open →",
+    st_err_name:"Please enter your full name (min. 3 characters).",
+    st_err_group:"Please select a group!", st_err_spec:"Please select a specialization!",
+    st_teacher:"Teacher:",
+
+--- students @ 906016 ---
+iz:"Interactive quiz", qr_fisa:"Group activity", qr_exam:"Exam",
+    qr_duration:"QR code validity", qr_generate:"📱 Generate QR code",
+    qr_cancel:"✕ Cancel current session", qr_download:"💾 Download QR image",
+    qr_time_left:"time remaining",
+    qr_empty:"Configure the session and press \"Generate QR code\"",
+    qr_used_by:"Used by:", qr_students:"students",
+    qr_not_ready:"⚠️ This practice has no active quiz",
+    qr_fisa_info:"📱 Every student works on their own phone. With 6–14 participants, all six core professional roles are covered and additional students receive distinct tasks.",
+    qr_results_tab:"📊 Results",
+    // Results
+    res_total:"Total responses", res_unique:"Unique students",
+    res_avg:"Overall average", res_active:"Active labs",
+    res_search:"🔍 Search by name or matriculation number...",
+    res_all_sem:"📅 All semesters", res_all_spec:"🎓 All specializations",
+    res_all_grp:"All groups", res_all_lab:"All labs",
+    res_no_sem:"No semester", res_no_spec:"No specialization",
+    res_export:"📥 CSV", res_empty:"No results recorded.",
+    res_view_ans:"📄 View answers",
+    res_col_sem:"Semester", res_col_spec:"Specialization", res_col_prof:"Teacher",
+    res_col_name:"Name", res_col_grp:"Group", res_col_lab:"Lab",
+    res_col_mod:"Module", res_col_score:"Score", res_col_pct:"%",
+    res_col_time:"Time", res_col_date:"Date",
+    res_fisa_title:"Completed worksheet",
+    // Student login
+    st_name:"Full name", st_name_ph:"e.g. Maria Ionescu",
+    st_group:"Group", st_group_ph:"— Select group —",
+    st_spec:"Specialization", st_spec_ph:"— Select specialization —",
+    st_enter:"Enter test →", teacher_label:"Teacher", demo_sub:"Interactive presentations and animated labs.", demo_empty:"No materials available for", demo_open:"Open →",
+    st_err_name:"Please enter your full name (min. 3 characters).",
+    st_err_group:"Please select a group!", st_err_spec:"Please select a specialization!",
+    st_teacher:"Teacher:",
+    // Quiz
+    quiz_confirm:"Confirm answer", quiz_next:"Next question →", welcome_student:"Welcome", materials_available:"Available
+
+--- students @ 912728 ---
+    prev_q_text_label:"Question *",
+    prev_hint_text_label:"Hint / Expected answer",
+    prev_q_text_ph:"Write the question...",
+    prev_hint_text_ph:"Evaluation hint (teacher only)...",
+    // Nomenclator
+    nom_title:"🗂️ Classification Nomenclature",
+    nom_sub:"Values appear in the classification dropdowns when generating QR sessions.",
+    nom_reset:"↺ Reset",
+    nom_spec:"Specializations", nom_years:"Study years", nom_modules:"Modules",
+    nom_spec_ph:"e.g.: General Medicine", nom_year_ph:"e.g.: Year I", nom_mod_ph:"e.g.: Semester 1",
+    nom_no_val:"No values added",
+    // File manager
+    file_title:"📁 My files",
+    file_sub:"Upload PDFs, presentations or other materials for students.",
+    file_upload:"📤 Upload file", file_uploading:"⏳ Uploading…",
+    file_ok:"✅", file_err:"❌",
+    file_empty_title:"No files uploaded for",
+    file_empty_sub:"Click the button above to upload the first file.",
+    file_own:"Your file", file_other:"Other teacher",
+    file_download:"⬇️ Download", file_delete:"🗑️",
+    file_delete_confirm:"Delete this file?",
+    file_deleted:"File deleted.",
+    file_del_err:"Delete error.",
+    file_up_ok:"File uploaded successfully!",
+    file_up_err:"Upload error:",
+    file_open:"↗ Open",
+    // Presentations
+    prez_title:"📽️ Presentations",
+    prez_sub:"Materials for {lab}. Open in browser, F11 = fullscreen.",
+    prez_no_title:"No presentation available for",
+    prez_no_sub:"Upload a PDF or PPT file below.",
+    // Homepage
+    home_headline1:"Interactive",
+    home_headline2:"Hygiene Practice",
+    home_sub:"Interactive quizzes, group worksheets with AI evaluation and real-time result tracking — for UMFST hygiene labs.",
+    home_stats_active:"Active laboratories", home_stats_total:"Total labs",
+    home_stats_ai:"Automated evaluation", home_stats_qr:"Quick activation",
+    home_labs_title:"Available laboratories",
+  }
+};
+
+const LangContext = React.createContext("ro");
+function useT() {
+  const lang = React.useContext(LangContext);
+  return React.useCallback((key) => T_STRINGS[lang]?.[key] ?? T_STRINGS.ro[key] ?? key, [lang]);
+}
+
+--- students @ 1103940 ---
+ang==="en"?"Group ":"Grupa "}{i+1}</option>)}
+          </select></>}
+        {err && <p style={{color:"#dc2626",fontSize:13,margin:"0 0 10px",fontWeight:600}}>{err}</p>}
+        <button style={S.btnG} onClick={go}>{isGroupActivity?(lang==="en"?"Enter group activity →":"Intră în activitatea de grup →"):isLivePresentation?(lang==="en"?"Join live presentation →":"Intră în prezentarea live →"):(lang==="en"?"Enter quiz →":"Intră la quiz →")}</button>
+      </div>
+    </div>
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+// LIVE PRESENTATION — one synchronized question on every phone
+// ════════════════════════════════════════════════════════════
+function LivePresentationStudentScreen({session, student, onExit}) {
+  const lang = React.useContext(LangContext);
+  const [events,setEvents]=useState([]);
+  const [selected,setSelected]=useState(null);
+  const [submitted,setSubmitted]=useState(false);
+  const [saving,setSaving]=useState(false);
+  const [syncError,setSyncError]=useState("");
+  const joinedRef=useRef(false);
+  const lab=LABS.find(l=>l.id===session?.labId)||{};
+  const matricol=cleanMatricol(student?.matricol||"");
+
+  const refresh=useCallback(async()=>{
+    try { setEvents(await loadLiveClassEvents(session?.token)); setSyncError(""); }
+    catch(e) { setSyncError(lang==="en"?"Connection lost. Reconnecting…":"Conexiune întreruptă. Se reconectează…"); }
+  },[session?.token,lang]);
+
+  useEffect(()=>{
+    let alive=true;
+    const run=()=>refresh().catch(()=>{});
+    run(); const id=setInterval(()=>{if(alive)run();},1500);
+    return()=>{alive=false;clearInterval(id);};
+  },[refresh]);
+
+  useEffect(()=>{
+    if(joinedRef.current||!session?.token||!student?.matricol)return;
+    joinedRef.current=true;
+    const identity=buildStudentIdentity(student||{});
+    addResult({token:session.token,name:student.name,group:student.group||student.grupa||"",labId:session.labId,labCode:session.labCode,module:"live_join_room",moduleTitle:"Prezentare live · participant conectat",score:0,total:0,pct:0,timeUsed:0,teacher:session.teacher||"",semester:session.semester|
+
+--- students @ 1122586 ---
+acyFullQuestions(p,lang));
+  if(!lab||!questions.length) return null;
+  return {
+    id:"full"+labId.replace("lp",""),
+    icon:lab.icon,
+    title:(lang==="en"?"Complete quiz ":"Quiz complet ")+lab.code,
+    sub:(lang==="en"?"Combined content from the former A and B practicals":"Conținut combinat din fostele practici A și B"),
+    color:lab.color,
+    dim:lab.dim,
+    border:lab.border,
+    time:20,
+    count:Math.min(20,questions.length),
+    labCode:lab.code,
+    _questions:questions
+  };
+}
+
+// ════════════════════════════════════════════════════════════
+// QUIZ SCREEN
+// ════════════════════════════════════════════════════════════
+function QuizScreen({student, studentName, studentGroup, studentSpec, labId, module, onFinish, sessionTeacher, sessionSemester}) {
+  const T = useT();
+  const lang = React.useContext(LangContext);
+  const _getQBank = (l) => ({
+    lp1a: l==="en" ? LP1A_QUESTIONS_EN : LP1A_QUESTIONS,
+    lp1b: l==="en" ? LP1B_QUESTIONS_EN : LP1B_QUESTIONS,
+    lp2a: l==="en" ? LP2A_QUESTIONS_EN : LP2A_QUESTIONS,
+    lp2b: l==="en" ? LP2B_QUESTIONS_EN : LP2B_QUESTIONS,
+    lp3a: l==="en" ? LP3A_QUESTIONS_EN : LP3A_QUESTIONS,
+    lp3b: l==="en" ? LP3B_QUESTIONS_EN : LP3B_QUESTIONS,
+    lp4a: l==="en" ? LP4A_QUESTIONS_EN : LP4A_QUESTIONS,
+    lp4b: l==="en" ? LP4B_QUESTIONS_EN : LP4B_QUESTIONS,
+    lp5a: l==="en" ? LP5A_QUESTIONS_EN : LP5A_QUESTIONS,
+    lp5b: l==="en" ? LP5B_QUESTIONS_EN : LP5B_QUESTIONS,
+    lp6a: l==="en" ? LP6A_QUESTIONS_EN : LP6A_QUESTIONS,
+    lp6b: l==="en" ? LP6B_QUESTIONS_EN : LP6B_QUESTIONS,
+  });
+  const [qs, setQs] = useState(null);
+  const [quizLoaded, setQuizLoaded] = useState(editsAreReady());
+  const [cur, setCur] = useState(0);
+  const [sel, setSel] = useState(null);
+  const [ans, setAns] = useState([]);
+  const [startT, setStartT] = useState(null);
+  const [showExp, setShowExp] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
+
+  React.useEffect(() => {
+    const init = () => {
+      const base = module._questions || ((_getQBank(lang)[labId] || LP4B_QUESTIONS)[module.id] || []);
+      const all = applyQuiz
+
+--- students @ 1125063 ---
+FA",display:"flex",alignItems:"center",justifyContent:"center",color:"#4a9a6a",fontSize:14}}>
+        Se încarcă quiz-ul…
+      </div>
+    );
+  }
+
+  const q = qs[cur];
+  if (!q) return null;
+
+  const confirm = () => {
+    if (sel===null) return;
+    setConfirmed(true);
+    setShowExp(true);
+  };
+
+  const next = () => {
+    const newAns = [...ans, {q:q.q, chosen:sel, correct:q.c, options:q.o, explanation:q.e||""}];
+    if (cur+1 >= qs.length) {
+      const score = newAns.filter(a=>a.chosen===a.correct).length;
+      const pct = Math.round(score/qs.length*100);
+      const timeUsed = Math.round((Date.now()-startT)/1000);
+      const entry = {
+        name:studentName, group:studentGroup, spec:studentSpec||"",
+        labId, labCode:module.labCode||(LABS.find(l=>l.id===labId)||{}).code,
+        module:module.id, moduleTitle:module.title,
+        score, total:qs.length, pct, timeUsed,
+        timestamp:Date.now(),
+        teacher:sessionTeacher||"", semester:sessionSemester||"",
+        specialization:studentSpec||"",
+        studyYear:student?.yearLabel||formatStudentYear(student?.year||student?.an||""),
+        answersText:JSON.stringify(buildStudentIdentity(student||{}))
+      };
+      addResult(entry).catch(()=>{});
+      onFinish(entry, newAns, qs);
+    } else {
+      setAns(newAns);
+      setCur(cur+1);
+      setSel(null);
+      setShowExp(false);
+      setConfirmed(false);
+    }
+  };
+
+  const pct = Math.round((cur)/qs.length*100);
+  const pctColor = (p) => p>=80?"#16a34a":p>=60?"#ca8a04":"#dc2626";
+
+  return (
+    <div style={{minHeight:"100vh",background:"#F8F9FA",padding:"16px"}}>
+      <div style={{maxWidth:680,margin:"0 auto"}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,background:"#fff",borderRadius:14,padding:"12px 16px",border:"1.5px solid #b2ddc8"}}>
+          <div style={{flex:1}}>
+            <p style={{fontWeight:700,color:module.color,fontSize:13,margin:"0 0 2px"}}>{module.icon} {module.title}</p>
+            <p style={{color:"#4a9a6a",fontSize:12,margin:0}}>{studentName} · Î{cur+1}/{qs.length}</p>
+          </div>
+     
+
+--- studenti @ 872535 ---
+on buildStudentGroupLabel(student) {
+  if (!student) return "";
+  const parts = [];
+  if (student.seria) parts.push("Seria " + student.seria);
+  if (student.grupa) parts.push("Grupa " + student.grupa);
+  return parts.join(" · ");
+}
+
+const STUDENT_BY_MATRICOL = STUDENT_REGISTRY.reduce((acc, s) => {
+  const key = cleanMatricol(s.matricol);
+  if (key) acc[key] = {
+    ...s,
+    matricol: cleanMatricol(s.matricol),
+    year: s.an || "",
+    yearLabel: formatStudentYear(s.an),
+    group: buildStudentGroupLabel(s),
+    spec: formatStudentYear(s.an)
+  };
+  return acc;
+}, {});
+
+function findStudentByMatricol(matricol) {
+  return STUDENT_BY_MATRICOL[cleanMatricol(matricol)] || null;
+}
+
+function buildStudentIdentity(student) {
+  return {
+    type:"student_identity_v1",
+    matricol:cleanMatricol(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||formatStudentYear(student?.year||student?.an||"")),
+    seria:String(student?.seria||""),
+    grupa:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function parseStudentIdentity(text) {
+  try {
+    const parsed=JSON.parse(String(text||"{}"));
+    return parsed?.type==="student_identity_v1"?parsed:{};
+  } catch(e) { return {}; }
+}
+
+function buildExamMeta(meta) {
+  try { return "EXAM_META:" + JSON.stringify(meta || {}); } catch(e) { return "EXAM_META:{}"; }
+}
+
+function parseExamMeta(text) {
+  const raw = String(text || "");
+  const idx = raw.indexOf("EXAM_META:");
+  if (idx === -1) return {};
+  const jsonText = raw.slice(idx + "EXAM_META:".length).trim();
+  try { return JSON.parse(jsonText); } catch(e) { return {}; }
+}
+
+function isExamResult(r) {
+  return !!(r && (
+    String(r.labCode || "").includes("-EXAM") ||
+    String(r.module || "").includes("exam") ||
+    String(r.moduleTitle || "").toLowerCase().includes("examen")
+  ));
+}
+
+function enrichExamResult(r) {
+  const meta = parseExamMeta(r && r.answersText);
+  const status = meta.status || (String(r?.module || "").includes("blocked
+
+--- studenti @ 873006 ---
+.an),
+    group: buildStudentGroupLabel(s),
+    spec: formatStudentYear(s.an)
+  };
+  return acc;
+}, {});
+
+function findStudentByMatricol(matricol) {
+  return STUDENT_BY_MATRICOL[cleanMatricol(matricol)] || null;
+}
+
+function buildStudentIdentity(student) {
+  return {
+    type:"student_identity_v1",
+    matricol:cleanMatricol(student?.matricol),
+    name:String(student?.name||""),
+    year:String(student?.year||student?.an||""),
+    yearLabel:String(student?.yearLabel||formatStudentYear(student?.year||student?.an||"")),
+    seria:String(student?.seria||""),
+    grupa:String(student?.officialGroup||student?.grupa||""),
+    academicGroup:String(student?.academicGroup||""),
+  };
+}
+
+function parseStudentIdentity(text) {
+  try {
+    const parsed=JSON.parse(String(text||"{}"));
+    return parsed?.type==="student_identity_v1"?parsed:{};
+  } catch(e) { return {}; }
+}
+
+function buildExamMeta(meta) {
+  try { return "EXAM_META:" + JSON.stringify(meta || {}); } catch(e) { return "EXAM_META:{}"; }
+}
+
+function parseExamMeta(text) {
+  const raw = String(text || "");
+  const idx = raw.indexOf("EXAM_META:");
+  if (idx === -1) return {};
+  const jsonText = raw.slice(idx + "EXAM_META:".length).trim();
+  try { return JSON.parse(jsonText); } catch(e) { return {}; }
+}
+
+function isExamResult(r) {
+  return !!(r && (
+    String(r.labCode || "").includes("-EXAM") ||
+    String(r.module || "").includes("exam") ||
+    String(r.moduleTitle || "").toLowerCase().includes("examen")
+  ));
+}
+
+function enrichExamResult(r) {
+  const meta = parseExamMeta(r && r.answersText);
+  const status = meta.status || (String(r?.module || "").includes("blocked") || String(r?.moduleTitle || "").includes("BLOCAT") ? "blocked" : "completed");
+  return {
+    ...(r || {}),
+    examMeta: meta,
+    matricol: meta.matricol || "",
+    examYear: meta.yearLabel || formatStudentYear(meta.year || meta.an || r?.studyYear || r?.specialization || ""),
+    seria: meta.seria || "",
+    grupaStudent: meta.grupa || "",
+    studentGroupLabel: meta.group || [meta.seria ? "Seria " + meta.seria : "", meta.grupa ? "Grupa " + meta.grupa : ""].filt
+
+--- studenti @ 885958 ---
+  // Paginated fetch — loads ALL results
+  const PAGE = 1000;
+  let all = [], from = 0, done = false;
+  while (!done) {
+    const res = await sb(`results?select=*&order=created_at.desc&limit=${PAGE}&offset=${from}`);
+    if (!res.ok) break;
+    const page = await res.json();
+    all = all.concat(page);
+    if (page.length < PAGE) done = true;
+    else from += PAGE;
+  }
+  // Keep synchronized room events out of the normal results list. The single
+  // group_activity_* final report remains visible as the assessed result.
+  all = all.filter(r => !String(r.module || "").startsWith("activity_") && !String(r.module || "").startsWith("live_"));
+  let mapped = all.map(r => {
+    const identity=parseStudentIdentity(r.answers_text||"");
+    const base = {
+      name: r.name, group: r.grp, labId: r.lab_id, labCode: r.lab_code,
+      module: r.module, moduleTitle: r.module_title,
+      answersText: r.answers_text||"",
+      matricol: identity.matricol||"",
+      studentYear: identity.yearLabel||formatStudentYear(identity.year||""),
+      studentSeries: identity.seria||"",
+      studentOfficialGroup: identity.grupa||"",
+      score: r.score, total: r.total, pct: r.pct,
+      timestamp: new Date(r.created_at).getTime(), timeUsed: r.time_used,
+      teacher: r.teacher || "",
+      semester: r.semester || "",
+      specialization: r.specialization || "",
+      studyYear: r.study_year || identity.yearLabel || ""
+    };
+    return isExamResult(base) ? enrichExamResult(base) : base;
+  });
+  try {
+    const pending = JSON.parse(localStorage.getItem("igiena_pending_results") || "[]");
+    const localRows = pending.map(r => {
+      if (isExamResult(r)) return enrichExamResult(r);
+      const identity=parseStudentIdentity(r?.answersText||"");
+      return {...r,matricol:r?.matricol||identity.matricol||"",studentYear:r?.studentYear||identity.yearLabel||formatStudentYear(identity.year||""),studentSeries:r?.studentSeries||identity.seria||"",studentOfficialGroup:r?.studentOfficialGroup||identity.grupa||"",studyYear:r?.studyYear||identity.yearLabel||""};
+    });
+    mapped = [...localRows, ...mapped
+
+--- studenti @ 886971 ---
+ar(identity.year||""),
+      studentSeries: identity.seria||"",
+      studentOfficialGroup: identity.grupa||"",
+      score: r.score, total: r.total, pct: r.pct,
+      timestamp: new Date(r.created_at).getTime(), timeUsed: r.time_used,
+      teacher: r.teacher || "",
+      semester: r.semester || "",
+      specialization: r.specialization || "",
+      studyYear: r.study_year || identity.yearLabel || ""
+    };
+    return isExamResult(base) ? enrichExamResult(base) : base;
+  });
+  try {
+    const pending = JSON.parse(localStorage.getItem("igiena_pending_results") || "[]");
+    const localRows = pending.map(r => {
+      if (isExamResult(r)) return enrichExamResult(r);
+      const identity=parseStudentIdentity(r?.answersText||"");
+      return {...r,matricol:r?.matricol||identity.matricol||"",studentYear:r?.studentYear||identity.yearLabel||formatStudentYear(identity.year||""),studentSeries:r?.studentSeries||identity.seria||"",studentOfficialGroup:r?.studentOfficialGroup||identity.grupa||"",studyYear:r?.studyYear||identity.yearLabel||""};
+    });
+    mapped = [...localRows, ...mapped];
+  } catch(e) {}
+  return mapped.filter(r => !(isExamResult(r) && Number(r.timestamp || 0) < EXAM_RESULTS_RESET_AT));
+}
+
+// Live presentation events use the existing results table as a lightweight
+// synchronized classroom channel. They are hidden from assessed results.
+async function loadLiveClassEvents(token) {
+  if (!token) return [];
+  const res = await sb(`results?session_id=eq.${encodeURIComponent(token)}&select=*&order=created_at.asc&limit=1000`);
+  if (!res.ok) throw new Error("Sesiunea live nu a putut fi sincronizată.");
+  const rows = await res.json();
+  return rows.map(row=>{
+    let payload={};
+    try { payload=JSON.parse(row.answers_text||"{}"); } catch(e) {}
+    return {...row,payload,timestamp:new Date(row.created_at).getTime()};
+  }).filter(row=>row.payload?.type==="live_class_v1");
+}
+
+async function migrateLocalEditsToServer(quizMap, fisaMap) {
+  const localQuiz = loadQuizEditsLocal();
+  const localFisa = loadFisaEditsLocal();
+  const quizKeys = Object.keys(localQuiz).filter(k =
+
+--- studenti @ 1105018 ---
+.id===session?.labId)||{};
+  const matricol=cleanMatricol(student?.matricol||"");
+
+  const refresh=useCallback(async()=>{
+    try { setEvents(await loadLiveClassEvents(session?.token)); setSyncError(""); }
+    catch(e) { setSyncError(lang==="en"?"Connection lost. Reconnecting…":"Conexiune întreruptă. Se reconectează…"); }
+  },[session?.token,lang]);
+
+  useEffect(()=>{
+    let alive=true;
+    const run=()=>refresh().catch(()=>{});
+    run(); const id=setInterval(()=>{if(alive)run();},1500);
+    return()=>{alive=false;clearInterval(id);};
+  },[refresh]);
+
+  useEffect(()=>{
+    if(joinedRef.current||!session?.token||!student?.matricol)return;
+    joinedRef.current=true;
+    const identity=buildStudentIdentity(student||{});
+    addResult({token:session.token,name:student.name,group:student.group||student.grupa||"",labId:session.labId,labCode:session.labCode,module:"live_join_room",moduleTitle:"Prezentare live · participant conectat",score:0,total:0,pct:0,timeUsed:0,teacher:session.teacher||"",semester:session.semester||"",specialization:student.spec||student.yearLabel||"",studyYear:student.yearLabel||formatStudentYear(student.year||student.an||""),answersText:JSON.stringify({type:"live_class_v1",kind:"join",matricol,name:student.name,identity,joinedAt:Date.now()})}).catch(()=>{});
+  },[session?.token,student?.matricol]);
+
+  const openEvent=events.filter(e=>e.payload?.kind==="open").at(-1)||null;
+  const question=openEvent?.payload||null;
+  const questionId=question?.questionId||"";
+  const relevantAnswers=events.filter(e=>e.payload?.kind==="answer"&&e.payload.questionId===questionId&&(!openEvent||e.timestamp>=openEvent.timestamp));
+  const answerMap=new Map();
+  relevantAnswers.forEach(e=>answerMap.set(cleanMatricol(e.payload.matricol||e.name),e));
+  const ownAnswer=answerMap.get(matricol)||null;
+  const revealed=events.some(e=>e.payload?.kind==="reveal"&&e.payload.questionId===questionId&&(!openEvent||e.timestamp>=openEvent.timestamp));
+
+  useEffect(()=>{
+    setSelected(ownAnswer?Number(ownAnswer.payload.selected):null);
+    setSubmitted(!!ownAnswer);
+  },[questionId,ownAns
+
+--- studenti @ 1106651 ---
+openEvent.timestamp));
+  const answerMap=new Map();
+  relevantAnswers.forEach(e=>answerMap.set(cleanMatricol(e.payload.matricol||e.name),e));
+  const ownAnswer=answerMap.get(matricol)||null;
+  const revealed=events.some(e=>e.payload?.kind==="reveal"&&e.payload.questionId===questionId&&(!openEvent||e.timestamp>=openEvent.timestamp));
+
+  useEffect(()=>{
+    setSelected(ownAnswer?Number(ownAnswer.payload.selected):null);
+    setSubmitted(!!ownAnswer);
+  },[questionId,ownAnswer?.id]);
+
+  const submit=async()=>{
+    if(selected===null||saving||submitted||!question)return;
+    setSaving(true); setSyncError("");
+    const correct=Number(selected)===Number(question.correct);
+    const identity=buildStudentIdentity(student||{});
+    const entry={token:session.token,name:student.name,group:student.group||student.grupa||"",labId:session.labId,labCode:session.labCode,module:`live_answer_${questionId}`,moduleTitle:`Prezentare live · diapozitiv ${question.slide||""}`,score:correct?1:0,total:1,pct:correct?100:0,timeUsed:Math.max(0,Math.round((Date.now()-Number(question.openedAt||Date.now()))/1000)),teacher:session.teacher||"",semester:session.semester||"",specialization:student.spec||student.yearLabel||"",studyYear:student.yearLabel||formatStudentYear(student.year||student.an||""),answersText:JSON.stringify({type:"live_class_v1",kind:"answer",questionId,matricol,name:student.name,group:student.group||student.grupa||"",selected:Number(selected),correct,identity,answeredAt:Date.now()})};
+    const result=await addResult(entry);
+    if(result?.ok){setSubmitted(true);await refresh();}
+    else setSyncError(lang==="en"?"The answer was not saved. Please try again.":"Răspunsul nu a fost salvat. Încercați din nou.");
+    setSaving(false);
+  };
+
+  const counts=question?.options?.map((_,index)=>[...answerMap.values()].filter(e=>Number(e.payload.selected)===index).length)||[];
+  const totalAnswers=Math.max(1,answerMap.size);
+  const ownCorrect=ownAnswer?Number(ownAnswer.payload.selected)===Number(question?.correct):Number(selected)===Number(question?.correct);
+
+  return <div style={{minHeight:"100
+
+--- studenti @ 1125522 ---
+ score = newAns.filter(a=>a.chosen===a.correct).length;
+      const pct = Math.round(score/qs.length*100);
+      const timeUsed = Math.round((Date.now()-startT)/1000);
+      const entry = {
+        name:studentName, group:studentGroup, spec:studentSpec||"",
+        labId, labCode:module.labCode||(LABS.find(l=>l.id===labId)||{}).code,
+        module:module.id, moduleTitle:module.title,
+        score, total:qs.length, pct, timeUsed,
+        timestamp:Date.now(),
+        teacher:sessionTeacher||"", semester:sessionSemester||"",
+        specialization:studentSpec||"",
+        studyYear:student?.yearLabel||formatStudentYear(student?.year||student?.an||""),
+        answersText:JSON.stringify(buildStudentIdentity(student||{}))
+      };
+      addResult(entry).catch(()=>{});
+      onFinish(entry, newAns, qs);
+    } else {
+      setAns(newAns);
+      setCur(cur+1);
+      setSel(null);
+      setShowExp(false);
+      setConfirmed(false);
+    }
+  };
+
+  const pct = Math.round((cur)/qs.length*100);
+  const pctColor = (p) => p>=80?"#16a34a":p>=60?"#ca8a04":"#dc2626";
+
+  return (
+    <div style={{minHeight:"100vh",background:"#F8F9FA",padding:"16px"}}>
+      <div style={{maxWidth:680,margin:"0 auto"}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,background:"#fff",borderRadius:14,padding:"12px 16px",border:"1.5px solid #b2ddc8"}}>
+          <div style={{flex:1}}>
+            <p style={{fontWeight:700,color:module.color,fontSize:13,margin:"0 0 2px"}}>{module.icon} {module.title}</p>
+            <p style={{color:"#4a9a6a",fontSize:12,margin:0}}>{studentName} · Î{cur+1}/{qs.length}</p>
+          </div>
+          <div style={{textAlign:"right"}}>
+            <p style={{fontWeight:800,color:pctColor(pct),fontSize:16,margin:"0 0 2px"}}>{cur}/{qs.length}</p>
+            <p style={{color:"#94a3b8",fontSize:11,margin:0}}>{T("quiz_answers")||"răspunsuri"}</p>
+          </div>
+        </div>
+        <div style={{height:6,background:"#e2e8f0",borderRadius:3,marginBottom:16,overflow:"hidden"}}>
+          <div style={{height:"100%",background:"linear-gradient(90deg,"+m
+
+--- studenți @ 424465 ---
+feră of recomandarea OMS. Explain această diferență and implicațiile ei.",h:"România (Legea 104/2011): 25 µg/m³ anual (Directiva UE 2008/50). OMS 2021: 5 µg/m³ anual (revizuit sever in jos). Diferența: OMS bazat on evidențe epidemiologice actualizate, UE = compromis politic/economic. Implicație: exposure at 15,7 µg/m³ = legală in UE dar dăunătoare conform OMS. România: top 3 YLL/100.000 in UE."},
+      ], conc:["Depășirea OMS calculată (3,1×)","De ce PM₂.₅ is cel mai periculos poluant","Diferența standard UE vs recomandare OMS"] },
+
+    { id:"g5", emoji:"🔬", title:"CO₂ determination by Pettenkofer method — lecture hall", color:"#16a34a",
+      caz:[
+        {l:"Context",v:"Sală of curs, 120 studenți, ventilație insuficientă, 2 ore curs"},
+        {l:"Determinare",v:"Metoda titrimetrică Pettenkofer (Ba(OH)₂ + acid oxalic)"},
+        {l:"V₁ (titrare inițială)",v:"24,5 cm³ acid oxalic"},
+        {l:"Aer aspirat",v:"100 cm³"},
+        {l:"V₂ (titrare finală)",v:"21,3 cm³ acid oxalic"},
+        {l:"ΔV = V₁ - V₂",v:"3,2 cm³"},
+        {l:"Normal CO₂ atmosferic",v:"0,03-0,04%"},
+        {l:"Aer viciat",v:"> 0,1% CO₂"},
+      ],
+      qs:[
+        {q:"Calculate concentrația of CO₂ from sala of curs folosind formula metodei Pettenkofer. Interpretați rezultatul.",h:"CO₂ (cm³) = ΔV × 2 = 3,2 × 2 = 6,4 cm³. CO₂ (%) = 6,4/100 × 100 = 6,4%. Normal: 0,03-0,04%. Viciat: > 0,1%. 6,4% >> 0,1% = aer PUTERNIC VICIAT. Semnifică ventilație complet insuficientă for 120 persoane. CO₂ nu is toxic at această valoare dar indică and acumulare of alți poluanți biologici."},
+        {q:"Explain principiul chimic al metodei Pettenkofer. De ce scade volumul V₂ față of V₁?",h:"Reacție: Ba(OH)₂ + CO₂ → BaCO₃↓ + H₂O. Aerul with CO₂ bulos prin Ba(OH)₂ → CO₂ se fixează → Ba(OH)₂ disponibil scade → at titrarea finală with acid oxalic se consumă mai puțin acid (V₂ < V₁). ΔV = cantitatea of Ba(OH)₂ consumată of CO₂. Fondator metoda: Max Pettenkofer (fondatorul igienei moderne)."},
+        {q:"CO₂ is el însuși toxicul principal într-o sală aglomerată or is a indicator indirect? Explain.",h:"CO₂ > 0,1% = indicato
+
+--- studenți @ 426278 ---
+th acid oxalic se consumă mai puțin acid (V₂ < V₁). ΔV = cantitatea of Ba(OH)₂ consumată of CO₂. Fondator metoda: Max Pettenkofer (fondatorul igienei moderne)."},
+        {q:"CO₂ is el însuși toxicul principal într-o sală aglomerată or is a indicator indirect? Explain.",h:"CO₂ > 0,1% = indicator of aerisire deficitară → acumulare simultană de: vapori of apă (umiditate crescută), bacterii aeropurtate, COV (compuși orgyearsci volatili), odori. CO₂ devine toxic direct at > 1-2% (cefalee) and > 5% (narcotic). În sală: CO₂ = index of calitate a aerului, nu toxicul principal."},
+        {q:"Ce modificări orgyearszatorice and tehnice recomandați for îmbunătățirea calității aerului in sala with 120 studenți?",h:"Tehnice: ventilație mecyearscă (min. 10 L/s/persoană), senzori CO₂ with alarmă at >1000 ppm, filtre HEPA. Orgyearszatorice: pauze with aerisire forțată at 50 min, reducere ocupare (max 1 persoană/2 m²), măști in epidemii. Verificare: CO₂ < 1000 ppm (800 ppm ideal) = calitate bună a aerului interior."},
+        {q:"Ce alte gaze are determinate in cadrul LP1B and ce metode/instrumente se folosesc?",h:"CO: gazometru portabil Dräger MiniWarn (electrochimic), biomarker COHb sânge. Gaze multiple: Dräger MiniWarn (CO, H₂S, O₂, NO₂, NH₃, CO₂ — 4 senzori simultan). PM₂.₅: SidePak AM510 (fotometric). Metode rapide: tuburi colorimetrice Dräger. Metode exacte: spectrometrie IR, cromatografie gaz."},
+        {q:"Care is valoarea maximă admisă of CO₂ in spații publice and of unde vine norma?",h:"CMA CO₂ spații publice: 0,1% (1000 ppm) — standard internațional (ASHRAE 62.1, OMS). Sursa normei: diferența față of aerul exterior (400 ppm CO₂) = 600 ppm → dacă diferența > 600 ppm = aerisire insuficientă. Pettenkofer a stabilit pragul 0,1% in sec. XIX. Spații industriale (fermentație): pot ajunge at 5-10% CO₂."},
+      ], conc:["Concentrația of CO₂ calculată and interpretarea","CO₂ ca indicator vs toxic direct","Recomandarea tehnică prioritară"] },
+
+    { id:"g6", emoji:"⚖️", title:"MAC and syearstary standards — industrial compliance assessment", color:"#f59e0b",
+      caz:[
+        {l:"Con
+
+--- studenți @ 894283 ---
+═══════════
+// BILINGUAL SYSTEM — RO / EN
+// ════════════════════════════════════════════════════════════
+const LANG_STORAGE_KEY = "igiena_lang";
+
+const T_STRINGS = {
+  ro: {
+    // Login
+    login_title:"Panou de control", login_auth:"Autentificare Profesor", back:"← Înapoi", platform_sub:"Platformă Practică", login_sub:"Generează QR · Urmărește rezultatele",
+    login_auth:"Autentificare Profesor", login_btn:"Intră în panou →",
+    login_loading:"Se autentifică…", login_prof:"Profesor", login_pass:"Parolă",
+    login_select:"— Selectați numele —", login_err_prof:"Selectați profesorul!",
+    login_err_pass:"Introduceți parola!", login_err_wrong:"Parolă incorectă!",
+    login_student_title:"Studenți",
+    login_student_sub:"Scanați codul QR primit de la profesor. Nu este nevoie de cont.",
+    // Nav
+    tab_qr:"Generează QR", tab_preview:"Previzualizare Quiz", tab_results:"Rezultate",
+    tab_prezentari:"Prezentări", tab_prezenta:"Prezență", tab_exam_preview:"🎓 Previzualizare Examen", tab_exam_edit:"✏️ Editor Examen", tab_fisiere:"Fișiere", tab_nomenclator:"Nomenclator",
+    tab_fise_preview:"Previzualizare Activități de Grup", tab_fise_edit:"Editor Activități",
+    // QR
+    qr_config:"⚙️ Configurare sesiune", qr_select_lab:"Selectează practica",
+    qr_classify:"📅 Clasificare sesiune", qr_optional:"(opțional)",
+    qr_spec:"— Specializare —", qr_year:"— An —", qr_module:"— Modul —",
+    qr_type:"Tip activitate", qr_quiz:"Quiz interactiv", qr_fisa:"Activitate de grup", qr_exam:"Examen",
+    qr_duration:"Durată valabilitate QR", qr_generate:"📱 Generează cod QR",
+    qr_cancel:"✕ Anulează sesiunea curentă", qr_download:"💾 Descarcă imaginea QR",
+    qr_time_left:"timp rămas",
+    qr_empty:"Configurează sesiunea și apasă „Generează cod QR\"",
+    qr_used_by:"Utilizat de:", qr_students:"studenți",
+    qr_not_ready:"⚠️ Practica nu are quiz activ",
+    qr_fisa_info:"📱 Fiecare student lucrează pe propriul telefon. Pentru 6–14 participanți, toate cele 6 roluri profesionale de bază sunt acoperite, iar studenții suplimentari primesc sarcini distincte.",
+    qr_results_tab:"📊 Rezult
+
+--- studenți @ 895397 ---
+izualizare Activități de Grup", tab_fise_edit:"Editor Activități",
+    // QR
+    qr_config:"⚙️ Configurare sesiune", qr_select_lab:"Selectează practica",
+    qr_classify:"📅 Clasificare sesiune", qr_optional:"(opțional)",
+    qr_spec:"— Specializare —", qr_year:"— An —", qr_module:"— Modul —",
+    qr_type:"Tip activitate", qr_quiz:"Quiz interactiv", qr_fisa:"Activitate de grup", qr_exam:"Examen",
+    qr_duration:"Durată valabilitate QR", qr_generate:"📱 Generează cod QR",
+    qr_cancel:"✕ Anulează sesiunea curentă", qr_download:"💾 Descarcă imaginea QR",
+    qr_time_left:"timp rămas",
+    qr_empty:"Configurează sesiunea și apasă „Generează cod QR\"",
+    qr_used_by:"Utilizat de:", qr_students:"studenți",
+    qr_not_ready:"⚠️ Practica nu are quiz activ",
+    qr_fisa_info:"📱 Fiecare student lucrează pe propriul telefon. Pentru 6–14 participanți, toate cele 6 roluri profesionale de bază sunt acoperite, iar studenții suplimentari primesc sarcini distincte.",
+    qr_results_tab:"📊 Rezultate",
+    // Results
+    res_total:"Total răspunsuri", res_unique:"Studenți unici",
+    res_avg:"Medie generală", res_active:"Lab-uri active",
+    res_search:"🔍 Caută după nume sau nr. matricol...",
+    res_all_sem:"📅 Toate semestrele", res_all_spec:"🎓 Toate specializările",
+    res_all_grp:"Toate grupele", res_all_lab:"Toate lab-urile",
+    res_no_sem:"Fără semestru", res_no_spec:"Fără specializare",
+    res_export:"📥 CSV", res_empty:"Nu există rezultate înregistrate.",
+    res_view_ans:"📄 Vezi răspunsuri",
+    res_col_sem:"Semestru", res_col_spec:"Specializare", res_col_prof:"Profesor",
+    res_col_name:"Nume", res_col_grp:"Grupă", res_col_lab:"Lab",
+    res_col_mod:"Modul", res_col_score:"Scor", res_col_pct:"%",
+    res_col_time:"Timp", res_col_date:"Data",
+    res_fisa_title:"Group assessment completed",
+    // Student login
+    st_name:"Numele și prenumele", st_name_ph:"ex. Ionescu Maria",
+    st_group:"Fișă", st_group_ph:"— Selectați fișa —",
+    st_spec:"Specializare", st_spec_ph:"— Selectați specializarea —",
+    st_enter:"Intră la test →", teacher_label:"Profesor", demo_sub:"Prezentări in
+
+--- studenți @ 895611 ---
+nal)",
+    qr_spec:"— Specializare —", qr_year:"— An —", qr_module:"— Modul —",
+    qr_type:"Tip activitate", qr_quiz:"Quiz interactiv", qr_fisa:"Activitate de grup", qr_exam:"Examen",
+    qr_duration:"Durată valabilitate QR", qr_generate:"📱 Generează cod QR",
+    qr_cancel:"✕ Anulează sesiunea curentă", qr_download:"💾 Descarcă imaginea QR",
+    qr_time_left:"timp rămas",
+    qr_empty:"Configurează sesiunea și apasă „Generează cod QR\"",
+    qr_used_by:"Utilizat de:", qr_students:"studenți",
+    qr_not_ready:"⚠️ Practica nu are quiz activ",
+    qr_fisa_info:"📱 Fiecare student lucrează pe propriul telefon. Pentru 6–14 participanți, toate cele 6 roluri profesionale de bază sunt acoperite, iar studenții suplimentari primesc sarcini distincte.",
+    qr_results_tab:"📊 Rezultate",
+    // Results
+    res_total:"Total răspunsuri", res_unique:"Studenți unici",
+    res_avg:"Medie generală", res_active:"Lab-uri active",
+    res_search:"🔍 Caută după nume sau nr. matricol...",
+    res_all_sem:"📅 Toate semestrele", res_all_spec:"🎓 Toate specializările",
+    res_all_grp:"Toate grupele", res_all_lab:"Toate lab-urile",
+    res_no_sem:"Fără semestru", res_no_spec:"Fără specializare",
+    res_export:"📥 CSV", res_empty:"Nu există rezultate înregistrate.",
+    res_view_ans:"📄 Vezi răspunsuri",
+    res_col_sem:"Semestru", res_col_spec:"Specializare", res_col_prof:"Profesor",
+    res_col_name:"Nume", res_col_grp:"Grupă", res_col_lab:"Lab",
+    res_col_mod:"Modul", res_col_score:"Scor", res_col_pct:"%",
+    res_col_time:"Timp", res_col_date:"Data",
+    res_fisa_title:"Group assessment completed",
+    // Student login
+    st_name:"Numele și prenumele", st_name_ph:"ex. Ionescu Maria",
+    st_group:"Fișă", st_group_ph:"— Selectați fișa —",
+    st_spec:"Specializare", st_spec_ph:"— Selectați specializarea —",
+    st_enter:"Intră la test →", teacher_label:"Profesor", demo_sub:"Prezentări interactive și laboratoare animate.", demo_empty:"Niciun material disponibil pentru", demo_open:"Deschide →",
+    st_err_name:"Introduceți numele complet (min. 3 caractere).",
+    st_err_group:"Selectați fișa!", st_e
+
+--- studenți @ 895758 ---
+ctivitate de grup", qr_exam:"Examen",
+    qr_duration:"Durată valabilitate QR", qr_generate:"📱 Generează cod QR",
+    qr_cancel:"✕ Anulează sesiunea curentă", qr_download:"💾 Descarcă imaginea QR",
+    qr_time_left:"timp rămas",
+    qr_empty:"Configurează sesiunea și apasă „Generează cod QR\"",
+    qr_used_by:"Utilizat de:", qr_students:"studenți",
+    qr_not_ready:"⚠️ Practica nu are quiz activ",
+    qr_fisa_info:"📱 Fiecare student lucrează pe propriul telefon. Pentru 6–14 participanți, toate cele 6 roluri profesionale de bază sunt acoperite, iar studenții suplimentari primesc sarcini distincte.",
+    qr_results_tab:"📊 Rezultate",
+    // Results
+    res_total:"Total răspunsuri", res_unique:"Studenți unici",
+    res_avg:"Medie generală", res_active:"Lab-uri active",
+    res_search:"🔍 Caută după nume sau nr. matricol...",
+    res_all_sem:"📅 Toate semestrele", res_all_spec:"🎓 Toate specializările",
+    res_all_grp:"Toate grupele", res_all_lab:"Toate lab-urile",
+    res_no_sem:"Fără semestru", res_no_spec:"Fără specializare",
+    res_export:"📥 CSV", res_empty:"Nu există rezultate înregistrate.",
+    res_view_ans:"📄 Vezi răspunsuri",
+    res_col_sem:"Semestru", res_col_spec:"Specializare", res_col_prof:"Profesor",
+    res_col_name:"Nume", res_col_grp:"Grupă", res_col_lab:"Lab",
+    res_col_mod:"Modul", res_col_score:"Scor", res_col_pct:"%",
+    res_col_time:"Timp", res_col_date:"Data",
+    res_fisa_title:"Group assessment completed",
+    // Student login
+    st_name:"Numele și prenumele", st_name_ph:"ex. Ionescu Maria",
+    st_group:"Fișă", st_group_ph:"— Selectați fișa —",
+    st_spec:"Specializare", st_spec_ph:"— Selectați specializarea —",
+    st_enter:"Intră la test →", teacher_label:"Profesor", demo_sub:"Prezentări interactive și laboratoare animate.", demo_empty:"Niciun material disponibil pentru", demo_open:"Deschide →",
+    st_err_name:"Introduceți numele complet (min. 3 caractere).",
+    st_err_group:"Selectați fișa!", st_err_spec:"Selectați specializarea!",
+    st_teacher:"Profesor:",
+    // Quiz
+    quiz_confirm:"Confirmă răspunsul", quiz_next:"Următoarea întrebare 
+
+--- studenți @ 902819 ---
+rea *",
+    prev_hint_text_label:"Indiciu / Răspuns așteptat",
+    prev_q_text_ph:"Scrieți întrebarea...",
+    prev_hint_text_ph:"Indiciu pentru evaluare (vizibil doar profesorului)...",
+    // Nomenclator
+    nom_title:"🗂️ Nomenclator Clasificare",
+    nom_sub:"Valorile apar în dropdown-urile de clasificare la generarea sesiunii QR.",
+    nom_reset:"↺ Reset",
+    nom_spec:"Specializări", nom_years:"Ani de studiu", nom_modules:"Module",
+    nom_spec_ph:"ex: Medicină Generală", nom_year_ph:"ex: Anul I", nom_mod_ph:"ex: Semestrul 1",
+    nom_no_val:"Nicio valoare adăugată",
+    // File manager
+    file_title:"📁 Fișiere mele",
+    file_sub:"Încarcă PDF-uri, prezentări sau alte materiale pentru studenți.",
+    file_upload:"📤 Încarcă fișier", file_uploading:"⏳ Se încarcă…",
+    file_ok:"✅", file_err:"❌",
+    file_empty_title:"Niciun fișier încărcat pentru",
+    file_empty_sub:"Apăsați butonul de mai sus pentru a încărca primul fișier.",
+    file_own:"Fișierul tău", file_other:"Alt profesor",
+    file_download:"⬇️ Descarcă", file_delete:"🗑️",
+    file_delete_confirm:"Ștergeți acest fișier?",
+    file_deleted:"Fișier șters.",
+    file_del_err:"Eroare la ștergere.",
+    file_up_ok:"Fișier încărcat cu succes!",
+    file_up_err:"Eroare la încărcare:",
+    file_open:"↗ Deschide",
+    // Presentations
+    prez_title:"📽️ Prezentări",
+    prez_sub:"Materiale pentru {lab}. Deschide în browser, F11 = ecran complet.",
+    prez_no_title:"Nicio prezentare disponibilă pentru",
+    prez_no_sub:"Încarcă un fișier PDF sau PPT mai jos.",
+    // How it works (homepage)
+    home_headline1:"Practica de",
+    home_headline2:"Igienă Interactivă",
+    home_sub:"Quizuri interactive, fișe de grup cu evaluare AI și urmărire rezultate în timp real — pentru laboratoarele de igienă UMFST.",
+    home_stats_active:"Laboratoare active", home_stats_total:"Lab-uri totale",
+    home_stats_ai:"Evaluare automată", home_stats_qr:"Activare rapidă",
+    home_labs_title:"Laboratoare disponibile",
+  },
+  en: {
+    // Login
+    login_title:"Dashboard", login_auth:"Teacher Login", back:"← Back", platform_sub:"Practical Pl
+
+--- studenți @ 925251 ---
+ze:15,fontWeight:800,cursor:loading?"not-allowed":"pointer",letterSpacing:".02em",transition:"all .2s",boxShadow:loading?"none":"0 4px 20px rgba(99,102,241,0.35)"}}>
+              {loading?T("login_loading"):T("login_btn")}
+            </button>
+          </div>
+
+          {/* Student info */}
+          <div style={{marginTop:20,background:"rgba(255,255,255,0.6)",backdropFilter:"blur(10px)",border:"1px solid #e0e7ff",borderRadius:14,padding:"14px 18px",display:"flex",alignItems:"flex-start",gap:12}}>
+            <span style={{fontSize:22,marginTop:1}}>📱</span>
+            <div>
+              <div style={{fontSize:12,fontWeight:700,color:"#6366f1",marginBottom:3}}>{T("login_student_title")||"Studenți"}</div>
+              <div style={{fontSize:12,color:"#64748b",lineHeight:1.6}}>Scanați codul QR primit de la profesor. Nu este nevoie de cont.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+function AdminLogin({onSuccess, onBack}) {
+  const T = useT();
+  const [teacher, setTeacher] = useState("");
+  const [pw, setPw]           = useState("");
+  const [err, setErr]         = useState("");
+  const go = () => {
+    if (!teacher) { setErr(T("login_err_prof")||"Selectați numele profesorului!"); return; }
+    if (!pw) { setErr(T("login_err_pass")); return; }
+    if (TEACHERS[teacher] !== pw) { setErr(T("login_err_wrong")); return; }
+    onSuccess(teacher);
+  };
+  return (
+    <div style={S.page}>
+      <div style={{...S.card, maxWidth:380, textAlign:"center"}}>
+        <div style={{fontSize:44, marginBottom:10}}>🔐</div>
+        <h2 style={{color:"#f1f5f9", margin:"0 0 4px", fontSize:22}}>{T("login_title")||"Panou Profesor"}</h2>
+        <p style={{color:"#64748b",fontSize:13,margin:"0 0 20px"}}>{T("login_sub")||"Generează coduri QR și urmărești rezultatele"}</p>
+        <label style={{...S.label, textAlign:"left", display:"block"}}>{T("login_prof")||"Profesor"}</label>
+        <select style={{...S.input, marginBottom:12}} value={teacher} onChange={e=>{setTeacher(e.target.value);setPw("");setErr("")}}>
+          <option value="">— Selectați
+
+--- studenți @ 950083 ---
+"#64748b",
+                      fontSize:13,fontWeight:activityType===t.id?700:500,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+                    <span>{t.icon}</span><span>{t.label}</span>
+                  </button>
+                ))}
+              </div>
+              {activityType==="fisa" && <div style={{background:"#FFFBEB",border:"1px solid #fde68a",borderRadius:9,padding:"8px 14px",marginBottom:16,fontSize:12,color:"#92400e"}}>
+                📱 Fiecare student scanează același cod pe telefonul propriu, alege grupa 1–6 și primește automat un rol individual.<br/>
+                Cele 6 roluri de bază sunt păstrate pentru orice grupă de 6–14 studenți; participanții suplimentari primesc sarcini distincte. Răspunsurile rămân sigilate până când toți termină.
+              </div>}
+
+              {activityType==="fisa" && <div style={{marginBottom:16}}>
+                <label style={S.label}>👥 Număr așteptat de studenți / grupă</label>
+                <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                  {[6,8,10,12,14].map(n=><button key={n} onClick={()=>setTeamSize(n)} style={{flex:1,padding:"8px 4px",borderRadius:8,border:`1.5px solid ${teamSize===n?"#a5b4fc":"#e0e7ff"}`,background:teamSize===n?"#EEF2FF":"#F8FAFF",color:teamSize===n?"#6366f1":"#64748b",fontWeight:teamSize===n?700:500,cursor:"pointer"}}>{n}</button>)}
+                  <input type="number" min="6" max="14" value={teamSize} onChange={e=>setTeamSize(Math.min(14,Math.max(6,Number(e.target.value)||14)))} style={{...S.input,width:72,textAlign:"center",padding:"8px 4px"}} title="6–14"/>
+                </div>
+                <p style={{fontSize:11,color:"#64748b",margin:"6px 0 0"}}>Selectați numărul prezent real (6–14). Sinteza se deschide automat după {teamSize} contribuții individuale.</p>
+              </div>}
+
+              <label style={S.label}>Durată valabilitate QR</label>
+              <div style={{display:"flex",gap:8,marginBottom:20,flexWrap:"wrap"}}>
+                {QR_DURATIONS.map(d=>(
+                  <button key={d.value} onCl
+
+--- studenți @ 950353 ---
+       ))}
+              </div>
+              {activityType==="fisa" && <div style={{background:"#FFFBEB",border:"1px solid #fde68a",borderRadius:9,padding:"8px 14px",marginBottom:16,fontSize:12,color:"#92400e"}}>
+                📱 Fiecare student scanează același cod pe telefonul propriu, alege grupa 1–6 și primește automat un rol individual.<br/>
+                Cele 6 roluri de bază sunt păstrate pentru orice grupă de 6–14 studenți; participanții suplimentari primesc sarcini distincte. Răspunsurile rămân sigilate până când toți termină.
+              </div>}
+
+              {activityType==="fisa" && <div style={{marginBottom:16}}>
+                <label style={S.label}>👥 Număr așteptat de studenți / grupă</label>
+                <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                  {[6,8,10,12,14].map(n=><button key={n} onClick={()=>setTeamSize(n)} style={{flex:1,padding:"8px 4px",borderRadius:8,border:`1.5px solid ${teamSize===n?"#a5b4fc":"#e0e7ff"}`,background:teamSize===n?"#EEF2FF":"#F8FAFF",color:teamSize===n?"#6366f1":"#64748b",fontWeight:teamSize===n?700:500,cursor:"pointer"}}>{n}</button>)}
+                  <input type="number" min="6" max="14" value={teamSize} onChange={e=>setTeamSize(Math.min(14,Math.max(6,Number(e.target.value)||14)))} style={{...S.input,width:72,textAlign:"center",padding:"8px 4px"}} title="6–14"/>
+                </div>
+                <p style={{fontSize:11,color:"#64748b",margin:"6px 0 0"}}>Selectați numărul prezent real (6–14). Sinteza se deschide automat după {teamSize} contribuții individuale.</p>
+              </div>}
+
+              <label style={S.label}>Durată valabilitate QR</label>
+              <div style={{display:"flex",gap:8,marginBottom:20,flexWrap:"wrap"}}>
+                {QR_DURATIONS.map(d=>(
+                  <button key={d.value} onClick={()=>setDuration(d.value)}
+                    style={{flex:1,minWidth:70,padding:"8px 4px",borderRadius:8,border:`1.5px solid ${duration===d.value?"#a5b4fc":"#e0e7ff"}`,
+                      background:duration===d.value?"#EEF2FF":"#F8FAFF",color:duration===d.valu
+
+--- studenți @ 956239 ---
+                 {/* session info */}
+                  <div style={{background:"#F8FAFF",border:"1px solid #e0e7ff",borderRadius:10,padding:"10px 16px",width:"100%",marginBottom:12}}>
+                    <p style={{color:"#1e1b4b",fontSize:13,fontWeight:600,margin:"0 0 4px"}}>{selLab.icon} {selLab.code} – {selLab.title}</p>
+                    <p style={{color:"#4a9a6a",fontSize:12,margin:"0 0 4px"}}>Token: <code style={{background:"#dcfce7",padding:"1px 6px",borderRadius:4,color:"#15803d",fontSize:11}}>{activeSession.token}</code></p>
+                    <p style={{color:"#4a9a6a",fontSize:12,margin:0}}>
+                      Utilizat de: <strong>{activeSession.usedBy?.length||0}</strong> studenți
+                    </p>
+                  </div>
+
+                  {activeSession.labCode?.endsWith("-FISA") && (
+                    <div style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:12,padding:12,width:"100%",marginBottom:12}}>
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,marginBottom:9}}>
+                        <strong style={{fontSize:12,color:"#0f2742"}}>Săli de grup · în direct</strong>
+                        <span style={{fontSize:10,color:"#64748b"}}>țintă: {activeSession.teamSize||14}/grupă</span>
+                      </div>
+                      <div style={{fontSize:10,color:"#64748b",lineHeight:1.45,background:"#f8fafc",borderRadius:8,padding:"7px 8px",marginBottom:8}}>„Deschide sinteza” nu deschide o pagină în panoul profesorului. Deblochează contribuțiile pe telefoanele studenților, astfel încât aceștia să le vadă și să pregătească decizia comună.</div>
+                      {unlockMsg&&<div style={{fontSize:10,color:"#166534",background:"#ecfdf5",border:"1px solid #86efac",borderRadius:8,padding:"7px 8px",marginBottom:8}}>✓ {unlockMsg}</div>}
+                      <div style={{display:"grid",gap:7}}>
+                        {Array.from({length:6},(_,i)=>i+1).map(g=>{
+                          const state=roomOverview[String(g)]||{};
+                          const mission=get
+
+--- studenți @ 957131 ---
+d #dbe7f1",borderRadius:12,padding:12,width:"100%",marginBottom:12}}>
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,marginBottom:9}}>
+                        <strong style={{fontSize:12,color:"#0f2742"}}>Săli de grup · în direct</strong>
+                        <span style={{fontSize:10,color:"#64748b"}}>țintă: {activeSession.teamSize||14}/grupă</span>
+                      </div>
+                      <div style={{fontSize:10,color:"#64748b",lineHeight:1.45,background:"#f8fafc",borderRadius:8,padding:"7px 8px",marginBottom:8}}>„Deschide sinteza” nu deschide o pagină în panoul profesorului. Deblochează contribuțiile pe telefoanele studenților, astfel încât aceștia să le vadă și să pregătească decizia comună.</div>
+                      {unlockMsg&&<div style={{fontSize:10,color:"#166534",background:"#ecfdf5",border:"1px solid #86efac",borderRadius:8,padding:"7px 8px",marginBottom:8}}>✓ {unlockMsg}</div>}
+                      <div style={{display:"grid",gap:7}}>
+                        {Array.from({length:6},(_,i)=>i+1).map(g=>{
+                          const state=roomOverview[String(g)]||{};
+                          const mission=getActiveFiseForLab(activeSession.labId,lang)[g-1];
+                          const completed=state.memberCount||0;
+                          const target=activeSession.teamSize||14;
+                          const opened=state.unlocked||completed>=target;
+                          return <div key={g} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:8,alignItems:"center",background:state.final?"#ecfdf5":"#f8fafc",border:"1px solid "+(opened?"#86efac":"#e2e8f0"),borderRadius:9,padding:"8px 9px"}}>
+                            <div style={{minWidth:0}}>
+                              <div style={{fontSize:11,fontWeight:750,color:"#0f2742",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>Grupa {g}{mission?.title?" · "+mission.title:""}</div>
+                              <div style={{fontSize:10,color:"#64748b",marginTop:2}}>conectați {state.joinCount||0
+
+--- studenți @ 1091016 ---
+4px"}}>🧭 Activități de Grup</h3>
+      <p style={{color:"#4a9a6a",fontSize:13,margin:"0 0 20px"}}>Activitate practică pe telefon: roluri, indicii diferite, tablă comună de dovezi, buget de intervenție, pitch de 60 secunde și raport imprimabil.</p>
+      <div style={{background:"#eff6ff",border:"1.5px solid #bfdbfe",borderRadius:12,padding:"14px 18px",marginBottom:16}}>
+        <h4 style={{color:"#1e40af",fontSize:13,fontWeight:700,margin:"0 0 10px"}}>⚙️ Cum funcționează — 3 pași</h4>
+        <div className="fisa-grid-3" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
+          {[["1️⃣","Mergeți la","📱 Generează QR"],["2️⃣","Alegeți tipul","🧭 Activitate de grup"],["3️⃣","Studenții scanează","activează rolurile și decid"]].map(([n,t,s],i)=>(
+            <div key={i} style={{background:"white",borderRadius:9,padding:"14px 10px",textAlign:"center",border:"1px solid #dbeafe"}}>
+              <div style={{fontSize:26,marginBottom:6}}>{n}</div>
+              <div style={{fontSize:12,fontWeight:700,color:"#1e3a8a"}}>{t}</div>
+              <div style={{fontSize:11,color:"#64748b",marginTop:4}}>{s}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{background:"white",borderRadius:14,padding:"18px",border:"1.5px solid #b2ddc8",marginBottom:14,display:"flex",alignItems:"center",gap:12}}>
+        <span style={{fontSize:28}}>{selLab?.icon||"📋"}</span>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:700,fontSize:15,color:"#0a2a18"}}>{selLab?.code} — {selLab?.title}</div>
+          <div style={{fontSize:12,color:"#4a9a6a",marginTop:2}}>{hasFisa?(fisaInfo?.grupe||0)+" activități disponibile":"Activități în pregătire"}</div>
+        </div>
+        {hasFisa?<span style={{background:"#dcfce7",color:"#16a34a",padding:"5px 12px",borderRadius:20,fontSize:12,fontWeight:700}}>✅ Disponibil</span>
+          :<span style={{background:"#f1f5f9",color:"#94a3b8",padding:"5px 12px",borderRadius:20,fontSize:12,fontWeight:600}}>🔜 În pregătire</span>}
+      </div>
+      <div style={{background:"#fef9c3",border:"1.5px solid #fde68a",b
+
+--- studenți @ 1095121 ---
+{
+    if (!confirm(T("file_delete_confirm"))) return;
+    try {
+      await deleteFile(path);
+      setMsg({type:"ok", text:T("file_deleted")});
+      load();
+    } catch(err) {
+      setMsg({type:"err", text:T("file_del_err")});
+    }
+  };
+
+  const SB_STORAGE = "https://hgknirjorjvlofhngvcp.supabase.co/storage/v1";
+
+  return (
+    <div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,flexWrap:"wrap",gap:10}}>
+        <div>
+          <h3 style={{color:"#0a2a18",fontSize:17,margin:"0 0 4px"}}>📁 Fișiere mele — {selLab.code}</h3>
+          <p style={{color:"#4a9a6a",fontSize:13,margin:0}}>Încarcă PDF-uri, prezentări sau alte materiale pentru studenți.</p>
+        </div>
+        <div>
+          <input ref={fileRef} type="file" style={{display:"none"}} onChange={upload}
+            accept=".pdf,.pptx,.ppt,.docx,.doc,.xlsx,.xls,.png,.jpg,.jpeg,.gif,.zip"/>
+          <button onClick={()=>fileRef.current.click()} disabled={uploading}
+            style={{padding:"10px 18px",background:"linear-gradient(135deg,#10b981,#059669)",color:"white",border:"none",borderRadius:10,fontSize:13,fontWeight:700,cursor:"pointer"}}>
+            {uploading?T("file_uploading"):T("file_upload")}
+          </button>
+        </div>
+      </div>
+      {msg.text && <div style={{padding:"10px 14px",borderRadius:9,marginBottom:14,fontSize:13,fontWeight:600,
+        background:msg.type==="ok"?"#dcfce7":"#fee2e2",color:msg.type==="ok"?"#16a34a":"#dc2626"}}>
+        {msg.type==="ok"?"✅":"❌"} {msg.text}
+      </div>}
+      {loading ? <div style={{textAlign:"center",padding:30,color:"#94a3b8"}}>Se încarcă fișierele…</div>
+      : files.length===0 ? (
+        <div style={{background:"#f0fdf4",border:"1.5px solid #b2ddc8",borderRadius:12,padding:24,textAlign:"center",color:"#4a9a6a"}}>
+          <div style={{fontSize:32,marginBottom:8}}>📂</div>
+          <p style={{fontWeight:600,marginBottom:4}}>Niciun fișier încărcat pentru {selLab.code}</p>
+          <p style={{fontSize:13}}>Apăsați butonul de mai sus pentru a încărca primul fișier.</p>
+        </div>
+      )
+
+--- studenți @ 1099917 ---
+onst lang = React.useContext(LangContext);
+  const [matricol, setMatricol] = useState("");
+  const [group, setGroup] = useState("");
+  const [err, setErr]     = useState("");
+  const lab = LABS.find(l=>l.id===session.labId) || {};
+  const isGroupActivity = session?.labCode?.endsWith("-FISA");
+  const isLivePresentation = session?.labCode?.endsWith("-LIVE");
+  const clean = cleanMatricol(matricol);
+  const identified = findStudentByMatricol(clean);
+
+  const go = () => {
+    const student=findStudentByMatricol(clean);
+    if (!student) {
+      setErr(lang==="en"?"The matriculation number was not found in the student list. Please check and try again.":"Numărul matricol nu a fost găsit în lista studenților. Verificați și încercați din nou.");
+      return;
+    }
+    if (isGroupActivity && !group) { setErr(lang==="en"?"Select activity group 1–6.":"Selectați grupa activității 1–6."); return; }
+    const academicGroup=student.group||buildStudentGroupLabel(student);
+    const officialGroup=String(student.grupa||"");
+    const resultGroup=isGroupActivity?group:(officialGroup||String(student.seria||"")||"—");
+    const specialization=student.specialization||student.spec||student.yearLabel||"";
+    markSessionUsed(session.token, student.name);
+    onLogin({...student,academicGroup,officialGroup,activityGroup:isGroupActivity?group:"",group:resultGroup,spec:specialization});
+  };
+
+  return (
+    <div style={{minHeight:"100vh",background:"#F8F9FA",padding:"24px 16px",display:"flex",alignItems:"center",justifyContent:"center"}}>
+      <div className="student-card">
+        <div style={{textAlign:"center",marginBottom:20}}>
+          <div style={{fontSize:36}}>{lab.icon||"🧪"}</div>
+          <h2 style={{color:"#0a2a18",fontSize:20,margin:"8px 0 4px"}}>{lab.code} — {lang==="en" && lab.titleEn ? lab.titleEn : lab.title}</h2>
+          <p style={{color:"#4a9a6a",fontSize:13,margin:0}}>{T("teacher_label")||"Profesor"}: {session.teacher||"–"}</p>
+        </div>
+        <div style={{background:"#eef2ff",border:"1px solid #c7d2fe",borderRadius:11,padding:"10px 12px",fontSize:12,color:"#4338ca",
+
+--- studenți @ 1134337 ---
+itle={lang==="ro"?"Switch to English":"Comutați la Română"}>
+      {lang==="ro"?"EN":"RO"}
+    </button>
+  );
+}
+
+
+
+function ExamMatricolScreen({session, onStart}) {
+  const contextLang = React.useContext(LangContext);
+  const lang = resolveSessionLang(session, contextLang);
+  const [matricol, setMatricol] = React.useState('');
+  const [err, setErr] = React.useState('');
+  const clean = cleanMatricol(matricol);
+  const student = findStudentByMatricol(clean);
+
+  const go = () => {
+    const st = findStudentByMatricol(clean);
+    if (!st) { setErr(lang==='en' ? 'The matriculation number was not found in the student list. Please check and try again.' : 'Numărul matricol nu a fost găsit în lista studenților. Verificați și încercați din nou.'); return; }
+    const questions = pickExamQuestions(20, lang);
+    if (!questions || questions.length === 0) { setErr(lang==='en' ? 'The exam question bank is not available.' : 'Banca de întrebări pentru examen nu este disponibilă.'); return; }
+    try { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); } catch(e) {}
+    onStart(st, questions);
+  };
+
+  return (
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#4c1d95 100%)',display:'flex',alignItems:'center',justifyContent:'center',padding:24,fontFamily:"'Inter','Segoe UI',system-ui,sans-serif"}}>
+      <div style={{background:'#fff',borderRadius:20,padding:40,maxWidth:460,width:'100%',boxShadow:'0 25px 60px rgba(0,0,0,0.4)'}}>
+        <div style={{textAlign:'center',marginBottom:28}}>
+          <div style={{fontSize:48,marginBottom:12}}>📝</div>
+          <h1 style={{fontSize:24,fontWeight:900,color:'#1e1b4b',margin:0}}>{lang==='en'?'Hygiene Exam':'Examen Igienă'}</h1>
+          <p style={{color:'#64748b',fontSize:14,margin:'8px 0 0'}}>
+            {session?.teacher && <span>👤 {session.teacher}</span>}
+          </p>
+          <div style={{background:'#F0F4FF',borderRadius:10,padding:'10px 16px',marginTop:12,fontSize:13,color:'#4338ca'}}>
+            {lang==='en'?'Enter only the matriculation number · the
+
+--- studenți @ 1157912 ---
+   const a = document.createElement("a");
+    a.href=url; a.download="prezenta_"+grpFilter+".csv"; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Color for pct cell
+  const pctColor = pct => pct>=80?"#15803d":pct>=50?"#d97706":"#dc2626";
+  const pctBg    = pct => pct>=80?"#f0fdf4":pct>=50?"#fffbeb":"#fef2f2";
+
+  return (
+    <div>
+      {/* Header */}
+      <div style={{marginBottom:14,display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10}}>
+        <div>
+          <h2 style={{fontSize:18,fontWeight:800,color:"#1e1b4b",margin:0}}>📋 Tabel Prezență</h2>
+          <p style={{fontSize:12,color:"#64748b",margin:"3px 0 0"}}>
+            <b>{rows.length}</b> studenți · {filtered.length} înregistrări · {quizResults.length} quiz-uri total în BD
+          </p>
+        </div>
+        <button onClick={exportCSV} style={{padding:"8px 16px",background:"linear-gradient(135deg,#6366f1,#8b5cf6)",color:"#fff",border:"none",borderRadius:9,fontWeight:700,fontSize:13,cursor:"pointer"}}>
+          📥 CSV
+        </button>
+      </div>
+
+      {/* Filters */}
+      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14,background:"#fff",padding:"10px 12px",borderRadius:12,border:"1px solid #e0e7ff"}}>
+        <select style={sS} value={yearFilter} onChange={e=>setYearFilter(e.target.value)}>
+          <option value="all">📅 Toți anii</option>
+          {["Anul I","Anul II","Anul III","Anul IV","Anul V","Anul VI"].map(y=><option key={y} value={y}>{y}</option>)}
+        </select>
+        <select style={sS} value={specFilter} onChange={e=>setSpecFilter(e.target.value)}>
+          <option value="all">🎓 Toate specializările</option>
+          {specs.map(s=><option key={s} value={s}>{s}</option>)}
+        </select>
+        <select style={sS} value={grpFilter} onChange={e=>setGrpFilter(e.target.value)}>
+          <option value="all">👥 Toate grupele</option>
+          {groups.map(g=><option key={g} value={g}>Grupa {g}</option>)}
+        </select>
+        {(yearFilter!=="all"||grpFilter!=="all"||specFilter!=="all") && (
+          <button onClick={()=>{setYe
