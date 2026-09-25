@@ -213,10 +213,10 @@ async function unlockTeamRoom(session,group,f,teacherName){
 
 function TeamMissionScreen({session,student,onBack}){
   const lang="ro";
-  const labId=session?.labId||"lp1a";
+  const labId=session?.labId||"lp1";
   const [f,setF]=React.useState(null);
   const [room,setRoom]=React.useState({joins:[],members:[],approvals:[],seatByName:{},unlocked:false,synthesis:null,final:null});
-  const [answer,setAnswer]=React.useState("");
+  const [answers,setAnswers]=React.useState({});
   const [submitted,setSubmitted]=React.useState(null);
   const [saving,setSaving]=React.useState(false);
   const [error,setError]=React.useState("");
@@ -224,9 +224,10 @@ function TeamMissionScreen({session,student,onBack}){
 
   React.useEffect(()=>{
     const build=()=>{
-      const items=getActiveFiseForLab(labId,lang).slice(0,6).map(x=>normalizeTeamMission(x,lang));
-      const groupNumber=Math.min(items.length||1,Math.max(1,parseInt(String(student?.group||"1").match(/\d+/)?.[0]||"1",10)));
-      setF(items[groupNumber-1]||items[0]||null);
+      const items=getActiveFiseForLab(labId,lang).slice(0,5).map(x=>normalizeTeamMission(x,lang));
+      const rawGroup=parseInt(String(student?.group||"1").match(/\d+/)?.[0]||"1",10)||1;
+      const caseIndex=((rawGroup-1)%Math.max(1,items.length))+1;
+      setF(items[caseIndex-1]||items[0]||null);
       setReady(true);
     };
     if(editsAreReady()) build(); else fetchAllEditsRemote().then(build).catch(build);
@@ -240,7 +241,12 @@ function TeamMissionScreen({session,student,onBack}){
       const mine=(next.members||[]).find(r=>activityRowKey(r)===activityStudentKey(student));
       if(mine){
         const p=activityPayload(mine);
-        setSubmitted({answer:p.answer||p.analysis||"",submittedAt:p.submittedAt||p.savedAt||null});
+        const storedAnswers=p.answers||{};
+        setSubmitted({
+          answers:storedAnswers,
+          answer:p.answer||p.analysis||"",
+          submittedAt:p.submittedAt||p.savedAt||null
+        });
       }
       setError("");
     }catch(e){setError("Sincronizarea nu este disponibilă momentan.");}
@@ -248,57 +254,95 @@ function TeamMissionScreen({session,student,onBack}){
 
   React.useEffect(()=>{if(!f)return;refresh();const t=setInterval(refresh,4000);return()=>clearInterval(t)},[f,refresh]);
 
+  const setAnswer=(i,value)=>setAnswers(prev=>({...prev,[i]:value}));
+
   const send=async()=>{
-    const value=String(answer||"").trim();
-    if(!value){alert("Completați răspunsul înainte de trimitere.");return;}
-    if(submitted){alert("Răspunsul a fost deja trimis și nu mai poate fi modificat.");return;}
-    if(!confirm("Sunteți sigur(ă) că doriți să trimiteți răspunsul? După trimitere, acesta nu mai poate fi modificat."))return;
+    const taskCount=(f?.qs||[]).length;
+    const clean=Array.from({length:taskCount},(_,i)=>String(answers[i]||"").trim());
+    const missing=clean.findIndex(x=>!x);
+    if(missing>=0){
+      alert("Completați răspunsul la toate cele 4 sarcini înainte de trimitere.");
+      return;
+    }
+    if(submitted){alert("Răspunsurile au fost deja trimise și nu mai pot fi modificate.");return;}
+    if(!confirm("Sunteți sigur(ă) că doriți să trimiteți răspunsurile? După trimitere, acestea nu mai pot fi modificate."))return;
     setSaving(true);
     try{
       const latest=await loadActivityRoom(session,student,f,Number(session?.teamSize)||14);
       const already=(latest.members||[]).some(r=>activityRowKey(r)===activityStudentKey(student));
-      if(already){setRoom(latest);setSubmitted({answer:"Răspuns deja înregistrat."});return;}
+      if(already){setRoom(latest);setSubmitted({answers:{},answer:"Răspuns deja înregistrat."});return;}
+      const structured={};
+      (f.qs||[]).forEach((q,i)=>{structured[i]=clean[i]||"";});
+      const combined=(f.qs||[]).map((q,i)=>q.q+"\n"+(clean[i]||"")).join("\n\n");
       await activityWriteEvent("member",f,{
-        version:4,mode:"individual_locked",answer:value,analysis:value,submittedAt:Date.now(),locked:true,
-        studentMeta:activityStudentMeta(student)
+        version:5,mode:"individual_locked_structured",answers:structured,answer:combined,analysis:combined,
+        submittedAt:Date.now(),locked:true,studentMeta:activityStudentMeta(student)
       },session,student,"Răspuns individual sigilat · "+f.title);
-      setSubmitted({answer:value,submittedAt:Date.now()});
+      setSubmitted({answers:structured,answer:combined,submittedAt:Date.now()});
       await refresh();
-    }catch(e){setError("Răspunsul nu a putut fi salvat. Încercați din nou.");}
+    }catch(e){setError("Răspunsurile nu au putut fi salvate. Încercați din nou.");}
     finally{setSaving(false);}
   };
 
   if(!ready||!f)return <div style={{padding:30,fontFamily:"system-ui"}}>Se încarcă activitatea…</div>;
+
   const solution=[
     f.diagnosis?.options?.[f.diagnosis?.correct],
     ...(f.evidence||[]).filter(x=>x.relevant).map(x=>x.text),
-    ...(f.actions||[]).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.text)
+    ...(f.actions||[]).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,6).map(x=>x.text)
   ].filter(Boolean);
-  const task=(f.qs||[]).map((q,i)=><li key={i} style={{marginBottom:8}}>{q.q}</li>);
+
+  const sections=(f.sections&&f.sections.length)?f.sections:[{title:"Datele obținute",data:f.caz||[]}];
+
   return <div style={{minHeight:"100vh",background:"#f4f8fb",fontFamily:"system-ui",color:"#0f2742"}}>
     <div style={{background:"#071a33",color:"white",padding:"14px 18px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:12}}>
-      <div><div style={{fontSize:12,opacity:.75}}>Activitate de grup · răspuns individual</div><strong>{f.emoji} {f.title}</strong></div>
+      <div>
+        <div style={{fontSize:12,opacity:.75}}>Activitate de grup · răspuns individual</div>
+        <strong style={{display:"block",lineHeight:1.25}}>{f.emoji} {f.title}</strong>
+      </div>
       <button onClick={onBack} style={{padding:"9px 12px",borderRadius:9,border:"1px solid #ffffff44",background:"transparent",color:"white",cursor:"pointer"}}>Înapoi</button>
     </div>
-    <main style={{maxWidth:860,margin:"0 auto",padding:"20px 14px 50px"}}>
+
+    <main style={{maxWidth:860,margin:"0 auto",padding:"18px 12px 44px"}}>
       {error&&<div style={{background:"#fff7ed",border:"1px solid #fdba74",padding:12,borderRadius:12,marginBottom:12}}>{error}</div>}
-      <section style={{background:"white",borderRadius:18,padding:20,border:"1px solid #dbe7f1",marginBottom:14}}>
-        <div style={{fontSize:11,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:f.color}}>Contextul cazului</div>
-        <p style={{lineHeight:1.65}}>{f.context||f.briefing}</p>
-        {(f.caz||[]).length>0&&<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:8,marginTop:12}}>{f.caz.map((x,i)=><div key={i} style={{background:"#f8fafc",borderRadius:10,padding:11}}><div style={{fontSize:11,color:"#64748b"}}>{x.l}</div><strong>{x.v}</strong></div>)}</div>}
+
+      <section style={{background:"white",borderRadius:18,padding:"18px 16px",border:"1px solid #dbe7f1",marginBottom:14}}>
+        <div style={{fontSize:12,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:f.color}}>Contextul cazului</div>
+        <p style={{lineHeight:1.6,fontSize:16,marginBottom:16}}>{f.context||f.briefing}</p>
+
+        <div style={{fontSize:12,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:f.color,marginBottom:10}}>Datele obținute</div>
+        {sections.map((section,si)=><div key={si} style={{marginBottom:si<sections.length-1?16:0}}>
+          <div style={{fontWeight:850,fontSize:14,color:"#334155",margin:"0 0 8px"}}>{section.title}</div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:8}}>
+            {(section.data||[]).map((x,i)=><div key={i} style={{background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:12,padding:"11px 12px"}}>
+              <div style={{fontSize:11,color:"#64748b",marginBottom:3}}>{x.l}</div>
+              <strong style={{fontSize:16,lineHeight:1.25}}>{x.v}</strong>
+            </div>)}
+          </div>
+        </div>)}
       </section>
-      <section style={{background:"white",borderRadius:18,padding:20,border:"1px solid #dbe7f1",marginBottom:14}}>
-        <div style={{fontSize:11,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:f.color}}>Sarcina studentului</div>
-        <ol style={{lineHeight:1.55,paddingLeft:22}}>{task}</ol>
-        {!submitted?<><textarea value={answer} onChange={e=>setAnswer(e.target.value)} placeholder="Scrieți aici analiza, calculele, măsurile și concluzia…" style={{width:"100%",minHeight:180,padding:13,border:"1px solid #b8c9d6",borderRadius:12,font:"inherit",resize:"vertical",boxSizing:"border-box"}}/>
-        <div style={{background:"#f8fafc",padding:11,borderRadius:10,fontSize:12,color:"#64748b",margin:"10px 0"}}>🔐 După trimitere, răspunsul este înregistrat definitiv și nu mai poate fi modificat.</div>
-        <button disabled={saving} onClick={send} style={{width:"100%",padding:14,border:0,borderRadius:12,background:f.color,color:"white",fontWeight:850,cursor:saving?"wait":"pointer"}}>{saving?"Se trimite…":"Trimite răspunsul"}</button></>
-        :<div><div style={{background:"#ecfdf5",border:"1px solid #86efac",borderRadius:12,padding:14,color:"#166534",fontWeight:800}}>✓ Răspuns trimis</div>
-        <p style={{fontSize:13,color:"#64748b"}}>Răspunsul dumneavoastră a fost înregistrat și nu mai poate fi modificat. Rezolvarea va fi disponibilă după ce cadrul didactic o afișează.</p>
-        <div style={{fontSize:11,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:f.color,marginTop:18}}>Răspunsul meu</div><div style={{whiteSpace:"pre-wrap",lineHeight:1.6,background:"#f8fafc",padding:14,borderRadius:12,marginTop:7}}>{submitted.answer}</div></div>}
+
+      <section style={{background:"white",borderRadius:18,padding:"18px 16px",border:"1px solid #dbe7f1",marginBottom:14}}>
+        <div style={{fontSize:12,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:f.color,marginBottom:4}}>Sarcina studentului</div>
+        <p style={{fontSize:13,color:"#64748b",lineHeight:1.5,margin:"4px 0 16px"}}>Răspundeți separat la fiecare sarcină. După trimitere, toate răspunsurile sunt blocate definitiv.</p>
+
+        {(f.qs||[]).map((q,i)=><div key={i} style={{borderTop:i?"1px solid #e2e8f0":"none",paddingTop:i?16:0,marginTop:i?16:0}}>
+          <div style={{fontWeight:800,fontSize:15,lineHeight:1.5,color:"#0f2742",marginBottom:8}}>{q.q}</div>
+          {!submitted
+            ? <textarea value={answers[i]||""} onChange={e=>setAnswer(i,e.target.value)}
+                placeholder={i===0?"Formulați verdictul și argumentați-l…":i===1?"Indicați datele decisive și normele de comparație…":i===2?"Descrieți efectele și riscurile prioritare…":"Precizați măsurile, metoda de confirmare și concluzia…"}
+                style={{width:"100%",minHeight:110,padding:12,border:"1.5px solid #cbd5e1",borderRadius:12,font:"inherit",fontSize:15,lineHeight:1.45,resize:"vertical",boxSizing:"border-box",background:"#fff"}}/>
+            : <div style={{whiteSpace:"pre-wrap",lineHeight:1.55,background:"#f8fafc",padding:13,borderRadius:12,border:"1px solid #e2e8f0"}}>{submitted.answers?.[i]||"—"}</div>}
+        </div>)}
+
+        {!submitted?<>
+          <div style={{background:"#f8fafc",padding:11,borderRadius:10,fontSize:12,color:"#64748b",margin:"16px 0 10px"}}>🔐 După trimitere, răspunsurile sunt înregistrate definitiv și nu mai pot fi modificate.</div>
+          <button disabled={saving} onClick={send} style={{width:"100%",padding:14,border:0,borderRadius:12,background:f.color,color:"white",fontWeight:850,fontSize:16,cursor:saving?"wait":"pointer"}}>{saving?"Se trimit…":"Trimite răspunsurile"}</button>
+        </>:<div style={{background:"#ecfdf5",border:"1px solid #86efac",borderRadius:12,padding:14,color:"#166534",fontWeight:800,marginTop:16}}>✓ Răspunsurile au fost trimise și blocate</div>}
       </section>
-      {room.unlocked&&submitted&&<section style={{background:"#f0fdf4",borderRadius:18,padding:20,border:"1px solid #86efac"}}>
-        <div style={{fontSize:11,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:"#166534"}}>Rezolvarea corectă și explicații</div>
+
+      {room.unlocked&&submitted&&<section style={{background:"#f0fdf4",borderRadius:18,padding:"18px 16px",border:"1px solid #86efac"}}>
+        <div style={{fontSize:12,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:"#166534"}}>Rezolvarea corectă și explicații</div>
         <ul style={{lineHeight:1.6,paddingLeft:22}}>{solution.map((x,i)=><li key={i} style={{marginBottom:7}}>{x}</li>)}</ul>
         {(f.sourceRefs||[]).length>0&&<div style={{marginTop:14,fontSize:12,color:"#166534"}}><strong>Trasabilitate în material:</strong> {(f.sourceRefs||[]).join(" · ")}</div>}
       </section>}
