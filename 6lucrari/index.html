@@ -4080,6 +4080,7 @@ function TeamMissionScreen({session,student,onBack}){
   const [saving,setSaving]=React.useState(false);
   const [error,setError]=React.useState("");
   const [ready,setReady]=React.useState(editsAreReady());
+  const joinedRef=React.useRef(false);
 
   React.useEffect(()=>{
     const build=()=>{
@@ -4113,6 +4114,14 @@ function TeamMissionScreen({session,student,onBack}){
       setError("");
     }catch(e){setError("Sincronizarea nu este disponibilă momentan.");}
   },[f,session?.token,student?.group,student?.matricol]);
+
+  React.useEffect(()=>{
+    if(!f||joinedRef.current||!session?.token||!student?.matricol)return;
+    joinedRef.current=true;
+    activityWriteEvent("join",f,{
+      version:5,mode:"individual_case_join",joinedAt:Date.now(),studentMeta:activityStudentMeta(student)
+    },session,student,"Student conectat · "+f.title).catch(()=>{joinedRef.current=false;});
+  },[f,session?.token,student?.matricol]);
 
   React.useEffect(()=>{if(!f)return;refresh();const t=setInterval(refresh,4000);return()=>clearInterval(t)},[f,refresh]);
 
@@ -6174,11 +6183,11 @@ function AdminPanel({onBack, teacherName}) {
                                 Cazul {caseNo}{mission?.title?" · "+mission.title:""}
                               </div>
                               <div style={{fontSize:10,color:"#64748b",marginTop:2}}>
-                                conectați {totals.joinCount} · au trimis {totals.memberCount}
+                                lucrează {Math.max(0,totals.joinCount-totals.memberCount)} · au terminat {totals.memberCount}
                               </div>
                             </div>
-                            <span style={{fontSize:10,fontWeight:800,color:totals.memberCount>0?"#166534":"#64748b",background:totals.memberCount>0?"#ecfdf5":"#f1f5f9",borderRadius:999,padding:"4px 7px"}}>
-                              {totals.memberCount>0?"Răspunsuri primite":"În așteptare"}
+                            <span style={{fontSize:10,fontWeight:800,color:totals.memberCount>0?"#166534":totals.joinCount>0?"#92400e":"#64748b",background:totals.memberCount>0?"#ecfdf5":totals.joinCount>0?"#fffbeb":"#f1f5f9",borderRadius:999,padding:"4px 7px"}}>
+                              {totals.memberCount>0?"Finalizări primite":totals.joinCount>0?"În lucru":"În așteptare"}
                             </span>
                           </div>;
                         })}
