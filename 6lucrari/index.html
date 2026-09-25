@@ -9729,8 +9729,7 @@ function ExamBankPanel({mode, selLab}) {
 // ════════════════════════════════════════════════════════════
 
 function App() {
-  const [lang, setLang] = useState(()=>{ try{ const p=new URLSearchParams(window.location.search).get("lang"); if(p==="en"||p==="ro"){ localStorage.setItem("igiena_lang",p); return p; } return localStorage.getItem("igiena_lang")||"ro";}catch(e){return "ro";} });
-  const toggleLang = () => { const nl=lang==="ro"?"en":"ro"; setLang(nl); try{localStorage.setItem("igiena_lang",nl);}catch(e){} };
+  const [lang, setLang] = useState("ro");
   const [screen,      setScreen]      = useState("home");
   const [examCode,    setExamCode]    = useState('');
   const [examQuestions,setExamQuestions]=useState(null);
@@ -9758,7 +9757,7 @@ function App() {
   if (screen==="admin")       return <AdminPanel teacherName={teacherName} onBack={()=>setScreen("home")}/>;
   if (screen==="tokenJoin")   return (
     <TokenJoin token={pendingToken}
-      onValid={s=>{const sl=resolveSessionLang(s, lang); setLang(sl); try{localStorage.setItem("igiena_lang",sl);}catch(e){} setSession({...s, lang:sl}); setScreen(s?.labCode?.endsWith("-EXAM")?"exam_code":"studentLogin");}}
+      onValid={s=>{setLang("ro"); try{localStorage.setItem("igiena_lang","ro");}catch(e){} setSession({...s, lang:"ro"}); setScreen(s?.labCode?.endsWith("-EXAM")?"exam_code":"studentLogin");}}
       onInvalid={msg=>{setErrMsg(msg);setScreen("error");}}/>
   );
   if (screen==="error")       return <ErrorScreen message={errMsg} onBack={()=>{setScreen("home");window.history.pushState({},"",window.location.pathname);}}/>;
@@ -9877,7 +9876,7 @@ function App() {
   return (
     <LangContext.Provider value={lang}>
       {renderScreen()}
-      {screen!=="fisa_grup" && <LangToggle lang={lang} onToggle={toggleLang}/>}
+      
     </LangContext.Provider>
   );
 }
