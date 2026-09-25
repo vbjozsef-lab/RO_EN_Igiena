@@ -4885,7 +4885,7 @@ async function loadResults() {
   }
   // Keep synchronized room events out of the normal results list. The single
   // group_activity_* final report remains visible as the assessed result.
-  all = all.filter(r => !String(r.module || "").startsWith("activity_") && !String(r.module || "").startsWith("live_"));
+  all = all.filter(r => (!String(r.module || "").startsWith("activity_") || String(r.module || "").startsWith("activity_member_")) && !String(r.module || "").startsWith("live_"));
   let mapped = all.map(r => {
     const identity=parseStudentIdentity(r.answers_text||"");
     const base = {
@@ -5684,6 +5684,87 @@ function AdminLogin({onSuccess, onBack}) {
   );
 }
 
+
+function isIndividualGroupSubmission(result) {
+  return String(result?.module||"").startsWith("activity_member_");
+}
+
+function parseIndividualGroupSubmission(result) {
+  let payload={};
+  try { payload=JSON.parse(result?.answersText||"{}"); } catch(e) {}
+  const meta=payload.studentMeta||{};
+  const answers=payload.answers||{};
+  const caseNo=Math.max(1,Math.min(5,parseInt(String(result?.group||"1"),10)||1));
+  const labId=String(result?.labId||"").replace(/[^a-z0-9]/gi,"").toLowerCase();
+  const cases=window.FINAL_GROUP_CASES?.[labId]||[];
+  const activity=cases[caseNo-1]||null;
+  const title=activity?.title || String(result?.moduleTitle||"").replace(/^Răspuns individual sigilat\s*·\s*/i,"").replace(/\s*\|\|MID:.*$/i,"") || "Activitate de grup";
+  const questions=(activity?.taskParts||[]).map((q,i)=>({question:q,answer:String(answers[i]??"").trim()||"—"}));
+  if(!questions.length && payload.answer){
+    String(payload.answer).split(/\n\n+/).forEach((block,i)=>{
+      const rows=block.split("\n");
+      questions.push({question:rows[0]||("Punctul "+(i+1)),answer:rows.slice(1).join("\n").trim()||"—"});
+    });
+  }
+  return {
+    type:"individual_group_submission_v5",
+    caseNo,
+    title,
+    contextParagraphs:activity?.contextParagraphs||[],
+    taskRaw:activity?.taskRaw||"",
+    questions,
+    student:{
+      name:meta.name||result?.name||"—",
+      matricol:meta.matricol||result?.matricol||"",
+      yearLabel:meta.yearLabel||result?.studentYear||"",
+      seria:meta.seria||result?.studentSeries||"",
+      officialGroup:meta.officialGroup||result?.studentOfficialGroup||""
+    },
+    submittedAt:payload.submittedAt||result?.timestamp||null,
+    locked:payload.locked!==false
+  };
+}
+
+function IndividualGroupSubmissionModal({result,onClose}) {
+  const data=parseIndividualGroupSubmission(result);
+  return <div onClick={e=>{if(e.target===e.currentTarget)onClose();}} style={{position:"fixed",inset:0,background:"rgba(15,23,42,.58)",zIndex:2300,display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"40px 12px 28px",overflowY:"auto"}}>
+    <div style={{background:"#f8fafc",borderRadius:20,padding:"20px",maxWidth:900,width:"100%",boxShadow:"0 25px 80px rgba(15,23,42,.35)",margin:"0 0 30px"}}>
+      <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"flex-start",marginBottom:14}}>
+        <div>
+          <div style={{fontSize:11,fontWeight:900,color:"#4f46e5",letterSpacing:".09em",textTransform:"uppercase",marginBottom:5}}>Activitate de grup · răspuns individual blocat</div>
+          <h3 style={{margin:"0 0 6px",fontSize:20,color:"#0f172a"}}>Cazul {data.caseNo} · {data.title}</h3>
+          <div style={{fontSize:13,color:"#475569",lineHeight:1.6}}>
+            <b>{data.student.name}</b>{data.student.matricol?" · Nr. matricol "+data.student.matricol:""}<br/>
+            {data.student.yearLabel||""}{data.student.seria?" · Seria "+data.student.seria:""}{data.student.officialGroup?" · Grupa academică "+data.student.officialGroup:""} · {result.labCode||"—"}
+          </div>
+        </div>
+        <button onClick={onClose} style={{padding:"7px 12px",border:"1px solid #cbd5e1",borderRadius:9,background:"#fff",color:"#475569",fontWeight:850,cursor:"pointer"}}>✕</button>
+      </div>
+
+      <div style={{background:"#ecfdf5",border:"1px solid #86efac",borderRadius:12,padding:"10px 12px",marginBottom:14,color:"#166534",fontSize:12,fontWeight:800}}>
+        🔐 Răspuns trimis și blocat definitiv{data.submittedAt?" · "+new Date(data.submittedAt).toLocaleString("ro-RO",{timeZone:"Europe/Bucharest"}):""}
+      </div>
+
+      {data.contextParagraphs.length>0&&<div style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:14,padding:14,marginBottom:14}}>
+        <div style={{fontSize:11,fontWeight:900,color:"#2563eb",textTransform:"uppercase",letterSpacing:".07em",marginBottom:7}}>Contextul cazului</div>
+        {data.contextParagraphs.map((p,i)=><p key={i} style={{fontSize:13,color:"#334155",lineHeight:1.6,margin:i?"8px 0 0":"0"}}>{p}</p>)}
+      </div>}
+
+      {data.taskRaw&&<div style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:14,padding:14,marginBottom:14}}>
+        <div style={{fontSize:11,fontWeight:900,color:"#7c3aed",textTransform:"uppercase",letterSpacing:".07em",marginBottom:7}}>Sarcina studentului</div>
+        <div style={{fontSize:13,color:"#334155",lineHeight:1.6}}>{data.taskRaw}</div>
+      </div>}
+
+      <div style={{display:"grid",gap:10}}>
+        {data.questions.map((qa,i)=><div key={i} style={{background:"#fff",border:"1px solid #dbe7f1",borderRadius:14,overflow:"hidden"}}>
+          <div style={{background:"#eef2ff",padding:"10px 12px",fontSize:13,fontWeight:850,color:"#312e81",lineHeight:1.45}}>{i+1}. {qa.question}</div>
+          <div style={{padding:"12px",fontSize:14,color:"#0f172a",lineHeight:1.6,whiteSpace:"pre-wrap"}}>{qa.answer}</div>
+        </div>)}
+      </div>
+    </div>
+  </div>;
+}
+
 function isGroupActivityResult(result) {
   const module=String(result?.module||"");
   const title=String(result?.moduleTitle||"");
@@ -6213,12 +6294,18 @@ function AdminPanel({onBack, teacherName}) {
                             {lab && <span style={{background:lab.dim,color:lab.color,borderRadius:6,padding:"2px 8px",fontSize:11,fontWeight:700}}>{lab.icon} {r.labCode}</span>}
                           </td>
                           {(()=>{
-                          const groupResult=isGroupActivityResult(r);
+                          const individualGroup=isIndividualGroupSubmission(r);
+                          const groupResult=!individualGroup&&isGroupActivityResult(r);
                           const parts=(r.moduleTitle||"").split("\n---\n");
+                          const individualData=individualGroup?parseIndividualGroupSubmission(r):null;
                           const groupData=groupResult?parseGroupActivityResult(r):null;
-                          const title=groupResult?`Activitate de grup · ${groupData?.activityTitle||"—"}`:parts[0];
+                          const title=individualGroup
+                            ? `Cazul ${individualData.caseNo} · ${individualData.title}`
+                            : groupResult
+                              ? `Activitate de grup · ${groupData?.activityTitle||"—"}`
+                              : parts[0];
                           const legacyGroupDetails=/VERDICT:|CONTRIBUȚII INDIVIDUALE|SINTEZA GRUPULUI/i.test(String(r.moduleTitle||""));
-                          const hasAnswers=groupResult?!!r.answersText||legacyGroupDetails:parts.length>1;
+                          const hasAnswers=individualGroup?!!r.answersText:(groupResult?!!r.answersText||legacyGroupDetails:parts.length>1);
                           return <>
                             <td style={{padding:"9px 12px",color:"#475569",fontSize:12}}>
                               <div>{title||"–"}</div>
@@ -6226,8 +6313,8 @@ function AdminPanel({onBack, teacherName}) {
                             <td style={{padding:"9px 12px",whiteSpace:"nowrap"}}>
                               {hasAnswers && (
                                 <button onClick={()=>setSelectedResult(r)}
-                                  style={{padding:"5px 10px",background:groupResult?"#ede9fe":"#dcfce7",color:groupResult?"#6d28d9":"#16a34a",border:`1px solid ${groupResult?"#c4b5fd":"#86efac"}`,borderRadius:7,fontSize:11,fontWeight:800,cursor:"pointer"}}>
-                                  {groupResult?"👥 Vezi contribuțiile":"📄 Vezi răspunsuri"}
+                                  style={{padding:"5px 10px",background:(individualGroup||groupResult)?"#ede9fe":"#dcfce7",color:(individualGroup||groupResult)?"#6d28d9":"#16a34a",border:`1px solid ${(individualGroup||groupResult)?"#c4b5fd":"#86efac"}`,borderRadius:7,fontSize:11,fontWeight:800,cursor:"pointer"}}>
+                                  {individualGroup?"📄 Vezi răspunsurile":groupResult?"👥 Vezi contribuțiile":"📄 Vezi răspunsuri"}
                                 </button>
                               )}
                               {!hasAnswers && <span style={{color:"#94a3b8"}}>–</span>}
@@ -6335,8 +6422,9 @@ function AdminPanel({onBack, teacherName}) {
         {tab==="nomenclator" && (
           <NomenclatorEditor nomenclator={nomenclator} onChange={n=>{setNomenclator(n);saveNomenclator(n);}} />
         )}
-        {selectedResult && isGroupActivityResult(selectedResult) && <GroupActivityResultModal result={selectedResult} onClose={()=>setSelectedResult(null)}/>}
-        {selectedResult && !isGroupActivityResult(selectedResult) && (()=>{
+        {selectedResult && isIndividualGroupSubmission(selectedResult) && <IndividualGroupSubmissionModal result={selectedResult} onClose={()=>setSelectedResult(null)}/>}
+        {selectedResult && !isIndividualGroupSubmission(selectedResult) && isGroupActivityResult(selectedResult) && <GroupActivityResultModal result={selectedResult} onClose={()=>setSelectedResult(null)}/>} 
+        {selectedResult && !isIndividualGroupSubmission(selectedResult) && !isGroupActivityResult(selectedResult) && (()=>{
         const parts=(selectedResult.moduleTitle||"").split("\n---\n");
         const title=parts[0];
         const answersRaw=parts[1]||"";
