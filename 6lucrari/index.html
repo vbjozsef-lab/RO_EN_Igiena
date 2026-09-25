@@ -4115,8 +4115,17 @@ function TeamMissionScreen({session,student,onBack}){
     setSaving(true);
     try{
       const latest=await loadActivityRoom(session,student,f,Number(session?.teamSize)||14);
-      const already=(latest.members||[]).some(r=>activityRowKey(r)===activityStudentKey(student));
-      if(already){setRoom(latest);setSubmitted({answers:{},answer:"Răspuns deja înregistrat."});return;}
+      const existing=(latest.members||[]).find(r=>activityRowKey(r)===activityStudentKey(student));
+      if(existing){
+        const p=activityPayload(existing);
+        setRoom(latest);
+        setSubmitted({
+          answers:p.answers||{},
+          answer:p.answer||p.analysis||"",
+          submittedAt:p.submittedAt||p.savedAt||null
+        });
+        return;
+      }
       const structured={};
       (f.qs||[]).forEach((q,i)=>{structured[i]=clean[i]||"";});
       const combined=(f.qs||[]).map((q,i)=>q.q+"\n"+(clean[i]||"")).join("\n\n");
@@ -4164,6 +4173,11 @@ function TeamMissionScreen({session,student,onBack}){
         <div style={{fontSize:12,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:f.color,marginBottom:8}}>Sarcina studentului</div>
         {f.taskRaw&&<div style={{fontSize:15,color:"#334155",lineHeight:1.65,background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:12,padding:"12px 13px",marginBottom:16}}>{f.taskRaw}</div>}
         <p style={{fontSize:13,color:"#64748b",lineHeight:1.5,margin:"4px 0 16px"}}>Răspundeți separat la punctele de mai jos. După trimitere, toate răspunsurile sunt blocate definitiv.</p>
+
+        {submitted&&<div style={{background:"#ecfdf5",border:"1px solid #86efac",borderRadius:12,padding:"12px 13px",margin:"0 0 16px",color:"#166534"}}>
+          <div style={{fontWeight:900,fontSize:14}}>Răspunsurile mele — pentru prezentare</div>
+          <div style={{fontSize:12,marginTop:3}}>Răspunsurile rămân vizibile pe acest telefon, dar sunt blocate și nu mai pot fi modificate.</div>
+        </div>}
 
         {(f.qs||[]).map((q,i)=><div key={i} style={{borderTop:i?"1px solid #e2e8f0":"none",paddingTop:i?16:0,marginTop:i?16:0}}>
           <div style={{fontWeight:800,fontSize:15,lineHeight:1.5,color:"#0f2742",marginBottom:8}}>{q.q}</div>
