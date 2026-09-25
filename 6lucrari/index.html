@@ -3837,6 +3837,12 @@ window.EXAM_BANK_RAW_EN = EXAM_BANK_RAW_EN;
 })();
 
 </script>
+<script src="group-cases/lp1.js"></script>
+<script src="group-cases/lp2.js"></script>
+<script src="group-cases/lp3.js"></script>
+<script src="group-cases/lp4.js"></script>
+<script src="group-cases/lp5.js"></script>
+<script src="group-cases/lp6.js"></script>
 <script type="text/babel">
 // Activitate de grup v3: multi-device, automatic role confirmation,
 // sealed work, synchronized reveal, team approval and final report.
@@ -4101,7 +4107,7 @@ function TeamMissionScreen({session,student,onBack}){
     const clean=Array.from({length:taskCount},(_,i)=>String(answers[i]||"").trim());
     const missing=clean.findIndex(x=>!x);
     if(missing>=0){
-      alert("Completați răspunsul la toate cele 4 sarcini înainte de trimitere.");
+      alert("Completați răspunsul la toate sarcinile înainte de trimitere.");
       return;
     }
     if(submitted){alert("Răspunsurile au fost deja trimise și nu mai pot fi modificate.");return;}
@@ -4148,29 +4154,22 @@ function TeamMissionScreen({session,student,onBack}){
 
       <section style={{background:"white",borderRadius:18,padding:"18px 16px",border:"1px solid #dbe7f1",marginBottom:14}}>
         <div style={{fontSize:12,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:f.color}}>Contextul cazului</div>
-        <p style={{lineHeight:1.6,fontSize:16,marginBottom:16}}>{f.context||f.briefing}</p>
-
-        <div style={{fontSize:12,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:f.color,marginBottom:10}}>Datele obținute</div>
-        {sections.map((section,si)=><div key={si} style={{marginBottom:si<sections.length-1?16:0}}>
-          <div style={{fontWeight:850,fontSize:14,color:"#334155",margin:"0 0 8px"}}>{section.title}</div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:8}}>
-            {(section.data||[]).map((x,i)=><div key={i} style={{background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:12,padding:"11px 12px"}}>
-              <div style={{fontSize:11,color:"#64748b",marginBottom:3}}>{x.l}</div>
-              <strong style={{fontSize:16,lineHeight:1.25}}>{x.v}</strong>
-            </div>)}
-          </div>
-        </div>)}
+        {(f.contextParagraphs&&f.contextParagraphs.length
+          ? f.contextParagraphs
+          : [f.context||f.briefing]
+        ).filter(Boolean).map((p,i)=><p key={i} style={{lineHeight:1.65,fontSize:16,margin:i===0?"10px 0 10px":"0 0 10px"}}>{p}</p>)}
       </section>
 
       <section style={{background:"white",borderRadius:18,padding:"18px 16px",border:"1px solid #dbe7f1",marginBottom:14}}>
-        <div style={{fontSize:12,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:f.color,marginBottom:4}}>Sarcina studentului</div>
-        <p style={{fontSize:13,color:"#64748b",lineHeight:1.5,margin:"4px 0 16px"}}>Răspundeți separat la fiecare sarcină. După trimitere, toate răspunsurile sunt blocate definitiv.</p>
+        <div style={{fontSize:12,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:f.color,marginBottom:8}}>Sarcina studentului</div>
+        {f.taskRaw&&<div style={{fontSize:15,color:"#334155",lineHeight:1.65,background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:12,padding:"12px 13px",marginBottom:16}}>{f.taskRaw}</div>}
+        <p style={{fontSize:13,color:"#64748b",lineHeight:1.5,margin:"4px 0 16px"}}>Răspundeți separat la punctele de mai jos. După trimitere, toate răspunsurile sunt blocate definitiv.</p>
 
         {(f.qs||[]).map((q,i)=><div key={i} style={{borderTop:i?"1px solid #e2e8f0":"none",paddingTop:i?16:0,marginTop:i?16:0}}>
           <div style={{fontWeight:800,fontSize:15,lineHeight:1.5,color:"#0f2742",marginBottom:8}}>{q.q}</div>
           {!submitted
             ? <textarea value={answers[i]||""} onChange={e=>setAnswer(i,e.target.value)}
-                placeholder={i===0?"Formulați verdictul și argumentați-l…":i===1?"Indicați datele decisive și normele de comparație…":i===2?"Descrieți efectele și riscurile prioritare…":"Precizați măsurile, metoda de confirmare și concluzia…"}
+                placeholder={"Răspuns la punctul "+(i+1)+"…"}
                 style={{width:"100%",minHeight:110,padding:12,border:"1.5px solid #cbd5e1",borderRadius:12,font:"inherit",fontSize:15,lineHeight:1.45,resize:"vertical",boxSizing:"border-box",background:"#fff"}}/>
             : <div style={{whiteSpace:"pre-wrap",lineHeight:1.55,background:"#f8fafc",padding:13,borderRadius:12,border:"1px solid #e2e8f0"}}>{submitted.answers?.[i]||"—"}</div>}
         </div>)}
@@ -4181,10 +4180,10 @@ function TeamMissionScreen({session,student,onBack}){
         </>:<div style={{background:"#ecfdf5",border:"1px solid #86efac",borderRadius:12,padding:14,color:"#166534",fontWeight:800,marginTop:16}}>✓ Răspunsurile au fost trimise și blocate</div>}
       </section>
 
-      {room.unlocked&&submitted&&<section style={{background:"#f0fdf4",borderRadius:18,padding:"18px 16px",border:"1px solid #86efac"}}>
-        <div style={{fontSize:12,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:"#166534"}}>Rezolvarea corectă și explicații</div>
-        <ul style={{lineHeight:1.6,paddingLeft:22}}>{solution.map((x,i)=><li key={i} style={{marginBottom:7}}>{x}</li>)}</ul>
-        {(f.sourceRefs||[]).length>0&&<div style={{marginTop:14,fontSize:12,color:"#166534"}}><strong>Trasabilitate în material:</strong> {(f.sourceRefs||[]).join(" · ")}</div>}
+      {room.unlocked&&submitted&&((solution.length>0)||(f.sourceRefs||[]).length>0)&&<section style={{background:"#f0fdf4",borderRadius:18,padding:"18px 16px",border:"1px solid #86efac"}}>
+        <div style={{fontSize:12,fontWeight:900,textTransform:"uppercase",letterSpacing:".08em",color:"#166534"}}>Repere pentru verificare</div>
+        {solution.length>0&&<ul style={{lineHeight:1.6,paddingLeft:22}}>{solution.map((x,i)=><li key={i} style={{marginBottom:7}}>{x}</li>)}</ul>}
+        {(f.sourceRefs||[]).length>0&&<div style={{marginTop:10,fontSize:13,lineHeight:1.55,color:"#166534"}}>{(f.sourceRefs||[]).join(" · ")}</div>}
       </section>}
     </main>
   </div>;
@@ -4367,77 +4366,36 @@ function mergePairQuestions(aQs=[], bQs=[]) {
   return out;
 }
 
-function mergeIntegratedActivityPair(labId,a,b,index,parts){
-  if(!a&&!b) return null;
-  if(!a) return {...b,id:labId+"_g"+(index+1)};
-  if(!b) return {...a,id:labId+"_g"+(index+1)};
-
-  const correctA=a.diagnosis?.options?.[a.diagnosis?.correct]||"";
-  const correctB=b.diagnosis?.options?.[b.diagnosis?.correct]||"";
-  const relevantEvidence=[
-    ...(a.evidence||[]).filter(x=>x.relevant),
-    ...(b.evidence||[]).filter(x=>x.relevant)
-  ];
-  const usefulActions=[
-    ...(a.actions||[]).filter(x=>(x.score||0)>0),
-    ...(b.actions||[]).filter(x=>(x.score||0)>0)
-  ];
-
+function finalCaseToMission(item,labId,index){
+  const lab=LABS.find(x=>x.id===labId)||{};
+  const parts=(item.taskParts||[]).map((q,i)=>({
+    q:String(q||"").trim(),
+    h:""
+  }));
   return {
-    ...a,
-    id:labId+"_g"+(index+1),
+    ...item,
     mission:true,
-    title:"Caz integrat "+(index+1)+" · "+(a.title||parts[0].toUpperCase())+" + "+(b.title||parts[1].toUpperCase()),
-    context:
-      "În cadrul aceleiași evaluări practice trebuie analizate împreună două componente ale cazului. "+
-      String(a.context||a.briefing||"").trim()+" "+
-      "În paralel, "+String(b.context||b.briefing||"").trim(),
-    briefing:
-      "Analizați integrat datele din cele două componente și formulați un singur răspuns profesional coerent.",
-    sections:[
-      {title:a.title||parts[0].toUpperCase(),source:parts[0].toUpperCase(),data:a.caz||[]},
-      {title:b.title||parts[1].toUpperCase(),source:parts[1].toUpperCase(),data:b.caz||[]}
-    ],
-    caz:[
-      ...(a.caz||[]).map(x=>({...x,section:a.title||parts[0].toUpperCase()})),
-      ...(b.caz||[]).map(x=>({...x,section:b.title||parts[1].toUpperCase()}))
-    ],
-    qs:[
-      {q:"1. Formulați verdictul igienico-sanitar integrat al cazului și argumentați-l pe baza ambelor componente.",
-       h:[correctA,correctB].filter(Boolean).join(" · ")},
-      {q:"2. Selectați datele decisive din ambele componente și comparați-le cu valorile, normele sau principiile relevante.",
-       h:relevantEvidence.slice(0,6).map(x=>x.text).join(" · ")},
-      {q:"3. Ce efecte asupra sănătății sau siguranței rezultă din aceste constatări și care sunt prioritare?",
-       h:relevantEvidence.slice(0,4).map(x=>x.text).join(" · ")},
-      {q:"4. Propuneți planul de intervenție: măsurile prioritare, aparatul/metoda de confirmare și concluzia finală.",
-       h:usefulActions.sort((x,y)=>(y.score||0)-(x.score||0)).slice(0,5).map(x=>x.text).join(" · ")}
-    ],
-    diagnosis:{
-      prompt:"Verdict integrat",
-      options:[
-        [correctA,correctB].filter(Boolean).join(" + "),
-        "Datele indică doar o problemă minoră, fără consecințe igienico-sanitare.",
-        "Datele sunt toate conforme și nu este necesară nicio intervenție."
-      ],
-      correct:0
-    },
-    evidence:[...(a.evidence||[]),...(b.evidence||[])],
-    actions:[...(a.actions||[]),...(b.actions||[])],
-    budget:Number(a.budget||0)+Number(b.budget||0),
-    sourceRefs:[
-      ...(a.sourceRefs||[parts[0].toUpperCase()]),
-      ...(b.sourceRefs||[parts[1].toUpperCase()])
-    ],
-    conc:["Verdict integrat","Date decisive și norme","Riscuri prioritare","Plan de intervenție și concluzie"]
+    emoji:["🩺","🔎","🧪","📋","✅"][index%5],
+    color:lab.color||"#2563eb",
+    context:(item.contextParagraphs||[]).join("\n\n"),
+    briefing:(item.contextParagraphs||[]).join("\n\n"),
+    caz:[],
+    qs:parts,
+    diagnosis:null,
+    evidence:[],
+    actions:[],
+    sourceRefs:item.sourceNote?[item.sourceNote]:[],
+    conc:[],
+    _finalApprovedCase:true
   };
 }
 
 function buildMergedBaseActivities(labId, bank) {
-  const parts=MERGED_LAB_PARTS[labId];
-  if(!parts) return bank?.[labId] || [];
-  const left=bank?.[parts[0]] || [];
-  const right=bank?.[parts[1]] || [];
-  return Array.from({length:5},(_,i)=>mergeIntegratedActivityPair(labId,left[i]||null,right[i]||null,i,parts)).filter(Boolean);
+  const finalCases=window.FINAL_GROUP_CASES?.[labId];
+  if(finalCases?.length){
+    return finalCases.slice(0,5).map((x,i)=>finalCaseToMission(x,labId,i));
+  }
+  return [];
 }
 
 // Returns six visible activities for the new six-practical structure.
