@@ -47,8 +47,13 @@ for fn in ["index.html","6lucrari/index.html"]:
     if "function takeUniqueQuizQuestions" in t:
         print(fn,"already patched")
         continue
-    a=t.index("function getMergedQuizModule")
-    b=t.index("\n// ════════════════════════════════════════════════════════════\n// QUIZ SCREEN",a)
+    a=t.find("function getMergedQuizModule")
+    if a < 0:
+        print(fn,"no merged quiz helper; skipped")
+        continue
+    b=t.find("\n// ════════════════════════════════════════════════════════════\n// QUIZ SCREEN",a)
+    if b < 0:
+        raise SystemExit("Quiz screen anchor not found in "+fn)
     t=t[:a]+new+"\n"+t[b:]
     p.write_text(t,encoding="utf-8")
     print(fn,"patched")
