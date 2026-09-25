@@ -1,0 +1,22 @@
+name: Remove obsolete group size control
+on:
+  push:
+    paths:
+      - '.github/trigger-remove-group-size'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: python .github/scripts/remove_group_size_control.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add 6lucrari/index.html
+          git commit -m "Remove obsolete expected group size control"
+          git push
