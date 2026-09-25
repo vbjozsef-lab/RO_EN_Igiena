@@ -8256,7 +8256,7 @@ function StudentLogin({session, onLogin}) {
       setErr(lang==="en"?"The matriculation number was not found in the student list. Please check and try again.":"Numărul matricol nu a fost găsit în lista studenților. Verificați și încercați din nou.");
       return;
     }
-    if (isGroupActivity && !group) { setErr(lang==="en"?"Select activity group 1–6.":"Selectați grupa activității 1–6."); return; }
+    if (isGroupActivity && !group) { setErr(lang==="en"?"Select case 1–5.":"Selectați cazul 1–5."); return; }
     const academicGroup=student.group||buildStudentGroupLabel(student);
     const officialGroup=String(student.grupa||"");
     const resultGroup=isGroupActivity?group:(officialGroup||String(student.seria||"")||"—");
@@ -8287,10 +8287,10 @@ function StudentLogin({session, onLogin}) {
             #{identified.matricol}{identified.yearLabel?" · "+identified.yearLabel:""}{identified.seria?" · Seria "+identified.seria:""}{identified.grupa?" · Grupa "+identified.grupa:""}
           </div>
         </div>}
-        {isGroupActivity&&<><label style={S.label}>{lang==="en"?"Activity group":"Grupa activității"}</label>
+        {isGroupActivity&&<><label style={S.label}>{lang==="en"?"Case":"Caz"}</label>
           <select style={{...S.input,marginBottom:16}} value={group} onChange={e=>{setGroup(e.target.value);setErr("");}}>
-            <option value="">{lang==="en"?"— Select group 1–6 —":"— Selectați grupa 1–6 —"}</option>
-            {Array.from({length:6},(_,i)=><option key={i+1} value={String(i+1)}>{lang==="en"?"Group ":"Grupa "}{i+1}</option>)}
+            <option value="">{lang==="en"?"— Select case 1–5 —":"— Selectați cazul 1–5 —"}</option>
+            {Array.from({length:5},(_,i)=><option key={i+1} value={String(i+1)}>{lang==="en"?"Case ":"Cazul "}{i+1}</option>)}
           </select></>}
         {err && <p style={{color:"#dc2626",fontSize:13,margin:"0 0 10px",fontWeight:600}}>{err}</p>}
         <button style={S.btnG} onClick={go}>{isGroupActivity?(lang==="en"?"Enter group activity →":"Intră în activitatea de grup →"):isLivePresentation?(lang==="en"?"Join live presentation →":"Intră în prezentarea live →"):(lang==="en"?"Enter quiz →":"Intră la quiz →")}</button>
