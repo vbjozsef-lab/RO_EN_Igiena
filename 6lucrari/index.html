@@ -4095,7 +4095,7 @@ function TeamMissionScreen({session,student,onBack}){
   const refresh=React.useCallback(async()=>{
     if(!f)return;
     try{
-      const next=await loadActivityRoom(session,student,f,Number(session?.teamSize)||14);
+      const next=await loadActivityRoom(session,student,f,999999);
       setRoom(next);
       const ownFull=await loadOwnActivitySubmission(session,student,f);
       const mine=ownFull||(next.members||[]).find(r=>activityRowKey(r)===activityStudentKey(student));
@@ -4130,7 +4130,7 @@ function TeamMissionScreen({session,student,onBack}){
     if(!confirm("Sunteți sigur(ă) că doriți să trimiteți răspunsurile? După trimitere, acestea nu mai pot fi modificate."))return;
     setSaving(true);
     try{
-      const latest=await loadActivityRoom(session,student,f,Number(session?.teamSize)||14);
+      const latest=await loadActivityRoom(session,student,f,999999);
       const existing=(latest.members||[]).find(r=>activityRowKey(r)===activityStudentKey(student));
       if(existing){
         const p=activityPayload(existing);
@@ -5749,7 +5749,6 @@ function AdminPanel({onBack, teacherName}) {
   const [timeLeft, setTimeLeft]   = useState(0);
   const [generating, setGenerating] = useState(false);
   const [activityType, setActivityType] = useState('quiz');  // quiz | fisa | exam
-  const [teamSize, setTeamSize]     = useState(14);
   const [roomOverview, setRoomOverview] = useState({});
   const [unlockingGroup, setUnlockingGroup] = useState(null);
   const [unlockMsg, setUnlockMsg] = useState("");
@@ -5817,9 +5816,9 @@ function AdminPanel({onBack, teacherName}) {
       const token = generateToken();
       const expiresAt = Date.now() + duration * 60 * 1000;
       const fisaCode = activityType==='fisa' ? selLab.code+'-FISA' : activityType==='exam' ? selLab.code+'-EXAM' : selLab.code;
-      const session = { token, labId: selLab.id, labTitle: selLab.title, labCode: fisaCode, duration, expiresAt, createdAt: Date.now(), usedBy:[], teacher: teacherName, semester: semester.trim(), lang, teamSize: activityType==='fisa' ? teamSize : undefined };
+      const session = { token, labId: selLab.id, labTitle: selLab.title, labCode: fisaCode, duration, expiresAt, createdAt: Date.now(), usedBy:[], teacher: teacherName, semester: semester.trim(), lang };
       await addSession(session);
-      const url = `${getBaseURL()}?token=${token}&lang=${lang}${activityType==='fisa' ? `&teamSize=${teamSize}` : ''}`;
+      const url = `${getBaseURL()}?token=${token}&lang=${lang}`;
       const dataURL = await generateQRDataURL(url);
       setQrDataURL(dataURL);
       setActiveSession(session);
@@ -5985,17 +5984,8 @@ function AdminPanel({onBack, teacherName}) {
                 ))}
               </div>
               {activityType==="fisa" && <div style={{background:"#FFFBEB",border:"1px solid #fde68a",borderRadius:9,padding:"8px 14px",marginBottom:16,fontSize:12,color:"#92400e"}}>
-                📱 Fiecare student scanează același cod pe telefonul propriu, alege grupa 1–6 și primește automat un rol individual.<br/>
-                Cele 6 roluri de bază sunt păstrate pentru orice grupă de 6–14 studenți; participanții suplimentari primesc sarcini distincte. Răspunsurile rămân sigilate până când toți termină.
-              </div>}
-
-              {activityType==="fisa" && <div style={{marginBottom:16}}>
-                <label style={S.label}>👥 Număr așteptat de studenți / grupă</label>
-                <div style={{display:"flex",gap:8,alignItems:"center"}}>
-                  {[6,8,10,12,14].map(n=><button key={n} onClick={()=>setTeamSize(n)} style={{flex:1,padding:"8px 4px",borderRadius:8,border:`1.5px solid ${teamSize===n?"#a5b4fc":"#e0e7ff"}`,background:teamSize===n?"#EEF2FF":"#F8FAFF",color:teamSize===n?"#6366f1":"#64748b",fontWeight:teamSize===n?700:500,cursor:"pointer"}}>{n}</button>)}
-                  <input type="number" min="6" max="14" value={teamSize} onChange={e=>setTeamSize(Math.min(14,Math.max(6,Number(e.target.value)||14)))} style={{...S.input,width:72,textAlign:"center",padding:"8px 4px"}} title="6–14"/>
-                </div>
-                <p style={{fontSize:11,color:"#64748b",margin:"6px 0 0"}}>Selectați numărul prezent real (6–14). Sinteza se deschide automat după {teamSize} contribuții individuale.</p>
+                📱 Fiecare student scanează același cod pe telefonul propriu și primește unul dintre cele 5 cazuri ale lucrării practice.<br/>
+                Răspunsurile sunt individuale, rămân vizibile studentului după trimitere și nu mai pot fi modificate.
               </div>}
 
               <label style={S.label}>Durată valabilitate QR</label>
@@ -9680,7 +9670,7 @@ function App() {
   if (screen==="admin")       return <AdminPanel teacherName={teacherName} onBack={()=>setScreen("home")}/>;
   if (screen==="tokenJoin")   return (
     <TokenJoin token={pendingToken}
-      onValid={s=>{const sl=resolveSessionLang(s, lang); const rawSize=new URLSearchParams(window.location.search).get("teamSize"); const qrTeamSize=Math.min(14,Math.max(6,parseInt(rawSize||"14",10)||14)); setLang(sl); try{localStorage.setItem("igiena_lang",sl);}catch(e){} setSession({...s, lang:sl, teamSize:qrTeamSize}); setScreen(s?.labCode?.endsWith("-EXAM")?"exam_code":"studentLogin");}}
+      onValid={s=>{const sl=resolveSessionLang(s, lang); setLang(sl); try{localStorage.setItem("igiena_lang",sl);}catch(e){} setSession({...s, lang:sl}); setScreen(s?.labCode?.endsWith("-EXAM")?"exam_code":"studentLogin");}}
       onInvalid={msg=>{setErrMsg(msg);setScreen("error");}}/>
   );
   if (screen==="error")       return <ErrorScreen message={errMsg} onBack={()=>{setScreen("home");window.history.pushState({},"",window.location.pathname);}}/>;
