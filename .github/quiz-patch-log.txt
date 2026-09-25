@@ -1,5 +1,3 @@
-Traceback (most recent call last):
-  File "/home/runner/work/RO_EN_Igiena/RO_EN_Igiena/.github/scripts/merge_individual_quizzes.py", line 50, in <module>
-    a=t.index("function getMergedQuizModule")
-ValueError: substring not found
-PATCH_STATUS=1
+index.html no merged quiz helper; skipped
+6lucrari/index.html patched
+PATCH_STATUS=0
