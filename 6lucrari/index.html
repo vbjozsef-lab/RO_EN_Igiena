@@ -7257,11 +7257,11 @@ function QuizPreviewTab({selLab, onSelectLab, teacherName}) {
     fetchAllEditsRemote().then(([q]) => setQuizEdits(q)).catch(() => setQuizEdits(loadQuizEdits()));
   }, []);
 
-  React.useEffect(()=>{ setSelModId(null); setExpandedQ(null); setSearch(""); setEditingQ(null); setNewQDraft(null); }, [selLab?.id]);
+  React.useEffect(()=>{ const mq=getMergedQuizModule(selLab?.id,lang); setSelModId(mq?.id||null); setExpandedQ(null); setSearch(""); setEditingQ(null); setNewQDraft(null); }, [selLab?.id,lang]);
 
-  const labData = LAB_Q_MAP[selLab?.id];
-  const modules = labData?.m || [];
-  const baseQuestions = labData?.q || {};
+  const mergedQuiz = getMergedQuizModule(selLab?.id, lang);
+  const modules = mergedQuiz ? [{...mergedQuiz, id:mergedQuiz.id, title:mergedQuiz.title, time:mergedQuiz.time||20}] : [];
+  const baseQuestions = mergedQuiz ? {[mergedQuiz.id]:(mergedQuiz._questions||[])} : {};
   const selMod = modules.find(m=>m.id===selModId);
 
   const edKey = selLab?.id + ":" + selModId;
@@ -7315,7 +7315,7 @@ function QuizPreviewTab({selLab, onSelectLab, teacherName}) {
     persist({...quizEdits, [edKey]: arr}, edKey, arr);
   };
 
-  const totalQ = Object.values(baseQuestions).reduce((s,arr)=>s+arr.length,0);
+  const totalQ = modules.reduce((s,m)=>s+(quizEdits[selLab?.id+":"+m.id]||baseQuestions[m.id]||[]).length,0);
 
   // ── EDIT FORM ──────────────────────────────────────────
   const EditForm = ({initial, onSave, onCancel, isNew}) => {
@@ -7416,8 +7416,9 @@ function QuizPreviewTab({selLab, onSelectLab, teacherName}) {
       {/* Lab selector */}
       <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:16}}>
         {LABS.map(lab=>{
-          const lq = LAB_Q_MAP[lab.id];
-          const cnt = lq ? Object.values(lq.q).reduce((s,a)=>s+a.length,0) : 0;
+          const lm = getMergedQuizModule(lab.id,lang);
+          const lk = lm ? lab.id+":"+lm.id : "";
+          const cnt = lm ? (quizEdits[lk]||lm._questions||[]).length : 0;
           const active = selLab?.id===lab.id;
           const hasEd = Object.keys(quizEdits).some(k=>k.startsWith(lab.id+":"));
           return (
@@ -7791,8 +7792,7 @@ function FisaMissionForm({initial, onSave, onCancel}) {
 
 function FisaPreviewPanel({labId, mode="preview", teacherName, onActivitiesChange}) {
   const T = useT();
-  const ALL_LABS = ["lp1a","lp1b","lp2a","lp2b","lp3a","lp3b","lp4a","lp4b","lp5a","lp5b","lp6a","lp6b"];
-  const hasFisa = ALL_LABS.includes(labId);
+  const hasFisa = LABS.some(l=>l.id===labId);
   const [fisaEdits, setFisaEdits] = useState(()=>loadFisaEdits());
   const [selFisaId, setSelFisaId] = useState(null);
   const [expandedQ, setExpandedQ] = useState(null);
@@ -7813,7 +7813,7 @@ function FisaPreviewPanel({labId, mode="preview", teacherName, onActivitiesChang
 
   const lang = React.useContext(LangContext);
   const _fb = lang==="en" ? FISE_DATA_EN : (window.TEAM_MISSIONS || FISE_DATA);
-  const baseFise = hasFisa ? (_fb[labId]||[]).map(f=>normalizeTeamMission(f,lang)) : [];
+  const baseFise = hasFisa ? buildMergedBaseActivities(labId,_fb).map(f=>normalizeTeamMission(f,lang)) : [];
   const activeFise = getActiveFiseForLab(labId,lang,fisaEdits).map(f=>normalizeTeamMission(f,lang));
   const deletedBaseFise = baseFise.filter(f=>fisaEdits[labId+":"+f.id]?._deleted);
   const selFisa = selFisaId ? activeFise.find(f=>f.id===selFisaId) : null;
@@ -7846,8 +7846,8 @@ function FisaPreviewPanel({labId, mode="preview", teacherName, onActivitiesChang
   };
 
   const addActivity = () => {
-    if (activeFise.length >= 6) {
-      alert("Sunt deja 6 activități active. Ștergeți sau ascundeți una înainte de a adăuga alta.");
+    if (activeFise.length >= 5) {
+      alert("Sunt deja 5 activități active. Ștergeți sau ascundeți una înainte de a adăuga alta.");
       return;
     }
     const item=createBlankTeamMission(labId);
@@ -7858,7 +7858,7 @@ function FisaPreviewPanel({labId, mode="preview", teacherName, onActivitiesChang
   };
 
   const deleteActivity = () => {
-    if (!selFisa || !confirm(`Eliminați activitatea „${selFisa.title}”? QR-ul nu poate fi generat până când setul revine la 6 activități.`)) return;
+    if (!selFisa || !confirm(`Eliminați activitatea „${selFisa.title}”? QR-ul nu poate fi generat până când setul revine la 5 activități.`)) return;
     if (isCustom) {
       const ne={...fisaEdits};
       delete ne[edKey];
@@ -7877,7 +7877,7 @@ function FisaPreviewPanel({labId, mode="preview", teacherName, onActivitiesChang
 
   const restoreActivity = (fisa) => {
     const key=labId+":"+fisa.id;
-    if (activeFise.length>=6) { alert("Există deja 6 activități active. Eliminați una înainte de restaurare."); return; }
+    if (activeFise.length>=5) { alert("Există deja 5 activități active. Eliminați una înainte de restaurare."); return; }
     const ne={...fisaEdits}; delete ne[key];
     setFisaEdits(ne); saveFisaEdits(ne);
     deleteFisaEditRemote(key).catch(e=>console.warn("restore activity:",e));
@@ -7944,9 +7944,9 @@ function FisaPreviewPanel({labId, mode="preview", teacherName, onActivitiesChang
     <div>
       {/* Save status + activity set controls */}
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14,flexWrap:"wrap"}}>
-        <span style={{fontSize:12,fontWeight:800,color:activeFise.length===6?"#047857":"#b45309",background:activeFise.length===6?"#ecfdf5":"#fffbeb",padding:"6px 12px",borderRadius:8,border:`1px solid ${activeFise.length===6?"#a7f3d0":"#fde68a"}`}}>{activeFise.length}/6 activități active</span>
+        <span style={{fontSize:12,fontWeight:800,color:activeFise.length===5?"#047857":"#b45309",background:activeFise.length===5?"#ecfdf5":"#fffbeb",padding:"6px 12px",borderRadius:8,border:`1px solid ${activeFise.length===5?"#a7f3d0":"#fde68a"}`}}>{activeFise.length}/5 activități active</span>
         {saveMsg && <span style={{fontSize:13,color:"#16a34a",fontWeight:700,background:"#f0fdf4",padding:"5px 12px",borderRadius:8,border:"1px solid #bbf7d0"}}>{saveMsg}</span>}
-        {subTab==="edit" && <button onClick={addActivity} disabled={activeFise.length>=6} style={{padding:"7px 14px",background:activeFise.length<6?"linear-gradient(135deg,#4f46e5,#7c3aed)":"#e2e8f0",border:0,borderRadius:8,color:activeFise.length<6?"#fff":"#94a3b8",fontSize:12,fontWeight:800,cursor:activeFise.length<6?"pointer":"not-allowed"}}>＋ Activitate nouă</button>}
+        {subTab==="edit" && <button onClick={addActivity} disabled={activeFise.length>=5} style={{padding:"7px 14px",background:activeFise.length<5?"linear-gradient(135deg,#4f46e5,#7c3aed)":"#e2e8f0",border:0,borderRadius:8,color:activeFise.length<5?"#fff":"#94a3b8",fontSize:12,fontWeight:800,cursor:activeFise.length<5?"pointer":"not-allowed"}}>＋ Activitate nouă</button>}
         {hasEdits && baseFisa && subTab==="edit" && (
           <button onClick={resetFisa} style={{padding:"6px 14px",background:"#fef2f2",border:"1px solid #fca5a5",borderRadius:8,color:"#dc2626",fontSize:12,fontWeight:700,cursor:"pointer"}}>
             ↺ Restaurează conținutul original
@@ -7980,7 +7980,7 @@ function FisaPreviewPanel({labId, mode="preview", teacherName, onActivitiesChang
               </button>
             );
           })}
-          {deletedBaseFise.length>0&&<div style={{borderTop:"2px solid #e2e8f0",background:"#fff7ed"}}><div style={{padding:"8px 10px",fontSize:10,fontWeight:800,color:"#9a3412",textTransform:"uppercase"}}>Eliminate · pot fi restaurate</div>{deletedBaseFise.map(f=><div key={f.id} style={{display:"flex",alignItems:"center",gap:6,padding:"7px 9px",borderTop:"1px solid #fed7aa"}}><span>{f.emoji}</span><span style={{flex:1,minWidth:0,fontSize:10,color:"#7c2d12",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.title}</span><button onClick={()=>restoreActivity(f)} disabled={activeFise.length>=6} style={{border:"1px solid #fdba74",background:"#fff",color:"#c2410c",borderRadius:6,padding:"4px 6px",fontSize:9,fontWeight:800,cursor:activeFise.length<6?"pointer":"not-allowed",opacity:activeFise.length<6?1:.5}}>Restaurează</button></div>)}</div>}
+          {deletedBaseFise.length>0&&<div style={{borderTop:"2px solid #e2e8f0",background:"#fff7ed"}}><div style={{padding:"8px 10px",fontSize:10,fontWeight:800,color:"#9a3412",textTransform:"uppercase"}}>Eliminate · pot fi restaurate</div>{deletedBaseFise.map(f=><div key={f.id} style={{display:"flex",alignItems:"center",gap:6,padding:"7px 9px",borderTop:"1px solid #fed7aa"}}><span>{f.emoji}</span><span style={{flex:1,minWidth:0,fontSize:10,color:"#7c2d12",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.title}</span><button onClick={()=>restoreActivity(f)} disabled={activeFise.length>=5} style={{border:"1px solid #fdba74",background:"#fff",color:"#c2410c",borderRadius:6,padding:"4px 6px",fontSize:9,fontWeight:800,cursor:activeFise.length<5?"pointer":"not-allowed",opacity:activeFise.length<5?1:.5}}>Restaurează</button></div>)}</div>}
         </div>
 
         {/* Right panel */}
