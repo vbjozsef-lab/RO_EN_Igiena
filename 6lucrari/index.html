@@ -9269,7 +9269,7 @@ function PrezentaTab({results, labs}) {
   const pivot = {};
   filtered.forEach(r => {
     const key = (r.name||"").trim()+"|||"+(r.group||"");
-    if (!pivot[key]) pivot[key] = {name:(r.name||"").trim(), group:r.group||"", studyYear:r.studyYear||"", spec:r.specialization||""};
+    if (!pivot[key]) pivot[key] = {name:(r.name||"").trim(), matricol:r.matricol||"", group:r.group||"", studyYear:r.studyYear||"", spec:r.specialization||""};
     const lab = r.labId||"";
     if (!pivot[key][lab] || r.pct > pivot[key][lab]) pivot[key][lab] = r.pct;
   });
@@ -9287,9 +9287,9 @@ function PrezentaTab({results, labs}) {
 
   const exportCSV = () => {
     const labCols = activeLabs.map(l=>l.code);
-    const header = ["Grupă","An","Specializare","Nume",...labCols].join(",");
+    const header = ["Grupă","An","Specializare","Număr matricol","Nume",...labCols].join(",");
     const csvRows = rows.map(r =>
-      [r.group, r.studyYear||"", r.spec||"", r.name,
+      [r.group, r.studyYear||"", r.spec||"", r.matricol||"", r.name,
        ...activeLabs.map(l => r[l.id]!==undefined ? r[l.id]+"%" : "Absent")
       ].map(v=>'"'+String(v||"").replace(/"/g,"''")+'"').join(",")
     ).join("\n");
@@ -9357,6 +9357,7 @@ function PrezentaTab({results, labs}) {
             <thead>
               <tr style={{background:"#F0F4FF"}}>
                 <th style={{textAlign:"left",padding:"10px 12px",borderBottom:"2px solid #e0e7ff",fontWeight:700,color:"#4338ca",fontSize:12,whiteSpace:"nowrap",position:"sticky",left:0,background:"#F0F4FF",zIndex:1}}>Grupă</th>
+                <th style={{textAlign:"left",padding:"10px 12px",borderBottom:"2px solid #e0e7ff",fontWeight:700,color:"#4338ca",fontSize:12,whiteSpace:"nowrap"}}>Număr matricol</th>
                 <th style={{textAlign:"left",padding:"10px 12px",borderBottom:"2px solid #e0e7ff",fontWeight:700,color:"#4338ca",fontSize:12,whiteSpace:"nowrap",position:"sticky",left:48,background:"#F0F4FF",zIndex:1}}>Nume</th>
                 {activeLabs.map(l=>(
                   <th key={l.id} style={{textAlign:"center",padding:"10px 10px",borderBottom:"2px solid #e0e7ff",fontWeight:700,color:"#4338ca",fontSize:12,whiteSpace:"nowrap"}}>
@@ -9372,6 +9373,9 @@ function PrezentaTab({results, labs}) {
                   onMouseLeave={e=>e.currentTarget.style.background=i%2===0?"#fff":"#F8FAFF"}>
                   <td style={{padding:"8px 12px",position:"sticky",left:0,background:"inherit",zIndex:1,whiteSpace:"nowrap"}}>
                     <span style={{background:"#EEF2FF",color:"#4338ca",borderRadius:6,padding:"2px 8px",fontSize:12,fontWeight:700}}>{r.group}</span>
+                  </td>
+                  <td style={{padding:"8px 12px",fontFamily:"JetBrains Mono,monospace",fontWeight:700,color:"#4338ca",whiteSpace:"nowrap"}}>
+                    {r.matricol||"—"}
                   </td>
                   <td style={{padding:"8px 12px",fontWeight:600,color:"#1e293b",whiteSpace:"nowrap",position:"sticky",left:48,background:"inherit",zIndex:1,minWidth:150}}>
                     {r.name}
