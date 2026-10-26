@@ -9269,7 +9269,14 @@ function PrezentaTab({results, labs}) {
   const pivot = {};
   filtered.forEach(r => {
     const key = (r.name||"").trim()+"|||"+(r.group||"");
-    if (!pivot[key]) pivot[key] = {name:(r.name||"").trim(), matricol:r.matricol||"", group:r.group||"", studyYear:r.studyYear||"", spec:r.specialization||""};
+    // Older quiz records may not contain matricol in answers_text.
+    // For Prezență/CSV only, recover it from the official student registry by name.
+    const registryStudent = STUDENT_REGISTRY.find(s =>
+      String(s.name||"").trim().toLocaleLowerCase("ro-RO") === String(r.name||"").trim().toLocaleLowerCase("ro-RO")
+    );
+    const matricol = r.matricol || registryStudent?.matricol || "";
+    if (!pivot[key]) pivot[key] = {name:(r.name||"").trim(), matricol, group:r.group||"", studyYear:r.studyYear||"", spec:r.specialization||""};
+    else if (!pivot[key].matricol && matricol) pivot[key].matricol = matricol;
     const lab = r.labId||"";
     if (!pivot[key][lab] || r.pct > pivot[key][lab]) pivot[key][lab] = r.pct;
   });
