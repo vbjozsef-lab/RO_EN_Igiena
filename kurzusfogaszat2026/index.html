@@ -58,15 +58,60 @@ async function generateQR(type){
  const box=q("#qr-"+type);box.innerHTML='<div class="ok"><b>'+(type==="practical"?"Gyakorlati":"Elméleti")+' QR</b><div class="muted">Érvényes: '+dur+' perc</div></div><div class="qr" id="qrcode-'+type+'"></div><div class="muted center">Token: '+esc(t)+'</div>';
  new QRCode(document.getElementById("qrcode-"+type),{text:url,width:220,height:220});
 }
+function combinedExamRows(rawRows){
+ const by={};
+ for(const r of (rawRows||[])){
+   let m={};try{m=JSON.parse(r.answers_text||"{}")}catch(e){}
+   const matricol=String(m.matricol||"").trim();
+   if(!matricol) continue;
+   if(!by[matricol]) by[matricol]={matricol,name:r.name||m.name||"",practical:null,theory:null};
+   if(!by[matricol].name) by[matricol].name=r.name||m.name||"";
+   const type=m.examType||(String(r.lab_code||"").includes("PRACTICAL")?"practical":String(r.lab_code||"").includes("THEORY")?"theory":"");
+   if(!type) continue;
+   const item={grade:Number(m.grade??grade(r.pct)),score:Number(r.score||0),total:Number(r.total||0),pct:Number(r.pct||0),created_at:r.created_at||""};
+   const prev=by[matricol][type];
+   if(!prev||new Date(item.created_at).getTime()>=new Date(prev.created_at).getTime()) by[matricol][type]=item;
+ }
+ return Object.values(by).sort((a,b)=>a.name.localeCompare(b.name,"hu"));
+}
+function finalGrade(row){
+ if(!row?.practical||!row?.theory) return null;
+ return Number((0.30*Number(row.practical.grade)+0.70*Number(row.theory.grade)).toFixed(2));
+}
 async function loadResults(){
- const box=q("#results");if(!box)return;const r=await sb("results?select=*&order=created_at.desc&limit=1000",{method:"GET",prefer:""});
+ const box=q("#results");if(!box)return;
+ const r=await sb("results?select=*&order=created_at.desc&limit=1000",{method:"GET",prefer:""});
  if(!r.ok){box.innerHTML='<div class="bad">Nem sikerült betölteni.</div>';return}
- const rows=(await r.json()).filter(x=>String(x.lab_code||"").startsWith("KURZUSFOGASZAT2026-"));
+ const raw=(await r.json()).filter(x=>String(x.lab_code||"").startsWith("KURZUSFOGASZAT2026-"));
+ const rows=combinedExamRows(raw);
  window._kfrows=rows;
  if(!rows.length){box.innerHTML='<div class="muted">Még nincs eredmény.</div>';return}
- box.innerHTML='<div style="overflow:auto"><table><thead><tr><th>Vizsga</th><th>Nr. matricol</th><th>Név</th><th>Jegy</th><th>Scor</th><th>%</th><th>Idő</th><th>Dátum</th></tr></thead><tbody>'+rows.map(r=>{let m={};try{m=JSON.parse(r.answers_text||"{}")}catch(e){};return'<tr><td>'+(String(r.lab_code).includes("PRACTICAL")?"Gyakorlati":"Elméleti")+'</td><td>'+esc(m.matricol||"")+'</td><td>'+esc(r.name||"")+'</td><td><b>'+esc(m.grade??grade(r.pct))+'</b></td><td>'+esc(r.score)+"/"+esc(r.total)+'</td><td>'+esc(r.pct)+'%</td><td>'+esc(r.time_used)+'s</td><td>'+new Date(r.created_at).toLocaleString("hu-HU")+'</td></tr>'}).join("")+'</tbody></table></div>';
+ box.innerHTML='<div style="overflow:auto"><table><thead><tr><th>Cod matricol</th><th>Nume</th><th>Examen practic</th><th>Examen teoretic</th><th>Nota finală</th></tr></thead><tbody>'+
+ rows.map(x=>{
+   const fg=finalGrade(x);
+   return '<tr><td><b>'+esc(x.matricol)+'</b></td><td>'+esc(x.name)+'</td><td>'+(x.practical?'<b>'+x.practical.grade.toFixed(1)+'</b>':'—')+'</td><td>'+(x.theory?'<b>'+x.theory.grade.toFixed(1)+'</b>':'—')+'</td><td>'+(fg!==null?'<b>'+fg.toFixed(2)+'</b>':'—')+'</td></tr>';
+ }).join("")+'</tbody></table></div><div class="muted" style="margin-top:10px">Nota finală = 30% examen practic + 70% examen teoretic.</div>';
 }
-function exportCSV(){const rows=window._kfrows||[];const H=["Vizsga","Nr. matricol","Név","Jegy","Scor","Procent","Timp sec","Profesor","Dátum"];const out=[H.join(";")];for(const r of rows){let m={};try{m=JSON.parse(r.answers_text||"{}")}catch(e){};out.push([String(r.lab_code).includes("PRACTICAL")?"Gyakorlati":"Elméleti",m.matricol||"",r.name||"",m.grade??grade(r.pct),(r.score||0)+"/"+(r.total||0),(r.pct||0)+"%",r.time_used||0,r.teacher||"",new Date(r.created_at).toLocaleString("hu-HU")].map(x=>'"'+String(x).replaceAll('"','""')+'"').join(";"))}const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+out.join("\n")],{type:"text/csv;charset=utf-8"}));a.download="kurzusfogaszat2026_eredmenyek.csv";a.click()}
+function exportCSV(){
+ const rows=window._kfrows||[];
+ const H=["Cod matricol","Nume","Examen practic","Examen teoretic","Nota finală"];
+ const out=[H.join(";")];
+ for(const x of rows){
+   const fg=finalGrade(x);
+   out.push([
+     x.matricol||"",
+     x.name||"",
+     x.practical?x.practical.grade.toFixed(1):"",
+     x.theory?x.theory.grade.toFixed(1):"",
+     fg!==null?fg.toFixed(2):""
+   ].map(v=>'"'+String(v).replaceAll('"','""')+'"').join(";"));
+ }
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob(["\ufeff"+out.join("\n")],{type:"text/csv;charset=utf-8"}));
+ a.download="kurzusfogaszat2026_eredmenyek_osszesitett.csv";
+ a.click();
+}
+
 async function studentEntry(tokenValue){
  APP.innerHTML='<div class="card center"><h2>Vizsga ellenőrzése…</h2></div>';const s=await getSession(tokenValue);
  if(!s){APP.innerHTML='<div class="card bad">A QR-kód érvénytelen vagy lejárt.</div>';return}
