@@ -4836,6 +4836,31 @@ async function addResult(result) {
     return { ok:false, error: msg };
   }
 }
+
+async function verifyExamResultSaved(result) {
+  try {
+    const token=encodeURIComponent(result?.token||"");
+    const moduleName=encodeURIComponent(result?.module||"");
+    const name=encodeURIComponent(result?.name||"");
+    if(!token||!moduleName||!name) return false;
+    const res=await sb(`results?session_id=eq.${token}&module=eq.${moduleName}&name=eq.${name}&select=id,score,total,pct,created_at&order=created_at.desc&limit=5`);
+    if(!res.ok) return false;
+    const rows=await res.json();
+    return (rows||[]).some(x=>Number(x.score)===Number(result.score)&&Number(x.total)===Number(result.total)&&Number(x.pct)===Number(result.pct));
+  } catch(e){ return false; }
+}
+
+async function saveExamResultWithRetry(result, attempts=5) {
+  let lastError="";
+  for(let i=0;i<attempts;i++){
+    const info=await addResult(result);
+    if(info?.ok) return {ok:true,attempts:i+1};
+    if(await verifyExamResultSaved(result)) return {ok:true,attempts:i+1,verified:true};
+    lastError=info?.error||"Eroare necunoscută";
+    if(i<attempts-1) await new Promise(resolve=>setTimeout(resolve,1000*(i+1)));
+  }
+  return {ok:false,error:lastError,attempts};
+}
 function normalizeSessionExpiry(value) {
   const n = Number(value);
   if (Number.isFinite(n)) return n;
@@ -9175,7 +9200,7 @@ function ExamScreen({code, questions, session, student, onFinish}) {
 function ExamResultScreen({result, onRestart}) {
   const contextLang = React.useContext(LangContext);
   const lang = result?.lang || contextLang;
-  const {code,score,total,pct,grade,timeUsed,status,lockReason,cheatEvents=[],student} = result;
+  const {code,score,total,pct,grade,timeUsed,status,lockReason,cheatEvents=[],student,savedOnline,saveError} = result;
   const mins = Math.floor(timeUsed/60);
   const secs = timeUsed%60;
   const blocked = status === 'blocked';
@@ -9233,14 +9258,28 @@ function ExamResultScreen({result, onRestart}) {
             </div>
           </div>
           
+          {savedOnline===false && (
+            <div style={{background:'#fef2f2',border:'2px solid #dc2626',borderRadius:12,padding:'14px 16px',fontSize:14,color:'#991b1b',fontWeight:800,marginBottom:16,lineHeight:1.55,textAlign:'left'}}>
+              ⚠️ REZULTATUL NU A FOST SALVAT ÎN BAZA DE DATE.<br/>
+              Nu închideți această pagină și anunțați profesorul. Sistemul a încercat salvarea de mai multe ori.
+              {saveError && <div style={{fontSize:11,fontWeight:500,marginTop:6,wordBreak:'break-word'}}>Detaliu tehnic: {saveError}</div>}
+            </div>
+          )}
+
           <div style={{background:'#F8FAFF',borderRadius:12,padding:'12px 16px',fontSize:12,color:'#475569',textAlign:'left',lineHeight:1.55}}>
             <b style={{color:'#1e1b4b'}}>{lang==='en'?'Note':'Notă'}:</b> {lang==='en'?'in secure exam mode, the correct answers are not displayed on the student’s phone after completion, to prevent sharing them with colleagues.':'în modul examen securizat, răspunsurile corecte nu sunt afișate pe telefonul studentului după finalizare, pentru a evita transmiterea lor către colegi.'}
           </div>
         </div>
         
-        <button onClick={onRestart} style={{width:'100%',padding:14,background:'rgba(255,255,255,0.15)',color:'#fff',border:'2px solid rgba(255,255,255,0.3)',borderRadius:12,fontWeight:700,fontSize:14,cursor:'pointer'}}>
-          ← Back
-        </button>
+        {savedOnline!==false ? (
+          <button onClick={onRestart} style={{width:'100%',padding:14,background:'rgba(255,255,255,0.15)',color:'#fff',border:'2px solid rgba(255,255,255,0.3)',borderRadius:12,fontWeight:700,fontSize:14,cursor:'pointer'}}>
+            ← Înapoi
+          </button>
+        ) : (
+          <div style={{width:'100%',padding:14,boxSizing:'border-box',background:'rgba(220,38,38,.18)',color:'#fff',border:'2px solid rgba(248,113,113,.55)',borderRadius:12,fontWeight:800,fontSize:13,textAlign:'center'}}>
+            Pagina rămâne blocată până la verificarea rezultatului de către profesor.
+          </div>
+        )}
       </div>
     </div>
   );
@@ -9858,8 +9897,8 @@ function App() {
           specialization: examMeta.yearLabel || "",
           answersText: buildExamMeta(examMeta)
         };
-        const saveInfo = await addResult(entry);
-        setExamResult({...r, student, lang: resolveSessionLang(session, lang), savedOnline: !!saveInfo?.ok, saveError: saveInfo?.error || ""});
+        const saveInfo = await saveExamResultWithRetry(entry,5);
+        setExamResult({...r, student, lang: resolveSessionLang(session, lang), savedOnline: !!saveInfo?.ok, saveError: saveInfo?.error || "", _entry:entry});
         setScreen("exam_result");
       }}/>
   );
