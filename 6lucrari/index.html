@@ -3839,7 +3839,7 @@ window.FISE_DATA_EN = FISE_DATA_EN;
 <script src="group-cases/lp4.js"></script>
 <script src="group-cases/lp5.js"></script>
 <script src="group-cases/lp6.js"></script>
-<script src="exam-bank-postliceal.js?v=20261028"></script>
+<script src="exam-bank-postliceal.js?v=20261028-original-easy"></script>
 <script type="text/babel">
 // Activitate de grup v3: multi-device, automatic role confirmation,
 // sealed work, synchronized reveal, team approval and final report.
@@ -9446,10 +9446,10 @@ function PrezentaTab({results, labs}) {
 }
 
 
-const EXAM_EDITS_KEY = "exam_edits_postliceal6_2026_v1";
+const EXAM_EDITS_KEY = "exam_edits_postliceal6_original_easy_v1";
 
 function loadExamEdits() {
-  try { const s=localStorage.getItem("igiena_exam_edits_postliceal6_2026_v1"); return s?JSON.parse(s):{}; } catch(e){return {};}
+  try { const s=localStorage.getItem("igiena_exam_edits_postliceal6_original_easy_v1"); return s?JSON.parse(s):{}; } catch(e){return {};}
 }
 async function loadExamEditsRemote() {
   try {
@@ -9460,7 +9460,7 @@ async function loadExamEditsRemote() {
   } catch(e){return null;}
 }
 function saveExamEdits(edits) {
-  try { localStorage.setItem("igiena_exam_edits_postliceal6_2026_v1", JSON.stringify(edits)); } catch(e){}
+  try { localStorage.setItem("igiena_exam_edits_postliceal6_original_easy_v1", JSON.stringify(edits)); } catch(e){}
   sb("settings",{method:"POST",prefer:"return=minimal,resolution=merge-duplicates",
     body:JSON.stringify({key:EXAM_EDITS_KEY, data:edits})}).catch(()=>{});
 }
@@ -9530,7 +9530,13 @@ function getEditedExamBank(langOverride) {
 }
 
 function pickExamQuestions(count = 20, langOverride) {
-  const bank = getEditedExamBank(langOverride);
+  // Keep the full original bank available to the teacher. Only the approved,
+  // easier original items enter student exams; question text and keys are untouched.
+  const originalBank = getEditedExamBank(langOverride);
+  const selection = window.EXAM_EASY_SELECTION || {};
+  const bank = Object.fromEntries(Object.entries(originalBank).map(([lp, questions]) => [
+    lp, questions.filter(q => (selection[lp] || []).includes(q.idx))
+  ]));
   const lpOrder = ["lp1a","lp1b","lp2a","lp2b","lp3a","lp3b","lp4a","lp4b","lp5a","lp5b","lp6a","lp6b"];
   const activeLPs = lpOrder.filter(lp => (bank[lp] || []).length > 0);
   const all = activeLPs.flatMap(lp => (bank[lp] || []).map(q => ({...q, lp})));
@@ -9623,7 +9629,7 @@ function ExamBankPanel({mode, selLab}) {
     loadExamEditsRemote().then(remote=>{
       if (remote && Object.keys(remote).length>0) {
         setEdits(remote);
-        try{localStorage.setItem("igiena_exam_edits_postliceal6_2026_v1",JSON.stringify(remote));}catch(e){}
+        try{localStorage.setItem("igiena_exam_edits_postliceal6_original_easy_v1",JSON.stringify(remote));}catch(e){}
       }
     }).catch(()=>{});
   },[]);
