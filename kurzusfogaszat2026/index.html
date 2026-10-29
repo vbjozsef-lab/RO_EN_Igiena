@@ -68,7 +68,7 @@ function combinedExamRows(rawRows){
    if(!by[matricol].name) by[matricol].name=r.name||m.name||"";
    const type=m.examType||(String(r.lab_code||"").includes("PRACTICAL")?"practical":String(r.lab_code||"").includes("THEORY")?"theory":"");
    if(!type) continue;
-   const item={grade:Number(m.grade??grade(r.pct)),score:Number(r.score||0),total:Number(r.total||0),pct:Number(r.pct||0),created_at:r.created_at||""};
+   const item={grade:Number(m.grade??grade(r.pct)),score:Number(r.score||0),total:Number(r.total||0),pct:Number(r.pct||0),created_at:r.created_at||"",answers:Array.isArray(m.answers)?m.answers:null};
    const prev=by[matricol][type];
    if(!prev||new Date(item.created_at).getTime()>=new Date(prev.created_at).getTime()) by[matricol][type]=item;
  }
@@ -87,10 +87,33 @@ async function loadResults(){
  window._kfrows=rows;
  if(!rows.length){box.innerHTML='<div class="muted">Még nincs eredmény.</div>';return}
  box.innerHTML='<div style="overflow:auto"><table><thead><tr><th>Cod matricol</th><th>Nume</th><th>Examen practic</th><th>Examen teoretic</th><th>Nota finală</th></tr></thead><tbody>'+
- rows.map(x=>{
+ rows.map((x,index)=>{
    const fg=finalGrade(x);
-   return '<tr><td><b>'+esc(x.matricol)+'</b></td><td>'+esc(x.name)+'</td><td>'+(x.practical?'<b>'+x.practical.grade.toFixed(1)+'</b>':'—')+'</td><td>'+(x.theory?'<b>'+x.theory.grade.toFixed(1)+'</b>':'—')+'</td><td>'+(fg!==null?'<b>'+fg.toFixed(2)+'</b>':'—')+'</td></tr>';
+   return '<tr><td><b>'+esc(x.matricol)+'</b></td><td>'+esc(x.name)+'</td><td>'+(x.practical?'<b>'+x.practical.grade.toFixed(1)+'</b><br><button class="btn light" style="padding:6px 9px;margin-top:6px" data-details="'+index+'" data-exam="practical">Részletek / Details</button>':'—')+'</td><td>'+(x.theory?'<b>'+x.theory.grade.toFixed(1)+'</b><br><button class="btn light" style="padding:6px 9px;margin-top:6px" data-details="'+index+'" data-exam="theory">Részletek / Details</button>':'—')+'</td><td>'+(fg!==null?'<b>'+fg.toFixed(2)+'</b>':'—')+'</td></tr>';
  }).join("")+'</tbody></table></div><div class="muted" style="margin-top:10px">Nota finală = 30% examen practic + 70% examen teoretic.</div>';
+ qa("[data-details]").forEach(button=>button.onclick=()=>showExamDetails(Number(button.dataset.details),button.dataset.exam));
+}
+function showExamDetails(index,type){
+ if(!state.teacher||!["practical","theory"].includes(type))return;
+ const row=(window._kfrows||[])[index],exam=row?.[type];if(!exam)return;
+ document.getElementById("exam-details")?.remove();
+ const modal=document.createElement("dialog");
+ modal.id="exam-details";
+ modal.setAttribute("aria-labelledby","exam-details-title");
+ modal.style.cssText="width:min(920px,calc(100% - 24px));max-height:90vh;overflow:auto;border:1px solid #cbd5e1;border-radius:18px;padding:20px;color:#172033";
+ const questions=exam.answers;
+ modal.innerHTML='<div style="display:flex;justify-content:space-between;gap:12px;align-items:start"><div><h2 id="exam-details-title" style="margin-top:0">'+esc(row.name)+' — '+(type==="practical"?"Gyakorlati vizsga":"Elméleti vizsga")+'</h2><p>Cod matricol: <b>'+esc(row.matricol)+'</b> · Jegy: <b>'+esc(exam.grade.toFixed(1))+'</b> · Helyes: '+esc(exam.score)+'/'+esc(exam.total)+'</p></div><button class="btn light" id="close-details" autofocus>Bezárás</button></div>'+
+ (questions?.length?questions.map((a,i)=>{
+   const selected=Array.isArray(a.selected)?a.selected:[],correct=Array.isArray(a.correct)?a.correct:[];
+   const options=Array.isArray(a.options)?a.options:[];
+   const hasKey=Array.isArray(a.correct);
+   const isCorrect=hasKey&&JSON.stringify([...selected].sort((a,b)=>a-b))===JSON.stringify([...correct].sort((a,b)=>a-b));
+   return '<section class="q"><h3>'+esc(a.nr??i+1)+'. '+esc(a.question)+'</h3><p class="'+(hasKey?(isCorrect?"ok":"bad"):"warn")+'">'+(hasKey?(isCorrect?"✓ Helyes válasz":"✗ Hibás válasz"):"A helyes válasz nincs elmentve.")+'</p>'+options.map((text,oi)=>'<div style="padding:10px;border:1px solid #cbd5e1;border-radius:8px;margin:7px 0;'+(correct.includes(oi)?"background:#ecfdf5;border-color:#86efac;":"")+'"><b>'+String.fromCharCode(65+oi)+'.</b> '+esc(text)+(selected.includes(oi)?' <strong>— A diák választása</strong>':"")+(correct.includes(oi)?' <strong>— Helyes válasz</strong>':"")+'</div>').join("")+(!selected.length?'<p class="muted">Nincs megjelölt válasz.</p>':"")+'</section>';
+ }).join(""):'<div class="warn">Ehhez az eredményhez nem áll rendelkezésre elmentett részletes válaszlap.</div>');
+ document.body.appendChild(modal);
+ modal.querySelector("#close-details").onclick=()=>modal.close();
+ modal.addEventListener("close",()=>modal.remove(),{once:true});
+ modal.showModal();
 }
 function exportCSV(){
  const rows=window._kfrows||[];
