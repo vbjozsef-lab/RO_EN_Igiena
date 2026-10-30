@@ -6023,6 +6023,7 @@ function AdminPanel({onBack, teacherName}) {
               {id:"preview",     icon:"👁️", label:"Quiz"},
               {id:"activities",  icon:"🧩", label:"Activități"},
               {id:"results",     icon:"📊", label:T("tab_results")},
+              {id:"quizAverages", icon:"📈", label:"Medii Quiz"},
               {id:"examResults", icon:"📝", label:"Rezultate examen"},
               {id:"laborator",   icon:"🧪", label:"Laborator animat"},
               {id:"prezentari",  icon:"📽️", label:"Prezentări"},
@@ -6447,6 +6448,10 @@ function AdminPanel({onBack, teacherName}) {
               ))}
             </div>
           </div>
+        )}
+
+        {tab==="quizAverages" && (
+          <QuizAveragesTab results={results} />
         )}
 
         {tab==="examResults" && (
@@ -9320,6 +9325,108 @@ function ExamResultScreen({result, onRestart}) {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+
+function QuizAveragesTab({results}) {
+  const getMatricol = (r) => {
+    if (r?.matricol) return String(r.matricol);
+    const st = STUDENT_REGISTRY.find(s =>
+      String(s.name||"").trim().toLocaleLowerCase("ro-RO") === String(r?.name||"").trim().toLocaleLowerCase("ro-RO")
+    );
+    return st?.matricol ? String(st.matricol) : "";
+  };
+
+  const completeQuizResults = (results || []).filter(r => {
+    const labOk = /^lp[1-6]$/.test(String(r?.labId||""));
+    const moduleOk = /^full[1-6]$/.test(String(r?.module||""));
+    return labOk && moduleOk && Number(r?.total) > 0;
+  });
+
+  const byStudent = {};
+  completeQuizResults.forEach(r => {
+    const matricol = getMatricol(r);
+    const name = String(r?.name||"").trim();
+    const key = matricol ? "m:"+matricol : "n:"+name.toLocaleLowerCase("ro-RO");
+    if (!byStudent[key]) byStudent[key] = {matricol, name, lp:{}};
+    if (!byStudent[key].matricol && matricol) byStudent[key].matricol = matricol;
+    if (!byStudent[key].name && name) byStudent[key].name = name;
+
+    const lp = String(r.labId||"");
+    const pct = Number(r.pct)||0;
+    if (byStudent[key].lp[lp] == null || pct > byStudent[key].lp[lp]) {
+      byStudent[key].lp[lp] = pct;
+    }
+  });
+
+  const rows = Object.values(byStudent).map(s => {
+    const values = Object.values(s.lp).map(Number).filter(Number.isFinite);
+    const avgPct = values.length ? values.reduce((a,b)=>a+b,0) / values.length : 0;
+    return {
+      matricol:s.matricol||"",
+      name:s.name||"",
+      average:Number((avgPct/10).toFixed(2)),
+      completed:values.length
+    };
+  }).filter(r=>r.completed>0).sort((a,b)=>a.name.localeCompare(b.name,"ro"));
+
+  const exportCSV = () => {
+    const header = ["Cod matricol","Nume","Medie"].map(csvCell).join(";");
+    const body = rows.map(r => [r.matricol,r.name,r.average.toFixed(2).replace(".",",")].map(csvCell).join(";")).join("\n");
+    const blob = new Blob(["\uFEFF"+header+"\n"+body],{type:"text/csv;charset=utf-8"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="medii_quiz_complet.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
+  return (
+    <div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12,marginBottom:16,flexWrap:"wrap"}}>
+        <div>
+          <h3 style={{color:"#1e1b4b",fontSize:18,margin:"0 0 4px"}}>📈 Medii Quiz Complet</h3>
+          <p style={{color:"#64748b",fontSize:13,margin:0,lineHeight:1.5}}>
+            Media se calculează numai din LP-urile completate de fiecare student. Un LP necompletat nu intră în calcul.
+          </p>
+        </div>
+        <button onClick={exportCSV} disabled={rows.length===0}
+          style={{padding:"10px 16px",background:rows.length?"#10b981":"#cbd5e1",color:"#fff",border:"none",borderRadius:10,fontSize:13,fontWeight:800,cursor:rows.length?"pointer":"not-allowed"}}>
+          ⬇ Export CSV
+        </button>
+      </div>
+
+      {rows.length===0 ? (
+        <div style={{background:"#fff",border:"1px solid #e0e7ff",borderRadius:12,padding:"36px",textAlign:"center",color:"#94a3b8"}}>
+          Nu există încă rezultate Quiz Complet pentru LP1–LP6.
+        </div>
+      ) : (
+        <div style={{overflowX:"auto",borderRadius:14,border:"1px solid #e0e7ff",background:"#fff",boxShadow:"0 4px 16px rgba(99,102,241,0.06)"}}>
+          <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
+            <thead>
+              <tr style={{background:"#EEF2FF"}}>
+                {["COD MATRICOL","NUME","MEDIE"].map(h=>(
+                  <th key={h} style={{textAlign:"left",padding:"11px 14px",borderBottom:"1.5px solid #c7d2fe",color:"#4338ca",fontSize:11,fontWeight:800,letterSpacing:".05em"}}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r,i)=>(
+                <tr key={(r.matricol||r.name)+"-"+i} style={{background:i%2===0?"#F8FAFF":"#fff"}}>
+                  <td style={{padding:"10px 14px",fontFamily:"JetBrains Mono,monospace",fontWeight:800,color:"#4338ca"}}>{r.matricol||"—"}</td>
+                  <td style={{padding:"10px 14px",fontWeight:650,color:"#1e293b"}}>{r.name}</td>
+                  <td style={{padding:"10px 14px",fontWeight:900,color:r.average>=8?"#15803d":r.average>=5?"#d97706":"#dc2626"}}>
+                    {r.average.toFixed(2).replace(".",",")}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
