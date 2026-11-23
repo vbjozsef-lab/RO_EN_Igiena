@@ -494,3 +494,116 @@
     flex:1 1 100%!important;width:100%!important;
   }
 }
+
+/* Report views: clear heading, filter toolbar and a calm academic table style. */
+.lp-studio .studio-report-header{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;margin-bottom:16px!important;
+  background:#fff;border:1px solid #e4e9f2;
+  padding:20px 22px;border-radius:17px;
+  box-shadow:0 4px 18px rgba(23,40,72,.027);
+}
+.lp-studio .studio-report-header h2,
+.lp-studio .studio-report-header h3{
+  font-size:17px!important;color:#1e2f4b!important;
+  font-weight:850!important;letter-spacing:-.02em!important;
+}
+.lp-studio .studio-report-header p{font-size:12px!important;line-height:1.65!important;color:#8491a4!important}
+.lp-studio .studio-report-header > button{
+  min-height:43px!important;min-width:118px!important;
+  border-radius:11px!important;
+  background:#455bd4!important;color:#fff!important;
+  padding:11px 16px!important;font-weight:850!important;
+  box-shadow:0 6px 15px rgba(69,91,212,.12);
+}
+.lp-studio .studio-report-header > button:disabled{
+  background:#aab6ca!important;box-shadow:none;cursor:not-allowed;
+}
+.lp-studio .studio-report-table{
+  border:1px solid #e2e8f2!important;
+  border-radius:16px!important;
+  box-shadow:0 8px 27px rgba(26,45,81,.035)!important;
+  overflow-x:auto!important;
+}
+.lp-studio .studio-report-table table{min-width:550px}
+.lp-studio .studio-report-table th{
+  background:#f4f7fc!important;color:#596b86!important;
+  border-bottom:1px solid #e2e9f4!important;
+  padding:14px 15px!important;
+}
+.lp-studio .studio-report-table td{
+  padding:12px 15px!important;
+  color:#34445e;
+}
+.lp-studio .studio-report-table tbody tr:hover td{background:#f6f9ff!important}
+.lp-studio .studio-attendance-filters{
+  display:flex!important;align-items:center!important;
+  background:#fff!important;border:1px solid #e4eaf4!important;
+  border-radius:16px!important;padding:15px!important;gap:10px!important;
+  margin-bottom:17px!important;
+  box-shadow:0 4px 16px rgba(24,43,77,.025);
+}
+.lp-studio .studio-attendance-filters select{
+  width:auto!important;flex:1 1 185px!important;max-width:100%;
+  min-height:43px!important;font-size:12px!important;
+  border-color:#dfe6f1!important;border-radius:10px!important;
+  padding:9px 12px!important;
+}
+.lp-studio .studio-attendance-filters button{
+  width:auto!important;min-height:43px!important;
+  border-radius:10px!important;padding:9px 14px!important;font-size:12px!important;
+}
+.lp-studio .studio-lab-library,
+.lp-studio .studio-presentation-library{min-width:0}
+.lp-studio .studio-lab-library > h3{
+  font-size:19px!important;font-weight:850!important;
+  color:#1c2d4a!important;letter-spacing:-.03em!important;
+}
+.lp-studio .studio-lab-library > p{
+  color:#8290a5!important;font-size:12px!important;
+  line-height:1.7!important;max-width:820px;
+}
+.lp-studio .studio-lab-library a{
+  background:#fff!important;border:1px solid #e1e7f3!important;
+  color:#334b83!important;border-radius:13px!important;
+  box-shadow:0 3px 13px rgba(24,43,81,.025);
+  transition:transform .15s,box-shadow .15s,border-color .15s;
+}
+.lp-studio .studio-lab-library a:hover{
+  transform:translateY(-2px);border-color:#bfccf0!important;
+  box-shadow:0 9px 22px rgba(22,44,85,.07);
+}
+.lp-studio .studio-presentation-library > div:first-child{
+  background:linear-gradient(118deg,#182b5d,#334a9c)!important;
+  border-radius:19px!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:0 11px 30px rgba(31,53,112,.1)!important;
+}
+.lp-studio .studio-presentation-library > div:nth-child(2) > div{
+  background:#fff!important;border:1px solid #e4eaf3!important;
+  border-radius:16px!important;box-shadow:0 4px 16px rgba(25,44,80,.03)!important;
+  transition:transform .16s,box-shadow .16s;
+}
+.lp-studio .studio-presentation-library > div:nth-child(2) > div:hover{
+  transform:translateY(-2px);box-shadow:0 13px 28px rgba(22,45,86,.085)!important;
+}
+.lp-studio .studio-presentation-library a{
+  transition:background .16s,border-color .16s;
+}
+.lp-studio .studio-presentation-library a:hover{filter:brightness(.97)}
+.lp-studio .studio-section-root > div:first-child{
+  min-width:0;
+}
+.lp-studio .studio-section-root textarea,
+.lp-studio .studio-section-root select,
+.lp-studio .studio-section-root input{
+  border-color:#e0e6f1!important;border-radius:10px!important;
+}
+@media(max-width:650px){
+  .lp-studio .studio-report-header{padding:17px!important}
+  .lp-studio .studio-report-header h2,.lp-studio .studio-report-header h3{font-size:16px!important}
+  .lp-studio .studio-report-header button{width:100%!important}
+  .lp-studio .studio-attendance-filters{padding:11px!important}
+  .lp-studio .studio-attendance-filters select{flex-basis:100%!important}
+  .lp-studio .studio-report-table table{min-width:600px}
+}
