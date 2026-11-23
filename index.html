@@ -5406,149 +5406,89 @@ const S = {
 // ════════════════════════════════════════════════════════════
 function HomePage({onAdminLogin, onJoinToken}) {
   const T = useT();
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get("token");
-  useEffect(() => { if (token) onJoinToken(token); }, []);
-
-  const [teacher, setTeacher] = useState("");
-  const [pw, setPw]           = useState("");
-  const [err, setErr]         = useState("");
-  const [loading, setLoading] = useState(false);
+  const token = new URLSearchParams(window.location.search).get("token");
+  useEffect(()=>{ if(token) onJoinToken(token); },[]);
+  const [teacher,setTeacher] = useState("");
+  const [pw,setPw] = useState("");
+  const [err,setErr] = useState("");
+  const [loading,setLoading] = useState(false);
 
   const go = () => {
-    if (!teacher) { setErr(T("login_err_prof")); return; }
-    if (!pw)      { setErr(T("login_err_pass")); return; }
-    if (TEACHERS[teacher] !== pw) { setErr(T("login_err_wrong")); return; }
+    if(!teacher){setErr(T("login_err_prof")||"Selectați profesorul.");return;}
+    if(!pw){setErr(T("login_err_pass")||"Introduceți parola.");return;}
+    if(TEACHERS[teacher]!==pw){setErr(T("login_err_wrong")||"Parolă incorectă.");return;}
     setLoading(true);
-    setTimeout(() => onAdminLogin(teacher), 500);
+    setTimeout(()=>onAdminLogin(teacher),500);
   };
 
-  const readyLabs = LABS.filter(l=>l.ready);
-
+  const features = [
+    {title:"12 lucrări practice",subtitle:"Program universitar · Română / English",kind:"book",tone:"blue"},
+    {title:"6 lucrări practice",subtitle:"Program postliceal · Română",kind:"lab",tone:"teal"},
+    {title:"Examene independente",subtitle:"Catalog, QR și rezultate separate",kind:"award",tone:"violet"}
+  ];
   return (
-    <div className="home-layout" style={{background:"linear-gradient(150deg,#F8F9FA 0%,#EEF2FF 40%,#F0F4FF 100%)",fontFamily:"'Inter','Segoe UI',system-ui,sans-serif"}}>
-
-      {/* Soft blobs */}
-      <div style={{position:"absolute",width:600,height:600,borderRadius:"50%",background:"radial-gradient(circle,rgba(99,102,241,0.1),transparent 70%)",top:-180,left:-180,pointerEvents:"none"}}/>
-      <div style={{position:"absolute",width:400,height:400,borderRadius:"50%",background:"radial-gradient(circle,rgba(139,92,246,0.08),transparent 70%)",bottom:-80,right:200,pointerEvents:"none"}}/>
-      <div style={{position:"absolute",width:300,height:300,borderRadius:"50%",background:"radial-gradient(circle,rgba(16,185,129,0.07),transparent 70%)",bottom:0,left:200,pointerEvents:"none"}}/>
-
-      {/* LEFT PANEL */}
-      <div className="home-left" style={{position:"relative"}}>
-
-        {/* Logo */}
-        <div style={{marginBottom:44}}>
-          <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:14}}>
-            <div style={{width:50,height:50,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",borderRadius:15,display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,boxShadow:"0 8px 24px rgba(99,102,241,0.3)"}}>🧬</div>
-            <div>
-              <div style={{fontSize:21,fontWeight:900,color:"#1e1b4b",letterSpacing:"-.02em",lineHeight:1.1}}>Igienă</div>
-              <div style={{fontSize:11,color:"#6366f1",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase"}}>UMFST · {T("platform_sub")||"Platformă Practică"}</div>
-            </div>
+    <div className="home-layout" style={{background:"#f6f8fc"}}>
+      <div className="home-left portal-home-left">
+        <div style={{maxWidth:590,width:"100%",margin:"auto"}}>
+          <div className="teacher-logo" style={{marginBottom:64}}>
+            <span className="teacher-logo-mark"><PortalIcon kind="brand" size={22}/></span>
+            <div><div className="teacher-logo-name">Igienă <span style={{color:"#4557d9"}}>Campus</span></div>
+              <div className="teacher-logo-sub">UMFST · PLATFORMĂ EDUCAȚIONALĂ</div></div>
           </div>
-          <div style={{width:40,height:3,background:"linear-gradient(90deg,#6366f1,#c4b5fd)",borderRadius:2}}/>
-        </div>
-
-        {/* Headline */}
-        <h1 style={{fontSize:38,fontWeight:900,color:"#1e1b4b",lineHeight:1.18,margin:"0 0 14px",letterSpacing:"-.03em"}}>
-          Practica de<br/>
-          <span style={{background:"linear-gradient(135deg,#6366f1,#8b5cf6)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{T("home_headline2")}</span>
-        </h1>
-        <p style={{fontSize:15,color:"#64748b",lineHeight:1.7,margin:"0 0 44px",maxWidth:380}}>
-          Quizuri interactive, fișe de grup cu evaluare AI și urmărire rezultate în timp real — pentru laboratoarele de igienă UMFST.
-        </p>
-
-        {/* Stats */}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,maxWidth:360,marginBottom:44}}>
-          {[
-            {val:readyLabs.length,label:T("home_stats_active"),icon:"🧪",color:"#6366f1",bg:"#EEF2FF"},
-            {val:LABS.length,label:T("home_stats_total"),icon:"📚",color:"#8b5cf6",bg:"#F5F3FF"},
-            {val:"AI",label:T("home_stats_ai"),icon:"🤖",color:"#059669",bg:"#F0FDF4"},
-            {val:"QR",label:T("home_stats_qr"),icon:"📱",color:"#d97706",bg:"#FFFBEB"},
-          ].map((s,i)=>(
-            <div key={i} style={{background:s.bg,border:`1.5px solid ${s.color}22`,borderRadius:14,padding:"14px 16px",position:"relative",overflow:"hidden"}}>
-              <div style={{position:"absolute",top:10,right:12,fontSize:18,opacity:.5}}>{s.icon}</div>
-              <div style={{fontSize:26,fontWeight:900,color:s.color,lineHeight:1,marginBottom:3}}>{s.val}</div>
-              <div style={{fontSize:11,color:"#64748b",fontWeight:500}}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Labs chips */}
-        <div>
-          <div style={{fontSize:11,color:"#94a3b8",fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",marginBottom:8}}>Laboratoare disponibile</div>
-          <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
-            {LABS.map(lab=>(
-              <span key={lab.id} style={{
-                padding:"4px 11px",borderRadius:20,fontSize:11,fontWeight:700,
-                background:lab.ready?"#EEF2FF":"#F8FAFC",
-                color:lab.ready?"#6366f1":"#94a3b8",
-                border:`1px solid ${lab.ready?"#c7d2fe":"#e2e8f0"}`,
-              }}>
-                {lab.icon} {lab.code}
-              </span>
+          <span className="workspace-eyebrow" style={{letterSpacing:".14em"}}>EDUCAȚIE · EVALUARE · ORGANIZARE</span>
+          <h1 style={{fontWeight:850,fontSize:"clamp(36px,4vw,53px)",lineHeight:1.12,color:"#17244c",letterSpacing:"-.048em",margin:"16px 0 20px"}}>
+            Un singur loc pentru <span style={{color:"#4557d9"}}>toate activitățile</span> de igienă.
+          </h1>
+          <p style={{color:"#64748b",fontSize:15,lineHeight:1.82,maxWidth:490,margin:"0 0 34px"}}>
+            Trei spații de lucru, o singură autentificare pentru profesori. Alegeți cursul, generați coduri QR și consultați rezultatele, fără a amesteca băncile de întrebări.
+          </p>
+          <div style={{display:"flex",flexDirection:"column",gap:10,maxWidth:475}}>
+            {features.map((f,i)=>(
+              <div key={i} className="portal-home-feature">
+                <span className={"portal-home-feature-icon "+f.tone}><PortalIcon kind={f.kind} size={20}/></span>
+                <div><strong>{f.title}</strong><span>{f.subtitle}</span></div>
+                <span style={{color:"#a0aac3",marginLeft:"auto"}}><PortalIcon kind="chevron" size={18}/></span>
+              </div>
             ))}
           </div>
+          <div style={{color:"#9aa5b8",fontSize:11,marginTop:36}}>Igienă Campus · Platformă pentru profesori și studenți</div>
         </div>
       </div>
-
-      {/* RIGHT PANEL — Login */}
-      <div className="home-right" style={{position:"relative"}}>
-        <div style={{width:"100%",maxWidth:360}}>
-
-          {/* Card */}
-          {/* Mobile logo — shown only on mobile */}
-          <div className="home-mobile-logo" style={{alignItems:"center",gap:12,marginBottom:28}}>
-            <div style={{width:44,height:44,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",borderRadius:12,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,boxShadow:"0 6px 20px rgba(99,102,241,0.3)"}}>🧬</div>
-            <div>
-              <div style={{fontSize:18,fontWeight:900,color:"#1e1b4b",letterSpacing:"-.02em"}}>Igienă · UMFST</div>
-              <div style={{fontSize:11,color:"#6366f1",fontWeight:700,letterSpacing:".1em",textTransform:"uppercase"}}>Platformă Practică</div>
-            </div>
+      <div className="home-right portal-home-right">
+        <div style={{width:"100%",maxWidth:410,margin:"auto"}}>
+          <div className="home-mobile-logo" style={{alignItems:"center",gap:12,marginBottom:30}}>
+            <span className="teacher-logo-mark"><PortalIcon kind="brand" size={22}/></span>
+            <div><div className="teacher-logo-name">Igienă Campus</div><div className="teacher-logo-sub">UMFST · PLATFORMĂ EDUCAȚIONALĂ</div></div>
           </div>
-
-          <div className="login-panel" style={{background:"#fff",borderRadius:24,padding:"36px 32px",boxShadow:"0 8px 48px rgba(99,102,241,0.12)",border:"1px solid #e0e7ff"}}>
-
-            <div style={{marginBottom:28}}>
-              <div style={{fontSize:11,color:"#6366f1",fontWeight:800,textTransform:"uppercase",letterSpacing:".12em",marginBottom:8}}>Autentificare Profesor</div>
-              <h2 style={{fontSize:24,fontWeight:900,color:"#1e1b4b",margin:"0 0 4px",letterSpacing:"-.02em"}}>{T("login_title")||"Panou de control"}</h2>
-              <p style={{fontSize:13,color:"#94a3b8",margin:0}}>Generează QR · Urmărește rezultatele</p>
-            </div>
-
-            <label style={{display:"block",fontSize:11,color:"#6366f1",fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",marginBottom:6}}>{T("login_prof")||"Profesor"}</label>
-            <div style={{position:"relative",marginBottom:14}}>
-              <select
-                style={{width:"100%",background:teacher?"#fff":"#F8FAFF",border:`1.5px solid ${err&&!teacher?"#fca5a5":"#e0e7ff"}`,borderRadius:10,padding:"12px 40px 12px 14px",color:teacher?"#1e293b":"#94a3b8",fontSize:14,boxSizing:"border-box",outline:"none",appearance:"none",cursor:"pointer",transition:"border-color .15s"}}
-                value={teacher} onChange={e=>{setTeacher(e.target.value);setErr("");}}>
-                <option value="">— Selectați numele —</option>
+          <div className="login-panel" style={{background:"#fff",borderRadius:24,padding:"36px 32px",border:"1px solid #e3e8f4"}}>
+            <span className="workspace-eyebrow">CENTRU PROFESORI</span>
+            <h2 style={{fontSize:28,fontWeight:850,letterSpacing:"-.035em",color:"#17244c",margin:"9px 0 8px"}}>Bine ați revenit!</h2>
+            <p style={{fontSize:13,color:"#8490a4",lineHeight:1.7,margin:"0 0 30px"}}>Autentificați-vă pentru a accesa activitățile practice și examenele.</p>
+            <form onSubmit={e=>{e.preventDefault();go();}}>
+              <label htmlFor="teacher-login" style={{display:"block",fontSize:12,color:"#3c4b69",fontWeight:750,marginBottom:7}}>Profesor</label>
+              <select id="teacher-login" value={teacher} onChange={e=>{setTeacher(e.target.value);setErr("");}}
+                style={{width:"100%",padding:"13px 14px",borderRadius:11,border:"1px solid #dbe3f3",marginBottom:20,fontSize:14,color:"#253451",background:"#fff"}}>
+                <option value="">Selectați numele profesorului</option>
                 {Object.keys(TEACHERS).map(t=><option key={t} value={t}>{t}</option>)}
               </select>
-              <div style={{position:"absolute",right:14,top:"50%",transform:"translateY(-50%)",color:"#a5b4fc",pointerEvents:"none",fontSize:11,fontWeight:700}}>▾</div>
+              <label htmlFor="teacher-password" style={{display:"block",fontSize:12,color:"#3c4b69",fontWeight:750,marginBottom:7}}>Parolă</label>
+              <input id="teacher-password" type="password" autoComplete="current-password" value={pw}
+                onChange={e=>{setPw(e.target.value);setErr("");}}
+                style={{width:"100%",padding:"13px 14px",borderRadius:11,border:"1px solid #dbe3f3",marginBottom:err?10:24,fontSize:14}}
+                placeholder="Introduceți parola"/>
+              {err && <div role="alert" style={{borderRadius:9,background:"#fff1f2",border:"1px solid #fecdd3",padding:"10px 12px",fontSize:12,color:"#b91c1c",fontWeight:700,marginBottom:16}}>{err}</div>}
+              <button type="submit" disabled={loading}
+                style={{width:"100%",border:0,borderRadius:11,padding:"14px 16px",fontSize:14,fontWeight:800,color:"#fff",background:loading?"#95a3ed":"#4557d9",boxShadow:"0 8px 20px rgba(69,87,217,.2)",cursor:loading?"wait":"pointer",minHeight:49}}>
+                {loading?"Se autentifică…":"Intră în platformă →"}
+              </button>
+            </form>
+            <div style={{marginTop:24,paddingTop:20,borderTop:"1px solid #edf1f7",fontSize:12,color:"#8692a5",lineHeight:1.65}}>
+              După autentificare puteți alege programul 12 LP, 6 LP sau examenele independente.
             </div>
-
-            <label style={{display:"block",fontSize:11,color:"#6366f1",fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",marginBottom:6}}>{T("login_pass")||"Parolă"}</label>
-            <input
-              type="password" placeholder="••••••••"
-              style={{width:"100%",background:"#F8FAFF",border:`1.5px solid ${err&&teacher?"#fca5a5":"#e0e7ff"}`,borderRadius:10,padding:"12px 14px",color:"#1e293b",fontSize:14,boxSizing:"border-box",outline:"none",marginBottom:err?10:20,transition:"border-color .15s"}}
-              value={pw} onChange={e=>{setPw(e.target.value);setErr("");}} onKeyDown={e=>e.key==="Enter"&&go()}/>
-
-            {err && (
-              <div style={{display:"flex",alignItems:"center",gap:8,background:"#FEF2F2",border:"1px solid #fecaca",borderRadius:8,padding:"9px 12px",marginBottom:14,fontSize:13,color:"#dc2626",fontWeight:600}}>
-                ⚠ {err}
-              </div>
-            )}
-
-            <button onClick={go} disabled={loading}
-              style={{width:"100%",padding:"14px",background:loading?"#a5b4fc":"linear-gradient(135deg,#6366f1,#8b5cf6)",color:"#fff",border:"none",borderRadius:10,fontSize:15,fontWeight:800,cursor:loading?"not-allowed":"pointer",letterSpacing:".02em",transition:"all .2s",boxShadow:loading?"none":"0 4px 20px rgba(99,102,241,0.35)"}}>
-              {loading?T("login_loading"):T("login_btn")}
-            </button>
           </div>
-
-          {/* Student info */}
-          <div style={{marginTop:20,background:"rgba(255,255,255,0.6)",backdropFilter:"blur(10px)",border:"1px solid #e0e7ff",borderRadius:14,padding:"14px 18px",display:"flex",alignItems:"flex-start",gap:12}}>
-            <span style={{fontSize:22,marginTop:1}}>📱</span>
-            <div>
-              <div style={{fontSize:12,fontWeight:700,color:"#6366f1",marginBottom:3}}>{T("login_student_title")||"Studenți"}</div>
-              <div style={{fontSize:12,color:"#64748b",lineHeight:1.6}}>Scanați codul QR primit de la profesor. Nu este nevoie de cont.</div>
-            </div>
+          <div className="portal-student-hint">
+            <span style={{width:34,height:34,borderRadius:10,display:"grid",placeItems:"center",background:"#eef2ff",color:"#4356ca",flexShrink:0}}><PortalIcon kind="users" size={18}/></span>
+            <div><strong>Acces pentru studenți</strong><p>Studenții intră direct prin codul QR furnizat de profesor. Nu este necesar un cont.</p></div>
           </div>
         </div>
       </div>
