@@ -9477,10 +9477,84 @@ function ExamBankPanel({mode, selLab}) {
 // PREZENTA TAB — pivot table
 // ════════════════════════════════════════════════════════════
 
+
+const TEACHER_PORTAL_KEY = "igiena_teacher_portal_v1";
+function readTeacherPortalSession(){
+  try {
+    const s=JSON.parse(sessionStorage.getItem(TEACHER_PORTAL_KEY)||"null");
+    if(s && Object.prototype.hasOwnProperty.call(TEACHERS,s.teacher) && Number.isFinite(Number(s.at)) &&
+       Date.now() >= Number(s.at) && Date.now() - Number(s.at) < 8*60*60*1000) return s.teacher;
+  }catch(e){}
+  return "";
+}
+function writeTeacherPortalSession(teacher){
+  try { sessionStorage.setItem(TEACHER_PORTAL_KEY,JSON.stringify({teacher,at:Date.now()})); }catch(e){}
+}
+function clearTeacherPortalSession(){
+  try { sessionStorage.removeItem(TEACHER_PORTAL_KEY); }catch(e){}
+}
+
+// The portal changes navigation only; existing course question banks and QR URLs stay intact.
+function TeacherPortal({teacherName,onOpen12,onLogout}){
+  const bg={background:"#fff",border:"1px solid #e0e7ff",borderRadius:20,padding:26,boxShadow:"0 8px 30px rgba(49,46,129,.07)",display:"flex",flexDirection:"column",gap:10};
+  const action={border:0,background:"#4f46e5",color:"#fff",borderRadius:10,padding:"12px 14px",fontSize:14,fontWeight:800,cursor:"pointer"};
+  const muted={fontSize:13,color:"#64748b",lineHeight:1.6,margin:0};
+  return (
+    <div style={{minHeight:"100vh",background:"radial-gradient(circle at 10% 0%,#e0e7ff,transparent 42%),#f7f8ff",fontFamily:"Inter,Segoe UI,system-ui,sans-serif",color:"#172554"}}>
+      <div style={{background:"#1e1b4b",color:"#fff",padding:"18px 24px"}}>
+        <div style={{maxWidth:1100,margin:"auto",display:"flex",alignItems:"center",justifyContent:"space-between",gap:15,flexWrap:"wrap"}}>
+          <b style={{fontSize:17}}>🧬 Igienă · Centru profesori</b>
+          <div style={{display:"flex",alignItems:"center",gap:14}}>
+            <span style={{fontSize:12,color:"#c7d2fe"}}>👤 {teacherName}</span>
+            <button onClick={onLogout} style={{background:"#ffffff22",color:"#fff",padding:"8px 12px",border:"1px solid #ffffff44",borderRadius:9,fontSize:12,fontWeight:700,cursor:"pointer"}}>Deconectare</button>
+          </div>
+        </div>
+      </div>
+      <main style={{maxWidth:1100,margin:"0 auto",padding:"clamp(24px,5vw,52px) 22px"}}>
+        <div style={{fontSize:12,fontWeight:850,letterSpacing:".14em",color:"#6366f1",marginBottom:8}}>PANOU DE ADMINISTRARE</div>
+        <h1 style={{fontSize:"clamp(28px,4vw,39px)",letterSpacing:"-.04em",lineHeight:1.13,margin:"0 0 12px"}}>Alegeți spațiul de lucru</h1>
+        <p style={{...muted,maxWidth:760,fontSize:15,marginBottom:30}}>O singură intrare pentru activitățile practice și examene. Fiecare modul își păstrează întrebările și rezultatele.</p>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:18}}>
+          <section style={bg}>
+            <div style={{fontSize:34}}>📚</div>
+            <span style={{fontSize:11,fontWeight:900,color:"#6366f1",letterSpacing:".08em"}}>ÎNVĂȚĂMÂNT UNIVERSITAR</span>
+            <h2 style={{fontSize:23,margin:"0 0 2px"}}>12 LP · RO / EN</h2>
+            <p style={{...muted,flex:1}}>Cele 12 lucrări practice originale. Întrebări, prezentări, QR-uri și rezultate în limba română sau engleză.</p>
+            <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap"}}>
+              <button style={{...action,flex:1}} onClick={()=>onOpen12("ro")}>🇷🇴 Română</button>
+              <button style={{...action,flex:1,background:"#eef2ff",color:"#3730a3",border:"1px solid #c7d2fe"}} onClick={()=>onOpen12("en")}>🇬🇧 English</button>
+            </div>
+          </section>
+          <section style={bg}>
+            <div style={{fontSize:34}}>🧪</div>
+            <span style={{fontSize:11,fontWeight:900,color:"#6366f1",letterSpacing:".08em"}}>ÎNVĂȚĂMÂNT POSTLICEAL</span>
+            <h2 style={{fontSize:23,margin:"0 0 2px"}}>6 LP · RO</h2>
+            <p style={{...muted,flex:1}}>Cele 6 lucrări practice grupate, în limba română. Quiz complet, prezență, rezultate și medii.</p>
+            <a href="./6lucrari/?from=portal" style={{...action,textDecoration:"none",textAlign:"center",marginTop:12}}>Deschide 6 LP →</a>
+          </section>
+          <section style={bg}>
+            <div style={{fontSize:34}}>🎓</div>
+            <span style={{fontSize:11,fontWeight:900,color:"#6366f1",letterSpacing:".08em"}}>EXAMENE SEPARATE</span>
+            <h2 style={{fontSize:23,margin:"0 0 2px"}}>Examene independente</h2>
+            <p style={{...muted,flex:1}}>Examene distincte de activitățile LP. Include deja Kurzusfogászat 2026, cu examen practic și teoretic.</p>
+            <a href="./examene/?from=portal" style={{...action,textDecoration:"none",textAlign:"center",marginTop:12}}>Deschide examenele →</a>
+          </section>
+        </div>
+        <div style={{marginTop:26,padding:"14px 18px",borderRadius:12,background:"#eef2ff",border:"1px solid #c7d2fe",color:"#475569",fontSize:13,lineHeight:1.65}}>
+          🔗 Codurile QR deja distribuite studenților continuă să deschidă direct testele. Acest centru este doar pentru navigarea profesorilor.
+        </div>
+      </main>
+    </div>
+  );
+}
+
 function App() {
   const [lang, setLang] = useState(()=>{ try{ const p=new URLSearchParams(window.location.search).get("lang"); if(p==="en"||p==="ro"){ localStorage.setItem("igiena_lang",p); return p; } return localStorage.getItem("igiena_lang")||"ro";}catch(e){return "ro";} });
   const toggleLang = () => { const nl=lang==="ro"?"en":"ro"; setLang(nl); try{localStorage.setItem("igiena_lang",nl);}catch(e){} };
-  const [screen,      setScreen]      = useState("home");
+  const [screen,      setScreen]      = useState(() => {
+    const token=new URLSearchParams(window.location.search).get("token");
+    return !token && readTeacherPortalSession() ? "teacherHub" : "home";
+  });
   const [examCode,    setExamCode]    = useState('');
   const [examQuestions,setExamQuestions]=useState(null);
   const [examResult,  setExamResult]  = useState(null);
@@ -9490,7 +9564,7 @@ function App() {
   const [result,      setResult]      = useState(null);
   const [answers,     setAnswers]     = useState(null);
   const [quizQs,      setQuizQs]      = useState([]);
-  const [teacherName, setTeacherName] = useState("");
+  const [teacherName, setTeacherName] = useState(()=>readTeacherPortalSession());
   const [showDemo,    setShowDemo]    = useState(false);
   const [errMsg,      setErrMsg]      = useState("");
   const [pendingToken,setPendingToken]= useState(null);
@@ -9500,11 +9574,15 @@ function App() {
   }, []);
 
   const handleJoinToken = token => { setPendingToken(token); setScreen("tokenJoin"); };
+  const openTeacherPortal = t => { writeTeacherPortalSession(t);setTeacherName(t);setScreen("teacherHub"); };
+  const logoutTeacherPortal = () => { clearTeacherPortalSession();setTeacherName("");setScreen("home");window.history.replaceState({},"",window.location.pathname); };
 
   const renderScreen = () => {
-    if (screen==="home")        return <HomePage onAdminLogin={(t)=>{setTeacherName(t);setScreen("admin");}} onJoinToken={handleJoinToken}/>;
-  if (screen==="adminLogin")  return <AdminLogin onSuccess={(t)=>{setTeacherName(t);setScreen("admin");}} onBack={()=>setScreen("home")}/>;
-  if (screen==="admin")       return <AdminPanel teacherName={teacherName} onBack={()=>setScreen("home")}/>;
+    if (screen==="home")        return <HomePage onAdminLogin={openTeacherPortal} onJoinToken={handleJoinToken}/>;
+    if (screen==="teacherHub")  return <TeacherPortal teacherName={teacherName} onLogout={logoutTeacherPortal}
+      onOpen12={(l)=>{setLang(l);try{localStorage.setItem("igiena_lang",l);}catch(e){}setScreen("admin");}}/>;
+  if (screen==="adminLogin")  return <AdminLogin onSuccess={openTeacherPortal} onBack={()=>setScreen("home")}/>;
+  if (screen==="admin")       return <AdminPanel teacherName={teacherName} onBack={()=>setScreen("teacherHub")}/>;
   if (screen==="tokenJoin")   return (
     <TokenJoin token={pendingToken}
       onValid={s=>{const sl=resolveSessionLang(s, lang); const rawSize=new URLSearchParams(window.location.search).get("teamSize"); const qrTeamSize=Math.min(14,Math.max(6,parseInt(rawSize||"14",10)||14)); setLang(sl); try{localStorage.setItem("igiena_lang",sl);}catch(e){} setSession({...s, lang:sl, teamSize:qrTeamSize}); setScreen(s?.labCode?.endsWith("-EXAM")?"exam_code":"studentLogin");}}
