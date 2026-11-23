@@ -621,3 +621,173 @@
     visibility:visible;pointer-events:auto;
   }
 }
+
+/* Teacher workspace UX polish: quiz, activities, results, mobile · 2026-11-23 */
+/* Clear section headers, consistent with the new navigation shell. */
+.lp-studio .studio-section-root > div > div:first-child > h3,
+.lp-studio .studio-section-root > div > div:first-child > div > h3 {
+  color:#1b2e4d!important;
+  font-size:18px!important;
+  font-weight:850!important;
+  letter-spacing:-.025em!important;
+}
+.lp-studio .studio-section-root > div > div:first-child > p,
+.lp-studio .studio-section-root > div > div:first-child > div > p {
+  color:#78869b!important;
+  line-height:1.65!important;
+}
+.lp-studio .studio-section-root > div > div:first-child {
+  min-width:0;
+}
+/* The old quiz toolbar contains four long labels. Keep all of them reachable on mobile. */
+.lp-studio .studio-section-root > div > div[style*="width: fit-content"] {
+  max-width:100%;
+  overflow-x:auto;
+  scrollbar-width:thin;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.lp-studio .studio-section-root > div > div[style*="width: fit-content"] > button{
+  white-space:nowrap;
+  flex-shrink:0;
+}
+/* Selectable LP chips are touch-friendly and visibly interactive. */
+.lp-studio .studio-section-root > div > div[style*="flex-wrap: wrap"] > button{
+  min-height:39px;
+  border-radius:11px!important;
+  box-shadow:0 2px 7px rgba(27,48,90,.025);
+  transition:box-shadow .18s ease, transform .18s ease;
+}
+.lp-studio .studio-section-root > div > div[style*="flex-wrap: wrap"] > button:hover{
+  box-shadow:0 5px 15px rgba(28,48,88,.085);
+  transform:translateY(-1px);
+}
+/* Preserve the original question content and editor actions; improve their framing. */
+.lp-studio .studio-section-root textarea{
+  width:100%!important;
+  max-width:100%;
+  min-height:76px;
+  resize:vertical;
+  line-height:1.55;
+}
+.lp-studio .studio-section-root > div > div[style*="grid-template-columns: 240px 1fr"]{
+  min-width:0;
+}
+.lp-studio .studio-section-root > div > div[style*="grid-template-columns: 240px 1fr"] > div{
+  min-width:0;
+}
+.lp-studio .studio-section-root input:focus-visible,
+.lp-studio .studio-section-root textarea:focus-visible,
+.lp-studio .studio-section-root button:focus-visible,
+.lp-studio .studio-section-root select:focus-visible{
+  outline:3px solid rgba(78,101,215,.28)!important;
+  outline-offset:2px;
+}
+/* Results: scan-friendly overview, searchable filters, discoverable details. */
+.lp-studio .studio-results > div:first-child > div{
+  min-width:0;
+  padding:18px!important;
+  border:1px solid #e5eaf3!important;
+  background:#fff!important;
+  border-radius:16px!important;
+  box-shadow:0 5px 18px rgba(25,44,78,.035)!important;
+}
+.lp-studio .studio-results > div:first-child > div > div:nth-child(2){
+  font-weight:900!important;
+  letter-spacing:-.035em;
+  color:#26395a!important;
+}
+.lp-studio .studio-results > div:first-child > div > div:last-child{
+  font-size:11.5px!important;
+  line-height:1.45;
+  color:#78869b!important;
+}
+.lp-studio .studio-results > div:nth-child(2) input{
+  flex:2 1 245px!important;
+  min-width:155px!important;
+}
+.lp-studio .studio-results > div:nth-child(2) select{
+  flex:1 1 140px!important;
+  width:auto!important;
+  min-width:120px!important;
+}
+.lp-studio .studio-results > div:nth-child(2) button{
+  min-height:43px!important;
+  background:linear-gradient(130deg,#0d9286,#08786e)!important;
+  border:0!important;
+  color:#fff!important;
+  font-weight:850!important;
+  box-shadow:0 5px 13px rgba(8,120,110,.14)!important;
+}
+.lp-studio .studio-results > div:nth-child(2) button:hover{
+  filter:brightness(.97);
+}
+.lp-studio .studio-results table th,
+.lp-studio .studio-results table td {
+  vertical-align:middle;
+}
+.lp-studio .studio-results table .result-details-cell {
+  min-width:118px;
+  box-shadow:-5px 0 12px rgba(16,38,71,.055)!important;
+}
+.lp-studio .studio-results table td.result-details-cell button{
+  min-height:34px;
+  white-space:nowrap;
+  padding:8px 12px!important;
+  background:#eaf0ff!important;
+  color:#354db4!important;
+  border:1px solid #c8d4ff!important;
+  border-radius:9px!important;
+  font-weight:850!important;
+  letter-spacing:.005em;
+  box-shadow:0 2px 5px rgba(37,69,147,.05);
+}
+.lp-studio .studio-results table td.result-details-cell button:hover{
+  background:#dce7ff!important;
+  border-color:#aebef4!important;
+}
+.lp-studio .studio-results table td.result-details-cell button:focus-visible{
+  outline:3px solid rgba(77,103,210,.35)!important;
+  outline-offset:2px;
+}
+.lp-studio .studio-results table tbody tr:nth-child(even) td.result-details-cell{
+  background:#f8faff;
+}
+.lp-studio .studio-results table tbody tr:hover td.result-details-cell{
+  background:#eef3ff!important;
+}
+@media(max-width:860px){
+  .lp-studio .studio-section-root > div > div[style*="grid-template-columns: 240px 1fr"]{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+@media(max-width:650px){
+  .lp-studio .studio-section-root > div > div[style*="width: fit-content"]{
+    width:100%!important;
+    border-radius:13px!important;
+  }
+  .lp-studio .studio-section-root > div > div[style*="width: fit-content"] > button{
+    padding:11px 13px!important;
+    min-height:43px;
+  }
+  .lp-studio .studio-results > div:first-child{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:9px!important;
+  }
+  .lp-studio .studio-results > div:first-child > div{
+    padding:13px!important;
+  }
+  .lp-studio .studio-results > div:nth-child(2) input{
+    flex-basis:100%!important;
+  }
+  .lp-studio .studio-results > div:nth-child(2) select{
+    flex:1 1 calc(50% - 8px)!important;
+    min-width:0!important;
+  }
+  .lp-studio .studio-results > div:nth-child(2) button{
+    flex:1 1 100%!important;
+  }
+  .lp-studio .studio-results table .result-details-cell{
+    min-width:108px;
+  }
+}
