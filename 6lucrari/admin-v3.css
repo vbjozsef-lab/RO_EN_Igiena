@@ -607,3 +607,17 @@
   .lp-studio .studio-attendance-filters select{flex-basis:100%!important}
   .lp-studio .studio-report-table table{min-width:600px}
 }
+
+/* Keep lengthy live QR progress panels fully scrollable. */
+.lp-studio .studio-tab-content .studio-qr-card.studio-qr-display{
+  position:relative!important;top:auto!important;
+}
+@media(max-width:1070px){
+  .lp-studio .studio-sidebar{
+    visibility:hidden;pointer-events:none;
+    transition:transform .22s ease,visibility .22s;
+  }
+  .lp-studio .studio-sidebar.is-open{
+    visibility:visible;pointer-events:auto;
+  }
+}
