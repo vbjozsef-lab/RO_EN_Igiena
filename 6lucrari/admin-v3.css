@@ -361,3 +361,136 @@
 @media(prefers-reduced-motion:reduce){
   .lp-studio *, .lp-studio *::before,.lp-studio *::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
+
+/* Integration with the existing six-LP React admin.
+   The former horizontal toolbar remains in markup but is not displayed. */
+.lp-studio{background:#f5f7fb!important}
+.lp-studio .workspace-header{display:none!important}
+.lp-studio .studio-main > div[style*="position: fixed"]{display:none!important}
+.lp-studio .admin-content.studio-body{
+  max-width:1600px!important;
+  margin:0 auto!important;
+  padding:33px clamp(18px,3.1vw,44px) 60px!important;
+  position:relative;
+}
+.lp-studio .workspace-intro.studio-intro{
+  padding:0!important;margin:0 0 28px!important;gap:17px;
+  align-items:flex-end;
+}
+.lp-studio .workspace-intro.studio-intro .studio-heading-title{
+  color:#192a48!important;
+  font-size:clamp(24px,2.4vw,33px)!important;
+  letter-spacing:-.04em!important;
+  line-height:1.22!important;
+  margin:9px 0 7px!important;
+  font-weight:850!important;
+}
+.lp-studio .workspace-intro.studio-intro .studio-kicker{
+  color:#4b61cb!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:.14em!important;
+  text-transform:uppercase;
+}
+.lp-studio .workspace-intro.studio-intro .studio-heading-description{
+  color:#7e8ba1!important;
+  font-size:12.5px!important;
+  line-height:1.65!important;
+  margin:0!important;
+  max-width:730px;
+}
+.lp-studio .workspace-intro-tools.studio-heading-tools{
+  display:flex;align-items:center;gap:8px;
+}
+.lp-studio .workspace-intro-tools .workspace-jump-label{display:none!important}
+.lp-studio .workspace-intro-tools .workspace-jump{display:none!important}
+.lp-studio .workspace-intro-tools .workspace-pill{
+  background:#fff!important;border:1px solid #e1e7f1!important;
+  color:#556782!important;font-weight:800!important;
+  padding:10px 13px!important;border-radius:999px!important;
+  font-size:11px!important;white-space:nowrap;
+}
+.lp-studio .studio-tab-content{min-width:0}
+.lp-studio .studio-tab-content .qr-grid{gap:20px!important}
+.lp-studio .studio-tab-content .studio-qr-display{
+  justify-content:flex-start!important;
+}
+.lp-studio .studio-tab-content .studio-qr-display .studio-card-heading{
+  flex-shrink:0;
+}
+.lp-studio .studio-tab-content .studio-qr-display .studio-qr-placeholder{
+  flex:1;width:100%;
+}
+.lp-studio .studio-qr-settings > label,
+.lp-studio .studio-qr-settings label{display:block}
+.lp-studio .studio-tab-content .studio-qr-settings > select,
+.lp-studio .studio-tab-content .studio-qr-settings > div > select{
+  width:100%!important;
+}
+.lp-studio .studio-qr-settings .studio-qr-generate{
+  display:block!important;width:100%!important;
+}
+.lp-studio .studio-qr-settings .studio-qr-cancel{display:block!important;width:100%!important}
+.lp-studio .studio-tab-content .studio-results > div:nth-child(2){
+  display:flex!important;align-items:center!important;
+}
+.lp-studio .studio-tab-content .studio-results > div:nth-child(2) > select{
+  width:auto!important;min-width:135px!important;max-width:100%;
+  flex:1 1 140px!important;padding:10px 12px!important;
+}
+.lp-studio .studio-tab-content .studio-results > div:nth-child(2) > input{
+  flex:1 1 175px!important;min-width:150px!important;
+  padding:10px 12px!important;
+}
+.lp-studio .studio-tab-content .studio-results > div:nth-child(2) > button{
+  width:auto!important;flex:0 0 auto!important;
+  min-height:43px!important;padding:10px 16px!important;
+  background:#0e948d!important;
+  color:#fff!important;box-shadow:0 5px 13px rgba(12,149,139,.12)!important;
+}
+.lp-studio .studio-report > div > div:first-child button{
+  min-height:41px;
+}
+.lp-studio .studio-report table th,
+.lp-studio .studio-section-root table th{
+  background:#f3f6fc!important;
+}
+.lp-studio .studio-report table td,
+.lp-studio .studio-section-root table td{color:#32405c}
+.lp-studio .studio-section-root h3,
+.lp-studio .studio-report h3{
+  font-weight:850!important;letter-spacing:-.03em!important;
+}
+.lp-studio .studio-section-root input[type="search"]{min-height:41px}
+.lp-studio .studio-section-root > div > div,
+.lp-studio .studio-report > div > div{
+  border-radius:15px;
+}
+@media(max-width:1070px){
+  .lp-studio .admin-content.studio-body{
+    padding:25px clamp(16px,3vw,32px) 45px!important;
+  }
+}
+@media(max-width:780px){
+  .lp-studio .workspace-intro-tools .workspace-jump{
+    display:block!important;width:186px!important;
+    flex:1 1 170px!important;
+    min-height:42px!important;font-size:12px!important;
+    padding:9px 12px!important;
+  }
+  .lp-studio .workspace-intro.studio-intro{margin-bottom:20px!important}
+  .lp-studio .studio-tab-content .qr-grid{grid-template-columns:1fr!important}
+  .lp-studio .studio-qr-card.studio-qr-display{position:static!important}
+}
+@media(max-width:520px){
+  .lp-studio .admin-content.studio-body{padding:20px 12px 37px!important}
+  .lp-studio .workspace-intro.studio-intro .studio-heading-title{font-size:24px!important}
+  .lp-studio .workspace-intro-tools.studio-heading-tools{width:100%}
+  .lp-studio .workspace-intro-tools .workspace-jump{max-width:100%!important}
+  .lp-studio .studio-tab-content .studio-results > div:nth-child(2) > select{
+    flex-basis:45%!important;min-width:125px!important;
+  }
+  .lp-studio .studio-tab-content .studio-results > div:nth-child(2) > button{
+    flex:1 1 100%!important;width:100%!important;
+  }
+}
