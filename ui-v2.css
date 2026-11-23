@@ -1,0 +1,354 @@
+/* Igienă / UMFST — unified interface, visual-only theme v2. */
+:root {
+  --ui-ink:#14213d;
+  --ui-title:#111c38;
+  --ui-body:#4b5b72;
+  --ui-muted:#77859a;
+  --ui-brand:#4557d9;
+  --ui-brand-strong:#3444b9;
+  --ui-brand-soft:#edf0ff;
+  --ui-turquoise:#0f9a91;
+  --ui-border:#e2e8f2;
+  --ui-surface:#fff;
+  --ui-canvas:#f5f7fc;
+  --ui-shadow:0 14px 42px rgba(29,45,90,.055),0 2px 8px rgba(29,45,90,.025);
+}
+html {scroll-behavior:smooth}
+body {
+  background:var(--ui-canvas);
+  font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+button,a,input,select,textarea{font-family:inherit}
+button{transition:background .2s ease,box-shadow .2s ease,border-color .2s ease,color .2s ease}
+button:focus-visible,a:focus-visible,[role="button"]:focus-visible{
+  outline:3px solid rgba(69,87,217,.45)!important;outline-offset:3px;
+}
+button:disabled{cursor:not-allowed}
+::selection{background:#cbd5ff;color:#14213d}
+
+/* Login area. Keep existing content and authentication behavior unchanged. */
+.home-layout{background:#f7f9fd!important}
+.home-left{
+  background:
+    radial-gradient(circle at 7% 10%,rgba(131,151,255,.18),transparent 35%),
+    linear-gradient(145deg,#f8faff 2%,#eef3ff 97%);
+  border-right:1px solid var(--ui-border)!important;
+  min-width:0;
+}
+.home-right{
+  background:radial-gradient(circle at 100% 0%,rgba(69,87,217,.065),transparent 42%),#fff;
+}
+.login-panel {
+  border-radius:24px!important;
+  border:1px solid #e7ebf7!important;
+  box-shadow:0 20px 65px rgba(32,49,112,.105)!important;
+}
+.home-left h1{font-size:clamp(34px,3.1vw,48px)!important}
+.home-mobile-logo{margin-bottom:26px}
+.home-right select,.home-right input{
+  min-height:48px;
+  border-radius:12px!important;
+}
+.home-right button{
+  min-height:49px;
+  border-radius:12px!important;
+}
+@media (min-width:1024px){
+  .home-left{padding-left:clamp(48px,8vw,120px)!important}
+  .home-right{width:min(46%,650px)!important}
+}
+@media (max-width:768px){
+  .home-right{min-height:100vh!important;background:radial-gradient(circle at 50% -20%,#dfe7ff,transparent 75%),#f6f8fd}
+  .login-panel{padding:28px 23px!important}
+}
+
+/* Workspace header/navigation — visible labels, independent of language. */
+.workspace-header{
+  background:rgba(255,255,255,.97)!important;
+  border-bottom:1px solid var(--ui-border)!important;
+  backdrop-filter:blur(16px)!important;
+  box-shadow:0 2px 20px rgba(25,47,102,.035);
+}
+.workspace-topbar{
+  max-width:1380px!important;
+  height:74px!important;
+  gap:16px!important;
+}
+.workspace-brand{
+  min-width:max-content;
+  gap:10px!important;
+}
+.workspace-brand > div:first-child{
+  width:37px!important;height:37px!important;
+  font-size:19px!important;
+  border-radius:11px!important;
+  background:linear-gradient(135deg,#4358d4,#6278eb)!important;
+  box-shadow:0 6px 16px rgba(69,87,217,.21);
+}
+.admin-nav-tabs{
+  padding:5px!important;
+  border:1px solid #e6eaf3!important;
+  background:#f6f8fc!important;
+  border-radius:13px;
+  gap:3px!important;
+  scroll-behavior:smooth;
+  scroll-snap-type:x proximity;
+}
+.admin-nav-tabs button{
+  background:transparent!important;
+  border:0!important;
+  border-bottom:0!important;
+  color:#66748b!important;
+  border-radius:9px!important;
+  font-weight:650!important;
+  min-height:40px;
+  padding:9px 12px!important;
+  display:flex!important;
+  gap:7px!important;
+  align-items:center!important;
+  justify-content:center;
+  scroll-snap-align:start;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.admin-nav-tabs button:hover{background:#e9edfa!important;color:#2d3f91!important}
+.admin-nav-tabs button.is-active{
+  color:#3444b9!important;
+  background:#fff!important;
+  box-shadow:0 2px 10px rgba(43,62,122,.09)!important;
+}
+.admin-nav-tabs .show-desktop{display:inline!important;font-size:12px!important}
+.admin-nav-tabs .show-desktop > span{display:inline}
+.admin-nav-tabs button > span:first-child{font-size:16px!important}
+.admin-content{
+  max-width:1380px!important;
+  padding:28px 28px 55px!important;
+}
+.workspace-intro{
+  display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;
+  column-gap:20px;row-gap:12px;
+  padding:9px 2px 21px;
+}
+.workspace-eyebrow{
+  font-size:11px;font-weight:850;letter-spacing:.125em;
+  text-transform:uppercase;color:var(--ui-brand);
+}
+.workspace-intro h1{
+  margin:6px 0 5px;font-size:clamp(22px,2.4vw,30px);line-height:1.25;
+  letter-spacing:-.035em;color:var(--ui-title);font-weight:850;
+}
+.workspace-intro p{font-size:13px;color:var(--ui-muted);margin:0;max-width:720px;line-height:1.65}
+.workspace-pill{
+  background:#fff;border:1px solid #e3e9f4;color:#58677f;font-size:12px;
+  padding:9px 13px;border-radius:999px;font-weight:750;
+}
+.admin-content table{
+  border-collapse:separate!important;border-spacing:0!important;
+  background:#fff;
+}
+.admin-content table th{
+  font-size:11px!important;letter-spacing:.03em!important;
+  font-weight:800!important;
+  border-bottom:1px solid var(--ui-border)!important;
+}
+.admin-content table td{border-bottom:1px solid #eff2f7!important}
+.admin-content table tr:hover > td{background:#f7f9fe!important}
+.admin-content table tr:last-child td{border-bottom:0!important}
+.admin-content > div button:not(:disabled):hover{
+  filter:brightness(.985);
+}
+.admin-content input:focus-visible,.admin-content select:focus-visible,
+.admin-content textarea:focus-visible{
+  outline:0!important;border-color:#5066dd!important;
+  box-shadow:0 0 0 4px rgba(69,87,217,.1)!important;
+}
+.results-table-wrap{
+  box-shadow:var(--ui-shadow)!important;border-radius:16px!important;
+  border-color:var(--ui-border)!important;
+}
+.qr-grid{gap:18px!important}
+.student-card{box-shadow:var(--ui-shadow)!important;border-color:var(--ui-border)!important}
+.result-details-cell{box-shadow:-3px 0 9px rgba(15,23,42,.04)!important}
+@media(max-width:1000px){
+  .workspace-topbar{height:auto!important;min-height:65px;flex-wrap:wrap;padding:11px 0!important;gap:8px!important}
+  .workspace-topbar > .admin-nav-tabs{order:3;flex-basis:100%}
+  .workspace-topbar > div:last-child{margin-left:auto}
+  .workspace-header{padding:0 12px!important}
+  .admin-content{padding:22px 16px 42px!important}
+}
+@media(max-width:640px){
+  .workspace-topbar{min-height:70px}
+  .workspace-intro{padding-top:5px}
+  .workspace-intro p{font-size:12px}
+  .workspace-pill{font-size:11px;padding:7px 10px}
+  .admin-content{padding:18px 12px 38px!important}
+  .admin-nav-tabs button{padding:9px 11px!important;font-size:12px!important}
+  .admin-nav-tabs .show-desktop{display:inline!important}
+  .admin-content table{font-size:12px!important}
+}
+
+/* Primary teacher portal */
+.teacher-hub{min-height:100vh;background:#f5f7fb;color:var(--ui-ink)}
+.teacher-hub-header{
+  background:rgba(255,255,255,.94);border-bottom:1px solid var(--ui-border);
+  position:sticky;top:0;z-index:20;backdrop-filter:blur(16px);
+}
+.teacher-hub-header-inner{
+  margin:auto;max-width:1320px;padding:16px 28px;
+  display:flex;align-items:center;gap:20px;justify-content:space-between;flex-wrap:wrap;
+}
+.teacher-logo{display:flex;align-items:center;gap:13px}
+.teacher-logo-mark{
+  width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#3f52d3,#6079e8);color:#fff;
+  box-shadow:0 7px 19px rgba(53,80,194,.18);
+}
+.teacher-logo-name{font-size:15px;font-weight:850;letter-spacing:-.028em;color:#17244c}
+.teacher-logo-sub{color:#8590a4;font-size:10px;letter-spacing:.135em;font-weight:800;margin-top:2px}
+.teacher-account{display:flex;align-items:center;gap:13px}
+.teacher-avatar{width:36px;height:36px;display:grid;place-items:center;background:#edf1ff;color:#3548bd;border-radius:11px;font-weight:850}
+.teacher-account-name{font-size:12px;font-weight:800;color:#25324c}
+.teacher-account-role{font-size:11px;color:var(--ui-muted)}
+.teacher-logout{
+  padding:10px 14px;background:#fff;border:1px solid var(--ui-border);border-radius:10px;
+  color:#556176;font-size:12px;font-weight:750;cursor:pointer;
+}
+.teacher-logout:hover{background:#f2f4fd;border-color:#cdd6f7}
+.teacher-hub-main{max-width:1320px;margin:auto;padding:39px 28px 64px}
+.teacher-crumb{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:650;color:#8a97ac;margin-bottom:26px}
+.teacher-crumb strong{color:#4356d1;font-weight:800}
+.teacher-hero{
+  border:1px solid #d9e0f0;overflow:hidden;
+  background:linear-gradient(115deg,#172c69 2%,#283c8d 56%,#455ed1 100%);
+  position:relative;color:white;border-radius:24px;padding:35px 38px 34px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;isolation:isolate;
+}
+.teacher-hero::after{
+  content:"";position:absolute;right:-65px;top:-130px;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(193,213,255,.16),rgba(193,213,255,0) 70%);z-index:-1;
+}
+.teacher-hero::before{
+  content:"";position:absolute;right:170px;bottom:-175px;width:300px;height:300px;
+  border:1px solid rgba(255,255,255,.13);border-radius:50%;z-index:-1;
+}
+.teacher-hero-overline{font-size:11px;font-weight:800;letter-spacing:.17em;color:#c7d7ff}
+.teacher-hero h1{font-size:clamp(26px,3.1vw,38px);font-weight:850;letter-spacing:-.045em;line-height:1.15;max-width:660px;margin:12px 0}
+.teacher-hero p{font-size:14px;color:#d7e2ff;line-height:1.75;max-width:610px;margin:0}
+.teacher-hero-illustration{
+  width:164px;height:164px;flex-shrink:0;background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.2);border-radius:36px;
+  display:flex;align-items:center;justify-content:center;
+  transform:rotate(-9deg);box-shadow:inset 0 0 50px rgba(255,255,255,.025);
+}
+.teacher-hero-illustration svg{transform:rotate(9deg)}
+.teacher-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:20px 0 38px}
+.teacher-overview-item{
+  display:flex;align-items:center;gap:14px;
+  background:#fff;border:1px solid var(--ui-border);border-radius:16px;
+  padding:18px 20px;box-shadow:0 2px 8px rgba(29,45,90,.025);
+}
+.teacher-overview-icon{border-radius:12px;width:43px;height:43px;display:grid;place-items:center;background:#eef2ff;color:#4f61d5}
+.teacher-overview-title{font-size:22px;font-weight:850;letter-spacing:-.04em;color:var(--ui-title);line-height:1.25}
+.teacher-overview-label{font-size:12px;color:#8a95a9;margin-top:3px}
+.teacher-section-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:18px;flex-wrap:wrap}
+.teacher-section-label{color:#5d6bd4;font-size:11px;letter-spacing:.15em;font-weight:850;text-transform:uppercase}
+.teacher-section-heading h2{font-size:24px;letter-spacing:-.035em;color:#17223f;margin:5px 0 0}
+.teacher-section-help{font-size:12px;color:#8b96a9;margin:0}
+.teacher-program-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.teacher-program-card{
+  background:#fff;border:1px solid var(--ui-border);border-radius:21px;
+  padding:25px;display:flex;flex-direction:column;min-height:312px;
+  box-shadow:0 3px 17px rgba(24,46,95,.035);
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+.teacher-program-card:hover{transform:translateY(-3px);border-color:#c8d3f4;box-shadow:0 20px 40px rgba(24,46,95,.09)}
+.teacher-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.teacher-card-icon{width:49px;height:49px;border-radius:14px;background:#eef2ff;color:#4a5fd0;display:grid;place-items:center}
+.teacher-card-icon.teal{background:#e4f8f6;color:#078f87}
+.teacher-card-icon.violet{background:#f2edff;color:#7253ce}
+.teacher-card-tag{font-size:10px;font-weight:800;border-radius:999px;background:#f3f5fa;color:#687790;padding:7px 10px}
+.teacher-program-card h3{font-size:21px;line-height:1.27;letter-spacing:-.035em;color:#17223f;margin:18px 0 6px;font-weight:850}
+.teacher-program-card .teacher-card-description{font-size:12.5px;color:#718096;line-height:1.7;margin:0 0 20px;flex:1}
+.teacher-card-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
+.teacher-card-meta span{font-size:11px;font-weight:700;color:#62728b;background:#f6f8fd;border:1px solid #edf0f7;border-radius:7px;padding:6px 9px}
+.teacher-card-actions{display:flex;gap:9px}
+.teacher-card-action{
+  display:inline-flex;gap:7px;align-items:center;justify-content:center;
+  border:1px solid transparent;border-radius:11px;padding:11px 13px;
+  background:#4557d9;color:#fff;text-decoration:none;font-size:12px;
+  font-weight:800;cursor:pointer;min-height:44px;flex:1;white-space:nowrap;
+}
+.teacher-card-action:hover{background:#3444b9}
+.teacher-card-action.secondary{background:#edf0ff;color:#4253c4;border-color:#dce2ff}
+.teacher-card-action.secondary:hover{background:#dfe5ff}
+.teacher-safe-note{
+  display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid var(--ui-border);
+  border-radius:15px;padding:17px 20px;margin-top:25px;
+}
+.teacher-safe-note-icon{width:29px;height:29px;flex-shrink:0;background:#e9f7f5;color:#0a958e;border-radius:9px;display:grid;place-items:center}
+.teacher-safe-note strong{font-size:12px;color:#31415f}
+.teacher-safe-note p{font-size:12px;color:#8491a4;margin:4px 0 0;line-height:1.65}
+.teacher-footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:#9aa5b5;font-size:11px;margin-top:34px}
+@media(max-width:990px){
+  .teacher-program-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .teacher-program-card:last-child{grid-column:1/-1;min-height:260px}
+}
+@media(max-width:690px){
+  .teacher-hub-header-inner{padding:13px 16px}
+  .teacher-account-name,.teacher-account-role{display:none}
+  .teacher-hub-main{padding:22px 16px 38px}
+  .teacher-crumb{margin-bottom:16px}
+  .teacher-hero{padding:27px 22px;border-radius:18px}
+  .teacher-hero-illustration{display:none}
+  .teacher-overview{grid-template-columns:repeat(3,1fr);gap:8px;margin:13px 0 28px}
+  .teacher-overview-item{padding:13px 9px;border-radius:12px;gap:6px;flex-direction:column;text-align:center}
+  .teacher-overview-icon{width:34px;height:34px;border-radius:9px}
+  .teacher-overview-title{font-size:19px}
+  .teacher-overview-label{font-size:10px}
+  .teacher-section-heading h2{font-size:21px}
+  .teacher-program-grid{grid-template-columns:1fr}
+  .teacher-program-card{min-height:0;padding:22px}
+  .teacher-program-card:last-child{grid-column:auto}
+  .teacher-logout{padding:9px 10px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation-duration:.01ms!important}
+}
+
+/* Standalone examination and catalog visual consistency */
+body.dental-ui{background:#f5f7fb;color:#1a2742}
+body.dental-ui .top{
+  background:#172a65!important;padding:22px 30px!important;
+  border-bottom:1px solid rgba(255,255,255,.12)
+}
+body.dental-ui .wrap{max-width:1250px!important;padding:24px!important}
+body.dental-ui .card{
+  border-radius:18px!important;border-color:#e3e8f2!important;
+  box-shadow:var(--ui-shadow)!important;
+}
+body.dental-ui .btn{border-radius:11px!important;min-height:43px}
+body.dental-ui .btn:not(.red):not(.alt):not(.light){background:#4557d9}
+body.dental-ui .btn:hover{filter:brightness(.96)}
+body.dental-ui .inp{border-radius:11px}
+body.dental-ui .q{border-color:#e3e8f2}
+body.dental-ui .opt{border-radius:11px;transition:background .16s,border-color .16s}
+body.dental-ui .opt:hover{border-color:#8798e4;background:#f2f5ff}
+body.dental-ui .opt.sel{border-color:#4557d9;background:#e9edff}
+body.dental-ui table{min-width:680px}
+body.dental-ui th{background:#f0f3fd;color:#4156b5}
+body.dental-ui th,body.dental-ui td{padding:12px!important}
+body.dental-ui .card:has(table){overflow-x:auto}
+@media(max-width:640px){body.dental-ui .wrap{padding:16px!important}}
+
+body.exam-catalog{background:#f5f7fb}
+body.exam-catalog header{background:#172a65;border-bottom:1px solid rgba(255,255,255,.12)}
+body.exam-catalog .wrap{max-width:1170px}
+body.exam-catalog .grid{gap:19px}
+body.exam-catalog .card{border-color:#e4e9f3;border-radius:19px;box-shadow:var(--ui-shadow);padding:28px}
+body.exam-catalog .card:hover{border-color:#c5d1f5;box-shadow:0 18px 40px rgba(29,45,90,.085)}
+body.exam-catalog h1,body.exam-catalog h2{color:#1d2b4d}
+body.exam-catalog .kicker,body.exam-catalog .eyebrow{color:#4258ca}
+body.exam-catalog a.btn{background:#4557d9;border-radius:11px}
+body.exam-catalog .note{background:#f0f3ff;border-color:#dbe2fb}
