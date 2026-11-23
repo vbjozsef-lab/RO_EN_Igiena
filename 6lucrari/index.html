@@ -9939,9 +9939,22 @@ function ExamBankPanel({mode, selLab}) {
 // PREZENTA TAB — pivot table
 // ════════════════════════════════════════════════════════════
 
+
+function readSixLpPortalTeacher(){
+  try{
+    const p=new URLSearchParams(window.location.search);
+    if(p.get("from")!=="portal" || p.has("token")) return "";
+    const s=JSON.parse(sessionStorage.getItem("igiena_teacher_portal_v1")||"null");
+    if(s && Object.prototype.hasOwnProperty.call(TEACHERS,s.teacher) &&
+       Number.isFinite(Number(s.at)) && Date.now()>=Number(s.at) &&
+       Date.now()-Number(s.at)<8*60*60*1000) return s.teacher;
+  }catch(e){}
+  return "";
+}
+
 function App() {
   const [lang, setLang] = useState("ro");
-  const [screen,      setScreen]      = useState("home");
+  const [screen,      setScreen]      = useState(()=>readSixLpPortalTeacher()?"admin":"home");
   const [examCode,    setExamCode]    = useState('');
   const [examQuestions,setExamQuestions]=useState(null);
   const [examResult,  setExamResult]  = useState(null);
@@ -9951,7 +9964,7 @@ function App() {
   const [result,      setResult]      = useState(null);
   const [answers,     setAnswers]     = useState(null);
   const [quizQs,      setQuizQs]      = useState([]);
-  const [teacherName, setTeacherName] = useState("");
+  const [teacherName, setTeacherName] = useState(()=>readSixLpPortalTeacher());
   const [showDemo,    setShowDemo]    = useState(false);
   const [errMsg,      setErrMsg]      = useState("");
   const [pendingToken,setPendingToken]= useState(null);
@@ -9965,7 +9978,10 @@ function App() {
   const renderScreen = () => {
     if (screen==="home")        return <HomePage onAdminLogin={(t)=>{setTeacherName(t);setScreen("admin");}} onJoinToken={handleJoinToken}/>;
   if (screen==="adminLogin")  return <AdminLogin onSuccess={(t)=>{setTeacherName(t);setScreen("admin");}} onBack={()=>setScreen("home")}/>;
-  if (screen==="admin")       return <AdminPanel teacherName={teacherName} onBack={()=>setScreen("home")}/>;
+  if (screen==="admin")       return <AdminPanel teacherName={teacherName} onBack={()=>{
+    if(readSixLpPortalTeacher()) window.location.href="../?portal=1";
+    else setScreen("home");
+  }}/>;
   if (screen==="tokenJoin")   return (
     <TokenJoin token={pendingToken}
       onValid={s=>{setLang("ro"); try{localStorage.setItem("igiena_lang","ro");}catch(e){} setSession({...s, lang:"ro"}); setScreen(s?.labCode?.endsWith("-EXAM")?"exam_code":"studentLogin");}}
