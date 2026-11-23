@@ -6573,7 +6573,7 @@ function AdminPanel({onBack, teacherName}) {
         )}
 
         {tab==="laborator" && (
-          <div>
+          <div className="studio-lab-library">
             <h3 style={{color:"#1e1b4b",fontSize:16,margin:"0 0 4px",fontWeight:700}}>🧪 Laborator animat — {selLab.code}</h3>
             <p style={{color:"#64748b",fontSize:13,margin:"0 0 16px"}}>Laboratoare animate și fișe practice pentru {selLab.title}. Acest modul rămâne separat de prezentările didactice.</p>
             {(LAB_DEMOS[selLab.id]||[]).length === 0 ? (
@@ -6601,7 +6601,7 @@ function AdminPanel({onBack, teacherName}) {
         )}
 
         {tab==="prezentari" && (
-          <div>
+          <div className="studio-presentation-library">
             <div style={{background:"linear-gradient(135deg,#1e1b4b,#4338ca 58%,#6366f1)",color:"#fff",borderRadius:20,padding:"22px 24px",marginBottom:16,boxShadow:"0 12px 34px rgba(67,56,202,.20)",position:"relative",overflow:"hidden"}}>
               <div style={{position:"absolute",width:220,height:220,borderRadius:"50%",right:-70,top:-90,background:"rgba(255,255,255,.08)"}}/>
               <div style={{position:"relative"}}>
@@ -9577,7 +9577,7 @@ function QuizAveragesTab({results}) {
 
   return (
     <div>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12,marginBottom:16,flexWrap:"wrap"}}>
+      <div className="studio-report-header" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12,marginBottom:16,flexWrap:"wrap"}}>
         <div>
           <h3 style={{color:"#1e1b4b",fontSize:18,margin:"0 0 4px"}}>📈 Medii Quiz Complet</h3>
           <p style={{color:"#64748b",fontSize:13,margin:0,lineHeight:1.5}}>
@@ -9595,7 +9595,7 @@ function QuizAveragesTab({results}) {
           Nu există încă rezultate Quiz Complet pentru LP1–LP6.
         </div>
       ) : (
-        <div style={{overflowX:"auto",borderRadius:14,border:"1px solid #e0e7ff",background:"#fff",boxShadow:"0 4px 16px rgba(99,102,241,0.06)"}}>
+        <div className="studio-report-table" style={{overflowX:"auto",borderRadius:14,border:"1px solid #e0e7ff",background:"#fff",boxShadow:"0 4px 16px rgba(99,102,241,0.06)"}}>
           <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
             <thead>
               <tr style={{background:"#EEF2FF"}}>
@@ -9690,7 +9690,7 @@ function PrezentaTab({results, labs}) {
   return (
     <div>
       {/* Header */}
-      <div style={{marginBottom:14,display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10}}>
+      <div className="studio-report-header" style={{marginBottom:14,display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10}}>
         <div>
           <h2 style={{fontSize:18,fontWeight:800,color:"#1e1b4b",margin:0}}>📋 Tabel Prezență</h2>
           <p style={{fontSize:12,color:"#64748b",margin:"3px 0 0"}}>
@@ -9703,7 +9703,7 @@ function PrezentaTab({results, labs}) {
       </div>
 
       {/* Filters */}
-      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14,background:"#fff",padding:"10px 12px",borderRadius:12,border:"1px solid #e0e7ff"}}>
+      <div className="studio-attendance-filters" style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14,background:"#fff",padding:"10px 12px",borderRadius:12,border:"1px solid #e0e7ff"}}>
         <select style={sS} value={yearFilter} onChange={e=>setYearFilter(e.target.value)}>
           <option value="all">📅 Toți anii</option>
           {["Anul I","Anul II","Anul III","Anul IV","Anul V","Anul VI"].map(y=><option key={y} value={y}>{y}</option>)}
@@ -9735,7 +9735,7 @@ function PrezentaTab({results, labs}) {
           <p style={{margin:0}}>Nicio înregistrare pentru filtrele selectate.</p>
         </div>
       ) : (
-        <div style={{overflowX:"auto",borderRadius:12,border:"1px solid #e0e7ff",background:"#fff",boxShadow:"0 2px 8px rgba(99,102,241,0.06)"}}>
+        <div className="studio-report-table" style={{overflowX:"auto",borderRadius:12,border:"1px solid #e0e7ff",background:"#fff",boxShadow:"0 2px 8px rgba(99,102,241,0.06)"}}>
           <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
             <thead>
               <tr style={{background:"#F0F4FF"}}>
