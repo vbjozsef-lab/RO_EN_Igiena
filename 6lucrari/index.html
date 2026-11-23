@@ -134,6 +134,7 @@
   }
 
 </style>
+<link rel="stylesheet" href="../ui-v2.css?v=2">
 </head>
 <body>
 <div id="root"></div>
@@ -5636,7 +5637,7 @@ function HomePage({onAdminLogin, onJoinToken}) {
             </div>
           </div>
 
-          <div style={{background:"#fff",borderRadius:24,padding:"36px 32px",boxShadow:"0 8px 48px rgba(99,102,241,0.12)",border:"1px solid #e0e7ff"}}>
+          <div className="login-panel" style={{background:"#fff",borderRadius:24,padding:"36px 32px",boxShadow:"0 8px 48px rgba(99,102,241,0.12)",border:"1px solid #e0e7ff"}}>
 
             <div style={{marginBottom:28}}>
               <div style={{fontSize:11,color:"#6366f1",fontWeight:800,textTransform:"uppercase",letterSpacing:".12em",marginBottom:8}}>Autentificare Profesor</div>
@@ -6010,11 +6011,11 @@ function AdminPanel({onBack, teacherName}) {
       <div style={{position:"fixed",width:400,height:400,borderRadius:"50%",background:"radial-gradient(circle,rgba(139,92,246,0.05),transparent 70%)",bottom:-100,right:-100,pointerEvents:"none",zIndex:0}}/>
 
       {/* ── TOP NAV ── */}
-      <div style={{position:"sticky",top:0,zIndex:100,background:"rgba(240,244,255,0.95)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(99,102,241,0.12)",padding:"0 12px"}}>
-        <div style={{maxWidth:1100,margin:"0 auto",display:"flex",alignItems:"center",height:52,gap:8}}>
+      <div className="workspace-header" style={{position:"sticky",top:0,zIndex:100,background:"rgba(240,244,255,0.95)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(99,102,241,0.12)",padding:"0 12px"}}>
+        <div className="workspace-topbar" style={{maxWidth:1100,margin:"0 auto",display:"flex",alignItems:"center",height:52,gap:8}}>
 
           {/* Logo */}
-          <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
+          <div className="workspace-brand" style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
             <div style={{width:30,height:30,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>🧬</div>
             <span style={{fontSize:13,fontWeight:800,color:"#1e1b4b",letterSpacing:"-.01em",whiteSpace:"nowrap"}} className="hide-mobile">Igienă · UMFST</span>
           </div>
@@ -6034,7 +6035,7 @@ function AdminPanel({onBack, teacherName}) {
               {id:"fisiere",     icon:"📁", label:T("tab_fisiere")},
               {id:"nomenclator", icon:"🗂️", label:T("tab_nomenclator")},
             ].map(t=>(
-              <button key={t.id} onClick={()=>setTab(t.id)}
+              <button key={t.id} className={tab===t.id?"is-active":""} aria-current={tab===t.id?"page":undefined} onClick={()=>setTab(t.id)}
                 style={{
                   display:"flex",alignItems:"center",gap:5,flexShrink:0,
                   padding:"5px 10px",borderRadius:8,border:"none",cursor:"pointer",
@@ -6066,6 +6067,20 @@ function AdminPanel({onBack, teacherName}) {
       </div>
 
       <div className="admin-content" style={{zIndex:1}}>
+        <div className="workspace-intro">
+          <div>
+            <span className="workspace-eyebrow">6 LUCRĂRI PRACTICE · ROMÂNĂ · POSTLICEAL</span>
+            <h1>{({
+              qr:"Coduri QR și sesiuni",preview:"Previzualizare Quiz",activities:"Activități practice",
+              results:"Rezultate studenți",quizAverages:"Medii Quiz Complet",
+              examResults:"Rezultate examen",laborator:"Laborator animat",
+              prezentari:"Prezentări",prezenta:"Prezență și participare",
+              fisiere:"Fișiere și materiale",nomenclator:"Nomenclator"
+            })[tab]||"Panou de control"}</h1>
+            <p>Gestionați toate cele 6 LP-uri în limba română. Quiz-urile, notele și evidența prezenței rămân separate de programul universitar.</p>
+          </div>
+          <span className="workspace-pill">● 6 LP · RO</span>
+        </div>
 
         {/* ── QR TAB ── */}
         {tab==="qr" && (
