@@ -135,6 +135,7 @@
 
 </style>
 <link rel="stylesheet" href="../ui-v2.css?v=2">
+<link rel="stylesheet" href="admin-v3.css?v=3">
 </head>
 <body>
 <div id="root"></div>
@@ -5851,10 +5852,115 @@ function GroupActivityResultModal({result,onClose}) {
 // ════════════════════════════════════════════════════════════
 // ③ ADMIN PANEL — QR generator + results
 // ════════════════════════════════════════════════════════════
+
+function StudioIcon({name,size=18}){
+  const paths={
+    grid:"M3 3h8v8H3z M13 3h8v8h-8z M3 13h8v8H3z M13 13h8v8h-8z",
+    qr:"M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h3v3h-3z M21 14v3 M17 21h4 M14 20v1",
+    eye:"M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z M9 12a3 3 0 1 0 6 0 3 3 0 1 0-6 0",
+    activity:"M3 12h4l3-7 4 14 3-7h4",
+    results:"M4 20V9 M9 20V4 M14 20v-7 M19 20V8 M2 20h20",
+    average:"M3 17l6-6 4 4 8-9 M15 6h6v6",
+    exam:"M5 3h14v18H5z M8 8h8 M8 12h8 M8 16h5",
+    flask:"M9 3h6 M10 3v8l-5.5 9a1 1 0 0 0 .9 1.5h13.2a1 1 0 0 0 .9-1.5L14 11V3 M7.5 16h9",
+    presentation:"M3 4h18v12H3z M12 16v5 M7 21h10 M8 9l3 3 5-5",
+    attendance:"M3 5h18v16H3z M8 2v5 M16 2v5 M3 10h18 M8 15l2 2 4-4",
+    folder:"M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10H3z",
+    settings:"M4 7h16 M4 12h16 M4 17h16 M9 5v4 M15 10v4 M9 15v4",
+    menu:"M4 6h16 M4 12h16 M4 18h16",
+    arrow:"M12 19l-7-7 7-7 M5 12h15",
+    users:"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M5 7a4 4 0 1 0 8 0 4 4 0 1 0-8 0 M22 21v-2a4 4 0 0 0-3-3.9 M16 3.1a4 4 0 0 1 0 7.8",
+    shield:"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10 M9 12l2 2 4-4",
+    clock:"M12 3a9 9 0 1 0 0 18 9 9 0 1 0 0-18 M12 7v5l3 2"
+  };
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d={paths[name]||paths.grid}/>
+  </svg>;
+}
+const SIX_STUDIO_GROUPS=[
+  {label:"ACTIVITĂȚI",items:[
+    {id:"qr",icon:"qr",label:"Sesiuni și coduri QR"},
+    {id:"preview",icon:"eye",label:"Quiz Complet"},
+    {id:"activities",icon:"activity",label:"Activități practice"}
+  ]},
+  {label:"MONITORIZARE",items:[
+    {id:"results",icon:"results",label:"Rezultate"},
+    {id:"quizAverages",icon:"average",label:"Medii Quiz"},
+    {id:"prezenta",icon:"attendance",label:"Prezență"},
+    {id:"examResults",icon:"exam",label:"Rezultate examen"}
+  ]},
+  {label:"RESURSE ȘI SETĂRI",items:[
+    {id:"laborator",icon:"flask",label:"Laborator animat"},
+    {id:"prezentari",icon:"presentation",label:"Prezentări"},
+    {id:"fisiere",icon:"folder",label:"Fișiere"},
+    {id:"nomenclator",icon:"settings",label:"Nomenclator"}
+  ]}
+];
+const SIX_STUDIO_TITLES={
+  qr:"Sesiuni și coduri QR",preview:"Quiz Complet",activities:"Activități practice",
+  results:"Rezultatele studenților",quizAverages:"Medii Quiz Complet",
+  prezenta:"Prezență și participare",examResults:"Rezultate examen",
+  laborator:"Laborator animat",prezentari:"Bibliotecă de prezentări",
+  fisiere:"Fișiere și materiale",nomenclator:"Nomenclator"
+};
+const SIX_STUDIO_HELP={
+  qr:"Configurați activitatea, alegeți durata și generați codul QR pentru studenți.",
+  preview:"Vizualizați și editați întrebările pentru fiecare lucrare practică.",
+  activities:"Organizați activitățile și cazurile practice pentru studenți.",
+  results:"Consultați rezultatele, aplicați filtre și exportați datele în CSV.",
+  quizAverages:"Media studenților se calculează doar din lucrările practice completate.",
+  prezenta:"Urmăriți participarea la fiecare LP și exportați situația studenților.",
+  examResults:"Consultați notele și detaliile examenelor.",
+  laborator:"Accesați laboratoarele animate pentru lucrările practice.",
+  prezentari:"Deschideți prezentările LP1–LP6 și materialele de studiu.",
+  fisiere:"Gestionați fișierele și materialele de laborator.",
+  nomenclator:"Administrați specializările, anii și modulele."
+};
+function SixStudioSidebar({tab,onTab,onBack,open,onClose}){
+  return <>
+    <aside className={"studio-sidebar"+(open?" is-open":"")} aria-label="Meniu de administrare">
+      <div className="studio-brand">
+        <span className="studio-logo"><StudioIcon name="grid" size={23}/></span>
+        <div><div className="studio-brand-name">Igienă Campus</div><div className="studio-brand-sub">UMFST · CENTRU PROFESORI</div></div>
+      </div>
+      <div className="studio-course">
+        <span className="studio-course-icon"><StudioIcon name="flask" size={19}/></span>
+        <div><div className="studio-course-title">6 lucrări practice</div><div className="studio-course-sub">Postliceal · Română</div></div>
+      </div>
+      <nav className="studio-nav">
+        {SIX_STUDIO_GROUPS.map(group=>(
+          <div className="studio-nav-section" key={group.label}>
+            <div className="studio-nav-label">{group.label}</div>
+            {group.items.map(item=>(
+              <button key={item.id} type="button"
+                className={"studio-nav-link"+(tab===item.id?" is-active":"")}
+                aria-current={tab===item.id?"page":undefined}
+                onClick={()=>{onTab(item.id);onClose();}}>
+                <StudioIcon name={item.icon} size={18}/><span className="studio-nav-title">{item.label}</span>
+              </button>
+            ))}
+          </div>
+        ))}
+      </nav>
+      <div className="studio-sidebar-bottom">
+        <button type="button" className="studio-sidebar-back" onClick={onBack}>
+          <StudioIcon name="arrow" size={17}/>
+          <span>{readSixLpPortalTeacher()?"Înapoi la centru":"Înapoi la conectare"}</span>
+        </button>
+        <div className="studio-side-copyright">Igienă Campus · Platformă educațională<br/>LP1–LP6 · Activități și evaluare</div>
+      </div>
+    </aside>
+    {open && <button className="studio-menu-overlay" type="button"
+      aria-label="Închide meniul" onClick={onClose}/>}
+  </>;
+}
+
 function AdminPanel({onBack, teacherName}) {
   const T = useT();
   const lang = React.useContext(LangContext);
   const [tab, setTab]             = useState("qr"); // qr | results
+  const [studioMobileOpen,setStudioMobileOpen] = useState(false);
   const [selectedResult, setSelectedResult] = useState(null); // fisa detail modal
   const [selLab, setSelLab]       = useState(LABS.find(l=>l.ready) || LABS[0]);
   const [duration, setDuration]   = useState(5);
@@ -6004,7 +6110,29 @@ function AdminPanel({onBack, teacherName}) {
   const hasMore = filteredResults.length > DISPLAY_LIMIT;
 
   return (
-    <div style={{minHeight:"100vh",background:"#F0F4FF",fontFamily:"'Inter','Segoe UI',system-ui,sans-serif",position:"relative"}}>
+    <div className="lp-studio" style={{minHeight:"100vh",background:"#f5f7fb",fontFamily:"Inter,'Segoe UI',system-ui,sans-serif",position:"relative"}}>
+
+      <SixStudioSidebar tab={tab} onTab={setTab} onBack={onBack}
+        open={studioMobileOpen} onClose={()=>setStudioMobileOpen(false)}/>
+      <div className="studio-main">
+        <header className="studio-topbar">
+          <div className="studio-top-left">
+            <button type="button" className="studio-menu-toggle" aria-label="Deschide meniul"
+              aria-expanded={studioMobileOpen} onClick={()=>setStudioMobileOpen(!studioMobileOpen)}>
+              <StudioIcon name="menu" size={19}/>
+            </button>
+            <div>
+              <div className="studio-location">Igienă Campus / <strong>6 LP</strong></div>
+              <div className="studio-topbar-title">{SIX_STUDIO_TITLES[tab]||"Panou profesor"}</div>
+            </div>
+          </div>
+          <div className="studio-topbar-right">
+            <span className="studio-topbar-live">Spațiu de lucru</span>
+            <span className="studio-user-avatar">{teacherName.split(" ").filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase()||"P"}</span>
+            <div><div className="studio-user-name">{teacherName}</div><div className="studio-user-role">Profesor</div></div>
+            <button className="studio-header-return" type="button" onClick={onBack}>← Centru</button>
+          </div>
+        </header>
 
       {/* Soft blobs */}
       <div style={{position:"fixed",width:600,height:600,borderRadius:"50%",background:"radial-gradient(circle,rgba(99,102,241,0.07),transparent 70%)",top:-200,left:-200,pointerEvents:"none",zIndex:0}}/>
@@ -6066,20 +6194,20 @@ function AdminPanel({onBack, teacherName}) {
         </div>
       </div>
 
-      <div className="admin-content" style={{zIndex:1}}>
-        <div className="workspace-intro">
+      <div className="admin-content studio-body" style={{zIndex:1}}>
+        <div className="workspace-intro studio-intro">
           <div>
-            <span className="workspace-eyebrow">6 LUCRĂRI PRACTICE · ROMÂNĂ · POSTLICEAL</span>
-            <h1>{({
+            <span className="workspace-eyebrow studio-kicker">PROGRAM POSTLICEAL · 6 LP · ROMÂNĂ</span>
+            <h1 className="studio-heading-title">{({
               qr:"Coduri QR și sesiuni",preview:"Previzualizare Quiz",activities:"Activități practice",
               results:"Rezultate studenți",quizAverages:"Medii Quiz Complet",
               examResults:"Rezultate examen",laborator:"Laborator animat",
               prezentari:"Prezentări",prezenta:"Prezență și participare",
               fisiere:"Fișiere și materiale",nomenclator:"Nomenclator"
             })[tab]||"Panou de control"}</h1>
-            <p>Gestionați toate cele 6 LP-uri în limba română. Quiz-urile, notele și evidența prezenței rămân separate de programul universitar.</p>
+            <p className="studio-heading-description">{SIX_STUDIO_HELP[tab]||"Gestionați activitățile cursului."}</p>
           </div>
-          <div className="workspace-intro-tools">
+          <div className="workspace-intro-tools studio-heading-tools">
             <label className="workspace-jump-label" htmlFor="workspace-jump-6">Navigare rapidă</label>
             <select className="workspace-jump" id="workspace-jump-6" value={tab} onChange={e=>setTab(e.target.value)}>
                 <option value="qr">Generează QR</option>
@@ -6558,6 +6686,7 @@ function AdminPanel({onBack, teacherName}) {
           </div>
         );
       })()}
+      </div>
       </div>
     </div>
   );
