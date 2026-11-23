@@ -132,6 +132,7 @@
   }
 
 </style>
+<link rel="stylesheet" href="ui-v2.css?v=2">
 </head>
 <body>
 <div id="root"></div>
@@ -5504,7 +5505,7 @@ function HomePage({onAdminLogin, onJoinToken}) {
             </div>
           </div>
 
-          <div style={{background:"#fff",borderRadius:24,padding:"36px 32px",boxShadow:"0 8px 48px rgba(99,102,241,0.12)",border:"1px solid #e0e7ff"}}>
+          <div className="login-panel" style={{background:"#fff",borderRadius:24,padding:"36px 32px",boxShadow:"0 8px 48px rgba(99,102,241,0.12)",border:"1px solid #e0e7ff"}}>
 
             <div style={{marginBottom:28}}>
               <div style={{fontSize:11,color:"#6366f1",fontWeight:800,textTransform:"uppercase",letterSpacing:".12em",marginBottom:8}}>Autentificare Profesor</div>
@@ -5790,11 +5791,11 @@ function AdminPanel({onBack, teacherName}) {
       <div style={{position:"fixed",width:400,height:400,borderRadius:"50%",background:"radial-gradient(circle,rgba(139,92,246,0.05),transparent 70%)",bottom:-100,right:-100,pointerEvents:"none",zIndex:0}}/>
 
       {/* ── TOP NAV ── */}
-      <div style={{position:"sticky",top:0,zIndex:100,background:"rgba(240,244,255,0.95)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(99,102,241,0.12)",padding:"0 12px"}}>
-        <div style={{maxWidth:1100,margin:"0 auto",display:"flex",alignItems:"center",height:52,gap:8}}>
+      <div className="workspace-header" style={{position:"sticky",top:0,zIndex:100,background:"rgba(240,244,255,0.95)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(99,102,241,0.12)",padding:"0 12px"}}>
+        <div className="workspace-topbar" style={{maxWidth:1100,margin:"0 auto",display:"flex",alignItems:"center",height:52,gap:8}}>
 
           {/* Logo */}
-          <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
+          <div className="workspace-brand" style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
             <div style={{width:30,height:30,background:"linear-gradient(135deg,#6366f1,#8b5cf6)",borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>🧬</div>
             <span style={{fontSize:13,fontWeight:800,color:"#1e1b4b",letterSpacing:"-.01em",whiteSpace:"nowrap"}} className="hide-mobile">Igienă · UMFST</span>
           </div>
@@ -5813,7 +5814,7 @@ function AdminPanel({onBack, teacherName}) {
               {id:"fisiere",     icon:"📁", label:T("tab_fisiere")},
               {id:"nomenclator", icon:"🗂️", label:T("tab_nomenclator")},
             ].map(t=>(
-              <button key={t.id} onClick={()=>setTab(t.id)}
+              <button key={t.id} className={tab===t.id?"is-active":""} aria-current={tab===t.id?"page":undefined} onClick={()=>setTab(t.id)}
                 style={{
                   display:"flex",alignItems:"center",gap:5,flexShrink:0,
                   padding:"5px 10px",borderRadius:8,border:"none",cursor:"pointer",
@@ -5845,6 +5846,19 @@ function AdminPanel({onBack, teacherName}) {
       </div>
 
       <div className="admin-content" style={{zIndex:1}}>
+        <div className="workspace-intro">
+          <div>
+            <span className="workspace-eyebrow">12 LUCRĂRI PRACTICE · {lang==="en"?"ENGLISH":"ROMÂNĂ"}</span>
+            <h1>{({
+              qr:"Coduri QR și sesiuni",preview:"Previzualizare Quiz",activities:"Activități practice",
+              results:"Rezultate studenți",examResults:"Rezultate examen",laborator:"Laborator animat",
+              prezentari:"Prezentări",prezenta:"Prezență și participare",
+              fisiere:"Fișiere și materiale",nomenclator:"Nomenclator"
+            })[tab]||"Panou de control"}</h1>
+            <p>Gestionați activitățile și rezultatele acestei grupe dintr-un singur panou. Selectați o secțiune din meniul de sus.</p>
+          </div>
+          <span className="workspace-pill">● 12 LP · RO / EN</span>
+        </div>
 
         {/* ── QR TAB ── */}
         {tab==="qr" && (
@@ -9498,54 +9512,111 @@ function clearTeacherPortalSession(){
 }
 
 // The portal changes navigation only; existing course question banks and QR URLs stay intact.
-function TeacherPortal({teacherName,onOpen12,onLogout}){
-  const bg={background:"#fff",border:"1px solid #e0e7ff",borderRadius:20,padding:26,boxShadow:"0 8px 30px rgba(49,46,129,.07)",display:"flex",flexDirection:"column",gap:10};
-  const action={border:0,background:"#4f46e5",color:"#fff",borderRadius:10,padding:"12px 14px",fontSize:14,fontWeight:800,cursor:"pointer"};
-  const muted={fontSize:13,color:"#64748b",lineHeight:1.6,margin:0};
+
+function PortalIcon({kind, size=24}) {
+  const paths = {
+    brand:<><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="m3 12 9 5 9-5M3 16l9 5 9-5"/></>,
+    book:<><path d="M12 7v14"/><path d="M3 18V5a2 2 0 0 1 2-2h4a3 3 0 0 1 3 3v15a3 3 0 0 0-3-3H3Z"/><path d="M21 18V5a2 2 0 0 0-2-2h-4a3 3 0 0 0-3 3v15a3 3 0 0 1 3-3h6Z"/></>,
+    lab:<><path d="M9 3h6M10 3v8L4.5 20a1 1 0 0 0 .9 1.5h13.2a1 1 0 0 0 .9-1.5L14 11V3"/><path d="M7.5 16h9M10 18h.01M14 19h.01"/></>,
+    award:<><circle cx="12" cy="8" r="5"/><path d="m8.5 12.2-1.5 9 5-3 5 3-1.5-9"/></>,
+    arrow:<><path d="M5 12h14m-6-6 6 6-6 6"/></>,
+    chevron:<><path d="m9 18 6-6-6-6"/></>,
+    shield:<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></>,
+    layers:<><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="15" width="7" height="7" rx="1.5"/><rect x="14" y="15" width="7" height="7" rx="1.5"/></>,
+    logout:<><path d="M10 17l5-5-5-5m5 5H3"/><path d="M12 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-6"/></>,
+    clock:<><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></>,
+    users:<><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></>
+  };
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[kind]||paths.layers}</svg>;
+}
+function TeacherPortal({teacherName,onOpen12,onLogout}) {
+  const firstName = String(teacherName||"").split(" ").filter(Boolean)[0]||"Profesor";
+  const initials = String(teacherName||"P").split(/\s+/).slice(0,2).map(x=>x.charAt(0).toUpperCase()).join("");
   return (
-    <div style={{minHeight:"100vh",background:"radial-gradient(circle at 10% 0%,#e0e7ff,transparent 42%),#f7f8ff",fontFamily:"Inter,Segoe UI,system-ui,sans-serif",color:"#172554"}}>
-      <div style={{background:"#1e1b4b",color:"#fff",padding:"18px 24px"}}>
-        <div style={{maxWidth:1100,margin:"auto",display:"flex",alignItems:"center",justifyContent:"space-between",gap:15,flexWrap:"wrap"}}>
-          <b style={{fontSize:17}}>🧬 Igienă · Centru profesori</b>
-          <div style={{display:"flex",alignItems:"center",gap:14}}>
-            <span style={{fontSize:12,color:"#c7d2fe"}}>👤 {teacherName}</span>
-            <button onClick={onLogout} style={{background:"#ffffff22",color:"#fff",padding:"8px 12px",border:"1px solid #ffffff44",borderRadius:9,fontSize:12,fontWeight:700,cursor:"pointer"}}>Deconectare</button>
+    <div className="teacher-hub">
+      <header className="teacher-hub-header">
+        <div className="teacher-hub-header-inner">
+          <div className="teacher-logo">
+            <span className="teacher-logo-mark"><PortalIcon kind="brand" size={22}/></span>
+            <div><div className="teacher-logo-name">Igienă <span style={{color:"#4557d9"}}>Campus</span></div>
+              <div className="teacher-logo-sub">UMFST · PLATFORMĂ EDUCAȚIONALĂ</div>
+            </div>
+          </div>
+          <div className="teacher-account">
+            <span className="teacher-avatar">{initials}</span>
+            <div><div className="teacher-account-name">{teacherName}</div><div className="teacher-account-role">Cont profesor</div></div>
+            <button type="button" className="teacher-logout" onClick={onLogout}>Deconectare</button>
           </div>
         </div>
-      </div>
-      <main style={{maxWidth:1100,margin:"0 auto",padding:"clamp(24px,5vw,52px) 22px"}}>
-        <div style={{fontSize:12,fontWeight:850,letterSpacing:".14em",color:"#6366f1",marginBottom:8}}>PANOU DE ADMINISTRARE</div>
-        <h1 style={{fontSize:"clamp(28px,4vw,39px)",letterSpacing:"-.04em",lineHeight:1.13,margin:"0 0 12px"}}>Alegeți spațiul de lucru</h1>
-        <p style={{...muted,maxWidth:760,fontSize:15,marginBottom:30}}>O singură intrare pentru activitățile practice și examene. Fiecare modul își păstrează întrebările și rezultatele.</p>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:18}}>
-          <section style={bg}>
-            <div style={{fontSize:34}}>📚</div>
-            <span style={{fontSize:11,fontWeight:900,color:"#6366f1",letterSpacing:".08em"}}>ÎNVĂȚĂMÂNT UNIVERSITAR</span>
-            <h2 style={{fontSize:23,margin:"0 0 2px"}}>12 LP · RO / EN</h2>
-            <p style={{...muted,flex:1}}>Cele 12 lucrări practice originale. Întrebări, prezentări, QR-uri și rezultate în limba română sau engleză.</p>
-            <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap"}}>
-              <button style={{...action,flex:1}} onClick={()=>onOpen12("ro")}>🇷🇴 Română</button>
-              <button style={{...action,flex:1,background:"#eef2ff",color:"#3730a3",border:"1px solid #c7d2fe"}} onClick={()=>onOpen12("en")}>🇬🇧 English</button>
+      </header>
+
+      <main className="teacher-hub-main">
+        <div className="teacher-crumb"><span>Platformă educațională</span><PortalIcon kind="chevron" size={14}/><strong>Panou principal</strong></div>
+        <section className="teacher-hero">
+          <div>
+            <div className="teacher-hero-overline">BINE AȚI REVENIT · CENTRU PROFESORI</div>
+            <h1>Bun venit, {firstName}!<br/>Toate activitățile, într-un singur loc.</h1>
+            <p>Alegeți spațiul de lucru potrivit pentru cursul de astăzi. Păstrăm fiecare grupă, bancă de întrebări și examen în propriul său modul.</p>
+          </div>
+          <div className="teacher-hero-illustration"><PortalIcon kind="layers" size={83}/></div>
+        </section>
+        <div className="teacher-overview">
+          {[
+            {icon:"book",number:"12",label:"Lucrări practice · RO/EN"},
+            {icon:"lab",number:"6",label:"Lucrări practice · RO"},
+            {icon:"award",number:"1",label:"Examen independent activ"}
+          ].map((metric,i)=>(
+            <div className="teacher-overview-item" key={i}>
+              <span className="teacher-overview-icon"><PortalIcon kind={metric.icon} size={21}/></span>
+              <div><div className="teacher-overview-title">{metric.number}</div><div className="teacher-overview-label">{metric.label}</div></div>
             </div>
-          </section>
-          <section style={bg}>
-            <div style={{fontSize:34}}>🧪</div>
-            <span style={{fontSize:11,fontWeight:900,color:"#6366f1",letterSpacing:".08em"}}>ÎNVĂȚĂMÂNT POSTLICEAL</span>
-            <h2 style={{fontSize:23,margin:"0 0 2px"}}>6 LP · RO</h2>
-            <p style={{...muted,flex:1}}>Cele 6 lucrări practice grupate, în limba română. Quiz complet, prezență, rezultate și medii.</p>
-            <a href="./6lucrari/?from=portal" style={{...action,textDecoration:"none",textAlign:"center",marginTop:12}}>Deschide 6 LP →</a>
-          </section>
-          <section style={bg}>
-            <div style={{fontSize:34}}>🎓</div>
-            <span style={{fontSize:11,fontWeight:900,color:"#6366f1",letterSpacing:".08em"}}>EXAMENE SEPARATE</span>
-            <h2 style={{fontSize:23,margin:"0 0 2px"}}>Examene independente</h2>
-            <p style={{...muted,flex:1}}>Examene distincte de activitățile LP. Include deja Kurzusfogászat 2026, cu examen practic și teoretic.</p>
-            <a href="./examene/?from=portal" style={{...action,textDecoration:"none",textAlign:"center",marginTop:12}}>Deschide examenele →</a>
-          </section>
+          ))}
         </div>
-        <div style={{marginTop:26,padding:"14px 18px",borderRadius:12,background:"#eef2ff",border:"1px solid #c7d2fe",color:"#475569",fontSize:13,lineHeight:1.65}}>
-          🔗 Codurile QR deja distribuite studenților continuă să deschidă direct testele. Acest centru este doar pentru navigarea profesorilor.
+        <div className="teacher-section-heading">
+          <div>
+            <div className="teacher-section-label">SPAȚII DE LUCRU</div>
+            <h2>Ce doriți să administrați?</h2>
+          </div>
+          <p className="teacher-section-help">Selectați unul dintre cele trei module de mai jos.</p>
         </div>
+        <div className="teacher-program-grid">
+          <article className="teacher-program-card">
+            <div className="teacher-card-head"><div className="teacher-card-icon"><PortalIcon kind="book" size={25}/></div><span className="teacher-card-tag">UNIVERSITAR</span></div>
+            <h3>12 lucrări practice</h3>
+            <p className="teacher-card-description">Programul original cu 12 LP-uri. Gestionați quiz-uri, activități, prezentări, coduri QR și rezultate, în română sau în engleză.</p>
+            <div className="teacher-card-meta"><span>12 LP</span><span>RO / EN</span><span>Quiz · QR · Rezultate</span></div>
+            <div className="teacher-card-actions">
+              <button type="button" className="teacher-card-action" onClick={()=>onOpen12("ro")}>🇷🇴 Română <PortalIcon kind="arrow" size={15}/></button>
+              <button type="button" className="teacher-card-action secondary" onClick={()=>onOpen12("en")}>🇬🇧 English <PortalIcon kind="arrow" size={15}/></button>
+            </div>
+          </article>
+          <article className="teacher-program-card">
+            <div className="teacher-card-head"><div className="teacher-card-icon teal"><PortalIcon kind="lab" size={25}/></div><span className="teacher-card-tag">POSTLICEAL</span></div>
+            <h3>6 lucrări practice</h3>
+            <p className="teacher-card-description">Programul postliceal în limba română. Urmăriți Quiz Complet pentru LP1–LP6, prezența, rezultatele și mediile studenților.</p>
+            <div className="teacher-card-meta"><span>6 LP</span><span>Română</span><span>Quiz · Medii · Prezență</span></div>
+            <div className="teacher-card-actions">
+              <a className="teacher-card-action" href="./6lucrari/?from=portal">Deschide 6 LP <PortalIcon kind="arrow" size={15}/></a>
+            </div>
+          </article>
+          <article className="teacher-program-card">
+            <div className="teacher-card-head"><div className="teacher-card-icon violet"><PortalIcon kind="award" size={25}/></div><span className="teacher-card-tag">EXAMENE</span></div>
+            <h3>Examene independente</h3>
+            <p className="teacher-card-description">Accesați examenele individuale și cataloagele lor. Examenul de medicină dentară Kurzusfogászat 2026 este deja disponibil.</p>
+            <div className="teacher-card-meta"><span>Practic + teoretic</span><span>QR · Catalog</span></div>
+            <div className="teacher-card-actions">
+              <a className="teacher-card-action" href="./examene/?from=portal">Deschide examenele <PortalIcon kind="arrow" size={15}/></a>
+            </div>
+          </article>
+        </div>
+        <div className="teacher-safe-note">
+          <span className="teacher-safe-note-icon"><PortalIcon kind="shield" size={17}/></span>
+          <div>
+            <strong>Activitățile și rezultatele existente rămân păstrate.</strong>
+            <p>Studenții continuă să utilizeze codurile QR obișnuite. Această interfață este destinată navigării profesorilor și nu schimbă întrebările sau notarea.</p>
+          </div>
+        </div>
+        <footer className="teacher-footer"><span>Igienă Campus · UMFST</span><span>Panou profesor · Activități practice și examene</span></footer>
       </main>
     </div>
   );
