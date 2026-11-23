@@ -6079,7 +6079,23 @@ function AdminPanel({onBack, teacherName}) {
             })[tab]||"Panou de control"}</h1>
             <p>Gestionați toate cele 6 LP-uri în limba română. Quiz-urile, notele și evidența prezenței rămân separate de programul universitar.</p>
           </div>
-          <span className="workspace-pill">● 6 LP · RO</span>
+          <div className="workspace-intro-tools">
+            <label className="workspace-jump-label" htmlFor="workspace-jump-6">Navigare rapidă</label>
+            <select className="workspace-jump" id="workspace-jump-6" value={tab} onChange={e=>setTab(e.target.value)}>
+                <option value="qr">Generează QR</option>
+                <option value="preview">Quiz</option>
+                <option value="activities">Activități</option>
+                <option value="results">Rezultate</option>
+                <option value="quizAverages">Medii Quiz</option>
+                <option value="examResults">Rezultate examen</option>
+                <option value="laborator">Laborator animat</option>
+                <option value="prezentari">Prezentări</option>
+                <option value="prezenta">Prezență</option>
+                <option value="fisiere">Fișiere</option>
+                <option value="nomenclator">Nomenclator</option>
+            </select>
+            <span className="workspace-pill">● 6 LP · RO</span>
+          </div>
         </div>
 
         {/* ── QR TAB ── */}
