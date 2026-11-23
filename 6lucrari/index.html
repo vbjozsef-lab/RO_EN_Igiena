@@ -6226,12 +6226,33 @@ function AdminPanel({onBack, teacherName}) {
           </div>
         </div>
 
+        {tab==="qr" && (
+          <div className="studio-summary">
+            <div className="studio-summary-card">
+              <span className="studio-summary-icon"><StudioIcon name="flask" size={22}/></span>
+              <div><div className="studio-summary-number">6</div><div className="studio-summary-label">Lucrări practice</div></div>
+            </div>
+            <div className="studio-summary-card">
+              <span className="studio-summary-icon teal"><StudioIcon name="users" size={22}/></span>
+              <div><div className="studio-summary-number">{new Set(results.filter(r=>r.name).map(r=>String(r.matricol||r.name).trim().toLocaleLowerCase("ro-RO"))).size}</div>
+                <div className="studio-summary-label">Studenți cu înregistrări</div></div>
+            </div>
+            <div className="studio-summary-card">
+              <span className="studio-summary-icon amber"><StudioIcon name="results" size={22}/></span>
+              <div><div className="studio-summary-number">{results.filter(r=>/^full[1-6]$/.test(String(r.module||""))&&/^lp[1-6]$/.test(String(r.labId||""))).length}</div>
+                <div className="studio-summary-label">Quiz-uri complete înregistrate</div></div>
+            </div>
+          </div>
+        )}
+
         {/* ── QR TAB ── */}
         {tab==="qr" && (
           <div className="qr-grid">
             {/* left: generator */}
-            <div style={{background:"#fff",borderRadius:16,padding:24,border:"1px solid #e0e7ff",boxShadow:"0 4px 24px rgba(99,102,241,0.06)"}}>
-              <h3 style={{color:"#1e1b4b",fontSize:16,margin:"0 0 20px",fontWeight:700}}>⚙️ Configurare sesiune</h3>
+            <div className="studio-qr-card studio-qr-settings" style={{background:"#fff",borderRadius:16,padding:24,border:"1px solid #e0e7ff",boxShadow:"0 4px 24px rgba(99,102,241,0.06)"}}>
+              <div className="studio-card-heading"><span className="studio-step">01</span>
+                <div><h3>Configurați sesiunea</h3><p>Selectați lucrarea, activitatea și durata de acces.</p></div>
+              </div>
 
               <label style={S.label}>Selectează practica</label>
               <select style={{...S.input,marginBottom:16}}
@@ -6299,22 +6320,27 @@ function AdminPanel({onBack, teacherName}) {
               </div>
 
               {activeSession ? (
-                <button style={{...S.btnW,color:"#dc2626",borderColor:"#fca5a5"}} onClick={cancelSession}>
+                <button className="studio-qr-cancel" style={{...S.btnW,color:"#dc2626",borderColor:"#fca5a5"}} onClick={cancelSession}>
                   ✕ Anulează sesiunea curentă
                 </button>
               ) : (
-                <button style={S.btnG} onClick={generateQR} disabled={generating}>
+                <button className="studio-qr-generate" style={S.btnG} onClick={generateQR} disabled={generating}>
                   {generating ? <span className="spin">⏳</span> : T("qr_generate")}
                 </button>
               )}
             </div>
 
             {/* right: QR display */}
-            <div style={{background:"#fff",borderRadius:16,padding:24,border:"1px solid #e0e7ff",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",boxShadow:"0 4px 24px rgba(99,102,241,0.06)"}}>
+            <div className="studio-qr-card studio-qr-display" style={{background:"#fff",borderRadius:16,padding:24,border:"1px solid #e0e7ff",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",boxShadow:"0 4px 24px rgba(99,102,241,0.06)"}}>
+              <div className="studio-card-heading"><span className="studio-step second">02</span>
+                <div><h3>Cod QR pentru studenți</h3><p>Proiectați sau descărcați codul sesiunii.</p></div>
+              </div>
               {!activeSession ? (
-                <div style={{textAlign:"center",color:"#94a3b8"}}>
-                  <div style={{fontSize:80,marginBottom:16,opacity:.2}}>📱</div>
-                  <p style={{fontSize:14,color:"#94a3b8"}}>Configurează sesiunea și<br/>apasă „Generează cod QR"</p>
+                <div className="studio-qr-placeholder">
+                  <div className="studio-qr-placeholder-icon"><StudioIcon name="qr" size={49}/></div>
+                  <strong style={{color:"#263856",fontSize:14,marginBottom:7}}>Codul QR va apărea aici</strong>
+                  <p style={{fontSize:12,color:"#8794aa",maxWidth:260}}>Alegeți activitatea și apăsați „Generează cod QR”.</p>
+                  <div className="studio-qr-hint">Codurile QR și rezultatele existente rămân nemodificate.</div>
                 </div>
               ) : (
                 <>
@@ -6406,15 +6432,15 @@ function AdminPanel({onBack, teacherName}) {
 
         {/* ── RESULTS TAB ── */}
         {tab==="preview" && (
-          <QuizPreviewTab selLab={selLab} onSelectLab={lab=>setSelLab(lab)} teacherName={teacherName}/>
+          <div className="studio-section-root"><QuizPreviewTab selLab={selLab} onSelectLab={lab=>setSelLab(lab)} teacherName={teacherName}/></div>
         )}
 
         {tab==="activities" && (
-          <ActivityEditorTab selLab={selLab} onSelectLab={lab=>setSelLab(lab)} teacherName={teacherName}/>
+          <div className="studio-section-root"><ActivityEditorTab selLab={selLab} onSelectLab={lab=>setSelLab(lab)} teacherName={teacherName}/></div>
         )}
 
         {tab==="results" && (
-          <div>
+          <div className="studio-results">
             {/* summary cards */}
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:10,marginBottom:20}}>
               {[
@@ -6613,24 +6639,24 @@ function AdminPanel({onBack, teacherName}) {
         )}
 
         {tab==="quizAverages" && (
-          <QuizAveragesTab results={results} />
+          <div className="studio-report studio-quiz-averages"><QuizAveragesTab results={results} /></div>
         )}
 
         {tab==="examResults" && (
-          <ExamResultsPanel results={results} onRefresh={refreshResults} />
+          <div className="studio-report"><ExamResultsPanel results={results} onRefresh={refreshResults} /></div>
         )}
 
         {tab==="prezenta" && (
-          <PrezentaTab results={results} labs={LABS} />
+          <div className="studio-report"><PrezentaTab results={results} labs={LABS} /></div>
         )}
 
         {tab==="fisiere" && (
-          <FileManager teacherName={teacherName} selLab={selLab} />
+          <div className="studio-section-root"><FileManager teacherName={teacherName} selLab={selLab} /></div>
         )}
 
 
         {tab==="nomenclator" && (
-          <NomenclatorEditor nomenclator={nomenclator} onChange={n=>{setNomenclator(n);saveNomenclator(n);}} />
+          <div className="studio-section-root"><NomenclatorEditor nomenclator={nomenclator} onChange={n=>{setNomenclator(n);saveNomenclator(n);}} /></div>
         )}
         {selectedResult && (isExamResult(selectedResult) || (!isIndividualGroupSubmission(selectedResult) && !isGroupActivityResult(selectedResult) && !(selectedResult.moduleTitle||"").includes("\n---\n") && Number(selectedResult.total)>0)) &&
           <TestResultDetailsModal result={selectedResult} onClose={()=>setSelectedResult(null)}/>}
