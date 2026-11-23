@@ -4948,7 +4948,10 @@ async function loadResults() {
     });
     mapped = [...localRows, ...mapped];
   } catch(e) {}
-  return mapped.filter(r => !(isExamResult(r) && Number(r.timestamp || 0) < EXAM_RESULTS_RESET_AT));
+  return mapped.filter(r =>
+    /^lp[1-6]$/.test(String(r.labId||"")) &&
+    !(isExamResult(r) && Number(r.timestamp || 0) < EXAM_RESULTS_RESET_AT)
+  );
 }
 
 // Live presentation events use the existing results table as a lightweight
@@ -6056,7 +6059,7 @@ function AdminPanel({onBack, teacherName}) {
             )}
             <button onClick={onBack}
               style={{padding:"6px 10px",background:"#fff",border:"1px solid #e0e7ff",borderRadius:8,color:"#64748b",fontSize:12,cursor:"pointer",fontWeight:500,flexShrink:0,WebkitTapHighlightColor:"transparent",whiteSpace:"nowrap"}}>
-              Ieși
+              {readSixLpPortalTeacher() ? "← Centru" : "Ieși"}
             </button>
           </div>
         </div>
