@@ -38,13 +38,21 @@ async function addSession(s){const r=await sb("sessions",{method:"POST",body:JSO
 async function getSession(t){const r=await sb("sessions?id=eq."+encodeURIComponent(t)+"&select=*");if(!r.ok)return null;const a=await r.json();if(!a.length)return null;const s=a[0];const exp=Number(s.expires_at)||Date.parse(s.expires_at);if(exp&&Date.now()>exp)return null;return s}
 async function saveResultOnce(entry){try{const r=await sb("results",{method:"POST",body:JSON.stringify(entry)});return r.ok?{ok:true}:{ok:false,error:await r.text()}}catch(e){return{ok:false,error:String(e)}}}
 async function saveResultReliable(entry){for(let i=0;i<5;i++){const r=await saveResultOnce(entry);if(r.ok)return r;await new Promise(res=>setTimeout(res,700*(i+1)))}return{ok:false,error:"A szerver nem igazolta vissza a mentést."}}
+function portalTeacher(){
+  try {
+    const s=JSON.parse(sessionStorage.getItem("igiena_teacher_portal_v1")||"null");
+    return s && Object.prototype.hasOwnProperty.call(TEACHERS,s.teacher) &&
+      Number.isFinite(Number(s.at)) && Date.now()>=Number(s.at) &&
+      Date.now()-Number(s.at)<8*60*60*1000 ? s.teacher : "";
+  }catch(e){return ""}
+}
 function home(){
  APP.innerHTML='<div class="grid"><div class="card"><h2>👩‍🏫 Tanári belépés</h2><select id="teacher" class="inp"><option value="">— Profesor —</option>'+Object.keys(TEACHERS).map(x=>'<option>'+esc(x)+'</option>').join("")+'</select><input id="pw" class="inp" type="password" placeholder="Parolă"><button class="btn" id="login">Belépés</button><div id="err" class="muted"></div></div><div class="card"><h2>📱 Hallgató</h2><p class="muted">A vizsgához a tanár által kivetített QR-kódot kell beolvasni.</p><div class="tag">36 hallgató + 1 tesztdiák · matricolszám alapján</div></div></div>';
  q("#login").onclick=()=>{const t=q("#teacher").value,p=q("#pw").value;if(!t||TEACHERS[t]!==p){q("#err").textContent="Hibás név vagy jelszó.";return}state.teacher=t;admin()}
 }
 async function admin(){
- APP.innerHTML='<div class="card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><h2 style="margin:0">Vizsgák</h2><div class="muted">'+esc(state.teacher)+'</div></div><button class="btn light" id="logout">Kilépés</button></div></div><div class="grid">'+examCard("practical","🧪 Gyakorlati vizsga","10 kérdés · több helyes válasz is lehet",15)+examCard("theory","📘 Elméleti vizsga","20 kérdés · kérdésenként 1 helyes válasz",20)+'</div><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2 style="margin:0">📊 Eredmények</h2><button class="btn alt" id="csv">CSV export</button></div><div id="results" style="margin-top:12px">Betöltés…</div></div>';
- q("#logout").onclick=()=>{state.teacher="";home()};
+ APP.innerHTML='<div class="card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><h2 style="margin:0">Vizsgák</h2><div class="muted">'+esc(state.teacher)+'</div></div><button class="btn light" id="logout">'+(portalTeacher()?'← Központ':'Kilépés')+'</button></div></div><div class="grid">'+examCard("practical","🧪 Gyakorlati vizsga","10 kérdés · több helyes válasz is lehet",15)+examCard("theory","📘 Elméleti vizsga","20 kérdés · kérdésenként 1 helyes válasz",20)+'</div><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2 style="margin:0">📊 Eredmények</h2><button class="btn alt" id="csv">CSV export</button></div><div id="results" style="margin-top:12px">Betöltés…</div></div>';
+ q("#logout").onclick=()=>{if(portalTeacher()){location.href="../?portal=1";return}state.teacher="";home()};
  qa("[data-gen]").forEach(b=>b.onclick=()=>generateQR(b.dataset.gen));
  q("#csv").onclick=exportCSV;
  loadResults();
@@ -161,5 +169,9 @@ async function finishExam(){
  localStorage.removeItem("kf26_pending_result");state.unsaved=false;window.onbeforeunload=null;
  APP.innerHTML='<div class="card center" style="max-width:620px;margin:auto"><div class="muted">'+(state.exam==="practical"?"GYAKORLATI VIZSGA":"ELMÉLETI VIZSGA")+'</div><h2>'+esc(state.student.name)+'</h2><div class="tag">Nr. matricol '+esc(state.student.matricol)+'</div><div class="big" style="margin-top:20px">'+g+'</div><div>/10</div><div class="ok" style="margin-top:18px">✓ Az eredmény sikeresen elmentve a tanári rendszerbe.</div><div class="grid" style="margin-top:16px"><div class="card"><b>'+score+'/'+total+'</b><div class="muted">helyes</div></div><div class="card"><b>'+pct+'%</b><div class="muted">eredmény</div></div></div><p class="muted">A helyes válaszokat a rendszer nem jeleníti meg a hallgatónak.</p></div>'
 }
-const params=new URLSearchParams(location.search);const tok=params.get("token");if(tok)studentEntry(tok);else home();
+const params=new URLSearchParams(location.search);
+const tok=params.get("token");
+if(tok) studentEntry(tok);
+else if(params.get("from")==="portal" && portalTeacher()){state.teacher=portalTeacher();admin()}
+else home();
 </script></body></html>
