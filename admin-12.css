@@ -291,3 +291,89 @@
 @media(prefers-reduced-motion:reduce){
   .studio12 *{transition-duration:.01ms!important;animation-duration:.01ms!important}
 }
+
+/* 12-LP results and responsive detail polish */
+.studio12 .studio12-results > div:first-child > div{
+  min-width:0!important;background:#fff!important;
+  border:1px solid #e4eaf3!important;border-radius:16px!important;
+  padding:17px!important;
+  box-shadow:0 4px 16px rgba(24,43,83,.035)!important;
+}
+.studio12 .studio12-results > div:first-child > div > div:nth-child(2){
+  font-weight:900!important;letter-spacing:-.03em!important;
+  color:#293b59!important;
+}
+.studio12 .studio12-results > div:nth-child(2){
+  display:flex!important;flex-wrap:wrap!important;align-items:center!important;
+  background:#fff!important;border:1px solid #e2e8f2!important;
+  border-radius:16px!important;padding:15px!important;
+  box-shadow:0 4px 18px rgba(25,44,82,.03);
+}
+.studio12 .studio12-results > div:nth-child(2) input{
+  flex:2 1 220px!important;min-width:160px!important;
+}
+.studio12 .studio12-results > div:nth-child(2) select{
+  flex:1 1 135px!important;width:auto!important;
+  min-width:120px!important;max-width:100%;
+}
+.studio12 .studio12-results > div:nth-child(2) button{
+  flex:0 0 auto!important;min-height:43px!important;
+  padding:10px 16px!important;background:#0c968d!important;
+  color:#fff!important;border:0!important;border-radius:11px!important;
+  box-shadow:0 6px 16px rgba(12,150,141,.13)!important;
+}
+.studio12 .studio12-results > div:has(> table){
+  overflow-x:auto!important;overscroll-behavior-x:contain;
+  background:#fff!important;border:1px solid #e2e9f2!important;
+  border-radius:16px!important;
+  box-shadow:0 7px 25px rgba(25,47,84,.045)!important;
+  -webkit-overflow-scrolling:touch;
+}
+.studio12 .studio12-results table{
+  min-width:1150px;
+  border-collapse:separate!important;border-spacing:0!important;
+}
+.studio12 .studio12-results table .studio12-details-cell{
+  position:sticky!important;right:0;z-index:2;
+  min-width:125px;background:#fff!important;
+  box-shadow:-5px 0 13px rgba(26,44,79,.075)!important;
+}
+.studio12 .studio12-results table th.studio12-details-cell{
+  z-index:3;background:#f3f6fc!important;
+}
+.studio12 .studio12-results table tr:hover td.studio12-details-cell{
+  background:#eef3ff!important;
+}
+.studio12 .studio12-results .studio12-details-button{
+  padding:9px 12px!important;min-height:36px!important;
+  border-radius:9px!important;
+  background:#eaf0ff!important;color:#374eb4!important;
+  border:1px solid #c9d6fb!important;
+  font-weight:850!important;
+}
+.studio12 .studio12-results .studio12-details-button:hover{
+  background:#dce8ff!important;
+}
+.studio12 .studio12-results .studio12-details-button:focus-visible{
+  outline:3px solid rgba(78,104,214,.4)!important;outline-offset:2px;
+}
+.studio12 .studio12-body > div[style*="position: fixed"] > div > div:first-child,
+.studio12 .studio12-body > div > div[style*="position: fixed"] > div > div:first-child{
+  flex-wrap:wrap!important;min-width:0;
+}
+@media(max-width:650px){
+  .studio12 .studio12-results > div:first-child{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:9px!important;
+  }
+  .studio12 .studio12-results > div:nth-child(2){padding:12px!important}
+  .studio12 .studio12-results > div:nth-child(2) input{
+    flex-basis:100%!important;
+  }
+  .studio12 .studio12-results > div:nth-child(2) select{
+    flex:1 1 calc(50% - 8px)!important;min-width:0!important;
+  }
+  .studio12 .studio12-results > div:nth-child(2) button{
+    flex:1 1 100%!important;
+  }
+}
