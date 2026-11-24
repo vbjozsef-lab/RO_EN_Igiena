@@ -1103,3 +1103,99 @@
     gap:10px!important;
   }
 }
+
+/*
+ * Igienă Campus · 6 LP · Teacher UI v5 refinement
+ * Optional additive stylesheet for 6lucrari/admin-v3.css.
+ * Presentation only: no question banks, scores, QR links or exports are changed.
+ */
+
+/* The workspace remains legible when the sidebar is long or the user zooms. */
+.lp-studio .studio-sidebar {
+  overscroll-behavior-y: contain;
+}
+.lp-studio .studio-sidebar .studio-nav-link {
+  line-height: 1.35;
+}
+.lp-studio .studio-sidebar .studio-nav-link:focus-visible,
+.lp-studio .studio-sidebar .studio-sidebar-back:focus-visible,
+.lp-studio .studio-topbar button:focus-visible {
+  outline: 3px solid #99b5ff !important;
+  outline-offset: 3px;
+}
+.lp-studio .studio-topbar {
+  box-shadow: 0 3px 14px rgba(24, 40, 76, .04);
+}
+
+/* Long result lists can be scrolled horizontally without scrolling the page. */
+.lp-studio .studio-results > div:has(> table),
+.lp-studio .studio-report .results-table-wrap,
+.lp-studio .studio-report .studio-report-table {
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-color: #afc0e5 #f3f6fc;
+}
+.lp-studio .studio-results table td.result-details-cell button,
+.lp-studio .studio-report .results-table-wrap td.result-details-cell button {
+  min-height: 39px !important;
+  padding: 9px 12px !important;
+  touch-action: manipulation;
+}
+.lp-studio .studio-results table td.result-details-cell button:focus-visible,
+.lp-studio .studio-report .results-table-wrap td.result-details-cell button:focus-visible {
+  outline: 3px solid #8293ef !important;
+  outline-offset: 2px;
+}
+
+/* Keep title, student's ID and close/export actions visible while reading a long test.
+   The backdrop remains the scroll container; the content has no fixed height. */
+.lp-studio .studio-tab-content > div[style*="position: fixed"] > div > div:first-child {
+  position: sticky !important;
+  top: -1px;
+  z-index: 8;
+  background: #fff;
+  border-bottom: 1px solid #e6ebf3;
+  padding: 12px 0 14px;
+  margin-bottom: 16px !important;
+  border-radius: 8px 8px 0 0;
+}
+.lp-studio .studio-tab-content > div[style*="position: fixed"] > div > div:first-child > div:first-child {
+  min-width: 0;
+  flex: 1 1 320px;
+}
+.lp-studio .studio-tab-content > div[style*="position: fixed"] > div > div:first-child > div:last-child {
+  white-space: nowrap;
+}
+.lp-studio .studio-tab-content > div[style*="position: fixed"] > div {
+  max-width: min(980px, 100%);
+  overflow-wrap: anywhere;
+}
+
+/* A scroll cue and compact spacing on phones and narrow browser windows. */
+@media (max-width: 690px) {
+  .lp-studio .studio-tab-content > div[style*="position: fixed"] > div > div:first-child {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 9px !important;
+    padding-top: 4px;
+  }
+  .lp-studio .studio-tab-content > div[style*="position: fixed"] > div > div:first-child > div:first-child {
+    flex-basis: auto;
+  }
+  .lp-studio .studio-tab-content > div[style*="position: fixed"] > div > div:first-child > div:last-child {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .lp-studio .studio-tab-content > div[style*="position: fixed"] > div > div:first-child button {
+    flex: 1 1 130px;
+  }
+  .lp-studio .studio-results > div:has(> table) {
+    overflow-x: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-studio .studio-tab-content > div[style*="position: fixed"] * {
+    scroll-behavior: auto !important;
+  }
+}
