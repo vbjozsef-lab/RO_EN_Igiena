@@ -1040,3 +1040,66 @@
     grid-column:auto;
   }
 }
+
+/* Result details modal layering fix · 2026-11-24 */
+/*
+  The modal is rendered inside .admin-content.studio-body which normally has
+  inline z-index:1. That creates a stacking context below .studio-sidebar
+  (z-index:130) and .studio-topbar (z-index:95). Raising the modal's own
+  z-index cannot escape its ancestor, hence the clipped student/question text.
+  Apply the fix only while a results modal is open.
+*/
+.lp-studio:has(.studio-tab-content > div[style*="position: fixed"])
+  .admin-content.studio-body{
+  z-index:500!important;
+}
+/* Shared overlay for exam/quiz, individual and group result details. */
+.lp-studio .studio-tab-content > div[style*="position: fixed"]{
+  position:fixed!important;
+  inset:0!important;
+  z-index:2100!important;
+  max-width:none!important;
+  max-height:none!important;
+  width:100%!important;
+  height:100dvh!important;
+  box-sizing:border-box!important;
+  padding:clamp(12px,2vw,24px)!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.lp-studio .studio-tab-content > div[style*="position: fixed"] > div{
+  min-width:0!important;
+  max-width:980px!important;
+  width:100%!important;
+  margin:0 auto 18px!important;
+  box-sizing:border-box!important;
+  overflow-wrap:anywhere;
+}
+/* Keep student identity and the close/export controls reachable in a long test. */
+.lp-studio .studio-tab-content > div[style*="position: fixed"] > div > div:first-child{
+  flex-wrap:wrap!important;
+  min-width:0;
+}
+.lp-studio .studio-tab-content > div[style*="position: fixed"] > div > div:first-child > div{
+  min-width:0;
+}
+.lp-studio .studio-tab-content > div[style*="position: fixed"] button{
+  min-height:36px;
+}
+@media(max-width:650px){
+  .lp-studio .studio-tab-content > div[style*="position: fixed"]{
+    padding:10px!important;
+  }
+  .lp-studio .studio-tab-content > div[style*="position: fixed"] > div{
+    padding:15px!important;
+    border-radius:14px!important;
+  }
+  .lp-studio .studio-tab-content > div[style*="position: fixed"] > div > div:first-child{
+    gap:10px!important;
+  }
+}
