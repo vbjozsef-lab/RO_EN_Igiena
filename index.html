@@ -5835,6 +5835,19 @@ function AdminPanel({onBack, teacherName}) {
           </div>
         </div>
 
+
+        {tab==="qr" && (
+          <div className="studio12-overview">
+            <div className="studio12-overview-card"><span className="studio12-overview-icon"><TwelveStudioIcon name="flask" size={22}/></span>
+              <div><div className="studio12-overview-number">{LABS.length}</div><div className="studio12-overview-text">{studio12Copy.overview[0]}</div></div></div>
+            <div className="studio12-overview-card"><span className="studio12-overview-icon teal"><TwelveStudioIcon name="users" size={22}/></span>
+              <div><div className="studio12-overview-number">{new Set(results.filter(r=>r.name).map(r=>String(r.matricol||r.name).trim().toLocaleLowerCase("ro-RO"))).size}</div>
+                <div className="studio12-overview-text">{studio12Copy.overview[1]}</div></div></div>
+            <div className="studio12-overview-card"><span className="studio12-overview-icon gold"><TwelveStudioIcon name="results" size={22}/></span>
+              <div><div className="studio12-overview-number">{results.length}</div><div className="studio12-overview-text">{studio12Copy.overview[2]}</div></div></div>
+          </div>
+        )}
+
         {/* ── QR TAB ── */}
         {tab==="qr" && (
           <div className="qr-grid">
@@ -6026,7 +6039,7 @@ function AdminPanel({onBack, teacherName}) {
         )}
 
         {tab==="results" && (
-          <div>
+          <div className="studio12-results">
             {/* summary cards */}
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:10,marginBottom:20}}>
               {[
@@ -6083,7 +6096,7 @@ function AdminPanel({onBack, teacherName}) {
                   <thead>
                     <tr style={{background:"rgba(99,102,241,0.08)"}}>
                       {[T("res_col_sem"),T("res_col_spec"),T("res_col_prof"),"NR. MATRICOL",T("res_col_name"),T("res_col_grp"),T("res_col_lab"),T("res_col_mod"),"DETALII",T("res_col_score"),"%",T("res_col_time"),T("res_col_date")].map(h=>(
-                        <th key={h} style={{textAlign:"left",padding:"10px 12px",borderBottom:"1.5px solid #e0e7ff",color:"#6366f1",fontSize:11,textTransform:"uppercase",letterSpacing:"0.06em"}}>{h}</th>
+                        <th key={h} className={h==="DETALII"?"studio12-details-cell":undefined} style={{textAlign:"left",padding:"10px 12px",borderBottom:"1.5px solid #e0e7ff",color:"#6366f1",fontSize:11,textTransform:"uppercase",letterSpacing:"0.06em"}}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -6121,9 +6134,9 @@ function AdminPanel({onBack, teacherName}) {
                             <td style={{padding:"9px 12px",color:"#475569",fontSize:12}}>
                               <div>{title||"–"}</div>
                             </td>
-                            <td style={{padding:"9px 12px",whiteSpace:"nowrap"}}>
+                            <td className="studio12-details-cell" style={{padding:"9px 12px",whiteSpace:"nowrap"}}>
                               {hasAnswers && (
-                                <button onClick={()=>setSelectedResult(r)}
+                                <button className="studio12-details-button" aria-label={(lang==="en"?"Details: ":"Detalii: ")+String(r.name||"")} onClick={()=>setSelectedResult(r)}
                                   style={{padding:"5px 10px",background:groupResult?"#ede9fe":"#dcfce7",color:groupResult?"#6d28d9":"#16a34a",border:`1px solid ${groupResult?"#c4b5fd":"#86efac"}`,borderRadius:7,fontSize:11,fontWeight:800,cursor:"pointer"}}>
                                   {groupResult?"👥 Vezi contribuțiile":"📄 Vezi răspunsuri"}
                                 </button>
