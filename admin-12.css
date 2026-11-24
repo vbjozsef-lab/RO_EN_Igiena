@@ -1,0 +1,293 @@
+/* Igienă Campus · 12 LP (RO / EN) — modern teacher workspace
+   Scoped to .studio12 so student QR, tests and the 6-LP site are untouched. */
+.studio12{
+  --s12-ink:#1c2b48;--s12-muted:#78869d;--s12-line:#e3e9f3;
+  --s12-indigo:#4d60d5;--s12-bg:#f5f7fb;--s12-teal:#09968c;
+  min-height:100vh;background:var(--s12-bg)!important;
+  color:var(--s12-ink);
+  font-family:Inter,'Segoe UI',system-ui,sans-serif;
+}
+.studio12 *{box-sizing:border-box}
+.studio12-main{margin-left:268px;min-width:0;min-height:100vh;position:relative}
+.studio12-sidebar{
+  position:fixed;inset:0 auto 0 0;width:268px;z-index:140;
+  background:linear-gradient(175deg,#1b294a,#111d39 74%);
+  color:#dce5fa;display:flex;flex-direction:column;
+  padding:25px 14px 17px;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:#495979 transparent;
+  overscroll-behavior-y:contain;
+  box-shadow:10px 0 35px rgba(12,29,61,.07);
+}
+.studio12-brand{display:flex;align-items:center;gap:12px;padding:5px 12px 25px}
+.studio12-mark{flex-shrink:0;width:43px;height:43px;border-radius:13px;
+  display:grid;place-items:center;background:linear-gradient(140deg,#6679ed,#4b60cf);
+  color:white;box-shadow:0 9px 24px rgba(65,80,164,.24)}
+.studio12-brand-name{font-weight:900;font-size:17px;line-height:1.1;letter-spacing:-.035em;color:#fff}
+.studio12-brand-sub{margin-top:5px;font-size:9px;letter-spacing:.13em;font-weight:850;color:#aebde0}
+.studio12-course{
+  margin:0 9px 25px;border:1px solid rgba(185,205,248,.2);
+  border-radius:14px;background:rgba(255,255,255,.06);
+  display:flex;align-items:center;gap:10px;padding:12px 11px;
+}
+.studio12-course-icon{width:38px;height:38px;flex-shrink:0;border-radius:10px;
+  background:rgba(183,203,255,.13);display:grid;place-items:center;color:#e4eaff}
+.studio12-course-title{font-size:12px;font-weight:850;color:#fff;line-height:1.35}
+.studio12-course-sub{font-size:10px;margin-top:2px;color:#abbcdb}
+.studio12-language{display:inline-block;margin-top:6px;font-size:10px;font-weight:750;
+  color:#bfcef2}
+.studio12-nav{display:flex;flex-direction:column;gap:17px;flex:1}
+.studio12-nav-group{display:flex;flex-direction:column;gap:3px}
+.studio12-nav-heading{
+  padding:0 12px;margin-bottom:7px;
+  font-size:10px;font-weight:900;letter-spacing:.13em;
+  text-transform:uppercase;color:#91a1c4;
+}
+.studio12-nav-link{
+  display:flex!important;align-items:center!important;gap:12px!important;
+  width:100%!important;min-height:43px!important;
+  padding:10px 12px!important;cursor:pointer!important;text-align:left!important;
+  color:#c2cee6!important;background:transparent!important;
+  font-size:12.5px!important;font-weight:690!important;
+  border:1px solid transparent!important;border-radius:10px!important;
+  -webkit-text-fill-color:currentColor!important;
+  transition:background .17s,border-color .17s,color .17s;
+}
+.studio12-nav-link svg{flex-shrink:0;opacity:.85}
+.studio12-nav-link span{flex:1;line-height:1.28}
+.studio12-nav-link:hover{color:#fff!important;background:rgba(225,233,255,.1)!important}
+.studio12-nav-link.is-active{
+  color:#fff!important;background:#465bab!important;
+  border-color:rgba(255,255,255,.13)!important;
+  box-shadow:0 8px 19px rgba(7,18,44,.13);
+  font-weight:850!important;
+}
+.studio12-nav-link.is-active:after{
+  content:'';width:6px;height:6px;background:#9bf1dc;border-radius:50%;flex-shrink:0;
+}
+.studio12-sidebar-bottom{padding:14px 9px 0;margin-top:20px;
+  border-top:1px solid rgba(203,219,250,.13)}
+.studio12-back{display:flex!important;align-items:center!important;gap:9px!important;
+  background:transparent!important;color:#d3ddf4!important;border:0!important;
+  width:100%!important;text-align:left!important;min-height:40px!important;
+  padding:9px!important;border-radius:9px!important;font-size:12px!important;
+  font-weight:750!important;cursor:pointer}
+.studio12-back:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}
+.studio12-sidebar-note{font-size:10px;color:#7f94b8;line-height:1.5;padding:12px 8px 0}
+.studio12-dim{display:none}
+.studio12-topbar{
+  position:sticky;top:0;z-index:98;
+  min-height:73px;padding:13px clamp(18px,2.9vw,42px);
+  display:flex;align-items:center;justify-content:space-between;gap:13px;
+  background:rgba(255,255,255,.97);border-bottom:1px solid var(--s12-line);
+  backdrop-filter:blur(13px);
+}
+.studio12-top-left{display:flex;align-items:center;gap:12px;min-width:0}
+.studio12-menu-toggle{display:none!important;flex-shrink:0;
+  width:40px!important;height:40px!important;align-items:center!important;
+  justify-content:center!important;border:1px solid #dfe6f2!important;
+  border-radius:11px!important;background:#fff!important;color:#273c62!important;
+  cursor:pointer!important;padding:0!important}
+.studio12-breadcrumb{font-size:11px;color:#91a1b5;font-weight:700;line-height:1.3}
+.studio12-breadcrumb strong{color:#4c5fc8}
+.studio12-page-title{color:#192a49;font-size:14px;font-weight:900;
+  line-height:1.3;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.studio12-top-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.studio12-workspace-state{display:flex;align-items:center;gap:7px;
+  font-size:10.5px;font-weight:800;color:#138d80}
+.studio12-workspace-state:before{
+  content:'';width:7px;height:7px;background:#22b69c;border-radius:50%;
+  box-shadow:0 0 0 4px #e1f8f2;
+}
+.studio12-user-avatar{
+  display:grid;place-items:center;flex-shrink:0;width:36px;height:36px;
+  border-radius:11px;background:#eaf0ff;color:#4659bc;
+  font-size:11px;font-weight:900;
+}
+.studio12-user-name{font-size:12px;font-weight:850;color:#263958;max-width:185px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.studio12-user-role{font-size:10px;color:#94a0b4;margin-top:3px}
+.studio12-top-back{
+  background:#fff!important;color:#4055b7!important;
+  border:1px solid #dfe6f2!important;border-radius:10px!important;
+  padding:9px 12px!important;white-space:nowrap;font-size:11px!important;
+  font-weight:850!important;cursor:pointer;
+}
+.studio12-top-back:hover{background:#f2f5ff!important}
+.studio12 .workspace-header{display:none!important}
+.studio12 .admin-content.studio12-body{
+  max-width:1600px!important;margin:0 auto!important;
+  padding:32px clamp(18px,3.1vw,44px) 65px!important;
+  position:relative;z-index:1;min-width:0;
+}
+.studio12 .studio12-ambient{display:none}
+.studio12 .workspace-intro.studio12-intro{
+  padding:0 0 2px!important;margin-bottom:25px!important;
+  gap:16px!important;align-items:flex-end;
+}
+.studio12 .workspace-intro.studio12-intro .workspace-eyebrow{
+  font-size:10px!important;color:#5365cd!important;
+  font-weight:900!important;letter-spacing:.14em!important;
+}
+.studio12 .workspace-intro.studio12-intro h1{
+  font-size:clamp(25px,2.45vw,34px)!important;
+  letter-spacing:-.042em!important;color:#192b49!important;
+  font-weight:900!important;line-height:1.17!important;
+  margin:8px 0!important;
+}
+.studio12 .workspace-intro.studio12-intro p{
+  font-size:12.5px!important;line-height:1.65!important;
+  color:#7a899d!important;max-width:690px;
+}
+.studio12 .workspace-intro-tools .workspace-jump-label,
+.studio12 .workspace-intro-tools .workspace-jump{display:none!important}
+.studio12 .workspace-pill{
+  border:1px solid #e1e8f2!important;background:#fff!important;
+  color:#556780!important;border-radius:100px!important;
+  padding:10px 13px!important;font-size:11px!important;font-weight:800!important;
+}
+.studio12-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;margin-bottom:24px}
+.studio12-overview-card{
+  display:flex;align-items:center;gap:13px;min-width:0;
+  background:#fff;border:1px solid #e4eaf3;border-radius:16px;
+  padding:17px 18px;box-shadow:0 3px 12px rgba(22,39,82,.025);
+}
+.studio12-overview-icon{width:43px;height:43px;flex-shrink:0;
+  border-radius:12px;background:#eef1ff;color:#5064cf;display:grid;place-items:center}
+.studio12-overview-icon.teal{background:#e7f8f4;color:#12978a}
+.studio12-overview-icon.gold{background:#fff6e8;color:#ca871d}
+.studio12-overview-number{color:#203453;font-size:21px;font-weight:950;letter-spacing:-.035em}
+.studio12-overview-text{color:#8290a5;font-size:11px;margin-top:4px;line-height:1.4}
+.studio12 .admin-content h2,.studio12 .admin-content h3{
+  color:#253753;letter-spacing:-.02em;font-weight:850;
+}
+.studio12 .admin-content > .qr-grid{gap:20px!important;
+  grid-template-columns:minmax(340px,1.07fr) minmax(290px,.93fr)}
+.studio12 .admin-content > .qr-grid > div{
+  border:1px solid #e4eaf3!important;background:#fff!important;
+  border-radius:18px!important;box-shadow:0 7px 24px rgba(22,42,83,.045)!important;
+  padding:24px!important;min-width:0;
+}
+.studio12 .admin-content > .qr-grid h3{
+  font-size:16px!important;margin-bottom:17px!important;
+}
+.studio12 .admin-content input,.studio12 .admin-content select,
+.studio12 .admin-content textarea{
+  border:1px solid #dfe6f1!important;background:#fbfcff!important;
+  color:#2b3b56!important;border-radius:11px!important;
+  min-height:43px;padding:11px 13px!important;
+  box-shadow:none!important;
+}
+.studio12 .admin-content input:focus,.studio12 .admin-content select:focus,
+.studio12 .admin-content textarea:focus{
+  border-color:#5267da!important;
+  box-shadow:0 0 0 3px rgba(82,103,218,.12)!important;
+}
+.studio12 .admin-content label{color:#465778}
+.studio12 .admin-content button:not(.studio12-nav-link){
+  border-radius:10px;
+}
+.studio12 .admin-content table{
+  background:#fff!important;border-collapse:separate!important;
+  border-spacing:0!important;
+}
+.studio12 .admin-content table th{
+  background:#f3f6fc!important;color:#53647f!important;
+  font-weight:850!important;font-size:11px!important;
+  letter-spacing:.025em!important;
+  border-bottom:1px solid #e2e9f4!important;
+}
+.studio12 .admin-content table td{border-bottom:1px solid #edf0f5!important}
+.studio12 .admin-content table tr:hover td{background:#f6f9ff!important}
+.studio12 .admin-content table tr:last-child td{border-bottom:0!important}
+.studio12 .admin-content .results-table-wrap{
+  overflow-x:auto!important;overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  border:1px solid #e1e8f3!important;border-radius:16px!important;
+  box-shadow:0 8px 22px rgba(22,43,85,.035)!important;
+}
+.studio12 .admin-content .results-table-wrap table{min-width:840px}
+.studio12 .admin-content .activity-editor-grid{min-width:0;gap:17px!important}
+.studio12 .admin-content .activity-editor-grid > div{min-width:0}
+.studio12 .admin-content a:focus-visible,.studio12 button:focus-visible,
+.studio12 .admin-content select:focus-visible{
+  outline:3px solid rgba(91,111,220,.44)!important;outline-offset:3px;
+}
+/* Put result details above the sticky sidebar and topbar. A child modal
+   cannot exceed the stacking order of its own .admin-content ancestor. */
+.studio12:has(.studio12-body [style*="position: fixed"][style*="z-index"])
+  .admin-content.studio12-body{z-index:500!important}
+.studio12 .studio12-body > div[style*="position: fixed"],
+.studio12 .studio12-body > div > div[style*="position: fixed"]{
+  position:fixed!important;inset:0!important;z-index:1500!important;
+  width:100%!important;height:100dvh!important;max-width:none!important;
+  box-sizing:border-box!important;overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  padding:clamp(10px,2vw,24px)!important;
+}
+.studio12 .studio12-body > div[style*="position: fixed"] > div,
+.studio12 .studio12-body > div > div[style*="position: fixed"] > div{
+  width:100%!important;max-width:980px!important;min-width:0!important;
+  box-sizing:border-box!important;
+  margin:0 auto 20px!important;overflow-wrap:anywhere;
+}
+@media(max-width:1260px){
+  .studio12-sidebar{width:246px}
+  .studio12-main{margin-left:246px}
+  .studio12 .admin-content > .qr-grid{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+}
+@media(max-width:1070px){
+  .studio12-sidebar{
+    width:270px;transform:translateX(-106%);
+    transition:transform .23s ease,visibility .23s;
+    visibility:hidden;pointer-events:none;box-shadow:none;
+  }
+  .studio12-sidebar.is-open{
+    transform:translateX(0);visibility:visible;pointer-events:auto;
+    box-shadow:12px 0 30px rgba(4,19,49,.18);
+  }
+  .studio12-main{margin-left:0}
+  .studio12-menu-toggle{display:flex!important}
+  .studio12-dim{
+    display:block;position:fixed;inset:0;z-index:135;
+    background:rgba(13,24,47,.52);border:0;
+    padding:0!important;width:100%!important;cursor:pointer;
+  }
+  .studio12 .admin-content.studio12-body{
+    padding:26px clamp(16px,3vw,32px) 48px!important;
+  }
+}
+@media(max-width:790px){
+  .studio12-topbar{min-height:64px;padding:11px 16px}
+  .studio12-workspace-state,.studio12-user-name,.studio12-user-role{display:none}
+  .studio12 .admin-content > .qr-grid{grid-template-columns:minmax(0,1fr)}
+  .studio12-overview{gap:10px}
+  .studio12-overview-card{padding:13px;flex-direction:column;text-align:center;gap:8px}
+  .studio12-overview-icon{width:37px;height:37px}
+  .studio12-overview-number{font-size:19px}
+  .studio12 .workspace-intro-tools .workspace-jump{
+    display:block!important;width:175px!important;min-height:43px!important;
+  }
+  .studio12 .admin-content .activity-editor-grid{grid-template-columns:minmax(0,1fr)!important}
+}
+@media(max-width:530px){
+  .studio12 .admin-content.studio12-body{padding:20px 12px 38px!important}
+  .studio12-topbar{gap:7px;padding:11px 12px}
+  .studio12-page-title{font-size:12.5px}
+  .studio12-breadcrumb{font-size:10px}
+  .studio12-top-actions{gap:7px}
+  .studio12-top-back{padding:8px!important;font-size:10px!important}
+  .studio12-user-avatar{width:31px;height:31px}
+  .studio12-overview{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .studio12-overview-card:last-child{grid-column:1/-1}
+  .studio12-overview-text{font-size:10.5px}
+  .studio12 .admin-content > .qr-grid > div{padding:18px!important}
+  .studio12 .workspace-intro.studio12-intro h1{font-size:25px!important}
+  .studio12 .workspace-intro-tools{width:100%}
+  .studio12 .workspace-intro-tools .workspace-jump{flex:1!important;width:100%!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .studio12 *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
