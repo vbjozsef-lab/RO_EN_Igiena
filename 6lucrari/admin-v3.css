@@ -791,3 +791,252 @@
     min-width:108px;
   }
 }
+
+/* Teacher workspace unified panels v4 · 2026-11-24 */
+/* All professor modules share the same paper-like surface and typography. */
+.lp-studio .studio-tab-content{color:#263751}
+.lp-studio .studio-tab-content h2,
+.lp-studio .studio-tab-content h3{
+  letter-spacing:-.025em!important;
+  line-height:1.3;
+}
+.lp-studio .studio-tab-content p{line-height:1.62}
+.lp-studio .studio-section-root > div > div:first-child h3,
+.lp-studio .studio-report > div > div:first-child h3{
+  color:#1c2f4c!important;
+  font-size:18px!important;
+  font-weight:850!important;
+}
+.lp-studio .studio-section-root > div > div:first-child p,
+.lp-studio .studio-report > div > div:first-child p{
+  color:#77869d!important;
+  font-size:12.5px!important;
+}
+.lp-studio .studio-tab-content a:focus-visible,
+.lp-studio .studio-tab-content button:focus-visible,
+.lp-studio .studio-topbar button:focus-visible,
+.lp-studio .studio-sidebar button:focus-visible{
+  outline:3px solid #94a3ff!important;
+  outline-offset:3px;
+}
+.lp-studio .studio-tab-content button:disabled{
+  opacity:.6;
+  cursor:not-allowed!important;
+}
+/* Exam results: match the other dashboard filters and result tables. */
+.lp-studio .studio-report .results-table-wrap{
+  background:#fff!important;
+  border:1px solid #e3e9f2!important;
+  border-radius:17px!important;
+  box-shadow:0 8px 24px rgba(26,47,85,.04)!important;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.lp-studio .studio-report .results-table-wrap table{
+  min-width:850px;
+  border-collapse:separate!important;
+  border-spacing:0!important;
+}
+.lp-studio .studio-report .results-table-wrap th{
+  background:#f4f7fc!important;
+  color:#50627e!important;
+  text-transform:uppercase;
+  font-size:10.5px!important;
+  font-weight:850!important;
+  padding:13px 12px!important;
+  border-bottom:1px solid #e2e8f2!important;
+}
+.lp-studio .studio-report .results-table-wrap td{
+  color:#324560;
+  padding:13px 12px!important;
+}
+.lp-studio .studio-report .results-table-wrap tbody tr:hover td{
+  background:#f6f9ff!important;
+}
+.lp-studio .studio-report .results-table-wrap .result-details-cell{
+  min-width:105px;
+  position:sticky!important;
+  right:0;
+  z-index:2;
+  box-shadow:-5px 0 12px rgba(20,38,70,.05)!important;
+}
+.lp-studio .studio-report .results-table-wrap th.result-details-cell{
+  z-index:3;
+  background:#f4f7fc!important;
+}
+.lp-studio .studio-report .results-table-wrap td.result-details-cell{
+  background:#fff!important;
+}
+.lp-studio .studio-report .results-table-wrap tr:hover td.result-details-cell{
+  background:#f2f6ff!important;
+}
+.lp-studio .studio-report .results-table-wrap td.result-details-cell button{
+  background:#eaf0ff!important;
+  color:#394fb2!important;
+  border:1px solid #cbd5fc!important;
+  border-radius:10px!important;
+  padding:9px 12px!important;
+  min-height:36px;
+  font-weight:850!important;
+}
+/* Exam summary and filter boxes are stable on narrow screens. */
+.lp-studio .studio-report > div > div[style*="grid-template-columns"]{
+  min-width:0;
+  column-gap:12px!important;
+  row-gap:12px!important;
+}
+.lp-studio .studio-report > div > div[style*="grid-template-columns"] > div{
+  min-width:0;
+}
+.lp-studio .studio-report > div > div[style*="grid-template-columns"] input,
+.lp-studio .studio-report > div > div[style*="grid-template-columns"] select{
+  min-width:0!important;
+  width:100%!important;
+  min-height:44px!important;
+  border-radius:11px!important;
+  background:#fbfcff!important;
+  color:#263951!important;
+}
+.lp-studio .studio-report > div > div[style*="grid-template-columns"]:has(> div > div) > div{
+  background:#fff!important;
+  border:1px solid #e4eaf4!important;
+  padding:17px!important;
+  border-radius:15px!important;
+  box-shadow:0 4px 16px rgba(25,45,80,.025);
+}
+.lp-studio .studio-report > div > div:first-child > div:last-child button{
+  min-height:42px!important;
+  padding:10px 14px!important;
+  border-radius:10px!important;
+}
+/* Quiz / practical activities: editable panels retain all existing controls. */
+.lp-studio .studio-section-root .activity-editor-grid{
+  gap:16px!important;
+  min-width:0;
+}
+.lp-studio .studio-section-root .activity-editor-grid > div{
+  min-width:0;
+}
+.lp-studio .studio-section-root .activity-editor-grid > div:first-child{
+  border:1px solid #e3e9f2!important;
+  border-radius:16px!important;
+  box-shadow:0 7px 20px rgba(21,43,81,.04)!important;
+}
+.lp-studio .studio-section-root .activity-editor-grid > div:first-child > button{
+  min-height:55px;
+  transition:background .15s ease;
+}
+.lp-studio .studio-section-root .activity-editor-grid > div:first-child > button:hover{
+  background:#f2f6ff!important;
+}
+.lp-studio .studio-section-root .activity-editor-grid > div:last-child > div{
+  border-radius:16px!important;
+  box-shadow:0 5px 18px rgba(25,47,86,.035);
+}
+.lp-studio .studio-section-root > div > div[style*="grid-template-columns: 240px 1fr"] > div:first-child{
+  border-color:#e3e9f3!important;
+  border-radius:16px!important;
+  box-shadow:0 6px 20px rgba(23,43,81,.035)!important;
+}
+.lp-studio .studio-section-root > div > div[style*="grid-template-columns: 240px 1fr"] > div:first-child button{
+  min-height:51px;
+}
+.lp-studio .studio-section-root > div > div[style*="grid-template-columns: 240px 1fr"] > div:first-child button:hover{
+  background:#f2f5ff!important;
+}
+/* Files and nomenclature: remove mismatched legacy green headers and borders. */
+.lp-studio .studio-section-root > div > div:first-child{
+  gap:13px!important;
+  flex-wrap:wrap!important;
+}
+.lp-studio .studio-section-root > div > div:first-child > div:first-child{min-width:0}
+.lp-studio .studio-section-root > div > div:first-child > div:last-child > button{
+  min-height:42px!important;
+  padding:10px 16px!important;
+  border-radius:11px!important;
+}
+.lp-studio .studio-section-root > div > div:has(> div > span > button){
+  background:#fff!important;
+  border:1px solid #e1e8f2!important;
+  border-radius:17px!important;
+  padding:21px!important;
+  box-shadow:0 5px 18px rgba(24,43,81,.03);
+}
+.lp-studio .studio-section-root > div > div:has(> div > span > button) > div:first-child{
+  font-size:15px!important;
+  font-weight:850!important;
+  color:#243755!important;
+}
+.lp-studio .studio-section-root > div > div:has(> div > span > button) > div:nth-child(2) span{
+  background:#edf2ff!important;
+  border:1px solid #cbd7f6!important;
+  color:#3e548a!important;
+  border-radius:999px!important;
+  padding:7px 11px!important;
+}
+.lp-studio .studio-section-root > div > div:has(> div > span > button) > div:last-child input{
+  min-width:0!important;
+  flex:1 1 140px!important;
+}
+.lp-studio .studio-section-root > div > div:has(> div > span > button) > div:last-child button{
+  min-width:45px;
+  min-height:43px;
+  background:#4c61d8!important;
+  border-radius:10px!important;
+  font-size:19px!important;
+  font-weight:800!important;
+  color:white!important;
+}
+.lp-studio .studio-section-root > div > div[style*="flex-direction: column"] > div[style*="align-items: center"]{
+  background:#fff!important;
+  border:1px solid #e4eaf4!important;
+  border-radius:14px!important;
+  padding:14px!important;
+  box-shadow:0 4px 15px rgba(24,44,80,.03)!important;
+}
+.lp-studio .studio-section-root > div > div[style*="flex-direction: column"] > div[style*="align-items: center"] a{
+  background:#edf2ff!important;
+  color:#3c52b9!important;
+  border:1px solid #d0daf7!important;
+  border-radius:10px!important;
+}
+/* Responsive: avoid cramped exam filters and two-column activity editor. */
+@media(max-width:930px){
+  .lp-studio .studio-section-root .activity-editor-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+@media(max-width:650px){
+  .lp-studio .studio-report > div > div[style*="grid-template-columns"]{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  .lp-studio .studio-report > div > div[style*="grid-template-columns"] > input{
+    grid-column:1/-1;
+  }
+  .lp-studio .studio-report > div > div:first-child > div:last-child{
+    width:100%;
+  }
+  .lp-studio .studio-report > div > div:first-child > div:last-child button{
+    flex:1 1 auto;
+  }
+  .lp-studio .studio-section-root > div > div:has(> div > span > button){
+    padding:16px!important;
+  }
+  .lp-studio .studio-section-root > div > div:has(> div > span > button) > div:last-child{
+    flex-wrap:wrap!important;
+  }
+  .lp-studio .studio-section-root > div > div[style*="flex-direction: column"] > div[style*="align-items: center"]{
+    flex-wrap:wrap;
+  }
+  .lp-studio .studio-section-root > div > div[style*="flex-direction: column"] > div[style*="align-items: center"] > div{
+    flex:1 1 calc(100% - 50px)!important;
+  }
+}
+@media(max-width:420px){
+  .lp-studio .studio-report > div > div[style*="grid-template-columns"]{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  .lp-studio .studio-report > div > div[style*="grid-template-columns"] > input{
+    grid-column:auto;
+  }
+}
