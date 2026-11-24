@@ -8,6 +8,7 @@
 <title>Igiena – Platformă Interactivă · Activități de grup</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="admin-12-ui.js?v=1"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 <!-- QR code generator -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -133,6 +134,7 @@
 
 </style>
 <link rel="stylesheet" href="ui-v2.css?v=2">
+<link rel="stylesheet" href="admin-12.css?v=1">
 </head>
 <body>
 <div id="root"></div>
@@ -5582,6 +5584,8 @@ function AdminPanel({onBack, teacherName}) {
   const T = useT();
   const lang = React.useContext(LangContext);
   const [tab, setTab]             = useState("qr"); // qr | results
+  const [studio12MobileOpen,setStudio12MobileOpen] = useState(false);
+  const studio12Copy=TWELVE_ADMIN_COPY[lang==="en"?"en":"ro"];
   const [selectedResult, setSelectedResult] = useState(null); // fisa detail modal
   const [selLab, setSelLab]       = useState(LABS.find(l=>l.ready) || LABS[0]);
   const [duration, setDuration]   = useState(5);
@@ -5724,7 +5728,28 @@ function AdminPanel({onBack, teacherName}) {
   const hasMore = filteredResults.length > DISPLAY_LIMIT;
 
   return (
-    <div style={{minHeight:"100vh",background:"#F0F4FF",fontFamily:"'Inter','Segoe UI',system-ui,sans-serif",position:"relative"}}>
+    <div className="studio12" style={{minHeight:"100vh",background:"#f5f7fb",position:"relative"}}>
+      <TwelveStudioSidebar tab={tab} onTab={setTab} onBack={onBack} lang={lang}
+        open={studio12MobileOpen} onClose={()=>setStudio12MobileOpen(false)}/>
+      <div className="studio12-main">
+        <header className="studio12-topbar">
+          <div className="studio12-top-left">
+            <button type="button" className="studio12-menu-toggle" aria-label={lang==="en"?"Open menu":"Deschide meniul"}
+              aria-expanded={studio12MobileOpen} onClick={()=>setStudio12MobileOpen(!studio12MobileOpen)}>
+              <TwelveStudioIcon name="menu" size={19}/>
+            </button>
+            <div style={{minWidth:0}}>
+              <div className="studio12-breadcrumb">Igienă Campus / <strong>12 LP · {lang.toUpperCase()}</strong></div>
+              <div className="studio12-page-title">{studio12Copy.titles[tab]}</div>
+            </div>
+          </div>
+          <div className="studio12-top-actions">
+            <span className="studio12-workspace-state">{studio12Copy.workspace}</span>
+            <span className="studio12-user-avatar">{String(teacherName||"").split(" ").filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase()||"P"}</span>
+            <div><div className="studio12-user-name">{teacherName}</div><div className="studio12-user-role">{studio12Copy.professor}</div></div>
+            <button className="studio12-top-back" type="button" onClick={onBack}>{lang==="en"?"← Hub":"← Centru"}</button>
+          </div>
+        </header>
 
       {/* Soft blobs */}
       <div style={{position:"fixed",width:600,height:600,borderRadius:"50%",background:"radial-gradient(circle,rgba(99,102,241,0.07),transparent 70%)",top:-200,left:-200,pointerEvents:"none",zIndex:0}}/>
@@ -5785,17 +5810,12 @@ function AdminPanel({onBack, teacherName}) {
         </div>
       </div>
 
-      <div className="admin-content" style={{zIndex:1}}>
-        <div className="workspace-intro">
+      <div className="admin-content studio12-body" style={{zIndex:1}}>
+        <div className="workspace-intro studio12-intro">
           <div>
             <span className="workspace-eyebrow">12 LUCRĂRI PRACTICE · {lang==="en"?"ENGLISH":"ROMÂNĂ"}</span>
-            <h1>{({
-              qr:"Coduri QR și sesiuni",preview:"Previzualizare Quiz",activities:"Activități practice",
-              results:"Rezultate studenți",examResults:"Rezultate examen",laborator:"Laborator animat",
-              prezentari:"Prezentări",prezenta:"Prezență și participare",
-              fisiere:"Fișiere și materiale",nomenclator:"Nomenclator"
-            })[tab]||"Panou de control"}</h1>
-            <p>Gestionați activitățile și rezultatele acestei grupe dintr-un singur panou. Selectați o secțiune din meniul de sus.</p>
+            <h1>{studio12Copy.titles[tab]||"Teacher workspace"}</h1>
+            <p>{studio12Copy.tips[tab]||studio12Copy.intro}</p>
           </div>
           <div className="workspace-intro-tools">
             <label className="workspace-jump-label" htmlFor="workspace-jump-12">Navigare rapidă</label>
@@ -5811,7 +5831,7 @@ function AdminPanel({onBack, teacherName}) {
                 <option value="fisiere">Fișiere</option>
                 <option value="nomenclator">Nomenclator</option>
             </select>
-            <span className="workspace-pill">● 12 LP · RO / EN</span>
+            <span className="workspace-pill">● 12 LP · {lang.toUpperCase()}</span>
           </div>
         </div>
 
@@ -6260,6 +6280,7 @@ function AdminPanel({onBack, teacherName}) {
           </div>
         );
       })()}
+      </div>
       </div>
     </div>
   );
